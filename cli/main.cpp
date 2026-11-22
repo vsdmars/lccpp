@@ -18,6 +18,11 @@ namespace {
 // compiled problems shared library (liblc_problems.dylib / .so).
 class DynamicLib {
  public:
+  // RTLD_NOW  : Resolve all undefined symbols immediately during dlopen() so
+  //             missing symbols fail fast here rather than crashing lazily later.
+  // RTLD_LOCAL: Keep this library's symbols private instead of exporting them
+  //             into the global symbol table for subsequently loaded libraries
+  //             (prevents accidental symbol collisions between libraries).
   explicit DynamicLib(const std::string& path)
       : handle_(dlopen(path.c_str(), RTLD_NOW | RTLD_LOCAL)) {
     if (handle_ == nullptr) {
