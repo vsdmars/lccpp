@@ -12,10 +12,11 @@ lccpp/
 │   └── lc_framework.cpp    # Shared Registry singleton (liblc_core)
 ├── cli/
 │   └── main.cpp            # CLI11 frontend + dlopen loader for liblc_problems
-├── array/
-│   └── 1_Two_Sum.cpp
-└── graph/
-    └── 133_Clone_Graph.cpp
+└── lc/
+    ├── array/
+    │   └── 1_Two_Sum.cpp
+    └── graph/
+        └── 133_Clone_Graph.cpp
 ```
 
 ## Build & Run
@@ -39,7 +40,7 @@ cmake --build build --clean-first
 
 ## Adding a New Problem
 
-Drop a `.cpp` file into any category folder (e.g., `graph/207_Course_Schedule.cpp`) and run `cmake --build build`:
+Drop a `.cpp` file into any category folder under `lc/` (e.g., `lc/graph/207_Course_Schedule.cpp`) and run `cmake --build build`:
 
 ```cpp
 #include "framework/lc_framework.h"

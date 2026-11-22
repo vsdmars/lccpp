@@ -52,8 +52,9 @@ target_compile_definitions(lc_core PRIVATE LC_CORE_EXPORTS)
 target_compile_options(lc_core PRIVATE -Wall -Wextra -Wpedantic)
 
 # ------------------------------------------------------------------------------
-# 2. lc_problems (SHARED): compiles every LeetCode problem `.cpp` into its own
-#    `.o` file and bundles them into one shared library loaded via `dlopen()`.
+# 2. lc_problems (SHARED): compiles every LeetCode problem `.cpp` under `lc/`
+#    into its own `.o` file and bundles them into one shared library loaded via
+#    `dlopen()`.
 #    - Editing one problem only recompiles that single `.o` + relinks this lib
 #      (the `lc` binary itself does not need to relink).
 #    - Using SHARED (instead of STATIC .a) prevents the linker from dropping
@@ -63,9 +64,8 @@ target_compile_options(lc_core PRIVATE -Wall -Wextra -Wpedantic)
 file(
   GLOB_RECURSE LC_PROBLEM_SOURCES
   CONFIGURE_DEPENDS
-  "${CMAKE_CURRENT_SOURCE_DIR}/*/*.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/lc/*.cpp"
 )
-list(FILTER LC_PROBLEM_SOURCES EXCLUDE REGEX "/(cli|framework|build|cmake-build-[^/]*)/")
 
 add_library(lc_problems SHARED ${LC_PROBLEM_SOURCES})
 target_link_libraries(lc_problems PRIVATE lc_core)
