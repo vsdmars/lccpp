@@ -1,0 +1,131 @@
+// LeetCode 526: Beautiful Arrangement
+// https://leetcode.com/problems/beautiful-arrangement/
+//
+// Problem:
+//   Given a positive integer `n` (1 <= n <= 15), count the number of
+//   permutations `perm` of the integers `1..n` (1-indexed) such that for every
+//   position `i` (1 <= i <= n), either `perm[i]` is divisible by `i` or `i` is
+//   divisible by `perm[i]`.
+//
+// Algorithm:
+//   Top-down bitmask dynamic programming (memoized backtracking) filling
+//   positions backwards from `pos = n` down to `pos = 1`.
+//   - Filling from the highest position `n` down to `1` prunes aggressively
+//     because larger indices have far fewer valid divisors/multiples in `1..n`.
+//   - When `pos == 1`, any single remaining unused integer `x` satisfies
+//     `x % 1 == 0`, so we immediately return `1`.
+//   - The state is uniquely identified by `used_mask`, a bitmask of numbers in
+//     `1..n` already placed in positions `pos + 1 .. n` (since `pos` equals
+//     `n - popcount(used_mask)`). Memoizing on `used_mask` eliminates repeated
+//     subproblems when different placement orders consume the same subset.
+//
+//   Time Complexity:  O(n * 2^n) worst case (at most 2^n bitmask states, each
+//                     iterating over at most `n` candidate numbers, and much
+//                     smaller in practice due to divisibility pruning).
+//   Space Complexity: O(2^n) for the memoization table plus O(n) recursion
+//                     depth.
+//
+// Data Structures:
+//   - Bitmask (`std::uint32_t`): Compact O(1)-copy representation of which
+//     numbers in `1..n` have already been placed.
+//   - std::vector<int> (`memo`): Flat memoization table of size `2^n`
+//     initialized to `-1` (uncomputed), indexed directly by `used_mask`.
+//
+// Real-World Applications:
+//   - Counting valid slot assignments in constraint satisfaction problems
+//     (CSP), such as shift scheduling, resource-to-bucket allocation, or
+//     hardware register assignment with compatibility rules.
+//   - Computing permanent-like counts of perfect matchings in small bipartite
+//     compatibility graphs via subset DP.
+//   - Combinatorial verification and test-case enumeration in formal methods.
+//
+// Related LeetCode Problems:
+//   - #46 Permutations [done] (unconstrained permutation generation)
+//   - #667 Beautiful Arrangement II [done] (constructive permutation with k distinct adjacent differences)
+//   - #1947 Maximum Compatibility Score Sum [new] (bitmask DP over small permutations)
+//   - #1879 Minimum XOR Sum of Two Arrays [new] (assignment problem solved via bitmask DP)
+//   - #2741 Special Permutations [new] (counting permutations with adjacent divisibility via bitmask DP)
+
+#include "framework/lc_framework.h"
+
+#include <cstddef>
+#include <cstdint>
+#include <vector>
+
+namespace {
+
+class Solution {
+ public:
+  // Counts all beautiful arrangements of integers `1..n`.
+  //
+  // Places numbers from position `n` down to `1` using bitmask memoization.
+  // Time: O(n * 2^n), Space: O(2^n).
+  int countArrangement(int n) {
+    if (n <= 0) {
+      return 0;
+    }
+
+    const std::size_t state_count = 1uz << static_cast<std::size_t>(n);
+    std::vector<int> memo(state_count, -1);
+
+    // Returns the number of valid ways to fill positions `1..pos` given that
+    // the numbers marked in `used_mask` are already placed in `pos+1..n`.
+    auto dfs = [&](this auto&& self, int pos, std::uint32_t used_mask) -> int {
+      // Base case: at position 1, the single remaining number always divides
+      // cleanly by 1, yielding exactly one valid completion.
+      if (pos <= 1) {
+        return 1;
+      }
+
+      if (memo[used_mask] != -1) {
+        return memo[used_mask];
+      }
+
+      int total = 0;
+      for (int num = 1; num <= n; ++num) {
+        const std::uint32_t bit = 1u << static_cast<std::uint32_t>(num - 1);
+        if ((used_mask & bit) != 0u) {
+          continue;
+        }
+        // Check the divisibility constraint for placing `num` at `pos`.
+        if (num % pos == 0 || pos % num == 0) {
+          total += self(pos - 1, used_mask | bit);
+        }
+      }
+
+      memo[used_mask] = total;
+      return total;
+    };
+
+    return dfs(n, 0u);
+  }
+};
+
+LC_PROBLEM(526, "Beautiful Arrangement", "backtracking", ctx) {
+  ctx.test("base_case_n_1", [&] {
+    Solution sol;
+    ctx.expect_eq(sol.countArrangement(1), 1);
+  });
+
+  ctx.test("example_n_2", [&] {
+    Solution sol;
+    ctx.expect_eq(sol.countArrangement(2), 2);
+  });
+
+  ctx.test("small_values_3_to_7", [&] {
+    Solution sol;
+    ctx.expect_eq(sol.countArrangement(3), 3);
+    ctx.expect_eq(sol.countArrangement(4), 8);
+    ctx.expect_eq(sol.countArrangement(5), 10);
+    ctx.expect_eq(sol.countArrangement(6), 36);
+    ctx.expect_eq(sol.countArrangement(7), 41);
+  });
+
+  ctx.test("medium_and_max_constraint", [&] {
+    Solution sol;
+    ctx.expect_eq(sol.countArrangement(10), 700);
+    ctx.expect_eq(sol.countArrangement(15), 24679);
+  });
+}
+
+}  // namespace
