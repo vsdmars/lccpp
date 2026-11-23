@@ -1,9 +1,55 @@
+// LeetCode 1192: Critical Connections in a Network
 // https://leetcode.com/problems/critical-connections-in-a-network/
 //
-// There are `n` servers numbered `0..n-1` connected by undirected edges
-// `connections[i] = [ai, bi]`. A critical connection (bridge) is an edge whose
-// removal disconnects some servers from others. Return all critical connections
-// in any order.
+// Problem:
+//   There are `n` servers numbered `0` to `n - 1` connected by undirected
+//   network links `connections[i] = [ai, bi]` forming a connected simple graph
+//   (no self-loops or duplicate edges). A critical connection (bridge) is any
+//   edge whose removal disconnects the network so that some server can no
+//   longer reach another. Return all critical connections in any order.
+//   Typical constraints: 2 <= n <= 10^5, n - 1 <= connections.length <= 10^5.
+//
+// Algorithm:
+//   Tarjan's Bridge-Finding Algorithm (Single-Pass DFS):
+//   1. Build an undirected adjacency list `graph` from `connections`.
+//   2. Perform DFS tracking two timestamps per vertex:
+//      - `disc[u]`: The time at which vertex `u` is first discovered.
+//      - `low[u]`: The smallest discovery time reachable from `u`'s DFS subtree
+//        using tree edges plus at most one back-edge.
+//   3. For each neighbor `v` of `u` (skipping the immediate `parent`):
+//      - If `v` is unvisited (`disc[v] == -1`), recurse on `(v, u)`, then
+//        propagate `low[u] = min(low[u], low[v])`. If `low[v] > disc[u]`, no
+//        vertex in `v`'s subtree can reach `u` or any ancestor of `u` via an
+//        alternate path, so `(u, v)` is not part of any cycle and is a bridge.
+//      - Otherwise (`v` is already visited), `(u, v)` is a back-edge; update
+//        `low[u] = min(low[u], disc[v])`.
+//   4. Loop over all vertices `0..n-1` so disconnected inputs are also handled.
+//
+//   Complexity:
+//     - Time: O(V + E), visiting every vertex and undirected edge once.
+//     - Space: O(V + E) for the adjacency list, `disc`/`low` arrays, and DFS
+//       recursion stack.
+//
+// Data Structures:
+//   - `std::vector<std::vector<int>> graph`: Undirected adjacency list.
+//   - `std::vector<int> disc`: DFS discovery timestamp per vertex (-1 = unseen).
+//   - `std::vector<int> low`: Lowest reachable discovery time from each subtree.
+//   - `std::vector<std::vector<int>> bridges`: Output list of bridge edges.
+//
+// Real-World Applications:
+//   - Identifying single points of failure in data-center, telecom, and power
+//     grid topologies to guide redundancy planning.
+//   - Road, rail, and supply-chain vulnerability analysis (finding bottleneck
+//     links whose outage isolates regions).
+//   - Computing 2-edge-connected components in compilers and circuit design.
+//
+// Related LeetCode Problems:
+//   - #1568 Minimum Number of Days to Disconnect Island (articulation/bridges)
+//   - #1489 Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree
+//     (identifies edges essential to MST connectivity)
+//   - #684 Redundant Connection (dual problem: finds a removable cycle edge)
+//   - #1319 Number of Operations to Make Network Connected (network redundancy)
+//   - #2360 Longest Cycle in a Graph (DFS timestamp analysis of graph cycles)
 
 #include "framework/lc_framework.h"
 

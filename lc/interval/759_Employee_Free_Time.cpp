@@ -1,8 +1,56 @@
+// LeetCode 759: Employee Free Time
 // https://leetcode.com/problems/employee-free-time/
 //
-// Given a list `schedule` of employees where each employee has a sorted list of
-// non-overlapping working intervals, return the sorted list of finite,
-// positive-length intervals representing common free time for all employees.
+// Problem:
+//   Given a list `schedule` where `schedule[e]` is a sorted list of
+//   non-overlapping busy intervals `[start, end]` for employee `e`, return the
+//   sorted list of finite, positive-length intervals representing time spans
+//   when all employees are simultaneously free. Leading `(-inf, min_start)`
+//   and trailing `(max_end, +inf)` intervals are excluded, as are zero-length
+//   gaps between touching intervals.
+//   Constraints: 1 <= schedule.size() <= 50, each employee has 1..50 intervals
+//   (empty lists are handled gracefully), 0 <= start < end <= 10^8.
+//
+// Algorithm:
+//   Two approaches are implemented:
+//   1. `employeeFreeTime` (K-way min-heap merge): Push each non-empty
+//      employee's first interval into a min-heap ordered by `start`. Repeatedly
+//      pop the earliest interval, push that employee's next interval, and
+//      track the rightmost merged busy end `current_end`. Whenever the popped
+//      interval satisfies `iv.start > current_end`, record the common free gap
+//      `[current_end, iv.start]`, then update `current_end = max(current_end,
+//      iv.end)`.
+//      Time: O(N log K), Space: O(K) auxiliary (excluding output), where N is
+//      the total number of intervals and K is the number of employees.
+//   2. `employeeFreeTimeSort` (flatten and sort): Flatten all intervals into a
+//      single vector, sort by `start`, and run the same gap-detection scan.
+//      Time: O(N log N), Space: O(N).
+//   Key invariant: because intervals are visited in non-decreasing start order,
+//   `current_end` equals the end of the merged busy union seen so far; a gap
+//   exists if and only if the next interval starts strictly after `current_end`.
+//
+// Data Structures:
+//   - `struct Interval`: `[start, end]` value type representing busy/free spans.
+//   - `struct HeapEntry` & `HeapEntryGreater`: min-heap cursor storing
+//     `(start, emp_idx, iv_idx)` to advance each employee's sorted list.
+//   - `std::priority_queue<HeapEntry, ...> min_heap`: K-way merge frontier.
+//   - `std::vector<Interval> all` (in `employeeFreeTimeSort`): flattened buffer
+//     for global sorting.
+//
+// Real-World Applications:
+//   - Multi-participant calendar "Find a Time" scheduling across teams to
+//     surface mutually open meeting windows.
+//   - Identifying global maintenance windows when all dependent services or
+//     batch pipelines are simultaneously idle.
+//   - Computing idle gaps across multi-machine or multi-core execution traces
+//     in distributed systems profilers.
+//
+// Related LeetCode Problems:
+//   - #56 Merge Intervals (merging overlapping busy intervals into a union)
+//   - #23 Merge k Sorted Lists (same K-way min-heap merge over K sorted streams)
+//   - #986 Interval List Intersections (overlap between two sorted schedules)
+//   - #1229 Meeting Scheduler (earliest common free slot of a target duration)
+//   - #57 Insert Interval (maintaining a sorted disjoint interval set)
 
 #include "framework/lc_framework.h"
 

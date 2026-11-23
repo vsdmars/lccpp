@@ -1,15 +1,59 @@
+// LeetCode 2065: Maximum Path Quality of a Graph
 // https://leetcode.com/problems/maximum-path-quality-of-a-graph/
 //
-// Given an undirected weighted graph with `n` nodes (values `values[i]`) and
-// edges `[u, v, time]`, find the maximum path quality of any walk starting and
-// ending at node 0 whose total travel time is <= `maxTime`. A node may be
-// visited multiple times, but its value is added to the path quality at most
-// once.
+// Problem:
+//   Given an undirected weighted graph with `n` nodes (`0..n-1`), non-negative
+//   node values `values[i]`, undirected edges `edges[j] = [u, v, time]`, and a
+//   time budget `maxTime`, return the maximum path quality of any valid walk
+//   starting and ending at node `0` with total travel time `<= maxTime`. Nodes
+//   and edges may be revisited multiple times, but each node's value is added
+//   to the path quality at most once. Constraints: 1 <= n <= 1000,
+//   0 <= values[i] <= 10^8, 10 <= time_j, maxTime <= 100, and every node has
+//   degree at most 4.
 //
-// Constraint note:
-// `10 <= time_j, maxTime <= 100` and each node has degree <= 4, so every valid
-// walk has at most 10 edges (at most ~4^10 states in the worst case), making
-// bounded-time backtracking DFS fast and exact.
+// Algorithm:
+//   Time-bounded backtracking Depth-First Search (DFS) rooted at node `0`. Key
+//   constraint insight: because `time_j >= 10` and `maxTime <= 100`, every
+//   feasible walk traverses at most `floor(maxTime / 10) <= 10` edges, and
+//   each vertex has degree <= 4, bounding the search tree to at most 4^10
+//   states (pruned further whenever `travel_time > remaining_time`). Whenever
+//   the walk reaches node `0`, `best` is updated with `cur_quality`. Rather
+//   than copying a visited set on each step, a `visit_count` table credits
+//   `values[v]` only on the first entry (`0 -> 1`) and decrements cleanly on
+//   backtrack.
+//   Time Complexity: O(V + E + 4^(maxTime / minEdgeTime)), bounded by
+//     O(V + E + 4^10) under the problem constraints.
+//   Space Complexity: O(V + E) for the weighted adjacency list, `visit_count`
+//     array, and recursion stack (depth <= maxTime / minEdgeTime <= 10).
+//
+// Data Structures:
+//   - `std::vector<std::vector<std::pair<int, int>>> adj`: Undirected weighted
+//     adjacency list storing `(neighbor, travel_time)` pairs per vertex.
+//   - `std::vector<int> visit_count`: Per-node multiplicity counter along the
+//     current walk so node values are summed only on first visit and cleanly
+//     reverted during backtracking.
+//   - Recursive call stack (`dfs` lambda): Tracks `(current_node,
+//     remaining_time, cur_quality)` across the bounded-depth search tree.
+//
+// Real-World Applications:
+//   - Drone reconnaissance and orienteering routing: departing a base depot
+//     (`node 0`) and returning within a strict battery/fuel budget while
+//     maximizing unique points-of-interest reward collected.
+//   - Field-service technician or tourist itinerary optimization where hubs
+//     may be traversed repeatedly but site value is realized only once.
+//   - Bounded-horizon game AI and resource-collection planning in low-degree
+//     graphs under strict turn or time budgets.
+//
+// Related LeetCode Problems:
+//   - #1219 Path with Maximum Gold (bounded backtracking DFS maximizing
+//     collected path value)
+//   - #1928 Minimum Cost to Reach Destination in Time (weighted graph path
+//     optimization constrained by `maxTime`)
+//   - #787 Cheapest Flights Within K Stops (budget-constrained graph traversal)
+//   - #847 Shortest Path Visiting All Nodes (graph walks permitting revisits
+//     while tracking uniquely visited nodes)
+//   - #797 All Paths From Source to Target (DFS path exploration with
+//     backtracking)
 
 #include "framework/lc_framework.h"
 

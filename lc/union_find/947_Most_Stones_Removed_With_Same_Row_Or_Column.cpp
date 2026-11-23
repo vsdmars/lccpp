@@ -1,9 +1,56 @@
+// LeetCode 947: Most Stones Removed with Same Row or Column
 // https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/
 //
-// On a 2D plane, stones are placed at integer coordinates `stones[i] = [r, c]`
-// (at most one stone per coordinate). A stone can be removed if it shares a row
-// or column with another stone that has not been removed. Return the largest
-// possible number of stones that can be removed.
+// Problem:
+//   On a 2D integer plane, `n` stones are placed at distinct coordinates
+//   `stones[i] = [r, c]` (with `0 <= r, c`). A stone may be removed if it
+//   shares either the same row or the same column with at least one other
+//   stone that has not yet been removed. Return the maximum number of stones
+//   that can be removed.
+//
+// Algorithm:
+//   1. Model the grid as a bipartite graph between row nodes and column nodes.
+//      Encode each row `r` as non-negative integer `r` and each column `c` as
+//      negative integer `-(c + 1)` so row and column namespaces never collide
+//      (including at coordinate 0).
+//   2. For every stone `(r, c)`, unite `row_node` and `col_node` inside a
+//      sparse Union-Find (`SparseDisjointSet`) that lazily registers unseen
+//      coordinates and tracks the active number of connected components.
+//   3. Return `stones.size() - dsu.components()`.
+//   Key Invariant:
+//     Two stones belong to the same connected component if and only if they
+//     are linked by a chain of shared rows and columns. In any connected
+//     component of `k` stones, removing stones in reverse spanning-tree order
+//     (leaves first) always removes `k - 1` stones and leaves exactly 1 stone.
+//     Summing across `C` components yields `total_stones - C` removals.
+//   Time Complexity:
+//     O(N * alpha(N)) average, where N = `stones.size()` and alpha is the
+//     inverse Ackermann function.
+//   Space Complexity:
+//     O(N) for at most `2 * N` active row and column nodes in the hash map.
+//
+// Data Structures:
+//   - `SparseDisjointSet` (`parent_`: `std::unordered_map<int, int>`,
+//     `components_`: `int`): Hash-map-backed Union-Find pre-reserved for
+//     `2 * stones.size()` entries, using lazy insertion on `find` and two-pass
+//     iterative full path compression.
+//
+// Real-World Applications:
+//   - Bipartite graph connectivity and redundancy reduction (e.g., pruning
+//     redundant dependencies in matrix/grid constraints).
+//   - Circuit-board and VLSI netlist connectivity across horizontal and
+//     vertical routing tracks.
+//   - Sparse matrix block-diagonal decomposition by grouping coupled rows and
+//     columns into independent subproblems.
+//
+// Related LeetCode Problems:
+//   - #547 Number of Provinces (counting connected components via Union-Find)
+//   - #200 Number of Islands (connected components on a 2D grid)
+//   - #1267 Count Servers that Communicate (row and column connectivity on a
+//     2D grid)
+//   - #721 Accounts Merge (bipartite-style merging of entities via Union-Find)
+//   - #1319 Number of Operations to Make Network Connected (spanning tree
+//     edges vs. connected components)
 
 #include "framework/lc_framework.h"
 

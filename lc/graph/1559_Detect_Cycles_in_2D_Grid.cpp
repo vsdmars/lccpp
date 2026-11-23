@@ -1,8 +1,53 @@
+// LeetCode 1559: Detect Cycles in 2D Grid
 // https://leetcode.com/problems/detect-cycles-in-2d-grid/
 //
-// Given an m x n grid of lowercase characters, determine whether there exists a
-// cycle of length >= 4 consisting entirely of identical characters, moving
-// 4-directionally without immediately stepping back to the previous cell.
+// Problem:
+//   Given an m x n 2D grid of lowercase English letters `grid`, return `true`
+//   if there exists a cycle of length >= 4 consisting entirely of identical
+//   characters, and `false` otherwise. A valid cycle moves 4-directionally (up,
+//   down, left, right) through distinct same-character cells without
+//   immediately stepping back to the previous cell, returning to its start.
+//   Constraints: 1 <= m, n <= 500, `grid[i][j]` is a lowercase English letter.
+//
+// Algorithm:
+//   Undirected Depth-First Search (DFS) with parent-coordinate tracking across
+//   same-character connected components. Key graph-theoretic invariant: any
+//   4-connected 2D grid is bipartite (cells 2-color by `(r + c) % 2`), so it
+//   contains no odd-length cycles. Because DFS skips the immediate parent cell
+//   `(pr, pc)` (preventing trivial length-2 backtracks), encountering any
+//   already-visited same-character neighbor guarantees a simple cycle of even
+//   length >= 4. The solver scans all cells, launches DFS on each unvisited
+//   component, and returns `true` on the first detected cycle.
+//   Time Complexity: O(m * n), since each cell is visited at most once and
+//     inspects at most 4 neighbors.
+//   Space Complexity: O(m * n) for the `visited` matrix and worst-case DFS
+//     recursion stack depth.
+//
+// Data Structures:
+//   - `std::vector<std::vector<std::uint8_t>> visited`: 2D byte-flag matrix
+//     recording cells explored across all DFS traversals.
+//   - `std::array<std::pair<int, int>, 4> kDirs`: Fixed compile-time array of
+//     4-directional `(dr, dc)` neighbor offsets.
+//   - Recursive call stack (`dfs` passing `(r, c)` and parent `(pr, pc)`):
+//     Tracks active traversal state while suppressing immediate backtracking.
+//
+// Real-World Applications:
+//   - Electronic Design Automation (EDA) and PCB layout checking: detecting
+//     unintended closed conductive loops (ground loops or shorts) on a grid
+//     routing layer.
+//   - Computer vision and image segmentation: testing whether a connected
+//     region of matching pixels forms a closed contour enclosing a hole.
+//   - Tile-based puzzle and game engines (e.g., circuit/pipe-connection or
+//     match-loop games) validating closed loops of matching tiles.
+//
+// Related LeetCode Problems:
+//   - #200 Number of Islands (4-directional DFS connected-component search on
+//     a 2D grid)
+//   - #261 Graph Valid Tree (undirected cycle detection using parent tracking)
+//   - #684 Redundant Connection (detecting cycles in an undirected graph)
+//   - #130 Surrounded Regions (2D grid connected-component boundary analysis)
+//   - #1034 Coloring A Border (4-directional same-value component DFS on a
+//     2D grid)
 
 #include "framework/lc_framework.h"
 

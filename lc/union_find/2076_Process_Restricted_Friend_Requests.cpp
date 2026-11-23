@@ -1,10 +1,60 @@
+// LeetCode 2076: Process Restricted Friend Requests
 // https://leetcode.com/problems/process-restricted-friend-requests/
 //
-// Given n people labeled 0..n-1, a list of restriction pairs [xi, yi] that
-// cannot become direct or indirect friends, and an ordered list of friend
-// requests [uj, vj], process each request in order. A request succeeds if
-// merging uj's and vj's friend groups does not connect any restricted pair;
-// otherwise it is rejected. Already-connected pairs always succeed.
+// Problem:
+//   There are `n` people labeled `0` to `n - 1`. You are given a list of
+//   `restrictions` where `restrictions[i] = [xi, yi]` means person `xi` and
+//   person `yi` cannot become friends directly or indirectly through mutual
+//   friends. You are also given an ordered list of friend `requests` where
+//   `requests[j] = [uj, vj]`. Process requests sequentially: a request succeeds
+//   (and permanently merges `uj` and `vj`'s friend groups) iff doing so does
+//   not cause any restricted pair to end up in the same group; otherwise it is
+//   rejected without changing state. Requests between people who are already
+//   friends always succeed. Return a boolean array indicating each outcome.
+//   Typical constraints: 2 <= n <= 1000; restrictions, requests <= 1000.
+//
+// Algorithm:
+//   Disjoint Set Union (Union-Find) with Pre-Merge Conflict Validation:
+//   1. Maintain a single `DisjointSet` representing the current connected
+//      components of accepted friendships (initialized with each person alone).
+//   2. For each request `[u, v]`:
+//      - Find `root_u = dsu.find(u)` and `root_v = dsu.find(v)`.
+//      - If `root_u == root_v`, `u` and `v` are already direct or indirect
+//        friends; record `true` immediately without modifying the DSU.
+//      - Otherwise, call `can_merge(root_u, root_v, dsu, restrictions)` to scan
+//        every restriction `[x, y]`. Because the DSU invariant guarantees no
+//        prior merge violated any restriction, merging `root_u` and `root_v`
+//        violates `[x, y]` iff one of `find(x), find(y)` equals `root_u` and
+//        the other equals `root_v`.
+//      - If no restriction conflicts, commit `dsu.unite_roots(root_u, root_v)`
+//        and record `true`; otherwise leave the DSU untouched and record
+//        `false`.
+//
+//   Complexity:
+//     - Time: O(Q * R * alpha(n)), where Q = requests.size(),
+//       R = restrictions.size(), and alpha is the inverse Ackermann function.
+//     - Space: O(n) auxiliary space for the DSU (excluding the O(Q) output).
+//
+// Data Structures:
+//   - `DisjointSet`: Union-Find with two-pass iterative path compression in
+//     `find` (`std::vector<std::size_t> parent_`) and union by rank
+//     (`std::vector<int> rank_`) in `unite_roots`.
+//   - `std::vector<bool> result`: Pre-reserved output recording whether each
+//     request was approved or rejected.
+//
+// Real-World Applications:
+//   - Enforcing Separation of Duties (SoD) and conflict-of-interest policies in
+//     Role-Based Access Control (RBAC) when granting permissions or team joins.
+//   - Social-network block lists and moderation rules across group merges.
+//   - Incremental entity resolution / record linkage with "cannot-link"
+//     constraints in constrained clustering and data deduplication.
+//
+// Related LeetCode Problems:
+//   - #990 Satisfiability of Equality Equations (DSU unions + inequality check)
+//   - #684 Redundant Connection (incremental DSU connectivity testing)
+//   - #1697 Checking Existence of Edge Length Limited Paths (DSU query checks)
+//   - #1202 Smallest String With Swaps (groups elements into DSU components)
+//   - #721 Accounts Merge (transitive grouping of users with Disjoint Set Union)
 
 #include "framework/lc_framework.h"
 

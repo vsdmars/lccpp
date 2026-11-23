@@ -1,9 +1,57 @@
+// LeetCode 839: Similar String Groups
 // https://leetcode.com/problems/similar-string-groups/
 //
-// Two strings X and Y are similar if they are equal or if swapping two letters
-// at different positions in X yields Y. Given a list of strings `strs` where
-// every string is an anagram of every other string, return the number of
-// connected groups formed by this similarity relation.
+// Problem:
+//   Two strings X and Y are similar if they are identical or if swapping two
+//   characters at different positions in X produces Y. Given an array `strs`
+//   where every string is an anagram of every other string (so all strings
+//   share the same length L), partition `strs` into equivalence groups under
+//   the transitive closure of similarity and return the number of groups.
+//
+// Algorithm:
+//   1. Initialize an index-based Disjoint Set Union (`DisjointSet`) with `n`
+//      singleton groups (`n = strs.size()`). Indexing by position handles
+//      duplicate strings in `strs` naturally without extra deduplication.
+//   2. Iterate over every unordered pair `(i, j)` with `0 <= i < j < n`.
+//      Skip the O(L) character comparison whenever `i` and `j` already share a
+//      root in the DSU.
+//   3. Otherwise, compare `strs[i]` and `strs[j]` via `are_similar`: because
+//      all inputs are guaranteed anagrams, two strings are equal or differ by a
+//      single swap if and only if they disagree at exactly 0 or 2 indices
+//      (returning `false` early once more than 2 mismatches are seen).
+//   4. Unite similar pairs (decrementing the group count on each merge) and
+//      return the remaining number of groups.
+//   Time Complexity:
+//     O(N^2 * L) worst case, where N = `strs.size()` and L = `strs[0].size()`,
+//     with practical speedup from skipping already-connected pairs and early
+//     exit on > 2 mismatches.
+//   Space Complexity:
+//     O(N) for the DSU parent and rank arrays.
+//
+// Data Structures:
+//   - `DisjointSet` (`parent_`: `std::vector<std::size_t>`, `rank_`:
+//     `std::vector<int>`, `groups_`: `std::size_t`): Index-based Union-Find
+//     with iterative path halving and union by rank that tracks the live count
+//     of connected components.
+//   - `std::string_view`: Non-owning string slices passed to `are_similar` to
+//     avoid copying during pairwise scans.
+//
+// Real-World Applications:
+//   - Typo-tolerant clustering and near-duplicate text grouping (e.g.,
+//     Damerau-Levenshtein single-transposition equivalence classes).
+//   - Bioinformatics sequence clustering (grouping DNA/protein reads separated
+//     by single point mutations or inversions).
+//   - Data cleaning and fuzzy record linkage in ETL pipelines.
+//
+// Related LeetCode Problems:
+//   - #854 K-Similar Strings (minimum swaps to transform one anagram into
+//     another)
+//   - #547 Number of Provinces (counting connected components with Union-Find)
+//   - #1202 Smallest String With Swaps (grouping swappable string indices via
+//     Union-Find)
+//   - #721 Accounts Merge (clustering string records into connected components)
+//   - #2157 Groups of Strings (grouping strings connected by single-character
+//     edits via Union-Find)
 
 #include "framework/lc_framework.h"
 

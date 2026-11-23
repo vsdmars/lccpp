@@ -1,10 +1,49 @@
-// https://leetcode.com/problems/range-sum-query-2d-mutable/description/
+// LeetCode 308: Range Sum Query 2D - Mutable
+// https://leetcode.com/problems/range-sum-query-2d-mutable/
 //
-// Given a 2D integer matrix, handle multiple queries of two types:
-// 1. `update(row, col, val)`: update `matrix[row][col]` to `val`.
-// 2. `sumRegion(row1, col1, row2, col2)`: return the sum of elements inside
-//    the submatrix with upper-left corner `(row1, col1)` and lower-right
-//    corner `(row2, col2)` inclusive.
+// Problem:
+//   Design a data structure initialized with an `M x N` 2D integer matrix that
+//   efficiently supports two interleaved operations:
+//   1. `update(row, col, val)`: set `matrix[row][col]` to `val`.
+//   2. `sumRegion(row1, col1, row2, col2)`: return the sum of all elements in
+//      the inclusive submatrix bounded by upper-left `(row1, col1)` and
+//      lower-right `(row2, col2)`.
+//
+// Algorithm:
+//   2D Binary Indexed Tree (2D Fenwick Tree). Entry `tree_[r][c]` stores the
+//   sum of the rectangle of height `lowbit(r)` and width `lowbit(c)` ending at
+//   1-based cell `(r, c)`. Construction runs in O(M * N) by copying `vals_`
+//   into `tree_` and propagating partial sums first along row parents
+//   (`r + lowbit(r)`) and then along column parents (`c + lowbit(c)`). Point
+//   updates compute `delta = val - vals_[r0][c0]` and add `delta` across all
+//   covering ancestors via nested `r += lowbit(r)` and `c += lowbit(c)` loops.
+//   Rectangle queries combine four 2D prefix sums via inclusion-exclusion:
+//   `P(r2, c2) - P(r1, c2) - P(r2, c1) + P(r1, c1)`.
+//   Time: O(M * N) build, O(log M * log N) per `update` and `sumRegion`.
+//   Space: O(M * N).
+//
+// Data Structures:
+//   - `std::vector<std::vector<int>> vals_`: stores current cell values so
+//     point updates can compute the change `delta` in O(1) time.
+//   - `std::vector<std::vector<int>> tree_`: `(M + 1) x (N + 1)` 1-indexed 2D
+//     Fenwick tree storing hierarchical 2D partial sums.
+//   - `std::size_t rows_`, `cols_`: cached matrix dimensions for bounds checks.
+//
+// Real-World Applications:
+//   - Dynamic summed-area tables (integral images) in computer vision and
+//     graphics when localized pixel regions change interactively.
+//   - Geospatial and heatmap analytics aggregating live event counts over
+//     arbitrary rectangular map viewports.
+//   - Online spreadsheet engines and OLAP data cubes supporting frequent cell
+//     edits alongside fast rectangular range aggregations.
+//
+// Related LeetCode Problems:
+//   - #304 Range Sum Query 2D - Immutable (static 2D prefix sums using the
+//     same 2D inclusion-exclusion formula)
+//   - #307 Range Sum Query - Mutable (1D Fenwick tree counterpart)
+//   - #1314 Matrix Block Sum (sliding 2D rectangular sums via 2D prefix sums)
+//   - #1074 Number of Submatrices That Sum to Target (combines 2D prefix sums
+//     with hash-map range counting)
 
 #include "framework/lc_framework.h"
 

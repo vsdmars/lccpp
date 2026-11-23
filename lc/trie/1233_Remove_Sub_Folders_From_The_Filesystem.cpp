@@ -1,8 +1,54 @@
+// LeetCode 1233: Remove Sub-Folders from the Filesystem
 // https://leetcode.com/problems/remove-sub-folders-from-the-filesystem/
 //
-// Given a list of unique Unix-style folder paths (e.g. "/a/b"), remove all
-// sub-folders of any other folder in the list and return the remaining
-// top-level folders in any order.
+// Problem:
+//   Given a list of unique Unix-style folder paths `folder`
+//   (1 <= folder.length <= 4 * 10^4, 2 <= folder[i].length <= 100, each
+//   starting with '/' and containing lowercase English letters and '/'),
+//   remove every folder that is a sub-folder of another folder in the list and
+//   return the remaining top-level folders in any order. A path `p` is a
+//   sub-folder of `parent` iff `p` starts with `parent` followed immediately by
+//   '/' (so "/a/b/ca" is not a sub-folder of "/a/b/c").
+//
+// Algorithm:
+//   Implements two approaches:
+//     1. `removeSubfolders` (Sort + Linear Prefix Scan): Sorts `folder`
+//        lexicographically so every sub-folder appears immediately after its
+//        parent (or sibling sub-folders of that parent). Scans once, skipping
+//        any path where `is_subfolder(path, result.back())` holds—checking
+//        length, `starts_with`, and a '/' boundary with zero allocations.
+//        - Time: O(N * L * log N), Space: O(1) auxiliary (beyond sort/output).
+//     2. `removeSubfoldersTrie` (Path-Segment Trie + Pruned DFS): Splits each
+//        path on '/' and inserts its directory segments into a flat-pool trie,
+//        marking complete folder nodes with `folder_idx`. A DFS from root 0
+//        records the folder and returns immediately upon hitting any marked
+//        node, pruning all descendant sub-folders.
+//        - Time: O(N * L) average, Space: O(N * L).
+//
+// Data Structures:
+//   - `std::vector<std::string>` and `std::string_view`: Hold sorted paths and
+//     perform zero-allocation prefix/boundary checks in Approach 1.
+//   - `std::vector<TrieNode>` (arena-allocated path-segment Trie): Each
+//     `TrieNode` maps segment names to child indices via
+//     `std::unordered_map<std::string, std::size_t>` and marks terminal
+//     folders with `std::optional<std::size_t> folder_idx`.
+//
+// Real-World Applications:
+//   - File-system watchers (inotify/FSEvents), backup tools, and rsync engines
+//     collapsing overlapping nested directories into minimal watch roots.
+//   - Cloud IAM policy engines and HTTP reverse-proxy routers deduplicating
+//     subsumed resource or URL path prefixes.
+//   - Build systems and static analyzers normalizing overlapping include or
+//     exclude directory trees.
+//
+// Related LeetCode Problems:
+//   - #208 Implement Trie (Prefix Tree) (foundational trie generalized here to
+//     '/'-delimited path segments)
+//   - #648 Replace Words (finding shortest root prefixes using a trie)
+//   - #1948 Delete Duplicate Folders in System (path-segment trie construction
+//     and duplicate subtree pruning)
+//   - #588 Design In-Memory File System (hierarchical Unix paths in a trie)
+//   - #720 Longest Word in Dictionary (prefix chains over sorted strings/trie)
 
 #include "framework/lc_framework.h"
 

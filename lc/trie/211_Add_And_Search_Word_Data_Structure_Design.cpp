@@ -1,7 +1,51 @@
-// https://leetcode.com/problems/add-and-search-word-data-structure-design/description/
+// LeetCode 211: Design Add and Search Words Data Structure
+// https://leetcode.com/problems/design-add-and-search-words-data-structure/
 //
-// Design a data structure that supports adding lowercase words and searching
-// for a word where '.' matches any single lowercase letter ('a'-'z').
+// Problem:
+//   Design a `WordDictionary` class supporting two operations:
+//     - addWord(word): Adds a lowercase English word ('a'-'z') to the
+//       dictionary.
+//     - search(word): Returns true if any stored word matches `word`, where the
+//       wildcard character '.' can match any single lowercase English letter.
+//   Matches must span the entire word (a stored word's prefix does not match
+//   unless that prefix was also added as a word). Typical constraints: word
+//   length <= 25, at most 2-3 dots per query, up to 10^4 calls.
+//
+// Algorithm:
+//   Maintain an arena-backed prefix tree (`nodes_`) with node 0 as root and
+//   index 0 (`kNoChild`) as the empty-child sentinel.
+//   - addWord(word): Traverse from node 0 character by character, allocating
+//     missing child nodes at the back of `nodes_`, and set `is_end = true` at
+//     the terminal node.
+//   - search(word): Run a recursive depth-first search `dfs(node_idx, word, pos)`:
+//     - Base case: when `pos == word.size()`, return `nodes_[node_idx].is_end`.
+//     - Exact letter: follow `children[c - 'a']` if present and recurse on
+//       `pos + 1`.
+//     - Wildcard '.': use `std::ranges::any_of` to try every non-empty child
+//       slot, short-circuiting as soon as any branch returns true.
+//
+//   Complexity:
+//     - addWord: Time O(L), Space O(L) new nodes, where L is word length.
+//     - search:  Time O(L) with no wildcards, O(26^D * L) with D wildcards
+//       (worst-case O(26^L) when all characters are '.'); Space O(L) call stack.
+//
+// Data Structures:
+//   - `std::vector<Node> nodes_`: Contiguous arena of trie nodes indexed by
+//     `std::size_t`, keeping cache locality high during DFS branching.
+//   - `Node`: Holds `std::array<std::size_t, 26> children` (0 = no child) and
+//     `bool is_end` marking valid word completions.
+//
+// Real-World Applications:
+//   - Crossword solvers, Scrabble/word-game pattern lookups, and glob matching.
+//   - Simple regular-expression and wildcard filtering in log or file search.
+//   - Fuzzy dictionary lookup engines and DNS wildcard record resolution.
+//
+// Related LeetCode Problems:
+//   - #208 Implement Trie (Prefix Tree) (core trie without wildcard matching)
+//   - #212 Word Search II (combines a trie with backtracking DFS on a 2D grid)
+//   - #676 Implement Magic Dictionary (trie search with exactly one mismatch)
+//   - #745 Prefix and Suffix Search (extended trie queries on prefixes/suffixes)
+//   - #1032 Stream of Characters (matches stream suffixes via a reversed trie)
 
 #include "framework/lc_framework.h"
 

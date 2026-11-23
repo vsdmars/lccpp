@@ -1,9 +1,46 @@
+// LeetCode 435: Non-overlapping Intervals
 // https://leetcode.com/problems/non-overlapping-intervals/
 //
-// Given a collection of intervals where intervals[i] = [start_i, end_i], return
-// the minimum number of intervals you need to remove to make the rest of the
-// intervals non-overlapping. Intervals that only touch at an endpoint (e.g.,
-// [1, 2] and [2, 3]) are considered non-overlapping.
+// Problem:
+//   Given an array of intervals where `intervals[i] = [start_i, end_i]`,
+//   return the minimum number of intervals to remove so that the remaining
+//   intervals are mutually non-overlapping. Intervals that only touch at a
+//   shared endpoint (e.g., `[1, 2]` and `[2, 3]`) do not overlap.
+//   Constraints: 1 <= intervals.size() <= 10^5, -5*10^4 <= start_i < end_i
+//   <= 5*10^4 (empty input returns 0).
+//
+// Algorithm:
+//   Greedy earliest-finish interval scheduling. Minimizing removals is
+//   equivalent to maximizing the number of mutually compatible intervals kept.
+//   Sort all intervals by `end` coordinate ascending, select the first
+//   interval (`last_end = spans[0].end`, `kept = 1`), and scan the rest:
+//   whenever `spans[i].start >= last_end`, keep it and update `last_end`.
+//   Return `spans.size() - kept`.
+//   Key invariant (exchange argument): choosing the compatible interval with
+//   the smallest end time leaves the maximum possible remaining timeline for
+//   subsequent intervals, guaranteeing an optimal solution.
+//   Time: O(N log N) for sorting, Space: O(N) for the copied interval array.
+//
+// Data Structures:
+//   - `struct Interval`: lightweight `(start, end)` record for cache-friendly
+//     sorting by `end`.
+//   - `std::vector<Interval> spans`: contiguous array sorted via
+//     `std::ranges::sort` using the `&Interval::end` projection.
+//
+// Real-World Applications:
+//   - Activity selection and CPU/machine job scheduling to maximize the number
+//     of completed non-overlapping tasks on a single resource.
+//   - Conflict resolution in calendar apps and broadcast/ad slot allocation
+//     when maximizing accepted bookings.
+//   - Genomic sequence alignment chaining to pick the largest set of
+//     non-overlapping candidate exons or motifs.
+//
+// Related LeetCode Problems:
+//   - #452 Minimum Number of Arrows to Burst Balloons (dual earliest-end greedy)
+//   - #646 Maximum Length of Pair Chain (maximum non-overlapping chain length)
+//   - #56 Merge Intervals (sort-and-scan coalescing of overlapping intervals)
+//   - #252 Meeting Rooms (detecting whether zero removals are required)
+//   - #1235 Maximum Profit in Job Scheduling (weighted DP generalization)
 
 #include "framework/lc_framework.h"
 

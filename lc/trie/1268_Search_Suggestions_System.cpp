@@ -1,10 +1,57 @@
-// https://leetcode.com/problems/search-suggestions-system/description/
+// LeetCode 1268: Search Suggestions System
+// https://leetcode.com/problems/search-suggestions-system/
 //
-// Given an array of strings `products` and a string `searchWord`, design a
-// system that suggests at most three product names from `products` after each
-// character of `searchWord` is typed. Suggested products must share a common
-// prefix with `searchWord`, and if more than three match, return the three
-// lexicographically smallest products.
+// Problem:
+//   Given an array of unique lowercase English strings `products`
+//   (1 <= products.length <= 1000, sum of lengths <= 2 * 10^4) and a string
+//   `searchWord` (1 <= searchWord.length <= 1000), return a list of suggestion
+//   lists after each character of `searchWord` is typed. Each list must
+//   contain up to 3 products sharing the current typed prefix; if more than 3
+//   match, return the 3 lexicographically smallest products.
+//
+// Algorithm:
+//   Implements two approaches:
+//     1. `suggestedProducts` (Sort + Narrowing Binary Search): Sorts `products`
+//        lexicographically so all strings sharing any prefix form a contiguous
+//        range. As each character of `searchWord` extends `prefix`, calls
+//        `std::ranges::lower_bound` from the previous iterator `it` (since
+//        growing prefixes only advance the lower bound) and collects up to 3
+//        consecutive entries matching `starts_with(prefix)`.
+//        - Time: O(N * log(N) * L + M * (log(N) + L)), Space: O(1) auxiliary
+//          (excluding the sorted copy of `products` and output).
+//     2. `suggestedProductsTrie` (Sort + Cached-Suggestions Trie): Sorts
+//        `products` first, then inserts each into a flat-pool trie. Because
+//        insertions occur in sorted order, appending `product` to each visited
+//        node while `suggestions.size() < 3` pre-caches the exact top-3
+//        matches at every prefix. Querying `searchWord` steps one edge per
+//        character and copies the cached list (or empty lists after a miss).
+//        - Time: O(N * log(N) * L + sum(|products[i]|) + M),
+//          Space: O(sum(|products[i]|)) for trie nodes and cached suggestions.
+//
+// Data Structures:
+//   - `std::vector<std::string>` and `std::string_view`: Sorted product catalog
+//     and prefix views for monotonic binary search and `starts_with` checks.
+//   - `std::vector<TrieNode>` (flat arena-allocated Trie): Contiguous node pool
+//     where index 0 is the root (and absent-child sentinel); each `TrieNode`
+//     stores `std::array<int, 26> children` and `std::vector<std::string>
+//     suggestions` capped at 3 entries.
+//
+// Real-World Applications:
+//   - E-commerce search bars, browser omniboxes, and IDE command palettes
+//     providing instant type-ahead autocomplete suggestions.
+//   - Contact lookup, address autocomplete, and mobile keyboard completion
+//     with precomputed top-k prefix caches.
+//   - CLI tab completion and API explorer endpoint suggestion engines.
+//
+// Related LeetCode Problems:
+//   - #208 Implement Trie (Prefix Tree) (core prefix tree for prefix lookups)
+//   - #642 Design Search Autocomplete System (stateful top-3 autocomplete
+//     ranked by historical search frequency)
+//   - #211 Design Add and Search Words Data Structure (trie traversal with
+//     wildcard character lookup)
+//   - #720 Longest Word in Dictionary (lexicographically ordered trie /
+//     sorted-string prefix analysis)
+//   - #14 Longest Common Prefix (prefix comparison across sorted strings)
 
 #include "framework/lc_framework.h"
 

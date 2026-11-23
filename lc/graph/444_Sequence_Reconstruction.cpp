@@ -1,16 +1,52 @@
-// https://leetcode.com/problems/sequence-reconstruction/description/
+// LeetCode 444: Sequence Reconstruction
+// https://leetcode.com/problems/sequence-reconstruction/
 //
-// Check whether the permutation `org` (of integers 1..n) is the *unique*
-// shortest common supersequence that can be reconstructed from the subsequences
-// in `seqs`.
+// Problem:
+//   Given an integer array `org` representing a permutation of `1..n` and a
+//   list of subsequences `seqs`, determine whether `org` is the unique
+//   shortest common supersequence that can be reconstructed from `seqs`.
+//   Equivalently, every sequence in `seqs` must be a valid subsequence of
+//   `org`, and no other permutation of `1..n` may also contain all sequences
+//   in `seqs` as subsequences.
 //
-// Key graph insight:
-// A DAG has a unique topological ordering `org` if and only if:
-//   1. Every element in `seqs` is in `1..n` and every directed edge `a -> b`
-//      respects the ordering in `org` (`pos[a] < pos[b]`),
-//   2. Every element of `org` appears in at least one sequence, and
-//   3. Every consecutive pair `(org[i], org[i + 1])` appears directly as a
-//      consecutive pair in at least one sequence (forming a Hamiltonian path).
+// Algorithm:
+//   Direct position-and-edge verification without constructing an explicit
+//   graph. A DAG over `1..n` has `org` as its unique topological order if and
+//   only if:
+//     1. Every element in `seqs` lies in `1..n`, and every consecutive pair
+//        `(a, b)` inside any sequence strictly advances along `org`
+//        (`pos[a] < pos[b]`), ruling out inversions and self-loops.
+//     2. Every element of `org` appears in at least one sequence.
+//     3. Every adjacent pair `(org[i], org[i + 1])` appears directly as a
+//        consecutive pair in at least one sequence, guaranteeing a unique
+//        Hamiltonian path through the DAG.
+//   The implementation first builds an inverse index `pos[val] = index`, then
+//   streams through `seqs` once to verify all three conditions.
+//   Time: O(n + sum(|seq|)), Space: O(n).
+//
+// Data Structures:
+//   - `std::vector<int> pos`: Maps each value in `1..n` to its 0-based index
+//     in `org` for O(1) order lookups.
+//   - `Tracker` (`seen` and `matched_edge` `std::vector<std::uint8_t>` arrays
+//     plus `seen_count` and `matched_count`): Tracks node coverage and which
+//     consecutive edges `(org[i], org[i + 1])` have been witnessed.
+//
+// Real-World Applications:
+//   - Genome and read assembly: verifying whether overlapping DNA/RNA fragments
+//     uniquely determine a reference sequence without ambiguous orderings.
+//   - Distributed event reconstruction: checking if partial causal logs from
+//     independent services define a single unambiguous global timeline.
+//   - Build and workflow verification: confirming that partial dependency
+//     chains enforce a single deterministic execution order.
+//
+// Related LeetCode Problems:
+//   - #207 Course Schedule (directed cycle detection / topological feasibility)
+//   - #210 Course Schedule II (computing a valid topological ordering of a DAG)
+//   - #269 Alien Dictionary (inferring a character ordering from precedence
+//     constraints)
+//   - #1136 Parallel Courses (level-by-level topological sort on a DAG)
+//   - #2392 Build a Matrix With Conditions (constructing total orderings from
+//     relative precedence pairs)
 
 #include "framework/lc_framework.h"
 

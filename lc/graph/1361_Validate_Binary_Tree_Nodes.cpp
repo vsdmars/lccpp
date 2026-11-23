@@ -1,15 +1,54 @@
+// LeetCode 1361: Validate Binary Tree Nodes
 // https://leetcode.com/problems/validate-binary-tree-nodes/
 //
-// You have `n` nodes numbered 0..n-1 with children given by `leftChild[i]` and
-// `rightChild[i]` (`-1` means no child). Return true if and only if all `n`
-// nodes form exactly one valid binary tree.
+// Problem:
+//   You are given `n` nodes labeled `0..n-1` with child pointers given by
+//   `leftChild[i]` and `rightChild[i]` (`-1` means no child). Return `true` if
+//   and only if all `n` nodes form exactly one valid binary tree; otherwise
+//   return `false`. Constraints: 1 <= n <= 10^4,
+//   leftChild.length == rightChild.length == n, and
+//   -1 <= leftChild[i], rightChild[i] <= n - 1.
 //
-// A directed graph with at most 2 outgoing edges per node is a single valid
-// binary tree iff:
-//   1. Every node has in-degree <= 1, and exactly one node (the root) has
-//      in-degree 0;
-//   2. Traversing from the root visits every node exactly once (no cycles and
-//      no disconnected components).
+// Algorithm:
+//   Two-phase validation combining in-degree inspection with Breadth-First
+//   Search (BFS). A directed graph where every vertex has out-degree <= 2 forms
+//   a single valid binary tree if and only if: (1) every node has in-degree <=
+//   1 (no shared child / multiple parents) and exactly one node has in-degree 0
+//   (the unique root), and (2) traversing from that root visits all `n` nodes
+//   exactly once (no directed cycles and no disconnected forest components).
+//   `find_unique_root` validates condition (1) in a single pass, then BFS from
+//   `root` checks for revisits and verifies `visited_count == n`.
+//   Time Complexity: O(n), inspecting each node and at most 2n child links a
+//     constant number of times.
+//   Space Complexity: O(n) for the in-degree array, visited array, and BFS
+//     queue.
+//
+// Data Structures:
+//   - `std::vector<int> indegree`: Counts incoming parent edges per node to
+//     reject nodes with > 1 parent and locate the unique root.
+//   - `std::queue<int> q`: FIFO frontier queue driving BFS traversal from the
+//     root.
+//   - `std::vector<std::uint8_t> visited`: Compact byte-flag array detecting
+//     cycles or shared descendants and verifying full reachability.
+//
+// Real-World Applications:
+//   - Validating deserialized ASTs, DOM trees, or flat index-table tree formats
+//     before running recursive traversals that would loop on hidden cycles.
+//   - Integrity verification of hierarchical directory trees, org charts, or
+//     scene graphs stored as parent-child rows in relational databases.
+//   - Sanity-checking binary decision trees or expression trees built from
+//     untrusted user configurations.
+//
+// Related LeetCode Problems:
+//   - #261 Graph Valid Tree (validating that an undirected graph is a single
+//     connected acyclic tree)
+//   - #685 Redundant Connection II (rooted directed tree anomalies involving a
+//     node with two parents or a directed cycle)
+//   - #2196 Create Binary Tree From Descriptions (building a binary tree from
+//     child links and finding the unique zero-in-degree root)
+//   - #207 Course Schedule (directed cycle detection via in-degrees and BFS)
+//   - #98 Validate Binary Search Tree (validating structural/ordering rules on
+//     a binary tree)
 
 #include "framework/lc_framework.h"
 

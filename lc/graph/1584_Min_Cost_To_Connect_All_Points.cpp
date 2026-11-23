@@ -1,9 +1,58 @@
-// https://leetcode.com/problems/min-cost-to-connect-all-points/description/
+// LeetCode 1584: Min Cost to Connect All Points
+// https://leetcode.com/problems/min-cost-to-connect-all-points/
 //
-// Given an array `points` representing integer 2D coordinates where
-// `points[i] = [xi, yi]`, the cost of connecting two points is their Manhattan
-// distance `|xi - xj| + |yi - yj|`. Return the minimum total cost to connect
-// all points into a single spanning tree.
+// Problem:
+//   Given an array `points` of distinct 2D integer coordinates where
+//   `points[i] = [xi, yi]`, the cost of connecting two points `i` and `j` is
+//   their Manhattan distance `|xi - xj| + |yi - yj|`. Return the minimum total
+//   cost to connect all points so that exactly one simple path exists between
+//   every pair of points (i.e., the Minimum Spanning Tree weight of the
+//   complete graph on `points`). Constraints: 1 <= points.length <= 1000,
+//   -10^6 <= xi, yi <= 10^6.
+//
+// Algorithm:
+//   Prim's Minimum Spanning Tree (MST) algorithm using a binary min-heap and
+//   best-known distance relaxation. Starting from point `0`, the loop pops the
+//   minimum-cost frontier edge `(dist, idx)`, discards stale entries whose
+//   endpoint is already in the MST, adds `dist` to `total_cost`, and computes
+//   Manhattan distances from `idx` to all remaining unvisited points on the
+//   fly. A candidate `(ndist, next)` is pushed to the heap only if it strictly
+//   improves `min_dist[next]`. By the MST cut property, greedily selecting the
+//   lightest edge crossing between visited and unvisited sets produces a
+//   minimum-weight spanning tree without pre-building all O(N^2) edges.
+//   Time Complexity: O(N^2 log N) worst case (up to O(N^2) heap pushes, each
+//     O(log N)).
+//   Space Complexity: O(N^2) worst case for heap entries (`O(N)` for `visited`
+//     and `min_dist`).
+//
+// Data Structures:
+//   - `std::priority_queue<Edge, std::vector<Edge>, std::greater<>> min_heap`:
+//     Min-heap of `(distance, point_index)` pairs retrieving the cheapest edge
+//     to expand the MST.
+//   - `std::vector<bool> visited`: Tracks points already added to the MST to
+//     skip outdated heap entries.
+//   - `std::vector<int> min_dist`: Stores the smallest known Manhattan distance
+//     from the current MST to each unvisited point to prune dominated pushes.
+//
+// Real-World Applications:
+//   - VLSI chip design and PCB rectilinear wire routing: minimizing total
+//     Manhattan wirelength when connecting pins across a grid-aligned layout.
+//   - Urban telecommunications, fiber-optic, and water/gas pipe deployment
+//     along Manhattan-style street grids at minimum infrastructure cost.
+//   - Single-linkage hierarchical clustering in spatial data analysis and
+//     machine learning via Minimum Spanning Tree construction.
+//
+// Related LeetCode Problems:
+//   - #1135 Connecting Cities With Minimum Cost (classic MST on an explicit
+//     weighted undirected graph)
+//   - #1168 Optimize Water Distribution in a Village (MST augmented with a
+//     virtual node modeling per-vertex installation costs)
+//   - #1489 Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree
+//     (classifying edges by their role across all MSTs)
+//   - #743 Network Delay Time (greedy min-heap relaxation structurally similar
+//     to Prim's algorithm)
+//   - #1579 Remove Max Number of Edges to Keep Graph Fully Traversable
+//     (spanning-tree connectivity optimization across edge types)
 
 #include "framework/lc_framework.h"
 

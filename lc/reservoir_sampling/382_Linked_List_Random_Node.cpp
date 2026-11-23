@@ -1,8 +1,50 @@
+// LeetCode 382: Linked List Random Node
 // https://leetcode.com/problems/linked-list-random-node/
 //
-// Given a singly linked list, return a random node's value from the linked list
-// such that each node has the same probability of being chosen, using O(1)
-// extra space without knowing the list length in advance (Reservoir Sampling).
+// Problem:
+//   Given the `head` of a singly linked list (1 <= n <= 10^4 nodes,
+//   -10^4 <= Node.val <= 10^4, up to 10^4 calls to `getRandom`), implement a
+//   `Solution` class whose `getRandom()` returns a random node's value such
+//   that every node has an equal 1 / n probability of being chosen. The
+//   follow-up requires O(1) extra memory without knowing the list length in
+//   advance or copying nodes into an array.
+//
+// Algorithm:
+//   Uses Reservoir Sampling with reservoir size k = 1 (Waterman's Algorithm R).
+//   The constructor stores only `head_` and seeds a Mersenne Twister PRNG.
+//   Each `getRandom()` call makes a single forward pass over the list while
+//   incrementing a 1-indexed counter `seen`. At the i-th node, it draws a
+//   uniform integer in [0, i - 1]; if the draw equals 0 (probability 1 / i),
+//   `chosen` is replaced with the current node's value. By induction, after n
+//   nodes, the i-th node survives all subsequent steps with exact probability
+//   (1 / i) * (i / (i + 1)) * ... * ((n - 1) / n) = 1 / n.
+//   - Constructor: Time O(1), Space O(1).
+//   - `getRandom`: Time O(n), Space O(1) auxiliary.
+//
+// Data Structures:
+//   - `ListNode`: Singly linked list node containing `int val` and
+//     `ListNode* next`.
+//   - `std::mt19937` and `std::uniform_int_distribution<int>`: Unbiased PRNG
+//     and integer range distribution for exact 1 / i replacement probability.
+//   - `ListArena` (`std::deque<ListNode>`): Test-harness RAII arena owning all
+//     list nodes with stable addresses during tests.
+//
+// Real-World Applications:
+//   - Uniformly sampling log lines, telemetry events, or network packets from
+//     unbounded real-time streams in observability platforms.
+//   - Traffic shadowing, canary request sampling, and online A/B test logging
+//     without buffering full datasets in memory.
+//   - Single-pass subsampling in big-data pipelines (e.g. Kafka consumers and
+//     Spark streaming jobs) where total record count is unknown ahead of time.
+//
+// Related LeetCode Problems:
+//   - #398 Random Pick Index (reservoir sampling filtered to indices matching
+//     a target value)
+//   - #528 Random Pick with Weight (weighted discrete sampling via prefix sums
+//     and binary search)
+//   - #384 Shuffle an Array (Fisher-Yates uniform random permutation)
+//   - #497 Random Point in Non-overlapping Rectangles (uniform geometric
+//     sampling using area-weighted prefix sums)
 
 #include "framework/lc_framework.h"
 

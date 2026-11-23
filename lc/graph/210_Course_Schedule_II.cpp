@@ -1,8 +1,47 @@
-// https://leetcode.com/problems/course-schedule-ii/description/
+// LeetCode 210: Course Schedule II
+// https://leetcode.com/problems/course-schedule-ii/
 //
-// Given `numCourses` courses labeled 0..numCourses-1 and prerequisite pairs
-// `[a, b]` meaning course `b` must be taken before course `a`, return any valid
-// ordering to finish all courses, or an empty vector if impossible.
+// Problem:
+//   Given `numCourses` courses labeled from 0 to `numCourses - 1` and a list of
+//   prerequisite pairs `[a, b]` meaning course `b` must be completed before
+//   course `a`, return any valid sequence of all courses that satisfies every
+//   prerequisite. If multiple valid orderings exist, return any of them; if no
+//   valid ordering exists (due to a cycle), return an empty vector.
+//
+// Algorithm:
+//   Build a directed adjacency list with edges oriented `course -> prereq`,
+//   then run a post-order 3-state DFS (`kUnvisited`, `kVisiting`, `kVisited`)
+//   starting from every unvisited course.
+//   Key invariant: because edges point from a course to its prerequisites, all
+//   transitive prerequisites of a node finish and get appended to `order`
+//   before the node itself is marked `kVisited` and appended. This produces a
+//   valid topological ordering directly without needing to reverse the output.
+//   Hitting a `kVisiting` node signals a back-edge (cycle) and aborts with `{}`.
+//   Time Complexity:  O(V + E), where V = numCourses and E = prerequisites.size.
+//   Space Complexity: O(V + E) for the adjacency list, state array, output
+//                     vector, and recursion stack.
+//
+// Data Structures:
+//   - `std::vector<std::vector<int>> adj`: adjacency list storing prerequisite
+//     edges `course -> prereq`.
+//   - `std::vector<State> state`: 3-state visitation array (`uint8_t` enum) for
+//     cycle detection and memoizing completed subgraphs.
+//   - `std::vector<int> order`: pre-reserved result vector populated in DFS
+//     post-order.
+//
+// Real-World Applications:
+//   - Task schedulers and CI/CD pipelines (Airflow, Bazel) ordering dependent
+//     jobs for execution.
+//   - Compilers and linkers resolving module compilation and symbol init order.
+//   - Database migration runners applying schema changes in dependency order.
+//   - Spreadsheet recalculation engines ordering dirty formula evaluations.
+//
+// Related LeetCode Problems:
+//   - #207 Course Schedule (decision version checking only for cycle absence)
+//   - #269 Alien Dictionary (topological sort over derived character ordering)
+//   - #310 Minimum Height Trees (iterative leaf peeling akin to Kahn's sort)
+//   - #444 Sequence Reconstruction (verifies uniqueness of a topological order)
+//   - #1136 Parallel Courses (layered topological sort for minimum semesters)
 
 #include "framework/lc_framework.h"
 

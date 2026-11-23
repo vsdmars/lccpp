@@ -1,8 +1,54 @@
+// LeetCode 305: Number of Islands II
 // https://leetcode.com/problems/number-of-islands-ii/
 //
-// Starting from an m x n grid of water, perform a sequence of `addLand(r, c)`
-// operations. After each operation, return the current number of 4-directionally
-// connected islands.
+// Problem:
+//   Start with an `m x n` 2D grid initially filled completely with water. Given
+//   a sequence of `positions` where each `[r, c]` turns cell `(r, c)` into land
+//   (an `addLand` operation), return a vector of integers recording the total
+//   number of 4-directionally connected islands after each operation. Duplicate
+//   operations on an existing land cell leave the grid and count unchanged.
+//
+// Algorithm:
+//   Model dynamic 4-directional grid connectivity using Disjoint Set Union
+//   (Union-Find) over flattened 1D cell IDs `id = r * n + c`, with path
+//   compression and union by rank.
+//   Maintain a running `islands` counter initialized to 0. For each `[r, c]`:
+//     1. If `parent[id] != -1`, the cell is already land; append `islands` and
+//        skip.
+//     2. Otherwise mark `parent[id] = id` (creating a singleton island) and
+//        increment `islands`.
+//     3. Check all 4 orthogonal neighbors (`kDirs`). For each in-bounds
+//        neighbor that is already land (`parent[nid] != -1`), call `unite(id,
+//        nid)`; if the two cells belonged to different islands, decrement
+//        `islands`.
+//     4. Append the updated `islands` count to `result`.
+//   Time Complexity:  O(m * n + k * alpha(m * n)), where k = positions.size()
+//                     (O(m * n) to initialize arrays, O(alpha(m * n)) amortized
+//                     per operation).
+//   Space Complexity: O(m * n) for the DSU arrays (plus O(k) for the output).
+//
+// Data Structures:
+//   - `std::vector<int> parent`: flattened `m * n` DSU parent table where `-1`
+//     acts as a sentinel for water and non-negative entries store parent IDs.
+//   - `std::vector<int> rank`: union-by-rank heights for balanced merges.
+//   - `std::array<std::pair<int, int>, 4> kDirs`: 4-neighbor coordinate offsets.
+//   - `std::vector<int> result`: island count recorded after each `addLand`.
+//
+// Real-World Applications:
+//   - Incremental image segmentation and connected-component labeling as pixels
+//     or foreground regions stream in.
+//   - Percolation simulations in physics and materials science tracking cluster
+//     merging as sites open dynamically.
+//   - GIS / map tiling systems maintaining landmass or service-coverage zones
+//     under real-time terrain or sensor updates.
+//
+// Related LeetCode Problems:
+//   - #200 Number of Islands (static connected-component count on a fixed grid)
+//   - #695 Max Area of Island (tracks largest connected land area on a grid)
+//   - #827 Making A Large Island (merges adjacent islands via one water flip)
+//   - #959 Regions Cut By Slashes (Union-Find region merging on a grid)
+//   - #1970 Last Day Where You Can Still Cross (dynamic grid connectivity via
+//     reverse-time Union-Find)
 
 #include "framework/lc_framework.h"
 

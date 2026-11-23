@@ -1,8 +1,47 @@
-// https://leetcode.com/problems/merge-intervals/description/
+// LeetCode 56: Merge Intervals
+// https://leetcode.com/problems/merge-intervals/
 //
-// Given an array of `intervals` where `intervals[i] = [start_i, end_i]`, merge
-// all overlapping intervals and return an array of the non-overlapping
-// intervals that cover all the intervals in the input.
+// Problem:
+//   Given an array of intervals where `intervals[i] = [start_i, end_i]`, merge
+//   all overlapping (or endpoint-touching) intervals and return an array of
+//   mutually disjoint intervals that cover the exact same union as the input.
+//   Constraints: 1 <= intervals.size() <= 10^4 (empty input returns empty),
+//   0 <= start_i <= end_i <= 10^4 (implementation also supports negative
+//   coordinates).
+//
+// Algorithm:
+//   Sort-and-sweep greedy merge. Sort `intervals` lexicographically (by start
+//   ascending, then end ascending). Iterate over the sorted intervals while
+//   maintaining the merged output list: if `merged` is non-empty and the
+//   current interval starts at or before `merged.back()[1]`, extend
+//   `merged.back()[1]` to `max(merged.back()[1], interval[1])`; otherwise
+//   append the new disjoint interval to `merged`.
+//   Key invariant: every interval already in `merged` is strictly disjoint
+//   from all earlier ones, and no future interval can start before
+//   `merged.back()[0]`, so only the last merged interval can ever overlap.
+//   Time: O(N log N) for sorting, Space: O(N) for the output vector (plus
+//   O(log N) sort stack space).
+//
+// Data Structures:
+//   - `std::vector<std::vector<int>> intervals`: input list sorted in place
+//     via `std::ranges::sort`.
+//   - `std::vector<std::vector<int>> merged`: output stack whose back element
+//     tracks the active merged range.
+//
+// Real-World Applications:
+//   - Coalescing adjacent or overlapping free memory blocks in heap allocators
+//     and disk/extent managers.
+//   - Merging overlapping time ranges in calendar availability views, uptime
+//     SLA calculators, and log/trace timeline visualizations.
+//   - Consolidating byte-range requests in HTTP caching proxies and storage
+//     I/O schedulers (read/write coalescing).
+//
+// Related LeetCode Problems:
+//   - #57 Insert Interval (insert and merge into an already-sorted list)
+//   - #986 Interval List Intersections (intersect two disjoint interval lists)
+//   - #759 Employee Free Time (find complement gaps of merged busy schedules)
+//   - #252 Meeting Rooms (sort by start time to test for any overlap)
+//   - #435 Non-overlapping Intervals (minimum removals to avoid all overlaps)
 
 #include "framework/lc_framework.h"
 

@@ -1,8 +1,54 @@
-// https://leetcode.com/problems/reconstruct-itinerary/description/
+// LeetCode 332: Reconstruct Itinerary
+// https://leetcode.com/problems/reconstruct-itinerary/
 //
-// Given airline tickets `[from, to]`, reconstruct the itinerary starting at
-// `"JFK"` that uses every ticket exactly once (a directed Eulerian path). If
-// multiple valid itineraries exist, return the lexicographically smallest one.
+// Problem:
+//   Given a list of airline tickets `tickets[i] = [from, to]` representing
+//   directed flights between 3-letter airport codes, reconstruct the itinerary
+//   starting at `"JFK"` that uses every ticket exactly once (a directed
+//   Eulerian path). At least one valid itinerary is guaranteed to exist; if
+//   multiple valid itineraries exist, return the lexicographically smallest one
+//   when read as a sequence of airport codes.
+//
+// Algorithm:
+//   Implements Hierholzer's algorithm for finding a directed Eulerian path in
+//   both recursive (`findItinerary`) and iterative (`review`) forms.
+//   Build an adjacency list from `tickets` and sort each airport's destination
+//   list in descending lexicographical order so the smallest remaining
+//   destination can be removed in O(1) from the back of the vector. Starting at
+//   `"JFK"`, greedily consume outgoing edges until stuck at a node with no
+//   unused outgoing flights, then append that airport to `route` in post-order.
+//   Key invariant: at most one vertex in an Eulerian trail is a dead-end sink
+//   (out-degree < in-degree); post-order recording guarantees that dead-end
+//   subpaths are appended first (ending up last after reversing `route`), while
+//   all cycle detours are spliced cleanly before it in lexicographical order.
+//   Time Complexity:  O(E log E), dominated by sorting adjacency lists, where
+//                     E = tickets.size().
+//   Space Complexity: O(E) for the adjacency map, recursion/explicit stack, and
+//                     output route of length E + 1.
+//
+// Data Structures:
+//   - `std::unordered_map<std::string, std::vector<std::string>> adj`: maps
+//     each departure airport to a descending-sorted vector of destinations
+//     acting as a min-pop stack (`back()` / `pop_back()`).
+//   - `std::vector<std::string> route`: collects airports in reverse Eulerian
+//     order before a final `std::ranges::reverse`.
+//   - `std::vector<std::string> stack` (in `review`): explicit traversal stack
+//     eliminating recursion depth limits.
+//
+// Real-World Applications:
+//   - Genome / DNA fragment assembly reconstructing a sequence from k-mer
+//     overlap graphs (De Bruijn graph Eulerian paths).
+//   - Postal, snowplow, street-sweeping, and garbage-collection route planning
+//     (Chinese Postman / edge-covering traversal).
+//   - PCB routing, laser cutting, and CNC toolpath planning minimizing pen-up
+//     moves across required segments.
+//
+// Related LeetCode Problems:
+//   - #753 Cracking the Safe (Eulerian circuit over a De Bruijn graph)
+//   - #2097 Valid Arrangement of Pairs (directed Eulerian path over integer
+//     pairs using Hierholzer's algorithm)
+//   - #743 Network Delay Time (weighted shortest paths in a directed network)
+//   - #787 Cheapest Flights Within K Stops (flight-graph routing with hop cap)
 
 #include "framework/lc_framework.h"
 

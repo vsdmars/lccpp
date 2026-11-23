@@ -1,8 +1,53 @@
+// LeetCode 415: Add Strings
 // https://leetcode.com/problems/add-strings/
 //
-// Given two non-negative integers `num1` and `num2` represented as strings,
-// return their sum as a string without using any built-in arbitrary-precision
-// integer library or converting the inputs directly to integers.
+// Problem:
+//   Given two non-negative integers `num1` and `num2` represented as decimal
+//   strings (1 <= num1.length, num2.length <= 10^4, digits '0'-'9' only, no
+//   leading zeros except "0" itself), return their sum as a decimal string.
+//   Built-in arbitrary-precision integer libraries (e.g. BigInteger) and
+//   converting the entire inputs directly to integers are disallowed.
+//
+// Algorithm:
+//   Implements both an iterative (`addStrings`) and a recursive
+//   (`addStringsRecursive`) elementary-school digit-by-digit addition from
+//   least-significant to most-significant digit. Indices `i` and `j` walk
+//   backward from the ends of `num1` and `num2` while maintaining an integer
+//   `carry`. As long as `i > 0 || j > 0 || carry != 0`, available digits are
+//   converted with `ch - '0'` and summed with `carry`; the ones digit
+//   `sum % 10` is appended to `result` and `carry` becomes `sum / 10`. Passing
+//   indices into the recursive lambda avoids quadratic string slicing. A
+//   single in-place `std::ranges::reverse` restores most-significant-first
+//   order.
+//   - Iterative (`addStrings`):          Time O(max(m, n)), Space O(max(m, n))
+//     for output (O(1) auxiliary).
+//   - Recursive (`addStringsRecursive`): Time O(max(m, n)), Space O(max(m, n))
+//     for output and recursion stack.
+//
+// Data Structures:
+//   - `std::string_view`: Non-owning views over `num1` and `num2` for
+//     zero-copy backward indexing.
+//   - `std::string`: Output buffer pre-reserved to `max(m, n) + 1` bytes to
+//     avoid reallocations while appending digits in reverse order.
+//   - Scalar counters (`i`, `j`, `carry`) and, in the recursive variant, the
+//     call stack via a C++23 deducing-`this` lambda (`dfs`).
+//
+// Real-World Applications:
+//   - Exact arbitrary-precision decimal arithmetic in financial ledgers,
+//     billing engines, and scientific calculators where 64-bit integers
+//     overflow and IEEE-754 floats lose precision.
+//   - Core addition kernels in BigInt libraries (GMP, OpenSSL BIGNUM, and
+//     language runtimes).
+//   - Serialization and telemetry systems summing unbounded numeric counters
+//     encoded as ASCII text.
+//
+// Related LeetCode Problems:
+//   - #43 Multiply Strings (arbitrary-precision multiplication of decimal
+//     strings)
+//   - #67 Add Binary (identical right-to-left carry propagation in base 2)
+//   - #2 Add Two Numbers (digit-by-digit addition with carry over linked lists)
+//   - #66 Plus One (adding 1 with carry propagation across a digit array)
+//   - #989 Add to Array-Form of Integer (adding an integer to a digit array)
 
 #include "framework/lc_framework.h"
 

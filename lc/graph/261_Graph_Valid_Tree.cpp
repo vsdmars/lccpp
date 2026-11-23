@@ -1,11 +1,47 @@
-// https://leetcode.com/problems/graph-valid-tree/description/
+// LeetCode 261: Graph Valid Tree
+// https://leetcode.com/problems/graph-valid-tree/
 //
-// Given `n` nodes labeled 0..n-1 and a list of undirected edges, determine
-// whether these edges form a valid tree.
+// Problem:
+//   Given `n` vertices labeled from 0 to `n - 1` and a list of undirected edges
+//   `edges[i] = [u, v]`, determine whether the edges form a valid tree. Return
+//   true if the graph is a single connected, acyclic component spanning all `n`
+//   nodes, and false otherwise.
 //
-// A graph with `n` vertices is a valid tree if and only if:
-//   1. It has exactly `n - 1` edges, and
-//   2. It is acyclic (equivalently, fully connected).
+// Algorithm:
+//   Use the graph-theoretic characterization of trees: an undirected graph on
+//   `n` vertices is a tree if and only if it has exactly `n - 1` edges AND is
+//   acyclic (which, combined with `n - 1` edges, implies full connectivity).
+//   First reject immediately if `n <= 0` or `edges.size() != n - 1`. Then scan
+//   each edge `[u, v]` using Disjoint Set Union (Union-Find) with path
+//   compression and union by rank. If `find(u) == find(v)`, `u` and `v` are
+//   already connected so adding the edge forms a cycle and we return false. If
+//   all `n - 1` edges merge distinct components without a cycle, return true.
+//   Time Complexity:  O(n * alpha(n)), where alpha is the inverse Ackermann
+//                     function (nearly O(n) in practice).
+//   Space Complexity: O(n) for the `parent` and `rank` arrays.
+//
+// Data Structures:
+//   - `std::vector<int> parent`: disjoint-set forest parent pointers updated
+//     lazily with recursive path compression in `find`.
+//   - `std::vector<int> rank`: upper bound on each root's subtree height for
+//     union by rank, keeping trees shallow.
+//
+// Real-World Applications:
+//   - Network topology verification (e.g., Spanning Tree Protocol preventing
+//     Ethernet switching loops while maintaining full reachability).
+//   - Validating hierarchical data structures such as org charts, file system
+//     mount trees, or scene graphs for accidental cycles or orphans.
+//   - Kruskal's minimum spanning tree construction, which incrementally tests
+//     candidate edges for cycle formation.
+//
+// Related LeetCode Problems:
+//   - #323 Number of Connected Components in an Undirected Graph (counts
+//     disjoint components using graph traversal or Union-Find)
+//   - #684 Redundant Connection (finds the exact edge that creates a cycle)
+//   - #685 Redundant Connection II (directed-tree variant with 2-parent cases)
+//   - #1319 Number of Operations to Make Network Connected (connectivity and
+//     redundant-edge counting via Union-Find)
+//   - #1361 Validate Binary Tree Nodes (tree-validity check on binary trees)
 
 #include "framework/lc_framework.h"
 

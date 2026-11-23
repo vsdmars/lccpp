@@ -1,9 +1,57 @@
+// LeetCode 1857: Largest Color Value in a Directed Graph
 // https://leetcode.com/problems/largest-color-value-in-a-directed-graph/
 //
-// Given a directed graph of `n` nodes where `colors[i]` is a lowercase letter
-// assigned to node `i`, the color value of a directed path is the maximum
-// frequency of any single color along that path. Return the largest color value
-// over all valid paths, or -1 if the graph contains a cycle.
+// Problem:
+//   Given a directed graph of `n` nodes (`0..n-1`), a string `colors` where
+//   `colors[i]` is a lowercase English letter (`'a'..'z'`) assigned to node
+//   `i`, and directed `edges[j] = [u, v]`, define the color value of a directed
+//   path as the maximum frequency of any single color among the nodes on that
+//   path. Return the largest color value over all valid directed paths, or `-1`
+//   if the graph contains a cycle. Constraints: 1 <= n <= 10^5,
+//   0 <= edges.length <= 10^5.
+//
+// Algorithm:
+//   Kahn's topological sort (BFS) combined with Directed Acyclic Graph (DAG)
+//   dynamic programming. Let `dp[u][c]` hold the maximum count of color `c`
+//   (`0 <= c < 26`) along any path ending at node `u`. Each node starts with
+//   `dp[i][color(i)] = 1`, and all zero-in-degree nodes enter the queue. When
+//   `u` is dequeued, all incoming predecessors have already finalized `dp[u]`,
+//   so `best` is updated with `max_c dp[u][c]` and each outgoing edge `u -> v`
+//   relaxes `dp[v][c] = max(dp[v][c], dp[u][c] + (c == color(v)))` across all
+//   26 colors. Decrementing `indegree[v]` enqueues `v` once it reaches 0. If
+//   fewer than `n` nodes are processed, a directed cycle prevented remaining
+//   nodes from reaching in-degree 0, so `-1` is returned.
+//   Time Complexity: O(26 * (V + E)) = O(V + E), as alphabet size is constant.
+//   Space Complexity: O(26 * V + E) = O(V + E) for the DP table, adjacency
+//     list, in-degree array, and queue.
+//
+// Data Structures:
+//   - `std::vector<std::vector<std::size_t>> adj`: Directed adjacency list
+//     storing outgoing neighbors for each vertex.
+//   - `std::vector<int> indegree`: Tracks remaining unprocessed incoming edges
+//     per node for Kahn's topological ordering and cycle detection.
+//   - `std::vector<std::array<int, 26>> dp`: Per-node fixed-size color-count DP
+//     table tracking peak frequency of each letter on paths ending at node `u`.
+//   - `std::queue<std::size_t> q`: FIFO queue of zero-in-degree frontier nodes.
+//
+// Real-World Applications:
+//   - Build-system and CI/CD DAG critical-path analysis: bounding the worst-
+//     case count of a specific job category (e.g., GPU or database-migration
+//     steps) on any dependency chain while catching circular dependencies.
+//   - Static program analysis over acyclic call graphs to find maximum
+//     occurrences of categorized operations or taint tags along execution paths.
+//   - Workflow orchestration engines (e.g., Airflow, Bazel) computing per-
+//     resource bottleneck metrics across DAG execution pipelines.
+//
+// Related LeetCode Problems:
+//   - #207 Course Schedule (directed cycle detection via Kahn's BFS algorithm)
+//   - #210 Course Schedule II (producing a topological order via in-degrees)
+//   - #2050 Parallel Courses III (DAG dynamic programming propagated in Kahn's
+//     topological order)
+//   - #329 Longest Increasing Path in a Matrix (longest-path DP on an implicit
+//     DAG)
+//   - #802 Find Eventual Safe States (identifying cycle-free nodes via
+//     topological peeling)
 
 #include "framework/lc_framework.h"
 

@@ -1,8 +1,52 @@
+// LeetCode 1202: Smallest String With Swaps
 // https://leetcode.com/problems/smallest-string-with-swaps/
 //
-// Given a string `s` and pairs of swappable indices `pairs`, you may swap the
-// characters at any given pair any number of times. Return the lexicographically
-// smallest string achievable.
+// Problem:
+//   Given a lowercase string `s` of length `N` and a list of index pairs
+//   `pairs`, where each pair `[a, b]` allows swapping `s[a]` and `s[b]` any
+//   number of times, return the lexicographically smallest string that can be
+//   obtained after any sequence of allowed swaps.
+//
+// Algorithm:
+//   Connected-components DFS with greedy per-component sorting. Treat string
+//   indices `0..N-1` as vertices and each pair `[a, b]` as an undirected edge.
+//   Because swaps are transitive and unlimited, any connected component can
+//   realize every permutation of its characters across its member indices.
+//   Therefore, the globally lexicographically smallest string is achieved by
+//   independently sorting each component's indices in ascending order and its
+//   characters in ascending order, then placing the smallest characters at the
+//   earliest indices. Isolated indices (`adj[i].empty()`) are skipped directly.
+//   Time: O(N log N + E), Space: O(N + E), where N = s.size() and
+//   E = pairs.size().
+//
+// Data Structures:
+//   - `std::vector<std::vector<std::size_t>> adj`: undirected adjacency list
+//     representing allowed index swaps.
+//   - `std::vector<std::uint8_t> visited`: byte-packed visited flags tracking
+//     already-processed vertices during DFS.
+//   - `std::vector<std::size_t> comp_indices` and `std::string comp_chars`:
+//     reusable buffers collecting the indices and characters of each connected
+//     component before sorting and writing back into `s`.
+//
+// Real-World Applications:
+//   - Equivalence-class canonicalization in record deduplication, alias
+//     resolution, and entity-merging pipelines where linked records share a
+//     canonical representative.
+//   - Memory/storage defragmentation and network routing optimization where
+//     items within connected swap domains can be reordered into optimal layout.
+//   - Symmetry breaking and canonical form generation in combinatorial solvers.
+//
+// Related LeetCode Problems:
+//   - #1722 Minimize Hamming Distance After Swap Operations (same connected-
+//     component swappability graph, greedily matching character multisets)
+//   - #1998 GCD Sort of an Array (swappability graph induced by shared prime
+//     factors, checking whether sorting each component sorts the whole array)
+//   - #547 Number of Provinces (foundational undirected connected-components
+//     traversal via DFS or Union-Find)
+//   - #721 Accounts Merge (groups transitively connected accounts into
+//     components and sorts elements within each component)
+//   - #2948 Make Lexicographically Smallest Array by Swapping Elements (groups
+//     transitively swappable elements within threshold `limit` and sorts each)
 
 #include "framework/lc_framework.h"
 

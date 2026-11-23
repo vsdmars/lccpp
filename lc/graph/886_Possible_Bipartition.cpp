@@ -1,8 +1,50 @@
+// LeetCode 886: Possible Bipartition
 // https://leetcode.com/problems/possible-bipartition/
 //
-// Given `n` people numbered 1..n and pairs `[a, b]` indicating that `a` and `b`
-// dislike each other, determine whether everyone can be partitioned into two
-// groups such that no two people who dislike each other share a group.
+// Problem:
+//   Given `n` people labeled 1 through `n` and an array `dislikes` where
+//   `dislikes[i] = [a_i, b_i]` means person `a_i` and person `b_i` dislike
+//   each other, return true if everyone can be split into two groups such that
+//   no pair of people who dislike each other end up in the same group.
+//   Constraints: 1 <= n <= 2000, 0 <= dislikes.size() <= 10^4, no self-loops
+//   or duplicate pairs; the dislike graph may be disconnected.
+//
+// Algorithm:
+//   Model the problem as 2-coloring an undirected graph (testing whether it is
+//   bipartite, i.e., free of odd-length cycles). Two implementations are
+//   provided:
+//   1. `possibleBipartition`: Recursive DFS 2-coloring using colors {0, 1}
+//      (-1 for unvisited). For each uncolored person, assign color 0 and
+//      recursively require every neighbor to take the opposite color (`c ^ 1`).
+//   2. `rewriteBfs`: Iterative BFS 2-coloring using colors {+1, -1} (0 for
+//      unvisited). For each unvisited component, color the root +1 and push it
+//      onto a queue; every neighbor must be colored with `-cur_color`.
+//   Key invariant: every explored edge connects vertices of opposite colors; a
+//   conflict proves an odd cycle and immediately returns false.
+//   Time: O(V + E), Space: O(V + E), where V = n and E = dislikes.size().
+//
+// Data Structures:
+//   - `std::vector<std::vector<int>> adj`: 1-indexed adjacency list for the
+//     undirected dislike graph.
+//   - `std::vector<std::int8_t> color`: per-vertex group assignment and
+//     visited marker.
+//   - `std::queue<int> q` (in `rewriteBfs`): FIFO frontier for level-order
+//     BFS traversal.
+//
+// Real-World Applications:
+//   - Two-way conflict partitioning in exam or meeting scheduling when pairs
+//     of events cannot share a time slot.
+//   - Dual-rail / two-layer PCB and VLSI routing where crossing nets must be
+//     assigned to opposite layers.
+//   - Register allocation and interference-graph 2-coloring in compiler
+//     backends for two-bank register architectures.
+//
+// Related LeetCode Problems:
+//   - #785 Is Graph Bipartite? (direct 2-coloring on a given adjacency list)
+//   - #207 Course Schedule (graph traversal and cycle detection on dependencies)
+//   - #261 Graph Valid Tree (undirected connectivity and acyclicity check)
+//   - #1042 Flower Planting With No Adjacent (4-coloring bounded-degree graphs)
+//   - #990 Satisfiability of Equality Equations (constraint-based partitioning)
 
 #include "framework/lc_framework.h"
 

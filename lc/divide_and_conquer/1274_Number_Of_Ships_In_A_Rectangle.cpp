@@ -1,10 +1,50 @@
-// https://leetcode.com/problems/number-of-ships-in-a-rectangle/description/
+// LeetCode 1274: Number of Ships in a Rectangle
+// https://leetcode.com/problems/number-of-ships-in-a-rectangle/
 //
-// Each ship is located at an integer point on a 2D Cartesian plane, with at
-// most one ship per integer point and at most 10 ships in the queried
-// rectangle. Given an interactive `Sea::hasShips(topRight, bottomLeft)` API
-// that returns true iff at least one ship lies inside or on the boundary of
-// the rectangle, return the exact number of ships inside the rectangle.
+// Problem:
+//   Each ship sits at a distinct integer coordinate on a 2D Cartesian grid
+//   (up to 1000 x 1000), with at most one ship per point and at most 10 ships
+//   inside the queried rectangle `[bottomLeft, topRight]`. Given only an
+//   interactive oracle `Sea::hasShips(topRight, bottomLeft)` that returns true
+//   iff at least one ship lies inside or on the boundary of that rectangle,
+//   return the exact number of ships while making at most 400 oracle calls.
+//
+// Algorithm:
+//   2D divide-and-conquer (implicit quadtree search). For a rectangle
+//   `[bottom_left, top_right]`, first discard inverted bounds and immediately
+//   prune empty regions when `sea.hasShips` returns false. If the rectangle
+//   collapses to a single point (`bottom_left == top_right`), it must contain
+//   exactly 1 ship. Otherwise, split at `(mid_x, mid_y)` into four pairwise
+//   disjoint subrectangles so no boundary point is double-counted, and sum the
+//   recursive counts. Because at most `S <= 10` ships exist, at most `S`
+//   branches stay active at each level of the quadtree, keeping total queries
+//   far below the 400-call budget.
+//   Time: O(S * log(max(W, H))) oracle calls and work, where W and H are the
+//   rectangle dimensions and S <= 10. Space: O(log(max(W, H))) recursion stack.
+//
+// Data Structures:
+//   - `Point`: lightweight 2D integer coordinate struct (`x`, `y`) with
+//     defaulted equality comparison.
+//   - `Sea`: mock judge oracle holding `std::vector<Point> ships_` and a
+//     mutable `query_count_` counter for test verification.
+//   - Call stack: implicitly represents the active root-to-leaf path in the
+//     quadtree without allocating explicit tree nodes.
+//
+// Real-World Applications:
+//   - Spatial indexing and quadtree range search in GIS, radar/lidar target
+//     localization, and game-engine broad-phase collision detection.
+//   - Sparse 2D defect detection and group testing, where area probes quickly
+//     eliminate large empty regions before zooming into active hotspots.
+//   - Adaptive image compression and hierarchical spatial partitioning.
+//
+// Related LeetCode Problems:
+//   - #427 Construct Quad Tree (explicitly builds a 2D quadtree by recursively
+//     subdividing a grid into four quadrants)
+//   - #558 Logical OR of Two Binary Grids Represented as Quad-Trees (operates
+//     recursively over quadtree partitions)
+//   - #240 Search a 2D Matrix II (2D divide-and-conquer / quadrant pruning)
+//   - #302 Smallest Rectangle Enclosing Black Pixels (binary-search probing
+//     over a 2D grid to locate sparse occupied coordinates)
 
 #include "framework/lc_framework.h"
 

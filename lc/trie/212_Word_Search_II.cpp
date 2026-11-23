@@ -1,8 +1,56 @@
-// https://leetcode.com/problems/word-search-ii/description/
+// LeetCode 212: Word Search II
+// https://leetcode.com/problems/word-search-ii/
 //
-// Given an m x n board of lowercase letters and a list of dictionary words,
-// return all words that can be formed by sequentially adjacent (horizontally
-// or vertically) cells without reusing the same cell within a single word.
+// Problem:
+//   Given an m x n grid `board` of lowercase English letters and a list of
+//   dictionary strings `words`, return all distinct words from `words` that can
+//   be constructed on the board. Each word must follow sequentially adjacent
+//   cells (up, down, left, right), and the same board cell cannot be reused
+//   more than once within a single word. Typical constraints: 1 <= m, n <= 12,
+//   1 <= words.length <= 3 * 10^4, 1 <= words[i].length <= 10.
+//
+// Algorithm:
+//   Trie-Guided Backtracking DFS:
+//   1. Build a single arena-backed trie containing every word in `words`,
+//      storing the word's index (`word_idx`) on its terminal node.
+//   2. For every cell `(r, c)` on `board`, check whether the root has a child
+//      edge matching `board[r][c]`. If so, launch backtracking DFS from that
+//      cell and child trie node.
+//   3. During `dfs`, if the current trie node holds a `word_idx`, append
+//      `words[*word_idx]` to `result` and immediately `reset()` `word_idx` so
+//      the same word is never reported twice, while still continuing deeper to
+//      discover longer words sharing the same prefix.
+//   4. Mark `board[r][c]` in place with `kVisited` ('#') before exploring its
+//      4 orthogonal neighbors whose letters exist in the current trie node's
+//      children, then restore the original letter on backtrack.
+//   Key invariant: A path on the board is pruned the instant its prefix ceases
+//   to exist in the trie, searching all dictionary words simultaneously.
+//
+//   Complexity:
+//     - Time: O(W * L + M * N * 4 * 3^(L - 1)), where W = words.size(),
+//       L = max word length, and M x N are the board dimensions (at most 3
+//       unvisited neighbor directions after the first step).
+//     - Space: O(W * L * 26) for the trie arena plus O(L) recursion depth.
+//
+// Data Structures:
+//   - `std::vector<TrieNode> nodes`: Flat arena-backed prefix tree indexing all
+//     candidate words; each `TrieNode` has `std::array<std::size_t, 26>
+//     children` and `std::optional<std::size_t> word_idx`.
+//   - `board` (mutated in place): Temporarily marked with `'#'` (`kVisited`) to
+//     track the active DFS path without allocating a separate visited matrix.
+//   - `kDirs`: Fixed 4-element array of orthogonal `(dr, dc)` offsets.
+//
+// Real-World Applications:
+//   - Automated solvers for Boggle, Wordament, and similar word-grid puzzles.
+//   - Multi-pattern spatial/2D symbol scanning in OCR and image-grid analysis.
+//   - Dictionary-pruned path search in bioinformatics sequence-motif matching.
+//
+// Related LeetCode Problems:
+//   - #79 Word Search (single-word 2D grid backtracking without a trie)
+//   - #208 Implement Trie (Prefix Tree) (foundational trie indexing structure)
+//   - #211 Design Add and Search Words Data Structure (DFS over trie branches)
+//   - #472 Concatenated Words (matches multiple dictionary words via trie/DFS)
+//   - #1032 Stream of Characters (multi-word matching using a trie)
 
 #include "framework/lc_framework.h"
 

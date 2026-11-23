@@ -1,8 +1,56 @@
+// LeetCode 720: Longest Word in Dictionary
 // https://leetcode.com/problems/longest-word-in-dictionary/
 //
-// Given an array of lowercase English strings `words`, return the longest word
-// that can be built one character at a time by other words in `words`. Break
-// ties by returning the lexicographically smallest word; return "" if none.
+// Problem:
+//   Given an array of lowercase English strings `words`, find and return the
+//   longest word in `words` that can be built one character at a time from
+//   other words in `words` (i.e., every non-empty prefix of the word is also
+//   present in `words`). If multiple valid words share the maximum length,
+//   return the lexicographically smallest one; return `""` if none exists.
+//   Typical constraints: 1 <= words.length <= 1000, 1 <= words[i].length <= 30.
+//
+// Algorithm:
+//   Trie Construction + Lexicographical Prefix-Gated DFS:
+//   1. Insert every word from `words` into an arena-backed trie (`nodes`),
+//      setting `is_end = true` on each word's terminal node.
+//   2. Run a recursive DFS starting from root (0) with a mutable path string
+//      `current` and best answer `best`:
+//      - At each visited node, if `current.size() > best.size()`, update
+//        `best = current`.
+//      - Iterate child slots `idx = 0..25` (strictly `'a'` through `'z'`).
+//      - Only descend into `child` if `child != kNoChild && nodes[child].is_end`.
+//        Push the character onto `current`, recurse, and pop on backtrack.
+//   Key invariants:
+//   - Gating every step on `nodes[child].is_end` guarantees that every prefix
+//     along `current` is a dictionary word, pruning invalid subtrees immediately.
+//   - Visiting children in `'a'..'z'` order and updating `best` only on strict
+//     length increases (`>`) ensures ties automatically keep the
+//     lexicographically smallest word without extra string comparisons.
+//
+//   Complexity:
+//     - Time: O(S * 26) = O(S), where S is the sum of all word lengths.
+//     - Space: O(S * 26) for the trie nodes plus O(L_max) for DFS stack and
+//       the path buffers.
+//
+// Data Structures:
+//   - `std::vector<Node> nodes`: Contiguous trie arena where each `Node` holds
+//     `std::array<std::size_t, 26> children` (0 = absent) and `bool is_end`.
+//   - `std::string current` & `std::string best`: Reusable path buffer for
+//     backtracking DFS and the longest valid word found so far.
+//
+// Real-World Applications:
+//   - Hierarchical namespace / taxonomy validation (ensuring every parent path
+//     or package prefix is registered before allowing nested entries).
+//   - File-system and URL-route completeness checks where every ancestor
+//     directory or route segment must exist.
+//   - Word-chain puzzle engines and incremental dictionary compression.
+//
+// Related LeetCode Problems:
+//   - #208 Implement Trie (Prefix Tree) (foundational trie data structure)
+//   - #1858 Longest Word With All Prefixes (same prefix-chain requirement)
+//   - #648 Replace Words (traverses trie prefixes to find dictionary roots)
+//   - #524 Longest Word in Dictionary through Deleting (longest/lex-smallest)
+//   - #820 Short Encoding of Words (uses a trie to collapse prefix/suffix words)
 
 #include "framework/lc_framework.h"
 

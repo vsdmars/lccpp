@@ -1,9 +1,59 @@
-// https://leetcode.com/problems/sentence-similarity-ii/description/
+// LeetCode 737: Sentence Similarity II
+// https://leetcode.com/problems/sentence-similarity-ii/
 //
-// Given two sentences `sentence1` and `sentence2` (arrays of strings) and a
-// list of similar word pairs `similarPairs`, return true if the sentences are
-// similar. Similarity is reflexive, symmetric, and transitive, and similar
-// sentences must have the same length.
+// Problem:
+//   Given two sentences `sentence1` and `sentence2` (each an array of words)
+//   and a list of similar word pairs `similarPairs`, determine whether the two
+//   sentences are similar. Two sentences are similar if they have the same
+//   length and every pair of words at the same index `sentence1[i]` and
+//   `sentence2[i]` is similar. Word similarity is reflexive, symmetric, and
+//   transitive (i.e., an equivalence relation).
+//
+// Algorithm:
+//   1. Return `false` immediately if `sentence1.size() != sentence2.size()`.
+//   2. Insert every pair `(u, v)` from `similar_pairs` into a Union-Find
+//      structure (`WordDisjointSet`) that merges their equivalence classes using
+//      union by rank and iterative path halving.
+//   3. For each index `i`, check whether `sentence1[i]` and `sentence2[i]` are
+//      connected: identical words match immediately (reflexivity); otherwise,
+//      both words must exist in the DSU and share the same representative root.
+//   Key Invariant:
+//     Two distinct words are transitively similar if and only if they belong to
+//     the same connected component in the similarity graph.
+//   Time Complexity:
+//     O((P + N) * L + (P + N) * alpha(P)), where P = `similar_pairs.size()`,
+//     N = `sentence1.size()`, L = average word length, and alpha is the inverse
+//     Ackermann function.
+//   Space Complexity:
+//     O(P) for the hash map and DSU arrays; `std::string_view` keys reference
+//     the input strings directly without allocating string copies.
+//
+// Data Structures:
+//   - `std::unordered_map<std::string_view, std::size_t>` (`word_to_id_`):
+//     Assigns each unique word from `similar_pairs` a dense integer ID without
+//     copying string data.
+//   - `std::vector<std::size_t>` (`parent_`) and `std::vector<int>` (`rank_`):
+//     Array-backed Disjoint Set Union (Union-Find) storing parent pointers and
+//     tree ranks for near-O(1) amortized `find` and `unite` operations.
+//
+// Real-World Applications:
+//   - Search query expansion and synonym canonicalization in information
+//     retrieval and NLP pipelines.
+//   - Entity resolution and record deduplication (merging alias tables across
+//     databases).
+//   - Compiler type-alias and symbol equivalence checking.
+//
+// Related LeetCode Problems:
+//   - #734 Sentence Similarity (non-transitive version solvable with a hash
+//     set)
+//   - #721 Accounts Merge (grouping string entities transitively via
+//     Union-Find)
+//   - #990 Satisfiability of Equality Equations (building transitive
+//     equivalence classes with Union-Find)
+//   - #1061 Lexicographically Smallest Equivalent String (character equivalence
+//     classes via Union-Find)
+//   - #547 Number of Provinces (foundational connected components with
+//     Union-Find)
 
 #include "framework/lc_framework.h"
 

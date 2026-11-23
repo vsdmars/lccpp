@@ -1,9 +1,52 @@
-// https://leetcode.com/problems/redundant-connection/description/
+// LeetCode 684: Redundant Connection
+// https://leetcode.com/problems/redundant-connection/
 //
-// In an undirected graph that started as a tree with N nodes labeled 1..N plus
-// one additional edge, return an edge that can be removed so the resulting
-// graph is a tree. If there are multiple answers, return the one that occurs
-// last in the input `edges` array.
+// Problem:
+//   Given an undirected graph that began as a tree of `n` nodes labeled `1..n`
+//   with one additional edge inserted between two distinct vertices, the graph
+//   is provided as an array `edges` of length `n` where `edges[i] = [ai, bi]`.
+//   Return an edge that can be removed so the remaining graph is a tree of `n`
+//   nodes. If multiple edges qualify, return the one that appears last in
+//   `edges`. Typical constraints: 3 <= n <= 1000, no duplicate edges.
+//
+// Algorithm:
+//   Incremental Cycle Detection via Disjoint Set Union (Union-Find):
+//   1. Determine `max_node` across `edges` and initialize a 1-indexed
+//      `DisjointSet` of size `max_node + 1` with every node in its own set.
+//   2. Iterate through `edges` in input order and attempt `dsu.unite(u, v)`.
+//      - If `u` and `v` belong to different components, merge them and keep
+//        going.
+//      - If `u` and `v` already share the same root (`unite` returns false),
+//        then an alternate path between `u` and `v` already exists using
+//        earlier edges, so `[u, v]` closes the unique cycle.
+//   Key invariant: Because a tree plus one edge contains exactly one simple
+//   cycle, the very first edge whose endpoints are already connected is
+//   guaranteed to be the last edge of that cycle in input order, and removing
+//   it breaks the cycle while keeping all `n` vertices connected.
+//
+//   Complexity:
+//     - Time: O(N * alpha(N)), where N = edges.size() and alpha is the inverse
+//       Ackermann function (effectively constant per union/find).
+//     - Space: O(N) for the DSU parent and rank arrays.
+//
+// Data Structures:
+//   - `DisjointSet`: Disjoint Set Union storing `std::vector<std::size_t>
+//     parent_` (using iterative path halving in `find`) and `std::vector<int>
+//     rank_` (using union by rank in `unite`).
+//
+// Real-World Applications:
+//   - Loop detection and spanning-tree maintenance in Ethernet switches (STP)
+//     and network topology provisioning.
+//   - Kruskal's Minimum Spanning Tree algorithm (rejecting edges that would
+//     form a cycle during incremental tree construction).
+//   - Circuit-netlist verification and dependency-graph cycle checks.
+//
+// Related LeetCode Problems:
+//   - #685 Redundant Connection II (directed-graph version with 2-parent case)
+//   - #261 Graph Valid Tree (verifies a graph is a single acyclic tree via DSU)
+//   - #547 Number of Provinces (counts undirected components using DSU)
+//   - #1319 Number of Operations to Make Network Connected (redundant edges)
+//   - #1192 Critical Connections in a Network (bridges outside any cycle)
 
 #include "framework/lc_framework.h"
 

@@ -1,8 +1,55 @@
-// https://leetcode.com/problems/alien-dictionary/description/
+// LeetCode 269: Alien Dictionary
+// https://leetcode.com/problems/alien-dictionary/
 //
-// Given a list of non-empty lowercase words sorted lexicographically according
-// to an unknown alien alphabet, derive a valid ordering of all distinct letters
-// present in `words`. Return "" if no valid ordering exists.
+// Problem:
+//   Given a list of non-empty lowercase English strings `words` that are sorted
+//   lexicographically according to the rules of an unknown alien alphabet,
+//   derive and return a string containing all unique letters appearing in
+//   `words` in a valid alien alphabetical order. If multiple valid orders
+//   exist, return any one; if the input is contradictory or invalid, return "".
+//
+// Algorithm:
+//   1. Graph construction (`build_graph`): scan all words to record which of
+//      the 26 lowercase letters appear, then compare every adjacent pair
+//      `(words[i], words[i + 1])`. At the first index `j` where the two words
+//      differ, record a directed edge `words[i][j] -> words[i + 1][j]`
+//      (deduplicated via an adjacency matrix) and increment the target's
+//      in-degree. Key edge case: if one word is a strict prefix of the other
+//      and the longer word precedes the shorter (`w1.size() > w2.size()`), the
+//      input violates lexicographical order, so return `""` immediately.
+//   2. Topological sort (`topo_sort`): run Kahn's BFS algorithm starting from
+//      all present letters with in-degree 0, decrementing neighbors' in-degrees
+//      as each letter is emitted. If fewer than `unique_chars` letters are
+//      emitted, a cycle exists among the remaining letters, so return `""`.
+//   Time Complexity:  O(C), where C is the total number of characters across
+//                     all words (alphabet size U = 26 is constant, so O(C + U^2)
+//                     simplifies to O(C)).
+//   Space Complexity: O(1) auxiliary space (fixed 26-letter arrays and queue).
+//
+// Data Structures:
+//   - `AlphabetGraph`: fixed-size 26-letter graph container holding:
+//     - `std::array<bool, 26> present`: marks which letters appear in `words`.
+//     - `std::array<std::array<bool, 26>, 26> adj`: boolean adjacency matrix
+//       that both stores directed edges and prevents duplicate edge counts.
+//     - `std::array<int, 26> indegree`: incoming edge count per letter.
+//   - `std::queue<std::size_t> q`: FIFO frontier of zero-in-degree letters for
+//     Kahn's BFS topological sort.
+//
+// Real-World Applications:
+//   - Inferring custom collation/sorting orders from pre-sorted corpora or
+//     localized dictionaries.
+//   - Reconstructing latent precedence rules from observed pairwise rankings
+//     (e.g., tournament seeding, version ordering, preference aggregation).
+//   - Validating consistency of partial-order constraints in config and rule
+//     engines.
+//
+// Related LeetCode Problems:
+//   - #953 Verifying an Alien Dictionary (checks sortedness given a known order)
+//   - #207 Course Schedule (directed cycle detection in a precedence graph)
+//   - #210 Course Schedule II (topological sort over integer-indexed tasks)
+//   - #444 Sequence Reconstruction (checks unique topological order from pairs)
+//   - #1203 Sort Items by Groups Respecting Dependencies (hierarchical topo
+//     sort across both items and groups)
 
 #include "framework/lc_framework.h"
 

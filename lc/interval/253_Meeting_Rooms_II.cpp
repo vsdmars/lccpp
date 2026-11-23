@@ -1,8 +1,45 @@
-// https://leetcode.com/problems/meeting-rooms-ii/description/
+// LeetCode 253: Meeting Rooms II
+// https://leetcode.com/problems/meeting-rooms-ii/
 //
-// Given an array of meeting time intervals `intervals` where
-// `intervals[i] = [start_i, end_i]` (`start_i < end_i`), return the minimum
-// number of conference rooms required.
+// Problem:
+//   Given an array of meeting time intervals `intervals` where
+//   `intervals[i] = [start_i, end_i]` (`start_i < end_i`), return the minimum
+//   number of conference rooms required so that all meetings can be held
+//   without conflict. A meeting ending at time `t` frees its room for a
+//   meeting starting at time `t`.
+//   Constraints: 1 <= intervals.size() <= 10^4 (empty input yields 0),
+//   0 <= start_i < end_i <= 10^6.
+//
+// Algorithm:
+//   Chronological two-pointer sweep over separately sorted start and end
+//   times. Extract all start times into `starts` and all end times into
+//   `ends`, then sort both arrays ascending. Iterate through each `start` in
+//   `starts` while tracking the earliest unconsumed end time `ends[end_idx]`:
+//   if `start < ends[end_idx]`, no active room has finished yet so increment
+//   `rooms`; otherwise advance `end_idx` to reuse that freed room.
+//   Key invariant: `rooms` never decreases and equals the high-water mark of
+//   simultaneously active meetings encountered so far, which by Dilworth's
+//   theorem on interval graphs equals the minimum room count.
+//   Time: O(N log N) for sorting, Space: O(N) for `starts` and `ends`.
+//
+// Data Structures:
+//   - `std::vector<int> starts`, `ends`: separately sorted timestamp arrays
+//     traversed with an index pointer `end_idx`.
+//
+// Real-World Applications:
+//   - Sizing conference rooms, airport gates, hospital operating rooms, or
+//     vehicle fleets to satisfy peak concurrent demand.
+//   - Computing peak thread-pool or worker-container concurrency needed for
+//     scheduled batch workloads.
+//   - Interval-graph coloring in compiler register allocation (linear scan
+//     register count).
+//
+// Related LeetCode Problems:
+//   - #252 Meeting Rooms (feasibility check: whether 1 room is sufficient)
+//   - #1094 Car Pooling (weighted capacity version with passenger counts)
+//   - #2402 Meeting Rooms III (numbered room assignment with delayed meetings)
+//   - #732 My Calendar III (online peak overlap count via boundary events)
+//   - #1854 Maximum Population Year (peak simultaneous count over intervals)
 
 #include "framework/lc_framework.h"
 

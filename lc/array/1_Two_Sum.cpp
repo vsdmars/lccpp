@@ -1,7 +1,42 @@
-// https://leetcode.com/problems/two-sum/description/
+// LeetCode 1: Two Sum
+// https://leetcode.com/problems/two-sum/
 //
-// Given an array of integers `nums` and an integer `target`, return indices of
-// the two numbers such that they add up to `target`.
+// Problem:
+//   Given an integer array `nums` and an integer `target`, return the two
+//   distinct indices `i` and `j` such that `nums[i] + nums[j] == target`.
+//   Each input has exactly one valid solution, the same element cannot be used
+//   twice, and the answer may be returned in any order.
+//
+// Algorithm:
+//   Single-pass complement lookup using a hash map. As we scan `nums` from
+//   left to right, we compute the required complement `need = target - nums[i]`
+//   and check whether `need` has already been seen at an earlier index. If so,
+//   we immediately return `{seen[need], i}`; otherwise we record
+//   `seen[nums[i]] = i`. Checking before inserting prevents pairing an element
+//   with itself while naturally handling duplicate values (such as `[3, 3]`).
+//   Time: O(N) average, Space: O(N).
+//
+// Data Structures:
+//   - `std::unordered_map<int, int> seen`: maps each previously visited array
+//     value to its index for O(1) average-time complement lookup.
+//   - `std::vector<int>`: stores the input array and the two-element result.
+//
+// Real-World Applications:
+//   - Financial reconciliation and payment matching (pairing transactions or
+//     invoices that sum to a target settlement amount).
+//   - Hash-join probing in relational databases, where one relation is indexed
+//     in memory and streamed rows probe for matching join keys in O(1) time.
+//   - Inventory or resource pairing systems matching complementary capacities.
+//
+// Related LeetCode Problems:
+//   - #167 Two Sum II - Input Array Is Sorted (two-pointer approach in O(1)
+//     extra space when input is sorted)
+//   - #15 3Sum (extends pair lookup to unique triplets summing to zero)
+//   - #18 4Sum (generalizes target sum search to k-tuples with deduplication)
+//   - #560 Subarray Sum Equals K (uses the same hash-map complement technique
+//     over running prefix sums)
+//   - #170 Two Sum III - Data structure design (streaming API supporting add
+//     and pair-sum lookup queries)
 
 #include "framework/lc_framework.h"
 

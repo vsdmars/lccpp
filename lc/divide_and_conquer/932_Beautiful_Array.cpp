@@ -1,10 +1,50 @@
+// LeetCode 932: Beautiful Array
 // https://leetcode.com/problems/beautiful-array/
 //
-// An array `nums` of length `n` is beautiful if:
-// - `nums` is a permutation of the integers in `[1, n]`.
-// - For every `0 <= i < k < j < n`, `2 * nums[k] != nums[i] + nums[j]`.
+// Problem:
+//   An array `nums` of length `n` (`1 <= n <= 1000`) is called beautiful if:
+//   1. It is a permutation of the integers `1..n`.
+//   2. For every triple of indices `0 <= i < k < j < n`,
+//      `2 * nums[k] != nums[i] + nums[j]` (no element is the exact arithmetic
+//      mean of two elements on opposite sides of it).
+//   Given `n`, construct and return any valid beautiful array of length `n`.
 //
-// Given `n` (1 <= n <= 1000), return any beautiful array of length `n`.
+// Algorithm:
+//   Bottom-up divide and conquer exploiting three closure properties of
+//   beautiful arrays:
+//   1. Affine invariance: if `A` is beautiful, then `2 * A - 1` (all odd) and
+//      `2 * A` (all even) are also beautiful.
+//   2. Parity separation: concatenating `[odd elements] + [even elements]`
+//      cannot form an invalid triple across the split because `odd + even` is
+//      odd whereas `2 * nums[k]` is always even.
+//   3. Deletion invariance: removing any elements preserves the condition.
+//   Starting from `res = {1}`, we repeatedly double the array by mapping `res`
+//   to `(2 * val - 1)` followed by `(2 * val)` until `res.size() >= n`, then
+//   filter out all values exceeding `n`. Because the sizes grow geometrically
+//   (`1 + 2 + 4 + ... < 2N`), total work is linear.
+//   Time: O(N), Space: O(N).
+//
+// Data Structures:
+//   - `std::vector<int> res`, `next`, `filtered`: contiguous arrays holding
+//     the current level's beautiful permutation, the doubled odd-then-even
+//     permutation, and the final filtered permutation of `1..n`.
+//
+// Real-World Applications:
+//   - Combinatorial design and coding theory (constructing Salem-Spencer /
+//     3-term arithmetic-progression-free sequences for interference avoidance).
+//   - Signal processing and radar/communication frequency hopping patterns
+//     that avoid intermodulation harmonics (`2*f_k = f_i + f_j`).
+//   - Bit-reversal permutation orderings closely related to Cooley-Tukey FFT
+//     butterfly stages and low-discrepancy (van der Corput) sampling.
+//
+// Related LeetCode Problems:
+//   - #1982 Find Array Given Subset Sums (divide-and-conquer reconstruction
+//     by splitting elements with an invariant offset)
+//   - #1027 Longest Arithmetic Subsequence (detects arithmetic progressions
+//     rather than avoiding them)
+//   - #413 Arithmetic Slices (identifies contiguous 3-term arithmetic triples)
+//   - #324 Wiggle Sort II (constructive permutation satisfying global index
+//     and ordering invariants)
 
 #include "framework/lc_framework.h"
 

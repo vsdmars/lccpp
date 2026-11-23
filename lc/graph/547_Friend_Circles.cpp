@@ -1,9 +1,45 @@
-// https://leetcode.com/problems/friend-circles/
-// (Now also titled "Number of Provinces" on LeetCode.)
+// LeetCode 547: Friend Circles (Number of Provinces)
+// https://leetcode.com/problems/number-of-provinces/
 //
-// Given an N x N symmetric adjacency matrix `M` where `M[i][j] == 1` indicates
-// students `i` and `j` are direct friends, return the total number of friend
-// circles (connected components).
+// Problem:
+//   Given an `n x n` symmetric binary adjacency matrix `isConnected` where
+//   `isConnected[i][j] == 1` means node `i` and node `j` are directly
+//   connected (and `0` otherwise), return the total number of connected
+//   components (friend circles / provinces). Friendship is reflexive and
+//   symmetric, and groups are closed under transitivity.
+//
+// Algorithm:
+//   Depth-First Search (DFS) connected-component counting directly over the
+//   adjacency matrix. Iterate over each node `i` from `0` to `n - 1`; whenever
+//   `i` is unvisited, launch a recursive DFS that marks every transitively
+//   reachable neighbor `v` (where `isConnected[u][v] == 1`) as visited and
+//   increment the component counter. Each node is visited once, and its full
+//   matrix row of length `n` is scanned once.
+//   Time: O(N^2), Space: O(N) for the visited array and DFS recursion stack.
+//
+// Data Structures:
+//   - `const std::vector<std::vector<int>>& isConnected`: Input `N x N`
+//     undirected adjacency matrix.
+//   - `std::vector<std::uint8_t> visited`: Flat boolean-like array tracking
+//     which nodes have already been assigned to a component.
+//   - Implicit call stack: Drives the recursive DFS lambda traversal.
+//
+// Real-World Applications:
+//   - Social network community detection: partitioning users into isolated
+//     social clusters from pairwise connection graphs.
+//   - Network topology auditing: counting disconnected subnetworks or isolated
+//     server islands in a cluster connectivity matrix.
+//   - Fraud and entity clustering: grouping accounts or devices linked by
+//     shared attributes into connected risk clusters.
+//
+// Related LeetCode Problems:
+//   - #200 Number of Islands (counting connected components in a 2D grid)
+//   - #323 Number of Connected Components in an Undirected Graph (component
+//     counting from an edge list)
+//   - #695 Max Area of Island (measuring the largest connected component)
+//   - #721 Accounts Merge (grouping records into components via shared emails)
+//   - #1319 Number of Operations to Make Network Connected (using component
+//     counts to find the minimum bridging edges)
 
 #include "framework/lc_framework.h"
 

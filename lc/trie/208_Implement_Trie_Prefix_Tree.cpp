@@ -1,7 +1,53 @@
-// https://leetcode.com/problems/implement-trie-prefix-tree/description/
+// LeetCode 208: Implement Trie (Prefix Tree)
+// https://leetcode.com/problems/implement-trie-prefix-tree/
 //
-// Implement a trie (prefix tree) supporting `insert`, `search`, and
-// `startsWith` operations over lowercase English letters ('a'-'z').
+// Problem:
+//   Implement a Trie (prefix tree) supporting three operations over lowercase
+//   English strings ('a'-'z'):
+//     - insert(word): Inserts the string `word` into the trie.
+//     - search(word): Returns true if `word` was previously inserted as a
+//       complete word, and false otherwise.
+//     - startsWith(prefix): Returns true if any inserted word begins with
+//       `prefix`, and false otherwise.
+//   Typical constraints: 1 <= word.length, prefix.length <= 2000; up to
+//   3 * 10^4 total calls across all three methods.
+//
+// Algorithm:
+//   Store the trie in a contiguous flat arena (`std::vector<Node>`) where node
+//   index 0 is always the root. Because no valid edge ever points back to the
+//   root, index 0 (`kNoChild`) doubles as the missing-child sentinel.
+//   - insert(word): Walk from root (0), mapping each character `c` to `c - 'a'`.
+//     Whenever a child slot is `kNoChild`, append a new default-initialized
+//     Node to `nodes_` and record its index. Mark the final node `is_end = true`.
+//   - find_node(text): Follow character transitions from node 0, returning
+//     `std::nullopt` if any transition hits `kNoChild`, or the final node index.
+//   - search(word): Succeeds iff `find_node(word)` returns a node with `is_end`.
+//   - startsWith(prefix): Succeeds iff `find_node(prefix)` returns any node.
+//
+//   Complexity:
+//     - Time: O(L) per operation, where L is the length of `word` or `prefix`.
+//     - Space: O(N * 26) where N is the total number of allocated trie nodes
+//       (at most the sum of inserted word lengths plus one root).
+//
+// Data Structures:
+//   - `std::vector<Node> nodes_`: Contiguous arena storing all trie nodes by
+//     integer index, avoiding per-node heap allocations and pointer chasing.
+//   - `Node`: Contains a fixed `std::array<std::size_t, 26> children` table of
+//     child indices (0 meaning absent) and a `bool is_end` word-terminal flag.
+//   - `std::optional<std::size_t>`: Return type of `find_node` to distinguish a
+//     failed lookup from a valid node index cleanly.
+//
+// Real-World Applications:
+//   - Prefix-based autocomplete and command-line tab completion.
+//   - Spell-checker dictionaries and T9 / mobile predictive keyboards.
+//   - Longest-prefix IP routing tables (CIDR / radix tries) and URL routers.
+//
+// Related LeetCode Problems:
+//   - #211 Design Add and Search Words Data Structure (adds '.' wildcard DFS)
+//   - #1804 Implement Trie II (Prefix Tree) (adds word/prefix counts & erase)
+//   - #648 Replace Words (finds shortest dictionary root prefix for each word)
+//   - #677 Map Sum Pairs (stores weights in a trie to sum values by prefix)
+//   - #720 Longest Word in Dictionary (uses trie traversal to validate prefixes)
 
 #include "framework/lc_framework.h"
 

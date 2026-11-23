@@ -1,19 +1,53 @@
+// LeetCode 1153: String Transforms Into Another String
 // https://leetcode.com/problems/string-transforms-into-another-string/
 //
-// Given two lowercase strings `str1` and `str2` of equal length, determine
-// whether `str1` can be transformed into `str2` using zero or more bulk
-// character replacements (replacing every occurrence of one letter with
-// another).
+// Problem:
+//   Given two lowercase English strings `str1` and `str2` of equal length,
+//   determine whether `str1` can be transformed into `str2` using zero or more
+//   bulk conversions, where one conversion replaces every occurrence of a
+//   chosen character in `str1` with another lowercase English character.
 //
-// Graph interpretation:
-// Each letter in `str1` has at most one outgoing edge to a target letter in
-// `str2` (a functional graph). A valid transformation exists iff:
-//   1. `str1 == str2`, OR
-//   2. Every letter in `str1` maps consistently to a single letter in `str2`
-//      (no 1-to-many conflict), AND
-//   3. `str2` uses strictly fewer than 26 distinct letters so at least one
-//      unused letter is available as a temporary swap variable to break cycles
-//      (e.g., `a -> b -> a`).
+// Algorithm:
+//   Model the required character substitutions as a directed functional graph
+//   (each source letter has outdegree at most 1). If `str1 == str2`, zero
+//   operations suffice so return `true`. Otherwise, scan both strings in one
+//   pass to verify two necessary and sufficient conditions:
+//   1. Functional consistency: every occurrence of a letter `c` in `str1` must
+//      map to the exact same target letter in `str2` (a 1-to-many split is
+//      impossible because identical characters always move together).
+//   2. Spare temporary character: `str2` must use strictly fewer than 26
+//      distinct letters. Any directed cycle (such as `a -> b -> a`) requires
+//      at least one unused letter as a temporary register (`a -> z`, `b -> a`,
+//      `z -> b`). If `str2` uses all 26 letters and `str1 != str2`, the mapping
+//      must be a non-identity bijection with at least one cycle and zero spare
+//      characters, making conversion impossible.
+//   Time: O(N), Space: O(1) (fixed 26-element arrays).
+//
+// Data Structures:
+//   - `std::array<char, 26> mapping`: stores the unique target letter assigned
+//     to each lowercase source letter (`'\0'` if unseen).
+//   - `std::array<bool, 26> used_in_str2`: fixed-size bitset tracking which
+//     alphabet letters appear in `str2` to count `distinct_in_str2`.
+//
+// Real-World Applications:
+//   - Compiler register allocation (parallel-copy resolution): resolving
+//     cyclic register moves (`r1 <- r2, r2 <- r1`) requires a scratch register
+//     or swap instruction when all registers are live.
+//   - Database schema/enum migration and bulk identifier renaming where
+//     cycles between old and new names need an intermediate placeholder.
+//   - Batch file renaming and symbol-table substitution engines.
+//
+// Related LeetCode Problems:
+//   - #205 Isomorphic Strings (checks consistent one-to-one character mapping
+//     between two strings)
+//   - #290 Word Pattern (verifies consistent bijection between pattern
+//     characters and space-separated words)
+//   - #890 Find and Replace Pattern (filters words matching a consistent
+//     character bijection)
+//   - #854 K-Similar Strings (transforms one string into another by resolving
+//     character permutation cycles with minimum swaps)
+//   - #777 Swap Adjacent in LR String (decides string transformation
+//     reachability via structural invariants)
 
 #include "framework/lc_framework.h"
 

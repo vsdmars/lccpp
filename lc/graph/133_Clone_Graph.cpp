@@ -1,8 +1,53 @@
-// https://leetcode.com/problems/clone-graph/description/
+// LeetCode 133: Clone Graph
+// https://leetcode.com/problems/clone-graph/
 //
-// Given a reference of a node in a connected undirected graph, return a deep
-// copy (clone) of the graph. Each node contains a value (`int`) and a list of
-// its neighbors (`std::vector<Node*>`).
+// Problem:
+//   Given a pointer `node` to a node in a connected undirected graph (or
+//   `nullptr` for an empty graph), return a deep copy (clone) of the entire
+//   graph. Each `Node` holds an integer `val` and a `std::vector<Node*>` of
+//   neighbor pointers. Every cloned node must be newly allocated with matching
+//   values and neighbor topology, sharing no pointers with the original graph.
+//   Constraints: 0 <= number of nodes <= 100, unique node values (1..100 in
+//   standard inputs; the implementation also handles self-cycles).
+//
+// Algorithm:
+//   Memoized Depth-First Search (DFS) graph cloning. Both `cloneGraph` (keyed
+//   by original `const Node*` address) and `review` (keyed by unique `int` node
+//   value) allocate the cloned `Node` and register it in a hash map BEFORE
+//   recursing on its neighbors. This pre-order registration invariant breaks
+//   cycles (including self-loops) and ensures every original node is cloned
+//   exactly once; subsequent encounters return the cached clone pointer in O(1)
+//   average time, faithfully reconstructing shared edges.
+//   Time Complexity: O(V + E), where V is the number of nodes and E is the
+//     number of edges, visiting each node and neighbor edge once.
+//   Space Complexity: O(V) for the clone hash map and DFS recursion stack
+//     (excluding the O(V + E) cloned graph output).
+//
+// Data Structures:
+//   - `Node` (`int val`, `std::vector<Node*> neighbors`): Heap-allocated
+//     adjacency-list graph node matching LeetCode's C++ interface.
+//   - `std::unordered_map<const Node*, Node*> cloned` (`cloneGraph`) and
+//     `std::unordered_map<int, Node*> dp` (`review`): Hash maps associating
+//     original nodes/values with their cloned `Node*` to prevent infinite
+//     recursion on cycles and preserve graph topology.
+//   - `GraphOwner` (test helper using `std::unordered_set<Node*>` and iterative
+//     `std::vector<Node*>` stack): RAII guard freeing all reachable nodes once.
+//
+// Real-World Applications:
+//   - Deep cloning and serialization of cyclic in-memory object graphs (e.g.,
+//     VM heap snapshots, object pickling, or DOM/scene-graph duplication).
+//   - Compiler IR and ML computation-graph cloning (duplicating control-flow or
+//     tensor graphs prior to destructive optimization passes).
+//   - Copy-on-write state isolation in graph databases and simulation engines.
+//
+// Related LeetCode Problems:
+//   - #138 Copy List with Random Pointer (deep-cloning a cyclic pointer graph
+//     via an original-to-clone hash map)
+//   - #1485 Clone Binary Tree With Random Pointer (memoized deep copy of a
+//     tree augmented with arbitrary cross/cycle pointers)
+//   - #1490 Clone N-ary Tree (recursive deep cloning of an acyclic N-ary tree)
+//   - #297 Serialize and Deserialize Binary Tree (traversing and reconstructing
+//     pointer-based node structures)
 
 #include "framework/lc_framework.h"
 

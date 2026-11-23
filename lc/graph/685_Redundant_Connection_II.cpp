@@ -1,16 +1,58 @@
-// https://leetcode.com/problems/redundant-connection-ii/description/
+// LeetCode 685: Redundant Connection II
+// https://leetcode.com/problems/redundant-connection-ii/
 //
-// A rooted tree with N nodes (labeled 1..N) has had one extra directed edge
-// added. Return the edge `[u, v]` that can be removed so the remaining graph is
-// a valid rooted tree. If multiple answers exist, return the one occurring last
-// in `edges`.
+// Problem:
+//   A rooted directed tree with `N` nodes labeled `1..N` has had one extra
+//   directed edge added between two existing nodes, giving `N` edges in total.
+//   Return an edge `[u, v]` that can be removed so the remaining `N - 1` edges
+//   form a valid rooted tree (one root with in-degree 0, every other node with
+//   in-degree 1, and no cycles). If multiple edges qualify, return the one
+//   that appears last in `edges`.
 //
-// Three failure modes can occur after adding one directed edge:
-//   1. A node has two parents, with no cycle -> remove the second incoming edge.
-//   2. Every node has at most one parent, with a cycle -> remove the last edge
-//      that closes the cycle.
-//   3. A node has two parents AND there is a cycle -> remove whichever of the
-//      two candidate incoming edges participates in the cycle.
+// Algorithm:
+//   Two-pass in-degree classification paired with Union-Find (DSU). Adding one
+//   directed edge to a rooted tree produces exactly one of three failure modes:
+//     1. A node has two parents, with no cycle -> remove the later incoming
+//        edge (`cand2`).
+//     2. Every node has at most one parent, with a cycle -> remove the last
+//        edge that closes the cycle.
+//     3. A node has two parents AND there is a cycle -> remove whichever of
+//        the two incoming edges (`cand1` or `cand2`) lies on the cycle.
+//   Pass 1 scans `edges` to detect any node with in-degree 2, saving its first
+//   incoming edge (`cand1`), second incoming edge (`cand2`), and index
+//   (`cand2_idx`). Pass 2 runs Union-Find with path compression over all edges
+//   except `cand2_idx`. If a cycle still occurs, `cand1` is returned when a
+//   two-parent node exists, or the cycle-closing edge otherwise; if no cycle
+//   remains, `cand2` is returned.
+//   Time: O(N * alpha(N)) amortized in practice (O(N log N) worst case without
+//   union by rank), Space: O(N).
+//
+// Data Structures:
+//   - `std::vector<int> direct_parent`: Tracks the first seen parent of each
+//     node `1..N` to identify any node with in-degree 2.
+//   - `std::vector<int> cand1`, `cand2` and `cand2_idx`: Store the two
+//     conflicting incoming edges and allow skipping `cand2` in Pass 2.
+//   - `std::vector<int> dsu`: Disjoint-set parent array with recursive path
+//     compression for cycle detection.
+//
+// Real-World Applications:
+//   - Organizational and RBAC hierarchy validation: repairing broken reporting
+//     trees where a node accidentally gains two managers or forms a cycle.
+//   - File system and container mount verification: detecting and breaking
+//     invalid hard-link/mount loops or duplicate parent links in a directory
+//     hierarchy.
+//   - Package/configuration inheritance debugging: locating the exact override
+//     edge that broke a single-inheritance tree.
+//
+// Related LeetCode Problems:
+//   - #684 Redundant Connection (undirected counterpart finding the last edge
+//     forming a cycle)
+//   - #261 Graph Valid Tree (verifying that an undirected graph is acyclic and
+//     connected)
+//   - #1361 Validate Binary Tree Nodes (checking single-parent, single-root,
+//     and acyclicity invariants in a directed graph)
+//   - #1579 Remove Max Number of Edges to Keep Graph Fully Traversable
+//     (Union-Find edge selection preserving connectivity)
 
 #include "framework/lc_framework.h"
 

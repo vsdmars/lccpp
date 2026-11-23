@@ -1,9 +1,50 @@
+// LeetCode 1404: Number of Steps to Reduce a Number in Binary Representation to One
 // https://leetcode.com/problems/number-of-steps-to-reduce-a-number-in-binary-representation-to-one/
 //
-// Given the binary representation of a positive integer as a string `s`, return
-// the number of steps to reduce it to 1 under the rules:
-//   - If the current number is even, divide it by 2.
-//   - If the current number is odd, add 1 to it.
+// Problem:
+//   Given a string `s` representing a positive integer in binary
+//   (1 <= s.length <= 500, s[0] == '1', containing only '0' and '1'), return
+//   the number of steps required to reduce it to 1 under two rules:
+//     - If the current number is even, divide it by 2.
+//     - If the current number is odd, add 1 to it.
+//   It is guaranteed that the number can always be reduced to 1.
+//
+// Algorithm:
+//   Implements both an iterative (`numSteps`) and a recursive
+//   (`numStepsRecursive`) right-to-left (LSB to bit 1) carry-propagation scan
+//   so arbitrarily long binary strings never overflow fixed-width integers.
+//   At each index i from s.size() - 1 down to 1, compute the effective bit
+//   `bit = (s[i] - '0') + carry`:
+//     - If `bit == 1` (odd): adding 1 turns it into 2 (setting `carry = 1`)
+//       and dividing by 2 shifts right, taking 2 steps.
+//     - If `bit` is 0 or 2 (even): dividing by 2 shifts right in 1 step while
+//       `carry` remains unchanged (0 stays 0; 2 keeps `carry = 1`).
+//   At index 0 (the leading '1'), a remaining `carry == 1` means the reduced
+//   value is 2 (`10` in binary), requiring 1 final division; otherwise it is 1.
+//   - Iterative (`numSteps`):          Time O(n), Space O(1).
+//   - Recursive (`numStepsRecursive`): Time O(n), Space O(n) call stack.
+//
+// Data Structures:
+//   - `std::string_view`: Non-owning read-only view of the input binary string
+//     `s`, avoiding unnecessary copies.
+//   - Scalar integer state (`steps`, `carry`, index `i`): Tracks accumulated
+//     operations and binary carry; the recursive variant also uses the call
+//     stack via a C++23 deducing-`this` lambda (`dfs`).
+//
+// Real-World Applications:
+//   - Arbitrary-precision (BigInt) bit-level arithmetic and carry-propagation
+//     analysis in cryptography and numeric libraries.
+//   - Hardware shift-and-add circuit design and cycle-count estimation for
+//     binary normalization pipelines.
+//   - Static analysis of Collatz-like bit-manipulation state machines.
+//
+// Related LeetCode Problems:
+//   - #1342 Number of Steps to Reduce a Number to Zero (integer reduction with
+//     halving and decrementing rules)
+//   - #67 Add Binary (right-to-left binary string addition with carry)
+//   - #397 Integer Replacement (minimum steps to reach 1 via +1, -1, and /2)
+//   - #2139 Minimum Moves to Reach Target Score (greedy reverse reduction
+//     using halving and decrement operations)
 
 #include "framework/lc_framework.h"
 

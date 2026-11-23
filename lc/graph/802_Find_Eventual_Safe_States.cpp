@@ -1,9 +1,48 @@
-// https://leetcode.com/problems/find-eventual-safe-states/description/
+// LeetCode 802: Find Eventual Safe States
+// https://leetcode.com/problems/find-eventual-safe-states/
 //
-// In a directed graph, a node is *eventually safe* if every possible walk
-// starting from it leads to a terminal node (a node with no outgoing edges),
-// i.e. no path from it can ever enter a cycle. Return all eventually safe nodes
-// in ascending order.
+// Problem:
+//   Given a directed graph of `n` nodes labeled `0..n-1` as an adjacency list
+//   `graph`, a node is a *terminal node* if it has no outgoing edges, and a
+//   node is *eventually safe* if every possible directed walk starting from it
+//   leads to a terminal node (equivalently, no path from it can ever enter a
+//   cycle). Return all eventually safe nodes sorted in ascending order.
+//
+// Algorithm:
+//   Memoized DFS with 4-state node classification (`kUnvisited`, `kVisiting`,
+//   `kSafe`, `kUnsafe`), refining classic 3-color cycle detection. On entering
+//   an unvisited node `u`, mark it `kVisiting` (currently on the active call
+//   stack) and recursively test every outgoing neighbor `v`. If any neighbor
+//   is `kVisiting` (back-edge closing a cycle) or `kUnsafe`, mark `u` as
+//   `kUnsafe` and return `false`. Only if every outgoing neighbor is confirmed
+//   `kSafe` is `u` marked `kSafe` and `true` returned. Iterating `i = 0..n-1`
+//   collects all safe nodes directly in ascending order without sorting.
+//   Time: O(V + E), Space: O(V) for state memoization and recursion stack.
+//
+// Data Structures:
+//   - `const std::vector<std::vector<int>>& graph`: Input directed adjacency
+//     list.
+//   - `std::vector<State> state`: Per-node memoization table storing
+//     `kUnvisited`, `kVisiting`, `kSafe`, or `kUnsafe` (`std::uint8_t` enum).
+//   - `std::vector<int> safe_nodes`: Output buffer collecting safe node IDs in
+//     ascending index order.
+//
+// Real-World Applications:
+//   - Static analysis and termination checking: identifying program states or
+//     CFG basic blocks guaranteed to terminate rather than enter infinite loops.
+//   - Distributed workflow and state-machine verification: auditing transitions
+//     to guarantee every execution reaches a valid terminal state without
+//     livelock.
+//   - Spreadsheet and dependency-graph validation: isolating cells unaffected
+//     by circular reference cycles.
+//
+// Related LeetCode Problems:
+//   - #207 Course Schedule (3-color DFS cycle detection in a directed graph)
+//   - #210 Course Schedule II (topological sorting of acyclic directed graphs)
+//   - #2127 Maximum Employees to Be Invited to a Meeting (analyzing directed
+//     cycles and acyclic branches feeding into them)
+//   - #2360 Longest Cycle in a Graph (detecting and measuring cycles in a
+//     directed graph)
 
 #include "framework/lc_framework.h"
 

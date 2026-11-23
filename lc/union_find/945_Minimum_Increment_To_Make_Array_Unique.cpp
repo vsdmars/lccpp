@@ -1,8 +1,55 @@
+// LeetCode 945: Minimum Increment to Make Array Unique
 // https://leetcode.com/problems/minimum-increment-to-make-array-unique/
 //
-// Given an integer array `nums`, in one move you can pick any index `i` and
-// increment `nums[i]` by 1. Return the minimum number of moves required to make
-// every value in `nums` unique.
+// Problem:
+//   Given an integer array `nums`, in one move you may choose any index `i`
+//   and increment `nums[i]` by 1. Return the minimum total number of moves
+//   needed so that every element in `nums` is strictly unique.
+//
+// Algorithm:
+//   This file implements two approaches:
+//   1. Sorting + Greedy (`minIncrementForUnique`):
+//      Sort a copy of `nums` in non-decreasing order and maintain `level`, the
+//      largest assigned unique value so far. For each subsequent `nums[i]`:
+//      - If `nums[i] > level`, keep it as-is and advance `level = nums[i]`.
+//      - Otherwise, bump it to `++level` and add `level - nums[i]` to `moves`.
+//      Time: O(N log N). Space: O(1) auxiliary beyond sorting the value copy.
+//   2. Path-Compressing Union-Find (`minIncrementForUniqueUnionFind`):
+//      Process `nums` online in any order using a sparse hash map `root` over
+//      occupied integer slots. Invariant: `root[x]` stores the rightmost end
+//      of the contiguous occupied block containing `x`. For each `num`,
+//      `find_free_slot(num)` jumps via `cur = root[cur] + 1` until reaching an
+//      unoccupied integer `cur`, marks `root[cur] = cur`, and path-compresses
+//      every visited key to `cur`. The moves needed for `num` is `cur - num`.
+//      Time: O(N * alpha(N)) average, where alpha is the inverse Ackermann
+//      function. Space: O(N).
+//
+// Data Structures:
+//   - `std::vector<int>` (`nums` in Approach 1): Sorted in-place to enable a
+//     single linear greedy pass.
+//   - `std::unordered_map<int, int>` (`root` in Approach 2): Sparse Union-Find
+//     mapping each occupied integer slot to the end of its contiguous occupied
+//     run, pre-reserved to `nums.size()`.
+//   - `std::vector<int>` (`visited` in Approach 2): Records traversed keys
+//     during a probe so all of them can be compressed to the newly claimed slot.
+//
+// Real-World Applications:
+//   - Linear-probing hash table slot allocation and open-addressing collision
+//     resolution with jump-pointer acceleration.
+//   - Unique ID, port, or time-slot scheduling when requests collide on the
+//     same preferred slot and must be shifted forward minimally.
+//   - Monotonic timestamp deduplication in event logs and distributed tracing.
+//
+// Related LeetCode Problems:
+//   - #1647 Minimum Deletions to Make Character Frequencies Unique (making
+//     counts unique via greedy decrements)
+//   - #1846 Maximum Element After Decreasing and Rearranging (sorting with
+//     greedy level tracking)
+//   - #41 First Missing Positive (locating the smallest unused integer slot)
+//   - #128 Longest Consecutive Sequence (tracking contiguous integer blocks
+//     with a hash map or Union-Find)
+//   - #2195 Append K Integers With Minimal Sum (greedily assigning smallest
+//     available integers)
 
 #include "framework/lc_framework.h"
 

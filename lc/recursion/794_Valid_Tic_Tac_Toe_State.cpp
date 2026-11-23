@@ -1,9 +1,48 @@
+// LeetCode 794: Valid Tic-Tac-Toe State
 // https://leetcode.com/problems/valid-tic-tac-toe-state/
 //
-// Given a 3x3 Tic-Tac-Toe board as an array of 3 strings containing ' ', 'X',
-// and 'O', return true if and only if it is possible to reach this board state
-// during a valid game where 'X' plays first, players alternate, and the game
-// stops immediately once either player gets three in a row.
+// Problem:
+//   Given a 3x3 Tic-Tac-Toe `board` as a vector of 3 strings of length 3
+//   containing ' ', 'X', and 'O', return `true` if and only if the position is
+//   reachable in a valid game. The game starts from an empty board, 'X' always
+//   plays first, players alternate turns on empty cells, and play stops
+//   immediately once either player forms three identical marks in a row,
+//   column, or diagonal (or all 9 cells are filled).
+//
+// Algorithm:
+//   Checks the necessary and sufficient invariants of a reachable 3x3
+//   Tic-Tac-Toe board directly without searching the game tree:
+//     1. Count all 'X' and 'O' marks; because 'X' moves first and players
+//        alternate, `x_count` must equal `o_count` or `o_count + 1`.
+//     2. Check all 8 winning lines (3 rows, 3 columns, 2 diagonals) via
+//        `hasWin` for both 'X' and 'O'.
+//     3. If 'O' has a winning line, 'X' cannot also have won and 'O' must have
+//        played the final move (`x_count == o_count`).
+//     4. If 'X' has a winning line, 'X' must have played the final move
+//        (`x_count == o_count + 1`). Note that 'X' may legally complete two
+//        winning lines on its last move.
+//   - Time Complexity:  O(1) (fixed 3x3 board and 8 winning lines).
+//   - Space Complexity: O(1).
+//
+// Data Structures:
+//   - `const std::vector<std::string>&`: Read-only 3x3 board representation.
+//   - Scalar counters (`x_count`, `o_count`) and booleans (`x_wins`, `o_wins`,
+//     `main_diag`, `anti_diag`) for constant-space invariant checks.
+//
+// Real-World Applications:
+//   - Server-side anti-cheat and board-state validation in online turn-based
+//     multiplayer games to reject tampered or unreachable client states.
+//   - State-machine invariant verification and protocol sanity checks in
+//     distributed workflows.
+//   - Filtering invalid board configurations in automated test generators and
+//     game-AI training pipelines.
+//
+// Related LeetCode Problems:
+//   - #348 Design Tic-Tac-Toe (O(1) incremental win detection on an n x n grid)
+//   - #1275 Find Winner on a Tic Tac Toe Game (simulating a move list to find
+//     the winner or draw state)
+//   - #36 Valid Sudoku (verifying fixed-grid rule invariants without solving)
+//   - #294 Flip Game II (two-player turn-based game state analysis)
 
 #include "framework/lc_framework.h"
 

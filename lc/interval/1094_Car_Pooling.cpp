@@ -1,9 +1,46 @@
+// LeetCode 1094: Car Pooling
 // https://leetcode.com/problems/car-pooling/
 //
-// A vehicle with `capacity` empty seats drives only east. Given trips where
-// trips[i] = [num_passengers, from, to], return true if and only if it is
-// possible to pick up and drop off all passengers for all trips without ever
-// exceeding `capacity`.
+// Problem:
+//   A vehicle with `capacity` empty seats travels strictly east along a line.
+//   Given `trips` where `trips[i] = [num_passengers, from, to]` (`from < to`),
+//   return true if and only if the vehicle can pick up and drop off all
+//   passengers for every trip without ever exceeding `capacity` seats.
+//   Passengers dropped off at a location free their seats before pickups at
+//   that same location. Constraints: 1 <= trips.size() <= 1000,
+//   0 <= from < to <= 1000, 1 <= capacity <= 10^5.
+//
+// Algorithm:
+//   Sweep-line with two sorted event arrays and two pointers. Split each trip
+//   into a pickup stop `(from, num_passengers)` and a drop-off stop
+//   `(to, num_passengers)`, then sort both arrays by `location` ascending.
+//   Walk through pickups in order, always processing all drop-offs with
+//   `dropoff.location <= pickup.location` first to reclaim seats before
+//   boarding. Subtract boarded passengers from `available`; if `available < 0`
+//   at any point, return false.
+//   Key invariant: before any pickup at coordinate `x`, `available` reflects
+//   all drop-offs at coordinates <= `x` and all prior pickups.
+//   Time: O(N log N) for sorting, Space: O(N) for the stop arrays.
+//
+// Data Structures:
+//   - `struct Stop`: pairs a road coordinate (`location`) with a passenger
+//     delta (`passengers`).
+//   - `std::vector<Stop> pickups`, `dropoffs`: separately sorted event lists
+//     scanned with two index pointers (`pickup_idx`, `dropoff_idx`).
+//
+// Real-World Applications:
+//   - Ride-sharing, shuttle, and railway seat-inventory validation along a
+//     linear route with intermediate stops.
+//   - Network bandwidth and link-capacity admission control for scheduled
+//     data transfers over shared links.
+//   - Cloud compute and memory quota enforcement across overlapping batch jobs.
+//
+// Related LeetCode Problems:
+//   - #253 Meeting Rooms II (unit-weight peak overlap via two-pointer sweep)
+//   - #1109 Corporate Flight Bookings (range-addition accumulation on indices)
+//   - #731 My Calendar II (online interval booking with capacity bound of 2)
+//   - #732 My Calendar III (dynamic peak overlap count via boundary events)
+//   - #1854 Maximum Population Year (peak simultaneous count over intervals)
 
 #include "framework/lc_framework.h"
 

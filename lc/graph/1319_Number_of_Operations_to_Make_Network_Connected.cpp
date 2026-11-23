@@ -1,14 +1,53 @@
+// LeetCode 1319: Number of Operations to Make Network Connected
 // https://leetcode.com/problems/number-of-operations-to-make-network-connected/
 //
-// Given `n` computers labeled 0..n-1 and undirected cable `connections`, you
-// may relocate existing cables between any pair of disconnected computers.
-// Return the minimum number of cable moves needed to connect all computers, or
-// -1 if impossible.
+// Problem:
+//   Given `n` computers labeled `0..n-1` and an array of undirected ethernet
+//   cables `connections[i] = [a, b]`, you may unplug any existing cable and
+//   reconnect it between any pair of disconnected computers. Return the minimum
+//   number of cable relocations needed to connect all `n` computers into one
+//   network, or `-1` if impossible. Constraints: 1 <= n <= 10^5,
+//   1 <= connections.length <= min(n * (n - 1) / 2, 10^5), with no self-loops
+//   or duplicate cables.
 //
-// Key observation:
-// Connecting `n` nodes requires at least `n - 1` cables total. When at least
-// `n - 1` cables exist, any `C` connected components have enough redundant
-// cables inside cycles to bridge them together in exactly `C - 1` operations.
+// Algorithm:
+//   Edge-sufficiency check followed by connected-component counting via DFS.
+//   Key invariant: spanning `n` vertices requires at least `n - 1` edges, so
+//   fewer than `n - 1` cables immediately returns `-1`. When at least `n - 1`
+//   cables exist and the graph splits into `C` connected components, those
+//   components span `n - C` tree edges and therefore hold at least `C - 1`
+//   redundant cycle edges that can be relocated to bridge all `C` components in
+//   exactly `C - 1` operations. The solution builds an undirected adjacency
+//   list, runs DFS from each unvisited vertex to count `components`, and
+//   returns `components - 1`.
+//   Time Complexity: O(V + E), where V = n and E = connections.size().
+//   Space Complexity: O(V + E) for the adjacency list, visited flags, and DFS
+//     recursion stack.
+//
+// Data Structures:
+//   - `std::vector<std::vector<int>> adj`: Undirected adjacency list storing
+//     cable neighbors for each computer `0..n-1`.
+//   - `std::vector<std::uint8_t> visited`: Compact byte-flag array tracking
+//     already-explored vertices across DFS traversals.
+//   - Recursive call stack (`dfs` lambda): Explores all vertices belonging to
+//     the current connected component.
+//
+// Real-World Applications:
+//   - Data center and telecom topology recovery: computing the minimum link
+//     rewirings needed to heal partitioned clusters into one connected fabric.
+//   - Power grid and utility restoration planning when re-routing redundant
+//     transmission lines to reconnect isolated substations.
+//   - Distributed mesh-network maintenance to unify split-brain partitions with
+//     minimal edge reassignments.
+//
+// Related LeetCode Problems:
+//   - #547 Number of Provinces (counting connected components in a graph)
+//   - #323 Number of Connected Components in an Undirected Graph (direct
+//     connected-component counting via DFS or Union-Find)
+//   - #684 Redundant Connection (identifying redundant cycle edges in a graph)
+//   - #261 Graph Valid Tree (checking n - 1 edges and single-component status)
+//   - #2316 Count Unreachable Pairs of Nodes in an Undirected Graph (analyzing
+//     component structure in disconnected undirected graphs)
 
 #include "framework/lc_framework.h"
 

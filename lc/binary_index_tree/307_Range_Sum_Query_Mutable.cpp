@@ -1,9 +1,47 @@
+// LeetCode 307: Range Sum Query - Mutable
 // https://leetcode.com/problems/range-sum-query-mutable/
 //
-// Given an integer array `nums`, handle multiple queries of two types:
-// 1. `update(index, val)`: update `nums[index]` to `val`.
-// 2. `sumRange(left, right)`: return the sum of elements in `nums[left..right]`
-//    inclusive.
+// Problem:
+//   Design a data structure initialized with an integer array `nums` that
+//   efficiently supports two interleaved operations:
+//   1. `update(index, val)`: set `nums[index]` to `val`.
+//   2. `sumRange(left, right)`: return the sum of `nums[left..right]`
+//      inclusive (with `0 <= left <= right < nums.size()`).
+//
+// Algorithm:
+//   1-indexed Binary Indexed Tree (Fenwick Tree). Each slot `tree_[i]` stores
+//   the sum of the half-open block of length `lowbit(i) = i & -i` ending at
+//   index `i`. Construction runs in linear time by adding `nums_[i - 1]` into
+//   `tree_[i]` and propagating `tree_[i]` once to its immediate parent
+//   `i + lowbit(i)`. Point updates compute `delta = val - nums_[idx]`, update
+//   `nums_[idx]`, and add `delta` along the ancestor chain `i += lowbit(i)`.
+//   Prefix sums accumulate `tree_[i]` along `i -= lowbit(i)`, and any range
+//   sum is answered as `prefix_sum(right + 1) - prefix_sum(left)`.
+//   Time: O(N) build, O(log N) per `update` and `sumRange`. Space: O(N).
+//
+// Data Structures:
+//   - `std::vector<int> nums_`: mirrors the current array values so each
+//     `update` can compute the incremental `delta` in O(1) time.
+//   - `std::vector<int> tree_`: 1-indexed Fenwick tree of size `N + 1` storing
+//     hierarchical partial sums indexed by lowest set bit.
+//
+// Real-World Applications:
+//   - Real-time financial order books and telemetry dashboards tracking dynamic
+//     cumulative volumes or sliding-window metrics under high-frequency updates.
+//   - Adaptive arithmetic coding and online frequency tables requiring fast
+//     cumulative probability queries and symbol-count updates.
+//   - Leaderboard and ranking services maintaining dynamic prefix counts.
+//
+// Related LeetCode Problems:
+//   - #303 Range Sum Query - Immutable (static prefix-sum baseline without
+//     point updates)
+//   - #308 Range Sum Query 2D - Mutable (2D Fenwick tree extension for mutable
+//     submatrix sum queries)
+//   - #315 Count of Smaller Numbers After Self (uses a Fenwick tree over
+//     coordinate-compressed values to count inversions)
+//   - #327 Count of Range Sum (counts valid prefix-sum ranges via Fenwick tree
+//     or divide and conquer)
+//   - #493 Reverse Pairs (tracks dynamic value counts with a Fenwick tree)
 
 #include "framework/lc_framework.h"
 

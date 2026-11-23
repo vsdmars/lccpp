@@ -1,8 +1,58 @@
+// LeetCode 787: Cheapest Flights Within K Stops
 // https://leetcode.com/problems/cheapest-flights-within-k-stops/
 //
-// Given `n` cities and directed weighted flights `[from, to, price]`, find the
-// cheapest price from `src` to `dst` with at most `k` intermediate stops (i.e.
-// at most `k + 1` flight legs). Return -1 if no such route exists.
+// Problem:
+//   Given `n` cities labeled `0..n-1` and a list of directed weighted flights
+//   `[from, to, price]`, find the minimum total price to travel from `src` to
+//   `dst` with at most `k` intermediate stops (meaning at most `k + 1` flight
+//   legs). Return `-1` if no valid route exists within the stop limit.
+//
+// Algorithm:
+//   This file implements two classic shortest-path algorithms:
+//     1. `findCheapestPrice` (Modified Dijkstra with Stop-Count Pruning):
+//        Explores `(cost, stops, city)` states from a min-heap ordered by
+//        total `cost`. Because states are popped in non-decreasing cost order,
+//        the first time `dst` is popped yields the minimum valid cost. Key
+//        invariant: track `best_stops[u]`, the fewest edges used to pop city
+//        `u` so far; any later pop at `u` is at least as expensive, so if its
+//        `stops >= best_stops[u]` (or `stops > k`), it is strictly dominated
+//        and pruned.
+//        Time: O(E * k * log(V * k)), Space: O(V + E * k) including heap.
+//     2. `dp` (Bellman-Ford over `k + 1` Rounds):
+//        Maintains the minimum cost `dist[v]` to reach each city using at most
+//        `step` edges. In each of `k + 1` rounds, relaxes all flights from a
+//        read-only snapshot `dist` into `next_dist` so that each round extends
+//        paths by at most one additional flight leg.
+//        Time: O(k * E), Space: O(V).
+//
+// Data Structures:
+//   - `std::vector<std::vector<std::pair<int, int>>> adj` (`findCheapestPrice`):
+//     Directed weighted adjacency list mapping `from -> (to, price)`.
+//   - `std::priority_queue<State, std::vector<State>, std::greater<>> pq`
+//     (`findCheapestPrice`): Min-heap ordering candidate states by total cost.
+//   - `std::vector<int> best_stops` (`findCheapestPrice`): Records minimum
+//     edges used on any prior cheaper pop of each city to prune dominated work.
+//   - `std::vector<int> dist`, `next_dist` (`dp`): Rolling Bellman-Ford
+//     distance tables across consecutive edge-budget layers.
+//
+// Real-World Applications:
+//   - Travel and freight routing engines: computing lowest-fare itineraries
+//     subject to maximum layover or transfer limits.
+//   - Network packet routing with TTL/hop limits: finding minimum-latency or
+//     lowest-cost paths bounded by a maximum hop count.
+//   - Supply-chain logistics: minimizing multi-leg shipping cost when
+//     perishable goods can tolerate only a fixed number of hub transfers.
+//
+// Related LeetCode Problems:
+//   - #743 Network Delay Time (standard single-source shortest paths with
+//     Dijkstra or Bellman-Ford)
+//   - #1514 Path with Maximum Probability (modified Dijkstra maximizing path
+//     probability)
+//   - #1631 Path With Minimum Effort (minimax shortest path via Dijkstra)
+//   - #1928 Minimum Cost to Reach Destination in Time (resource-constrained
+//     shortest path trading off cost and elapsed time)
+//   - #2093 Minimum Cost to Reach City With Discounts (state-space Dijkstra
+//     tracking remaining discount budget)
 
 #include "framework/lc_framework.h"
 

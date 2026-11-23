@@ -1,9 +1,53 @@
+// LeetCode 1219: Path with Maximum Gold
 // https://leetcode.com/problems/path-with-maximum-gold/
 //
-// In an m x n gold mine `grid`, each cell contains a non-negative amount of
-// gold. Starting and stopping at any non-zero cell, move 4-directionally
-// without revisiting cells or stepping onto 0-gold cells. Return the maximum
-// gold collectible along a single simple path.
+// Problem:
+//   Given an m x n integer matrix `grid` representing a gold mine where each
+//   cell holds a non-negative amount of gold (`0` means empty), return the
+//   maximum total gold collectible along a single simple path. You may start
+//   and stop at any cell with positive gold, move 4-directionally (up, down,
+//   left, right), never revisit a cell, and never step onto a 0-gold cell.
+//   Constraints: 1 <= m, n <= 15, 0 <= grid[r][c] <= 100, and at most 25 cells
+//   contain gold.
+//
+// Algorithm:
+//   Backtracking Depth-First Search (DFS) initiated from every cell containing
+//   gold. On entering `(r, c)`, the cell's gold value is saved and temporarily
+//   set to `0` in-place to mark it visited on the active path, preventing
+//   revisits without a separate visited matrix. The search explores all four
+//   cardinal neighbors, records the highest-yielding continuation, restores the
+//   cell's original gold value upon backtracking, and returns `gold +
+//   best_branch`. Taking the maximum over all non-zero starting cells yields
+//   the globally optimal simple path.
+//   Time Complexity: O(m * n + G * 3^G) (at most O(m * n * 3^G)), where
+//     G <= 25 is the number of non-zero gold cells (after the first step, each
+//     move has at most 3 unvisited neighbors).
+//   Space Complexity: O(G) for the DFS recursion call stack and O(1) auxiliary
+//     heap space via in-place marking.
+//
+// Data Structures:
+//   - `std::vector<std::vector<int>>& grid`: The 2D gold mine mutated in-place
+//     (zeroed on visit, restored on backtrack) to track active path membership.
+//   - `std::array<std::pair<int, int>, 4> kDirs`: Fixed compile-time array of
+//     4-directional `(dr, dc)` neighbor offsets.
+//   - Recursive call stack (`dfs` lambda): Stores active coordinates and saved
+//     gold amounts needed to restore state while unwinding.
+//
+// Real-World Applications:
+//   - Autonomous drone or robot foraging and inspection path planning across a
+//     2D spatial grid with no-revisit and obstacle constraints.
+//   - Open-pit or underground mine excavation routing to maximize resource
+//     yield along a continuous non-overlapping path.
+//   - Board-game and puzzle move-tree search (such as Boggle or tile-chaining
+//     games) using in-place board mutation and undo during backtracking.
+//
+// Related LeetCode Problems:
+//   - #79 Word Search (2D grid backtracking DFS with in-place visited marking)
+//   - #980 Unique Paths III (grid backtracking visiting cells without revisits)
+//   - #212 Word Search II (multi-path 2D grid backtracking with Trie pruning)
+//   - #200 Number of Islands (4-directional DFS over non-zero grid regions)
+//   - #329 Longest Increasing Path in a Matrix (grid path optimization where
+//     strict monotonicity allows memoization instead of full backtracking)
 
 #include "framework/lc_framework.h"
 

@@ -1,11 +1,64 @@
-// https://leetcode.com/problems/design-search-autocomplete-system/description/
+// LeetCode 642: Design Search Autocomplete System
+// https://leetcode.com/problems/design-search-autocomplete-system/
 //
-// Design a search autocomplete system initialized with historical sentences
-// and their hotness counts. For each typed character c ('a'-'z' or ' '),
-// return the top 3 historical sentences sharing the typed prefix, ordered by
-// hotness descending and then ASCII lexicographical order ascending. Typing
-// '#' finishes the current sentence, records it (incrementing its hotness by
-// 1), resets the typed prefix, and returns an empty list.
+// Problem:
+//   Design a search autocomplete system initialized with historical `sentences`
+//   and their corresponding frequency (`times`) counts. Characters consist of
+//   lowercase English letters ('a'-'z') and spaces (' '). Each call to
+//   `input(char c)` represents the user typing one character:
+//     - If `c == '#'`, the current typed sentence ends: save it to history
+//       (incrementing its hotness count by 1), clear the active input state,
+//       and return an empty list.
+//     - Otherwise, append `c` to the current prefix and return up to the top 3
+//       historical sentences starting with that prefix, ranked by hotness
+//       descending and then ASCII lexicographical order ascending.
+//
+// Algorithm:
+//   Arena-Backed Trie with Stateful Incremental Cursor + Subtree Top-K Sort:
+//   - Map `'a'-'z'` to indices `0..25` and `' '` to index `26` (`kSpaceIndex`).
+//   - In the constructor, insert each `(sentence, times[i])` into the trie via
+//     `add_sentence`, storing the full `sentence` string and cumulative `hot`
+//     count at its terminal node.
+//   - Maintain an incremental cursor `cur_node_` (starting at root 0) and the
+//     accumulated buffer `current_input_`.
+//   - On `input('#')`, record `current_input_` with hotness `+1`, clear
+//     `current_input_`, reset `cur_node_` to root 0, and return `{}`.
+//   - On a regular character `c`, advance `cur_node_` by one edge in O(1). If
+//     no edge exists, set `cur_node_ = std::nullopt` so subsequent characters
+//     in the same query return `{}` immediately without traversing the trie.
+//   - Otherwise, DFS (`collect`) the subtree rooted at `*cur_node_` to gather
+//     all nodes with `hot > 0`, and use `std::ranges::partial_sort` to select
+//     the top `min(3, M)` candidates by `(hot desc, sentence asc)`.
+//
+//   Complexity:
+//     - Constructor: Time O(S), Space O(S * 27), where S is the total number of
+//       characters across all initial sentences.
+//     - input(c): Time O(T + M log K) for subtree size T, M matching sentences,
+//       and K = 3 (O(L) on '#' to insert the finished sentence of length L).
+//     - Space: O(S_total * 27) across all recorded sentences plus O(M) per query.
+//
+// Data Structures:
+//   - `std::vector<Node> nodes_`: Flat trie arena where each `Node` holds a
+//     27-slot `children` array, terminal `sentence`, and cumulative `hot` count.
+//   - `std::optional<std::size_t> cur_node_`: Incremental trie cursor avoiding
+//     re-walking the prefix on each keystroke (nullopt on dead-end prefix).
+//   - `std::string current_input_`: Accumulates characters of the in-progress
+//     query until `'#'` commits it.
+//   - `std::vector<Candidate>`: Lightweight `(hot, std::string_view)` list used
+//     with `std::ranges::partial_sort` to rank top-3 matches without copying
+//     non-winning strings.
+//
+// Real-World Applications:
+//   - Search engine query typeahead (Google, Bing, e-commerce search bars).
+//   - IDE symbol/command autocomplete ranked by usage frequency.
+//   - Address, contact, and ticker-symbol lookup widgets with live telemetry.
+//
+// Related LeetCode Problems:
+//   - #208 Implement Trie (Prefix Tree) (base prefix tree without ranking)
+//   - #1268 Search Suggestions System (top 3 lexicographical prefix suggestions)
+//   - #677 Map Sum Pairs (aggregates numeric scores over a trie prefix subtree)
+//   - #1804 Implement Trie II (Prefix Tree) (tracks per-word frequencies in trie)
+//   - #211 Design Add and Search Words Data Structure (custom trie query design)
 
 #include "framework/lc_framework.h"
 

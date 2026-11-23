@@ -1,9 +1,56 @@
-// https://leetcode.com/problems/random-pick-index/description/
+// LeetCode 398: Random Pick Index
+// https://leetcode.com/problems/random-pick-index/
 //
-// Given an integer array `nums` with possible duplicates, randomly output the
-// index of a given `target` number. You can assume the given `target` number
-// exists in the array, and each valid index must have equal probability of
-// being returned.
+// Problem:
+//   Given an integer array `nums` that may contain duplicates
+//   (1 <= nums.length <= 2 * 10^4, -2^31 <= nums[i] <= 2^31 - 1, up to 10^4
+//   calls to `pick`), implement `pick(target)` to return a random index `i`
+//   such that `nums[i] == target`. It is guaranteed that `target` exists in
+//   `nums`, and every valid index must have equal probability of being chosen.
+//
+// Algorithm:
+//   Implements two complementary approaches demonstrating the space-time
+//   trade-off:
+//     1. `Solution` (Filtered Reservoir Sampling, k = 1): Stores only `nums_`
+//        with no auxiliary index map. On each `pick(target)`, scans `nums_`;
+//        when the k-th occurrence of `target` is seen, replaces `chosen` with
+//        the current index with probability 1 / k, yielding an exact uniform
+//        distribution over all matching indices.
+//        - Constructor: Time O(1) (moves `nums`), Space O(1) auxiliary.
+//        - `pick`:      Time O(N), Space O(1) auxiliary.
+//     2. `HashMapSolution` (Precomputed Index Map): Constructor groups indices
+//        by value into a hash map so each `pick(target)` selects directly from
+//        the matching index vector in O(1) time.
+//        - Constructor: Time O(N), Space O(N) auxiliary.
+//        - `pick`:      Time O(1), Space O(1) per call.
+//
+// Data Structures:
+//   - `std::vector<int>`: Holds the input array in `Solution` and per-value
+//     index lists in `HashMapSolution`.
+//   - `std::unordered_map<int, std::vector<int>>`: Maps each distinct value to
+//     all of its array indices in `HashMapSolution`.
+//   - `std::mt19937` and `std::uniform_int_distribution`: Unbiased PRNG and
+//     uniform index selector used by both implementations.
+//
+// Real-World Applications:
+//   - Load balancers selecting a random healthy backend instance matching a
+//     requested service tag or shard group.
+//   - Ad-serving and recommendation engines uniformly picking a candidate item
+//     matching a category or audience filter.
+//   - Stratified and predicate-filtered sampling in streaming analytics and
+//     SQL query engines.
+//
+// Related LeetCode Problems:
+//   - #382 Linked List Random Node (unfiltered k = 1 reservoir sampling over a
+//     singly linked list)
+//   - #528 Random Pick with Weight (non-uniform discrete sampling with prefix
+//     sums and binary search)
+//   - #710 Random Pick with Blacklist (uniform random selection over a range
+//     excluding forbidden values)
+//   - #380 Insert Delete GetRandom O(1) (dynamic set with O(1) uniform random
+//     sampling)
+//   - #381 Insert Delete GetRandom O(1) - Duplicates allowed (dynamic multiset
+//     supporting O(1) uniform sampling)
 
 #include "framework/lc_framework.h"
 

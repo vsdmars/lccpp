@@ -1,7 +1,55 @@
-// https://leetcode.com/problems/evaluate-division/description/
+// LeetCode 399: Evaluate Division
+// https://leetcode.com/problems/evaluate-division/
 //
-// Given equations `A / B = k` and floating-point values `k`, evaluate a list of
-// division queries `C / D = ?`. Return `-1.0` when an answer cannot be derived.
+// Problem:
+//   Given a list of variable pairs `equations[i] = [A_i, B_i]` with matching
+//   positive real values `values[i]` representing `A_i / B_i = values[i]`,
+//   evaluate a list of division queries `queries[j] = [C_j, D_j]`. Return the
+//   numeric value of `C_j / D_j` for each query, or `-1.0` if either variable
+//   never appeared in `equations` or no ratio path links them. Input equations
+//   are guaranteed to be consistent and free of division by zero.
+//
+// Algorithm:
+//   Model the system of ratio equations as a weighted directed graph: each
+//   equation `A / B = k` adds edge `A -> B` with weight `k` and reciprocal edge
+//   `B -> A` with weight `1.0 / k`. Because ratios telescope along a path
+//   (`(A/B) * (B/C) = A/C`), answering `src / dst` reduces to multiplying edge
+//   weights along any simple path from `src` to `dst`.
+//   For each query:
+//     - If `src` or `dst` is absent from `graph`, return `-1.0`.
+//     - If `src == dst`, return `1.0`.
+//     - Otherwise run DFS from `src` with a per-query `visited` set; when `dst`
+//       is reached, unwind the recursion multiplying each edge weight along the
+//       path, or return `-1.0` if `dst` is unreachable.
+//   Time Complexity:  O(E + Q * (V + E)), where E = equations.size(), V is the
+//                     number of distinct variables, and Q = queries.size().
+//   Space Complexity: O(V + E) for the weighted graph, `visited` set, and DFS
+//                     recursion stack.
+//
+// Data Structures:
+//   - `std::unordered_map<std::string, std::vector<std::pair<std::string,
+//     double>>> graph`: weighted adjacency list mapping each variable to its
+//     `(neighbor, ratio)` edges.
+//   - `std::unordered_set<std::string> visited`: per-query set preventing
+//     cycles during DFS path search.
+//   - `std::vector<double> results`: pre-reserved output vector storing answers.
+//
+// Real-World Applications:
+//   - Currency exchange and foreign-exchange (FX) cross-rate conversion across
+//     quoted currency pairs.
+//   - Unit conversion engines (length, mass, energy, custom domain units)
+//     deriving indirect conversion factors from base ratios.
+//   - Pricing, recipe scaling, and bill-of-materials ratio propagation across
+//     linked commodities.
+//
+// Related LeetCode Problems:
+//   - #2307 Check for Contradictions in Equations (validates consistency of
+//     ratio equations on a weighted graph)
+//   - #990 Satisfiability of Equality Equations (checks transitive equality
+//     and inequality constraints across variables)
+//   - #721 Accounts Merge (groups transitively linked string-keyed entities)
+//   - #547 Number of Provinces (reachability and connected components)
+//   - #1631 Path With Minimum Effort (weighted graph path queries)
 
 #include "framework/lc_framework.h"
 

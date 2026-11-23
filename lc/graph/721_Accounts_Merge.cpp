@@ -1,9 +1,59 @@
-// https://leetcode.com/problems/accounts-merge/description/
+// LeetCode 721: Accounts Merge
+// https://leetcode.com/problems/accounts-merge/
 //
-// Given a list of `accounts` where `accounts[i][0]` is a person's name and
-// `accounts[i][1..]` are emails belonging to that account, merge all accounts
-// that share at least one email. Return merged accounts with each account's
-// emails sorted in ascending order.
+// Problem:
+//   Given a list `accounts` where `accounts[i][0]` is a person's name and
+//   `accounts[i][1..]` are email addresses belonging to that account, merge
+//   any two accounts that share at least one common email (transitively).
+//   Distinct people may share the same name, so accounts are merged strictly
+//   by shared emails. Return the merged accounts in any order, with each
+//   account's name first followed by its unique emails sorted in ascending
+//   lexicographical order.
+//
+// Algorithm:
+//   This file implements two connected-component traversal approaches:
+//     1. `accountsMerge` (Bipartite DFS): Builds an inverted map from each
+//        email to the indices of all accounts containing it. For each
+//        unvisited account index, runs recursive DFS across shared emails to
+//        collect every email in the connected component, then sorts them.
+//     2. `bfsSolution` (Star-Graph Iterative Traversal): Connects every email
+//        in an account to that account's first email (`anchor`) in an
+//        undirected email graph and records each email's owner name. Explores
+//        each unvisited email component using an explicit stack, then sorts
+//        the collected emails.
+//   Let `M = sum(|accounts[i]| - 1)` be the total number of email entries
+//   (or `N * K` for `N` accounts of up to `K` emails) and `L` be average email
+//   length.
+//   Time: O(M * L * log M) dominated by sorting emails (O(N * K log(N * K))
+//   assuming O(1) string operations), Space: O(M * L).
+//
+// Data Structures:
+//   - `std::unordered_map<std::string, std::vector<std::size_t>>
+//     email_to_accts` (`accountsMerge`): Inverted adjacency map linking each
+//     email to the account indices that reference it.
+//   - `std::vector<std::uint8_t> visited` and `std::unordered_set<std::string>
+//     emails` (`accountsMerge`): Track visited accounts and deduplicated
+//     component emails.
+//   - `std::unordered_map<std::string, std::vector<std::string>> graph`,
+//     `email_to_name`, `std::unordered_set<std::string> visited`, and
+//     `std::vector<std::string> stack` (`bfsSolution`): Undirected email star
+//     graph, owner lookup, visited set, and explicit DFS stack.
+//
+// Real-World Applications:
+//   - Identity resolution and CRM deduplication: merging duplicate customer
+//     profiles that share phone numbers, emails, or device IDs across systems.
+//   - Anti-fraud and trust-and-safety clustering: linking accounts sharing
+//     payment instruments, recovery emails, or IP fingerprints.
+//   - Master data management (MDM): consolidating fragmented entity records
+//     from multiple ingested data sources via transitive key matching.
+//
+// Related LeetCode Problems:
+//   - #547 Number of Provinces (finding connected components in a graph)
+//   - #323 Number of Connected Components in an Undirected Graph (grouping
+//     connected nodes via DFS or Union-Find)
+//   - #737 Sentence Similarity II (transitive equivalence classes over strings)
+//   - #1202 Smallest String With Swaps (partitioning indices into connected
+//     components and sorting each component independently)
 
 #include "framework/lc_framework.h"
 
