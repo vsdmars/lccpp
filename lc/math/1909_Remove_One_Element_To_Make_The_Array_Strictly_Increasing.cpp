@@ -9,6 +9,42 @@
 //   otherwise.
 //   Constraints: 2 <= nums.length <= 1000, 1 <= nums[i] <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 10, 5, 7]
+//     Output: true
+//     Explanation:
+//       - Initialize removals = 0 and prev = nums[0] = 1, then iterate from i = 1.
+//       - At i = 1 and i = 2, nums[1] = 2 > 1 and nums[2] = 10 > 2, advancing prev
+//         to 2 and then 10.
+//       - At i = 3, nums[3] = 5 <= 10 increments removals to 1; since nums[3] >
+//         nums[1] (5 > 2), logically drop nums[2] = 10 and set prev = 5.
+//       - At i = 4, nums[4] = 7 > 5 advances prev to 7, so the loop finishes and
+//         returns true.
+//
+//   Example 2:
+//     Input:  nums = [2, 3, 1, 2]
+//     Output: false
+//     Explanation:
+//       - Initialize removals = 0 and prev = nums[0] = 2, then advance prev = 3 at
+//         i = 1 because 3 > 2.
+//       - At i = 2, nums[2] = 1 <= 3 increments removals to 1; since i > 1 and
+//         nums[2] <= nums[0] (1 <= 2), discard nums[2] via continue and keep prev =
+//         3.
+//       - At i = 3, nums[3] = 2 <= 3 increments removals to 2 (> 1), immediately
+//         returning false.
+//
+//   Example 3:
+//     Input:  nums = [105, 924, 32, 968]
+//     Output: true
+//     Explanation:
+//       - Initialize removals = 0 and prev = 105, then update prev = 924 at i = 1
+//         since 924 > 105.
+//       - At i = 2, nums[2] = 32 <= 924 increments removals to 1; because nums[2]
+//         <= nums[0] (32 <= 105), discard 32 and retain prev = 924.
+//       - At i = 3, nums[3] = 968 > 924 updates prev = 968, and the scan finishes
+//         returning true.
+//
 // Algorithm:
 //   Single-pass greedy scan tracking the effective previous kept value `prev`
 //   and the number of order violations `removals`. Whenever `nums[i] <= prev`,

@@ -12,6 +12,58 @@
 //       (most recently pushed) one.
 //   The last four operations are guaranteed to be called only when non-empty.
 //
+// Examples:
+//   Example 1:
+//     Input:  ["MaxStack", "push", "push", "push", "top", "popMax", "top",
+//             "peekMax", "pop", "top"], [[], [5], [1], [5], [], [], [], [], [], []]
+//     Output: [null, null, null, null, 5, 5, 1, 5, 1, 5]
+//     Explanation:
+//       - The three push calls assign IDs 0, 1, 2, producing stack_ = [(5,0),
+//         (1,1), (5,2)] and max_heap_ topped by (5,2) due to larger ID
+//         tie-breaking.
+//       - top() reads 5 from (5,2), then popMax() removes (5,2) from max_heap_,
+//         inserts id = 2 into removed_, and returns 5.
+//       - The second top() calls prune_stack(), discarding stale (5,2) and erasing
+//         id = 2 from removed_, then returns 1 from (1,1).
+//       - peekMax() returns 5 from (5,0) at the heap root, pop() removes (1,1) and
+//         marks id = 1 in removed_ returning 1, and the final top() returns 5 from
+//         (5,0).
+//
+//   Example 2:
+//     Input:  ["MaxStack", "push", "push", "push", "popMax", "top", "push",
+//             "popMax", "pop", "top"], [[], [10], [20], [10], [], [], [10], [], [],
+//             []]
+//     Output: [null, null, null, null, 20, 10, null, 10, 10, 10]
+//     Explanation:
+//       - Pushing 10, 20, 10 inserts entries (10,0), (20,1), (10,2); popMax() pops
+//         (20,1) from max_heap_, inserts id = 1 into removed_, and returns 20.
+//       - top() returns 10 from (10,2), then push(10) appends (10,3) with a fresh
+//         universal ID to both stack_ and max_heap_.
+//       - popMax() pops (10,3) (highest ID among the 10s) and inserts id = 3 into
+//         removed_, returning 10.
+//       - pop() prunes stale (10,3) and pops (10,2) (adding id = 2 to removed_)
+//         returning 10, and top() returns 10 from (10,0).
+//
+//   Example 3:
+//     Input:  ["MaxStack", "push", "peekMax", "push", "peekMax", "push", "pop",
+//             "pop", "push", "peekMax", "push", "popMax", "top", "push", "push",
+//             "peekMax", "popMax", "popMax", "top", "peekMax"], [[], [92], [],
+//             [54], [], [22], [], [], [-57], [], [-24], [], [], [26], [-71], [],
+//             [], [], [], []]
+//     Output: [null, null, 92, null, 92, null, 22, 54, null, 92, null, 92, -24,
+//             null, null, 26, 26, -24, -71, -57]
+//     Explanation:
+//       - Pushing 92 (id 0), 54 (id 1), and 22 (id 2) keeps peekMax() at 92, then
+//         two pop() calls return 22 and 54 while recording IDs 2 and 1 in removed_.
+//       - Pushing -57 (id 3) and -24 (id 4) keeps (92,0) at the heap root, so
+//         peekMax() returns 92, popMax() removes (92,0) (marking id = 0 removed),
+//         and top() returns -24.
+//       - Pushing 26 (id 5) and -71 (id 6) places (26,5) at the heap root, so
+//         peekMax() returns 26 and consecutive popMax() calls remove (26,5) and
+//         (-24,4) (marking IDs 5 and 4 removed).
+//       - top() returns -71 from (-71,6), and peekMax() calls prune_heap() to
+//         discard stale (26,5) and (-24,4) before returning -57 from (-57,3).
+//
 // Algorithm:
 //   Assign every pushed element a monotonically increasing universal ID
 //   (`next_id_++`) and insert `(value, id)` into both a LIFO stack and a

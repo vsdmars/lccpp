@@ -7,6 +7,37 @@
 //   ordered from the deepest leaf level up to the root). An empty tree
 //   returns an empty 2D vector.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 9, 20, null, null, 15, 7]
+//     Output: [[15, 7], [9, 20], [3]]
+//     Explanation:
+//       - Initialize the BFS queue frontier with root 3 and an empty result vector.
+//       - Pop depth 0 node 3 into level [3] and enqueue 9 and 20, then pop depth 1
+//         nodes 9 and 20 into [9, 20] and enqueue 15 and 7.
+//       - Pop depth 2 nodes 15 and 7 into [15, 7] with no children remaining,
+//         giving top-down result [[3], [9, 20], [15, 7]].
+//       - Call std::ranges::reverse(result) to reverse the outer vector in place,
+//         returning [[15, 7], [9, 20], [3]].
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, 4, null, null, 5]
+//     Output: [[4, 5], [2, 3], [1]]
+//     Explanation:
+//       - Depth 0 pops 1, appends [1] to result, and enqueues children 2 and 3.
+//       - Depth 1 pops 2 (enqueuing 4) and 3 (enqueuing 5), appending [2, 3] to
+//         result.
+//       - Depth 2 pops 4 and 5, appending [4, 5], and reversing result yields [[4,
+//         5], [2, 3], [1]].
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: []
+//     Explanation:
+//       - Check root == nullptr at entry to levelOrderBottom and
+//         levelOrderBottomRecursive.
+//       - Return the empty 2D vector [] immediately without traversing any nodes.
+//
 // Algorithm:
 //   1. Iterative BFS + Reverse (`levelOrderBottom`): Perform standard
 //      top-down BFS level by level using a FIFO queue, collecting each depth's

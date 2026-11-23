@@ -6,6 +6,45 @@
 //   two integers `low` and `high` (low <= high), return the sum of values of
 //   all nodes whose values fall within the inclusive interval [low, high].
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [10, 5, 15, 3, 7, null, 18], low = 7, high = 15
+//     Output: 32
+//     Explanation:
+//       - Visit root 10; since 7 <= 10 <= 15, add 10 to the sum and recurse into
+//         both left (5) and right (15).
+//       - At node 5, since 5 < 7, prune the entire left subtree (3) and recurse
+//         only right to 7.
+//       - Node 7 lies in [7, 15] with no children, contributing 7.
+//       - At node 15, since 7 <= 15 <= 15, add 15, skip its null left child, and
+//         inspect right child 18, which is > 15 and prunes to 0.
+//       - Combine the in-range contributions 10 + 7 + 15 to return 32.
+//
+//   Example 2:
+//     Input:  root = [10, 5, 15, 3, 7, 13, 18, 1, null, 6], low = 6, high = 10
+//     Output: 23
+//     Explanation:
+//       - Visit root 10; since 6 <= 10 <= 10, include 10 and explore both child
+//         subtrees 5 and 15.
+//       - At node 15, since 15 > 10, prune right child 18 and descend left to 13,
+//         which is also > 10 and contributes 0.
+//       - At node 5, since 5 < 6, prune left subtree (3 and 1) and descend right to
+//         7.
+//       - Node 7 is in [6, 10], so add 7 and inspect left child 6, which is also in
+//         [6, 10] and adds 6.
+//       - Return the total 10 + 7 + 6 = 23.
+//
+//   Example 3:
+//     Input:  root = [10, 5, 15, 3, 7, 13, 18], low = 14, high = 14
+//     Output: 0
+//     Explanation:
+//       - At root 10, since 10 < 14, skip the entire left subtree (5, 3, 7) and
+//         recurse only to right child 15.
+//       - At node 15, since 15 > 14, prune right child 18 and recurse only to left
+//         child 13.
+//       - At node 13, since 13 < 14, its right child is null, returning 0 without
+//         adding any node value.
+//
 // Algorithm:
 //   Pruned BST Depth-First Search (Recursive and Iterative):
 //   At each visited node, use the BST ordering invariant to skip subtrees that

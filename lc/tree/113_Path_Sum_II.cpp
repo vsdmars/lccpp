@@ -7,6 +7,43 @@
 //   target_sum. Each path is returned as a list of node values from root to
 //   leaf. A leaf is a node with no children.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [5, 4, 8, 11, null, 13, 4, 7, 2, null, null, 5, 1], target_sum
+//             = 22
+//     Output: [[5, 4, 11, 2], [5, 8, 4, 5]]
+//     Explanation:
+//       - Descend 5 -> 4 -> 11 with path = [5, 4, 11] and remaining = 2; leaf 7
+//         fails with next_remaining = -5, then leaf 2 succeeds with 2 - 2 = 0 and
+//         records [5, 4, 11, 2].
+//       - Backtrack to root 5 (path = [5], remaining = 17) and descend 8 -> 13,
+//         where leaf 13 fails with next_remaining = 9 - 13 = -4 and pops back to
+//         [5, 8].
+//       - Descend into right child 4 (path = [5, 8, 4], remaining = 5) and visit
+//         leaf 5, where next_remaining = 5 - 5 = 0 appends [5, 8, 4, 5] to result.
+//       - Visit sibling leaf 1 (next_remaining = 4 != 0), pop all frames back to an
+//         empty path, and return [[5, 4, 11, 2], [5, 8, 4, 5]].
+//
+//   Example 2:
+//     Input:  root = [1, -2, -3, 1, 3, -2, null, -1], target_sum = -1
+//     Output: [[1, -2, 1, -1]]
+//     Explanation:
+//       - Descend 1 -> -2 -> 1 with path = [1, -2, 1] and next_remaining = -1; node
+//         1 has left child -1 so it recurses rather than checking leaf termination.
+//       - At leaf -1, path = [1, -2, 1, -1] yields next_remaining = -1 - (-1) = 0,
+//         appending [1, -2, 1, -1] to result before popping back.
+//       - Check leaf 3 (next_remaining = 0 - 3 = -3) and right subtree leaf -2
+//         (next_remaining = 1 - (-2) = 3), finding no other matching paths.
+//
+//   Example 3:
+//     Input:  root = [1, 2, 3], target_sum = 5
+//     Output: []
+//     Explanation:
+//       - Push 1 onto path with next_remaining = 5 - 1 = 4, then visit leaf 2
+//         (next_remaining = 4 - 2 = 2 != 0) and pop 2.
+//       - Visit leaf 3 (next_remaining = 4 - 3 = 1 != 0), pop 3 and 1, and return
+//         an empty result [].
+//
 // Algorithm:
 //   Perform a depth-first search (DFS) with backtracking:
 //     1. Maintain a single mutable `path` vector representing the node values

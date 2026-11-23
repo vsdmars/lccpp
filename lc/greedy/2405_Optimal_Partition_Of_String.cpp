@@ -7,6 +7,41 @@
 //   substrings such that every character within each substring is unique.
 //   Return the minimum number of substrings in such a partition.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abacaba"
+//     Output: 4
+//     Explanation:
+//       - Initialize partitions = 1 and seen_mask = 0 for the first substring.
+//       - Scan 'a' and 'b': neither bit is set, so seen_mask records {'a', 'b'} for
+//         the substring "ab".
+//       - At the second 'a', (seen_mask & bit) != 0, so increment partitions to 2,
+//         reset seen_mask to {'a'}, and then add 'c' to form "ac".
+//       - At the third 'a', the collision increments partitions to 3 and resets
+//         seen_mask to {'a'}, then 'b' is added to form "ab".
+//       - At the final 'a', the collision increments partitions to 4 and starts
+//         "a", returning 4.
+//
+//   Example 2:
+//     Input:  s = "ssssss"
+//     Output: 6
+//     Explanation:
+//       - Initialize partitions = 1 and seen_mask = 0.
+//       - At index 0 ('s'), the bit for 's' is unset, so seen_mask records {'s'}
+//         while partitions remains 1.
+//       - For each of the remaining five 's' characters (indices 1 through 5),
+//         (seen_mask & bit) != 0 triggers a split, incrementing partitions from 1
+//         up to 6 and resetting seen_mask to {'s'} each time.
+//       - Return partitions = 6, corresponding to six single-character substrings.
+//
+//   Example 3:
+//     Input:  s = ""
+//     Output: 0
+//     Explanation:
+//       - Check s.empty(), which evaluates to true for the empty string.
+//       - Return 0 immediately before initializing partitions to 1 or entering the
+//         character loop.
+//
 // Algorithm:
 //   Greedy left-to-right scan: extending the current substring as far right as
 //   possible is always optimal by a standard greedy exchange argument — cutting

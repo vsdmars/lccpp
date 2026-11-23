@@ -9,6 +9,43 @@
 //   after that node and before its original `next` node. Every node's `child`
 //   pointer must be set to `nullptr` in the resulting list.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3, 4, 5, 6, null, null, null, 7, 8, 9, 10, null, null,
+//             11, 12]
+//     Output: [1, 2, 3, 7, 8, 11, 12, 9, 10, 4, 5, 6]
+//     Explanation:
+//       - flatten initializes stack = [1] and pops 1 and 2 in order, pushing each
+//         node's next pointer and linking 1 <-> 2.
+//       - At node 3, it pushes next = 4 first and child = 7 second (setting
+//         3->child = nullptr), so stack = [4, 7] and node 7 is popped before 4.
+//       - Popping 7 pushes 8, and popping 8 pushes next = 9 then child = 11
+//         (clearing 8->child), leaving stack = [4, 9, 11].
+//       - The stack then pops 11 -> 12 -> 9 -> 10 -> 4 -> 5 -> 6, stitching
+//         prev/next links at each step and terminating 1->prev = nullptr and
+//         6->next = nullptr.
+//
+//   Example 2:
+//     Input:  head = [1, null, 2, null, 3, null, 4] (1 -> child 2 -> child 3 ->
+//             child 4)
+//     Output: [1, 2, 3, 4]
+//     Explanation:
+//       - flatten pushes head = 1 onto stack, pops 1, finds 1->next == nullptr,
+//         pushes child = 2, and clears 1->child = nullptr.
+//       - Popping 2 links 1 <-> 2, pushes 3, and clears 2->child; popping 3 links 2
+//         <-> 3, pushes 4, and clears 3->child.
+//       - Popping 4 links 3 <-> 4 with no next or child remaining, then sets
+//         4->next = nullptr and 1->prev = nullptr to yield [1, 2, 3, 4].
+//
+//   Example 3:
+//     Input:  head = [] (nullptr)
+//     Output: [] (nullptr)
+//     Explanation:
+//       - Both flatten(nullptr) and flattenRecursive(nullptr) hit the head ==
+//         nullptr guard at entry.
+//       - No stack or recursion frames are allocated, and nullptr is returned
+//         immediately.
+//
 // Algorithm:
 //   Viewing `child` as a left branch and `next` as a right branch makes the
 //   desired output order a standard Preorder DFS traversal. Two O(N) in-place

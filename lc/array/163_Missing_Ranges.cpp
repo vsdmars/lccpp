@@ -8,6 +8,40 @@
 //   cover every integer in `[lower, upper]` absent from `nums`. Each missing
 //   range `[a, b]` is formatted as `"a"` if `a == b` and `"a->b"` if `a < b`.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [0, 1, 3, 50, 75], lower = 0, upper = 99
+//     Output: ["2", "4->49", "51->74", "76->99"]
+//     Explanation:
+//       - Initialize prev = -1 (lower - 1) and upper_sentinel = 100 (upper + 1) in
+//         64-bit signed arithmetic.
+//       - For curr = 0 and curr = 1, curr - prev is 1 (< 2), so no gap is added and
+//         prev advances to 1.
+//       - At i = 2 (curr = 3), 3 - 1 = 2 emits "2"; at i = 3 (curr = 50), 50 - 3 =
+//         47 emits "4->49".
+//       - At i = 4 (curr = 75), 75 - 50 = 25 emits "51->74"; at i = 5 (curr = 100),
+//         100 - 75 = 25 emits "76->99" and returns the four ranges.
+//
+//   Example 2:
+//     Input:  nums = [2, 3, 4], lower = 0, upper = 4
+//     Output: ["0->1"]
+//     Explanation:
+//       - Initialize prev = -1 and upper_sentinel = 5.
+//       - At i = 0 (curr = 2), curr - prev = 3 >= 2, so formatRange(0, 1) appends
+//         "0->1" and sets prev = 2.
+//       - For curr = 3, curr = 4, and trailing curr = 5, every difference curr -
+//         prev equals 1, so no further gaps are emitted and ["0->1"] is returned.
+//
+//   Example 3:
+//     Input:  nums = [], lower = -3, upper = -1
+//     Output: ["-3->-1"]
+//     Explanation:
+//       - Initialize prev = -4 (lower - 1) and upper_sentinel = 0 (upper + 1).
+//       - Because nums is empty, the loop runs a single iteration at i = 0 with
+//         curr = upper_sentinel = 0.
+//       - Since curr - prev = 4 >= 2, formatRange(-3, -1) appends "-3->-1" and
+//         returns ["-3->-1"].
+//
 // Algorithm:
 //   Virtual Sentinel Linear Scan:
 //     Treat the stream as starting at a virtual sentinel `prev = lower - 1`

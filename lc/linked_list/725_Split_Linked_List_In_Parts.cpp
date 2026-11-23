@@ -8,6 +8,43 @@
 //   parts, and parts that receive zero nodes must be represented by `nullptr`.
 //   Return an array of the `k` resulting part heads in original order.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3], k = 5
+//     Output: [[1], [2], [3], [], []]
+//     Explanation:
+//       - Pass 1 counts total_nodes = 3, computes base_size = 3 / 5 = 0 and
+//         remainder = 3 % 5 = 3, and allocates 5 nullptr slots in parts.
+//       - For i = 0, 1, 2 (each with i < remainder so part_size = 1), Pass 2
+//         records parts[i] = curr, detaches curr->next = nullptr, and advances curr
+//         to the next node (1, 2, then 3).
+//       - After node 3 is detached, curr becomes nullptr and the loop ends, leaving
+//         parts[3] and parts[4] as nullptr to return [[1], [2], [3], [], []].
+//
+//   Example 2:
+//     Input:  head = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], k = 3
+//     Output: [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]]
+//     Explanation:
+//       - Pass 1 counts total_nodes = 10 and computes base_size = 10 / 3 = 3 with
+//         remainder = 10 % 3 = 1.
+//       - For i = 0 (i < remainder), part_size = 4: parts[0] starts at 1, curr
+//         advances 3 steps to node 4, severs 4 -> nullptr, and moves to 5.
+//       - For i = 1 (i >= remainder), part_size = 3: parts[1] starts at 5, curr
+//         advances 2 steps to node 7, severs 7 -> nullptr, and moves to 8.
+//       - For i = 2, part_size = 3: parts[2] starts at 8, curr advances 2 steps to
+//         node 10, sets 10->next = nullptr, and returns [[1, 2, 3, 4], [5, 6, 7],
+//         [8, 9, 10]].
+//
+//   Example 3:
+//     Input:  head = [], k = 3
+//     Output: [[], [], []]
+//     Explanation:
+//       - Pass 1 traverses from head = nullptr and records total_nodes = 0,
+//         yielding base_size = 0 and remainder = 0.
+//       - Allocate parts(3, nullptr) and set curr = nullptr.
+//       - Because curr != nullptr is immediately false, Pass 2 performs zero
+//         iterations and returns three empty (nullptr) parts [[], [], []].
+//
 // Algorithm:
 //   Two-pass length-aware in-place splitting:
 //   1. Pass 1: Traverse the list to count its total length `n`.

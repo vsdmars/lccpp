@@ -12,6 +12,44 @@
 //   (Original LeetCode problem is SQL; modeled here directly as typed C++23
 //   table rows executing the exact relational join/aggregation semantics.)
 //
+// Examples:
+//   Example 1:
+//     Input:  follow_table = [{followee: "Alice", follower: "Bob"}, {followee:
+//             "Bob", follower: "Cena"}, {followee: "Bob", follower: "Donald"},
+//             {followee: "Donald", follower: "Edward"}]
+//     Output: [{follower: "Bob", num: 2}, {follower: "Donald", num: 1}]
+//     Explanation:
+//       - Phase 1 scans all 4 rows, building active_followers = {"Bob", "Cena",
+//         "Donald", "Edward"} and followee_to_followers = {"Alice": {"Bob"}, "Bob":
+//         {"Cena", "Donald"}, "Donald": {"Edward"}}.
+//       - Phase 2 semi-joins on active_followers: "Alice" is excluded because she
+//         follows no one, while "Bob" (count 2) and "Donald" (count 1) appear in
+//         both structures.
+//       - Phase 3 sorts the qualifying FollowerCount records ascending by follower
+//         name to return [{Bob, 2}, {Donald, 1}].
+//
+//   Example 2:
+//     Input:  follow_table = [{followee: "A", follower: "B"}, {followee: "B",
+//             follower: "C"}, {followee: "B", follower: "C"}, {followee: "B",
+//             follower: "D"}]
+//     Output: [{follower: "B", num: 2}]
+//     Explanation:
+//       - Phase 1 records active_followers = {"B", "C", "D"} and inserts "C" and
+//         "D" into followee_to_followers["B"], where the unordered_set deduplicates
+//         the repeated (B, C) row.
+//       - Phase 2 excludes "A" (not in active_followers) and emits {follower: "B",
+//         num: 2} because followee_to_followers["B"].size() is 2.
+//
+//   Example 3:
+//     Input:  follow_table = [{followee: "Celeb", follower: "Fan1"}, {followee:
+//             "Celeb", follower: "Fan2"}]
+//     Output: []
+//     Explanation:
+//       - Phase 1 populates active_followers = {"Fan1", "Fan2"} and
+//         followee_to_followers = {"Celeb": {"Fan1", "Fan2"}}.
+//       - Phase 2 checks whether "Celeb" is in active_followers, finds no match,
+//         and returns an empty result vector.
+//
 // Algorithm:
 //   Equivalent SQL query:
 //     SELECT f1.followee AS follower, COUNT(DISTINCT f1.follower) AS num

@@ -8,6 +8,39 @@
 //   number, you pay `$0` and win. Given `n >= 1`, return the minimum amount of
 //   money required to guarantee a win regardless of which number was picked.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 10
+//     Output: 16
+//     Explanation:
+//       - Intervals of length 1 have dp[lo][lo] = 0, and length-2 intervals satisfy
+//         dp[lo][lo + 1] = lo (for example, dp[9][10] = 9).
+//       - Bottom-up transitions for len = 3..9 compute subrange minimax costs,
+//         including dp[1][6] = 8 and dp[8][10] = 9 (guessing 9 costs 9 + max(0, 0)
+//         = 9).
+//       - For [1, 10] at len = 10, trying pivot x = 7 yields 7 + max(dp[1][6],
+//         dp[8][10]) = 7 + max(8, 9) = 16, which minimizes the worst-case cost
+//         across all x in [1, 9].
+//
+//   Example 2:
+//     Input:  n = 4
+//     Output: 4
+//     Explanation:
+//       - Base intervals of length 2 evaluate to dp[1][2] = 1, dp[2][3] = 2, and
+//         dp[3][4] = 3.
+//       - Length-3 intervals yield dp[1][3] = 2 (pivot x = 2 gives 2 + 0) and
+//         dp[2][4] = 3 (pivot x = 3 gives 3 + 0).
+//       - For [1, 4], pivots x = 1, 2, 3 cost 1 + dp[2][4] = 4, 2 + dp[3][4] = 5,
+//         and 3 + dp[1][2] = 4, so dp[1][4] = 4.
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: 0
+//     Explanation:
+//       - The guard n <= 1 immediately triggers before allocating the DP table.
+//       - With only one number in [1, 1], no wrong guess is possible and the
+//         guaranteed cost is 0.
+//
 // Algorithm:
 //   Bottom-Up Minimax Interval Dynamic Programming. Define `dp[lo][hi]` as the
 //   minimum worst-case cost to identify any secret number in the inclusive

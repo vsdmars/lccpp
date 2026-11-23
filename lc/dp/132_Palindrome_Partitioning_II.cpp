@@ -7,6 +7,40 @@
 //   cuts required to achieve such a palindrome partitioning.
 //   Constraints: 1 <= s.length <= 2000.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "aab"
+//     Output: 1
+//     Explanation:
+//       - Initialize dp = [-1, 0, 1, 2] where dp[i] = i - 1 is the worst-case cut
+//         count for prefix s[0..i-1].
+//       - At center = 0, odd expansion (0, 0) sets dp[1] = 0 and even expansion (0,
+//         1) matches "aa" to relax dp[2] = min(1, dp[0] + 1) = 0.
+//       - At center = 1, odd expansion (1, 1) keeps dp[2] = 0 and even expansion
+//         (1, 2) stops immediately because 'a' != 'b'.
+//       - At center = 2, odd expansion (2, 2) relaxes dp[3] = min(2, dp[2] + 1) =
+//         1, returning dp[3] = 1.
+//
+//   Example 2:
+//     Input:  s = "abacdc"
+//     Output: 1
+//     Explanation:
+//       - Initialize dp = [-1, 0, 1, 2, 3, 4, 5] for n = 6.
+//       - Expanding odd center = 1 ('b') matches [0, 2] ("aba") and relaxes dp[3] =
+//         min(2, dp[0] + 1) = 0.
+//       - Expanding odd center = 4 ('d') matches [3, 5] ("cdc") and relaxes dp[6] =
+//         min(5, dp[3] + 1) = 1.
+//       - Remaining center = 5 leaves dp[6] = 1 unchanged, returning 1 cut ("aba" |
+//         "cdc").
+//
+//   Example 3:
+//     Input:  s = "a"
+//     Output: 0
+//     Explanation:
+//       - Check the string length n = s.size() = 1.
+//       - Because n <= 1, minCut returns 0 immediately without allocating the DP
+//         array.
+//
 // Algorithm:
 //   Bottom-up 1D Dynamic Programming combined with expand-around-center:
 //   - Define dp[i] = minimum cuts needed to partition the prefix s[0..i-1].

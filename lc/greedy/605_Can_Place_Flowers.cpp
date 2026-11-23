@@ -7,6 +7,48 @@
 //   return true if `n` new flowers can be planted in `flowerbed` without
 //   violating the no-adjacent-flowers rule, and false otherwise.
 //
+// Examples:
+//   Example 1:
+//     Input:  flowerbed = [1, 0, 0, 0, 1], n = 1
+//     Output: true
+//     Explanation:
+//       - Initialize remaining = 1 and left_empty = true.
+//       - At i = 0, flowerbed[0] == 1 sets left_empty = false; at i = 1,
+//         flowerbed[1] == 0 sees left_empty = false, skips planting, and sets
+//         left_empty = true.
+//       - At i = 2, flowerbed[2] == 0 has left_empty = true and right_empty = true
+//         (flowerbed[3] == 0), so plant here, decrement remaining to 0, and return
+//         true immediately.
+//
+//   Example 2:
+//     Input:  flowerbed = [1, 0, 0, 0, 1], n = 2
+//     Output: false
+//     Explanation:
+//       - Initialize remaining = 2 and left_empty = true.
+//       - Indices 0 and 1 leave remaining = 2 and set left_empty = true entering
+//         index 2.
+//       - At i = 2 (0), both left_empty and right_empty (flowerbed[3] == 0) are
+//         true, so plant virtually, decrement remaining to 1, and set left_empty =
+//         false.
+//       - At i = 3 (0), left_empty is false (and flowerbed[4] == 1), so no flower
+//         is planted; at i = 4 (1), left_empty becomes false.
+//       - After scanning all plots with remaining = 1 > 0, return false.
+//
+//   Example 3:
+//     Input:  flowerbed = [0, 0, 1, 0, 0], n = 2
+//     Output: true
+//     Explanation:
+//       - Initialize remaining = 2 and left_empty = true because index 0 has no
+//         left neighbor.
+//       - At i = 0 (0), left_empty = true and right_empty = true (flowerbed[1] ==
+//         0), so plant at index 0, decrement remaining to 1, and set left_empty =
+//         false.
+//       - At i = 1 (0), left_empty = false prevents planting and resets left_empty
+//         = true; at i = 2 (1), left_empty is set to false.
+//       - At i = 3 (0), left_empty = false prevents planting and resets left_empty
+//         = true; at i = 4 (0), left_empty = true and right_empty = true (i + 1 ==
+//         5), so plant at index 4, decrement remaining to 0, and return true.
+//
 // Algorithm:
 //   Scan the flowerbed from left to right and greedily plant a flower at the
 //   earliest legal plot. By a standard exchange argument, planting at index `i`

@@ -8,6 +8,39 @@
 //   anti-diagonals until reaching `(m - 1, n - 1)`.
 //   Constraints: `1 <= m, n <= 10^4`, `1 <= m * n <= 10^4`.
 //
+// Examples:
+//   Example 1:
+//     Input:  mat = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+//     Output: [1, 2, 4, 7, 5, 3, 6, 8, 9]
+//     Explanation:
+//       - Group elements by anti-diagonal key d = r + c in row-major order,
+//         yielding buckets d=0: [1], d=1: [2, 4], d=2: [3, 5, 7], d=3: [6, 8], d=4:
+//         [9].
+//       - Emit even diagonals in reverse (bottom-left to top-right) and odd
+//         diagonals as-is: [1], [2, 4], [7, 5, 3], [6, 8], [9].
+//       - Concatenate all emitted diagonals in order to produce [1, 2, 4, 7, 5, 3,
+//         6, 8, 9].
+//
+//   Example 2:
+//     Input:  mat = [[1, 2, 3, 10], [4, 5, 6, 11], [7, 8, 9, 12]]
+//     Output: [1, 2, 4, 7, 5, 3, 10, 6, 8, 9, 11, 12]
+//     Explanation:
+//       - Bucket the 3x4 matrix by d = r + c for d in 0..5: [1], [2, 4], [3, 5, 7],
+//         [10, 6, 8], [11, 9], and [12].
+//       - Reverse even buckets (d = 0, 2, 4) to get [1], [7, 5, 3], and [9, 11],
+//         while keeping odd buckets (d = 1, 3, 5) as [2, 4], [10, 6, 8], and [12].
+//       - Append buckets d = 0 through 5 into the result vector to return [1, 2, 4,
+//         7, 5, 3, 10, 6, 8, 9, 11, 12].
+//
+//   Example 3:
+//     Input:  mat = [[1], [2], [3]]
+//     Output: [1, 2, 3]
+//     Explanation:
+//       - Bucket the 3x1 matrix by d = r + c: d=0 holds [1], d=1 holds [2], and d=2
+//         holds [3].
+//       - Since each bucket contains a single element, reversing even diagonals (d
+//         = 0, 2) leaves them unchanged, producing [1, 2, 3].
+//
 // Algorithm:
 //   1. Anti-Diagonal Sum Grouping (`findDiagonalOrder`):
 //      Every cell `(r, c)` on the same anti-diagonal shares the invariant

@@ -6,6 +6,42 @@
 //   set intersection. Every element in the result must be unique, and elements
 //   may be returned in any order.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums1 = [1, 2, 2, 1], nums2 = [2, 2]
+//     Output: [2]
+//     Explanation:
+//       - Because nums2 (size 2) is smaller than nums1 (size 4), insert nums2 into
+//         hash set seen = {2} and scan nums1.
+//       - For the first element 1, seen.erase(1) returns 0, so nothing is appended.
+//       - For the second element 2, seen.erase(2) removes 2 and returns 1,
+//         appending 2 to result and emptying seen.
+//       - For the remaining elements 2 and 1, seen.erase returns 0 because seen is
+//         empty, so return [2].
+//
+//   Example 2:
+//     Input:  nums1 = [4, 9, 5], nums2 = [9, 4, 9, 8, 4]
+//     Output: [9, 4]
+//     Explanation:
+//       - Because nums1 (size 3) is smaller than nums2 (size 5), build seen = {4,
+//         5, 9} from nums1 and scan nums2.
+//       - At 9, seen.erase(9) succeeds, appending 9 to result and shrinking seen to
+//         {4, 5}.
+//       - At 4, seen.erase(4) succeeds, appending 4 to result and shrinking seen to
+//         {5}.
+//       - The remaining values 9, 8, and 4 are absent from seen, so return [9, 4]
+//         (equivalent to [4, 9] since any order is accepted).
+//
+//   Example 3:
+//     Input:  nums1 = [1, 3, 5], nums2 = [2, 4, 6]
+//     Output: []
+//     Explanation:
+//       - Since both arrays have size 3, choose nums1 as smaller to build seen =
+//         {1, 3, 5}.
+//       - Scan nums2 ([2, 4, 6]): seen.erase(2), seen.erase(4), and seen.erase(6)
+//         each return 0.
+//       - No elements are appended to result, so return [].
+//
 // Algorithm:
 //   Hash-set lookup with erase-on-match deduplication:
 //   1. Pick the smaller of the two input arrays and insert all its elements

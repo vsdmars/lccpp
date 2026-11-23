@@ -8,6 +8,41 @@
 //     - `shuffle()`: returns a uniformly random permutation of `nums` where
 //       every one of the n! permutations is equally likely.
 //
+// Examples:
+//   Example 1:
+//     Input:  ops = ["Solution", "shuffle", "reset", "shuffle"], args = [[[1, 2,
+//             3]], [], [], []]
+//     Output: [null, [3, 1, 2], [1, 2, 3], [1, 3, 2]]
+//     Explanation:
+//       - Solution([1, 2, 3]) stores original_ = [1, 2, 3].
+//       - shuffle() clones original_ into result = [1, 2, 3] and applies backward
+//         Fisher-Yates for i = 3 then i = 2, swapping result[2] with a random index
+//         in [0, 2] and result[1] with a random index in [0, 1] to yield one of the
+//         6 permutations with equal 1/6 probability (e.g., [3, 1, 2]).
+//       - reset() returns the unmodified original_ vector [1, 2, 3].
+//       - The second shuffle() starts again from a fresh copy of original_ and
+//         produces another uniform permutation (e.g., [1, 3, 2]).
+//
+//   Example 2:
+//     Input:  ops = ["Solution", "shuffle", "reset"], args = [[[-5, 0, -5, 10,
+//             42]], [], []]
+//     Output: [null, [10, -5, 42, -5, 0], [-5, 0, -5, 10, 42]]
+//     Explanation:
+//       - Solution([-5, 0, -5, 10, 42]) saves original_ = [-5, 0, -5, 10, 42].
+//       - shuffle() copies original_ into result and performs 4 Fisher-Yates swaps
+//         for i = 5 down to 2, producing a permutation of the exact multiset {-5,
+//         -5, 0, 10, 42} (e.g., [10, -5, 42, -5, 0]).
+//       - reset() returns original_ intact as [-5, 0, -5, 10, 42].
+//
+//   Example 3:
+//     Input:  ops = ["Solution", "shuffle", "reset"], args = [[[]], [], []]
+//     Output: [null, [], []]
+//     Explanation:
+//       - Solution([]) initializes original_ as an empty vector.
+//       - shuffle() copies original_ into an empty result vector and skips the loop
+//         because result.size() == 0 is not greater than 1, returning [].
+//       - reset() returns the empty original_ vector [].
+//
 // Algorithm:
 //   Preserve an immutable copy `original_` for O(n) `reset()`. For `shuffle()`,
 //   clone `original_` into a working copy and apply the in-place Fisher-Yates

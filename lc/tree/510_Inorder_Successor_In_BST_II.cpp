@@ -9,6 +9,41 @@
 //   node exists (i.e., `node` is the maximum element in the BST), return
 //   `nullptr`. All node values are unique.
 //
+// Examples:
+//   Example 1:
+//     Input:  tree = [10, null, 20, 15, null, 12], node = 10
+//     Output: Node(12)
+//     Explanation:
+//       - inorderSuccessor(Node(10)) sees node->right (Node(20)) is non-null,
+//         entering the right-subtree minimum search.
+//       - It initializes curr = Node(20) and follows left pointers down the chain
+//         20 -> 15 -> 12.
+//       - At Node(12), curr->left is nullptr, so the loop stops and returns
+//         Node(12).
+//
+//   Example 2:
+//     Input:  tree = [5, 3, 6, 2, 4, null, null, 1], node = 4
+//     Output: Node(5)
+//     Explanation:
+//       - inorderSuccessor(Node(4)) finds node->right == nullptr and starts
+//         ascending via parent pointers from curr = Node(4).
+//       - Because Node(4) is the right child of Node(3) (curr->parent->right ==
+//         curr), the loop steps up to curr = Node(3).
+//       - Node(3) is the left child of Node(5), so the condition
+//         curr->parent->right == curr is false and the function returns
+//         curr->parent (Node(5)).
+//
+//   Example 3:
+//     Input:  tree = [5, 3, 6, 2, 4, null, null, 1], node = 6
+//     Output: nullptr
+//     Explanation:
+//       - inorderSuccessor(Node(6)) finds node->right == nullptr and starts
+//         ascending from curr = Node(6).
+//       - Because Node(6) is the right child of Node(5), the loop advances curr to
+//         Node(5).
+//       - At Node(5), curr->parent is nullptr (the root), so the loop terminates
+//         and returns nullptr.
+//
 // Algorithm:
 //   Exploit the BST ordering property directly using structural links without
 //   comparing values or climbing to the root first:

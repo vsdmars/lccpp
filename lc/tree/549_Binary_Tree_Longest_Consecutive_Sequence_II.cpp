@@ -9,6 +9,44 @@
 //   version I (#298), the path may go in child-parent-child order (turning at
 //   an ancestor node) rather than only parent-to-child.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3]
+//     Output: 2
+//     Explanation:
+//       - Start post-order dfs(1, 1), which recurses into dfs(2, 1) and dfs(3, 1).
+//       - At leaf 2 (parent = 1), both child pairs are {0, 0}, updating best = 1
+//         and returning {dec: 0, inc: 1} because 2 == 1 + 1.
+//       - At leaf 3 (parent = 1), best remains 1 and it returns {dec: 0, inc: 0}
+//         because 3 differs from 1 by 2.
+//       - At root 1 with left = {0, 1} and right = {0, 0}, right.dec + left.inc + 1
+//         = 0 + 1 + 1 = 2 updates best = 2, which is returned.
+//
+//   Example 2:
+//     Input:  root = [3, 2, 4, null, null, 5, 7]
+//     Output: 4
+//     Explanation:
+//       - Leaf 2 (parent = 3, 2 == 3 - 1) updates best = 1 and returns {dec: 1,
+//         inc: 0}.
+//       - Under node 4, leaf 5 (5 == 4 + 1) returns {dec: 0, inc: 1} while leaf 7
+//         (not adjacent to 4) returns {dec: 0, inc: 0}.
+//       - At node 4 (parent = 3), left = {0, 1} and right = {0, 0} update best = 2,
+//         and 4 == 3 + 1 causes it to return {dec: 0, inc: 1 + 1} = {0, 2}.
+//       - At root 3 with left = {1, 0} and right = {0, 2}, left.dec + right.inc + 1
+//         = 1 + 2 + 1 = 4 updates best = 4 (path [2, 3, 4, 5]) and returns 4.
+//
+//   Example 3:
+//     Input:  root = [-2, -3, -1, -4]
+//     Output: 4
+//     Explanation:
+//       - Leaf -4 (parent = -3, -4 == -3 - 1) updates best = 1 and returns {dec: 1,
+//         inc: 0} to -3.
+//       - Node -3 (parent = -2, -3 == -2 - 1) sees left = {1, 0} and right = {0,
+//         0}, updates best = 2, and returns {dec: 2, inc: 0}.
+//       - Leaf -1 (parent = -2, -1 == -2 + 1) returns {dec: 0, inc: 1} to root -2.
+//       - At root -2, left.dec + right.inc + 1 = 2 + 1 + 1 = 4 updates best = 4
+//         (path [-4, -3, -2, -1]) and returns 4.
+//
 // Algorithm:
 //   Use a single bottom-up post-order DFS `dfs(node, parent)` returning a pair
 //   `{dec, inc}` relative to `parent`:

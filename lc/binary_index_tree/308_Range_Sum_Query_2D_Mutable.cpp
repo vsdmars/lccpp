@@ -9,6 +9,51 @@
 //      the inclusive submatrix bounded by upper-left `(row1, col1)` and
 //      lower-right `(row2, col2)`.
 //
+// Examples:
+//   Example 1:
+//     Input:  NumMatrix([[3, 0, 1, 4, 2], [5, 6, 3, 2, 1], [1, 2, 0, 1, 5], [4, 1,
+//             0, 1, 7], [1, 0, 3, 0, 5]]), sumRegion(2, 1, 4, 3), update(3, 2, 2),
+//             sumRegion(2, 1, 4, 3)
+//     Output: sumRegion(2, 1, 4, 3) = 8, sumRegion(2, 1, 4, 3) = 10
+//     Explanation:
+//       - build_tree() builds the 6x6 2D Fenwick tree_ by copying vals_ and
+//         propagating sums along row parents then column parents.
+//       - sumRegion(2, 1, 4, 3) evaluates prefix_sum(5, 4) - prefix_sum(2, 4) -
+//         prefix_sum(5, 1) + prefix_sum(2, 1) = 38 - 24 - 14 + 8 = 8.
+//       - update(3, 2, 2) computes delta = 2 - 0 = 2, sets vals_[3][2] = 2, and
+//         adds 2 at 1-based row r = 4 across columns c = 3 and c = 4 (next r = 8
+//         and c = 8 exceed bounds).
+//       - Re-evaluating sumRegion(2, 1, 4, 3) sees prefix_sum(5, 4) rise by 2 to 40
+//         (via tree_[4][4]) while the other three terms stay unchanged, returning
+//         40 - 24 - 14 + 8 = 10.
+//
+//   Example 2:
+//     Input:  NumMatrix([[1, -2, 3], [-4, 5, -6]]), sumRegion(0, 0, 1, 2),
+//             sumRegion(0, 1, 1, 1), update(1, 0, 4), update(0, 2, -1),
+//             sumRegion(0, 0, 1, 2), sumRegion(1, 0, 1, 2)
+//     Output: sumRegion(0, 0, 1, 2) = -3, sumRegion(0, 1, 1, 1) = 3, sumRegion(0,
+//             0, 1, 2) = 1, sumRegion(1, 0, 1, 2) = 3
+//     Explanation:
+//       - Initial queries evaluate sumRegion(0, 0, 1, 2) = prefix_sum(2, 3) = -3
+//         and sumRegion(0, 1, 1, 1) = prefix_sum(2, 2) - prefix_sum(2, 1) = 0 -
+//         (-3) = 3.
+//       - update(1, 0, 4) adds delta = 4 - (-4) = 8 to tree_[2][1] and tree_[2][2],
+//         and update(0, 2, -1) adds delta = -1 - 3 = -4 to tree_[1][3] and
+//         tree_[2][3].
+//       - After both updates, sumRegion(0, 0, 1, 2) returns -3 + 8 - 4 = 1, and
+//         sumRegion(1, 0, 1, 2) returns prefix_sum(2, 3) - prefix_sum(1, 3) = 1 -
+//         (-2) = 3.
+//
+//   Example 3:
+//     Input:  NumMatrix([[5]]), sumRegion(0, 0, 0, 0), update(0, 0, -4),
+//             sumRegion(0, 0, 0, 0)
+//     Output: sumRegion(0, 0, 0, 0) = 5, sumRegion(0, 0, 0, 0) = -4
+//     Explanation:
+//       - build_tree() sets rows_ = 1, cols_ = 1, and tree_[1][1] = 5, so
+//         sumRegion(0, 0, 0, 0) returns prefix_sum(1, 1) = 5.
+//       - update(0, 0, -4) computes delta = -4 - 5 = -9, updates vals_[0][0] = -4,
+//         and adds -9 to tree_[1][1], so the next sumRegion(0, 0, 0, 0) returns -4.
+//
 // Algorithm:
 //   2D Binary Indexed Tree (2D Fenwick Tree). Entry `tree_[r][c]` stores the
 //   sum of the rectangle of height `lowbit(r)` and width `lowbit(c)` ending at

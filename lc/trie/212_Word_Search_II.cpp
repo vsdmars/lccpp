@@ -9,6 +9,48 @@
 //   more than once within a single word. Typical constraints: 1 <= m, n <= 12,
 //   1 <= words.length <= 3 * 10^4, 1 <= words[i].length <= 10.
 //
+// Examples:
+//   Example 1:
+//     Input:  board =
+//             [['o','a','a','n'],['e','t','a','e'],['i','h','k','r'],['i','f','l','v']],
+//             words = ["oath", "pea", "eat", "rain"]
+//     Output: ["eat", "oath"]
+//     Explanation:
+//       - build_trie indexes all four words into the trie arena, assigning word_idx
+//         0..3 on their terminal nodes.
+//       - Scanning the board finds 'o' at (0, 0), so DFS follows 'o' -> 'a' at (0,
+//         1) -> 't' at (1, 1) -> 'h' at (2, 1), records "oath", and resets its
+//         word_idx so it cannot be duplicated.
+//       - DFS from 'e' at (1, 3) follows 'e' -> 'a' at (1, 2) -> 't' at (1, 1),
+//         records "eat", and resets its word_idx; starting cells for "pea" (none)
+//         and "rain" ('r' at (2, 3) has no 'a' neighbor) prune immediately.
+//       - Sorting the collected matches yields ["eat", "oath"].
+//
+//   Example 2:
+//     Input:  board = [['o','a'],['h','t']], words = ["o", "oa", "oat", "oath",
+//             "oato"]
+//     Output: ["o", "oa", "oat", "oath"]
+//     Explanation:
+//       - build_trie builds a single prefix chain for "o", "oa", "oat", "oath", and
+//         "oato" with terminal word_idx markers at depths 1 through 4 (and
+//         branching to 'o' after "oat").
+//       - Starting at (0, 0) = 'o', DFS records "o", marks (0, 0) as '#', and
+//         continues along (0, 1) = 'a' -> (1, 1) = 't' -> (1, 0) = 'h', collecting
+//         "oa", "oat", and "oath" without stopping at shorter words.
+//       - When checking neighbors of (1, 1) = 't' for "oato", cell (0, 0) is marked
+//         '#' (kVisited), preventing cell reuse; backtracking restores every '#'
+//         cell back to its original letter.
+//
+//   Example 3:
+//     Input:  board = [['a']], words = ["a", "aa"]
+//     Output: ["a"]
+//     Explanation:
+//       - build_trie inserts "a" (depth 1) and "aa" (depth 2) into the trie.
+//       - DFS starts at (0, 0) = 'a', immediately matches word_idx 0 ("a"), and
+//         marks (0, 0) as '#'.
+//       - All four neighbor offsets from (0, 0) are out of bounds on the 1x1 board,
+//         so "aa" cannot be extended and only ["a"] is returned.
+//
 // Algorithm:
 //   Trie-Guided Backtracking DFS:
 //   1. Build a single arena-backed trie containing every word in `words`,

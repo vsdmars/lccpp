@@ -7,6 +7,37 @@
 //   true if the graph is a single connected, acyclic component spanning all `n`
 //   nodes, and false otherwise.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 5, edges = [[0, 1], [0, 2], [0, 3], [1, 4]]
+//     Output: true
+//     Explanation:
+//       - Verify edges.size() == n - 1 (4 == 4) and initialize parent = [0, 1, 2,
+//         3, 4], rank = [0, 0, 0, 0, 0].
+//       - Process [0, 1], [0, 2], and [0, 3]: union [0, 1] sets parent[1] = 0 and
+//         rank[0] = 1, then 2 and 3 attach directly under root 0.
+//       - Process [1, 4]: find(1) = 0 and find(4) = 4 are distinct roots, so
+//         parent[4] becomes 0 and validTree returns true.
+//
+//   Example 2:
+//     Input:  n = 5, edges = [[0, 1], [1, 2], [2, 3], [1, 3], [1, 4]]
+//     Output: false
+//     Explanation:
+//       - Check the edge-count invariant edges.size() == n - 1.
+//       - Since 5 != 4, the graph has too many edges to be a tree and validTree
+//         immediately returns false.
+//
+//   Example 3:
+//     Input:  n = 5, edges = [[0, 1], [0, 4], [1, 4], [2, 3]]
+//     Output: false
+//     Explanation:
+//       - Pass the edge-count check (4 == 5 - 1) and initialize parent = [0, 1, 2,
+//         3, 4], rank = [0, 0, 0, 0, 0].
+//       - Process [0, 1] (parent[1] = 0, rank[0] = 1) and [0, 4] (parent[4] = 0),
+//         merging {0, 1, 4} under root 0.
+//       - Process [1, 4]: find(1) == 0 == find(4), which detects a cycle and
+//         returns false.
+//
 // Algorithm:
 //   Use the graph-theoretic characterization of trees: an undirected graph on
 //   `n` vertices is a tree if and only if it has exactly `n - 1` edges AND is

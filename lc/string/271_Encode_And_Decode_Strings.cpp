@@ -8,6 +8,45 @@
 //   256 possible ASCII characters (including digits, delimiters, and NUL
 //   bytes), and strings may be empty.
 //
+// Examples:
+//   Example 1:
+//     Input:  strs = ["Hello", "World"]
+//     Output: encoded = "5#Hello5#World", decoded = ["Hello", "World"]
+//     Explanation:
+//       - encode appends each string's byte length, '#', and raw bytes, producing
+//         "5#Hello5#World".
+//       - decode starts at pos = 0, finds '#' at index 1, parses len = 5, extracts
+//         s.substr(2, 5) ("Hello"), and sets pos = 7.
+//       - At pos = 7, decode finds '#' at index 8, parses len = 5, extracts
+//         s.substr(9, 5) ("World"), and reaches pos = 14 == s.size(), returning
+//         ["Hello", "World"].
+//
+//   Example 2:
+//     Input:  strs = [""]
+//     Output: encoded = "0#", decoded = [""]
+//     Explanation:
+//       - encode reads str.size() == 0 and emits the length header "0#" followed by
+//         zero payload bytes.
+//       - decode starts at pos = 0, finds '#' at index 1, parses len = 0, and
+//         appends s.substr(2, 0) ("").
+//       - pos advances to 2 + 0 = 2 == s.size(), terminating the loop and returning
+//         [""].
+//
+//   Example 3:
+//     Input:  strs = ["~!~##!!", "5#Hello", "0#", "12#34#56", "#"]
+//     Output: encoded = "7#~!~##!!7#5#Hello2#0#8#12#34#561##", decoded =
+//             ["~!~##!!", "5#Hello", "0#", "12#34#56", "#"]
+//     Explanation:
+//       - encode prefixes each entry with its exact byte count and '#', yielding
+//         "7#~!~##!!7#5#Hello2#0#8#12#34#561##".
+//       - At pos = 0, decode reads len = 7 before index 1 and slices s.substr(2, 7)
+//         ("~!~##!!"), jumping straight over embedded '#' characters to pos = 9.
+//       - At pos = 9, decode reads len = 7 and slices s.substr(11, 7) ("5#Hello"),
+//         then repeats at pos = 18 (len = 2 for "0#"), pos = 22 (len = 8 for
+//         "12#34#56"), and pos = 32 (len = 1 for "#").
+//       - After the final slice ends at pos = 35 == s.size(), decode returns all
+//         five original strings unmodified.
+//
 // Algorithm:
 //   Naive delimiter-based splitting (such as joining with a sentinel like
 //   "~!~##!!") breaks whenever an input string itself contains the delimiter.

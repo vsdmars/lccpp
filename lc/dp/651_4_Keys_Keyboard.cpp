@@ -10,6 +10,35 @@
 //   Given an integer n (1 <= n <= 50), return the maximum number of 'A's that
 //   can appear on the screen after at most n key presses.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3
+//     Output: 3
+//     Explanation:
+//       - Allocate dp of size 4 initialized with dp[0] = 0.
+//       - For k = 1, 2, 3, the breakpoint check (k >= 4) is skipped, so dp[k] =
+//         max(k, dp[k - 1] + 1) yields dp[1] = 1, dp[2] = 2, and dp[3] = 3.
+//
+//   Example 2:
+//     Input:  n = 7
+//     Output: 9
+//     Explanation:
+//       - Fill dp[1..6] = [1, 2, 3, 4, 5, 6] as direct 'A' presses tie or beat
+//         every single copy-paste cycle up to k = 6.
+//       - At k = 7, set the baseline best = max(7, dp[6] + 1) = 7 and iterate
+//         breakpoints i from 1 to 4.
+//       - Breakpoint i = 3 yields dp[3] * (7 - 3 - 1) = 3 * 3 = 9 (three 'A's
+//         followed by Ctrl-A, Ctrl-C, Ctrl-V, Ctrl-V), beating i = 1 (4), i = 2
+//         (8), and i = 4 (8).
+//       - Store and return dp[7] = 9.
+//
+//   Example 3:
+//     Input:  n = 0
+//     Output: 0
+//     Explanation:
+//       - Check the early-exit guard n <= 0 at the entry of maxA(0).
+//       - Return 0 immediately since zero key presses cannot produce any 'A's.
+//
 // Algorithm:
 //   Bottom-up dynamic programming over the total number of key presses.
 //   Let dp[k] be the maximum number of 'A's obtainable in exactly k presses.

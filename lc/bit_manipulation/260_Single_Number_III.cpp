@@ -7,6 +7,40 @@
 //   two elements that appear only once (in any order). The algorithm must run
 //   in O(n) linear time and O(1) constant auxiliary space.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 1, 3, 2, 5]
+//     Output: [3, 5]
+//     Explanation:
+//       - Pass 1 XORs all elements: total_xor = 1 ^ 2 ^ 1 ^ 3 ^ 2 ^ 5 = 3 ^ 5 = 6
+//         (0b110).
+//       - Isolate the lowest differing bit: diff_bit = 6 & (~6 + 1U) = 2 (0b010).
+//       - Pass 2 XORs only elements with bit 1 set ({2, 3, 2}), cancelling the pair
+//         of 2s to yield first = 3.
+//       - Compute second = first ^ total_xor = 3 ^ 6 = 5, returning [3, 5].
+//
+//   Example 2:
+//     Input:  nums = [-1, 0]
+//     Output: [-1, 0]
+//     Explanation:
+//       - Pass 1 computes total_xor = 0xFFFFFFFFU ^ 0U = 0xFFFFFFFFU.
+//       - Isolate the lowest set bit: diff_bit = 0xFFFFFFFFU & (0U + 1U) = 1U.
+//       - Pass 2 selects only elements with bit 0 set (-1), yielding first = -1
+//         (0xFFFFFFFFU), and computes second = 0xFFFFFFFFU ^ 0xFFFFFFFFU = 0,
+//         returning [-1, 0].
+//
+//   Example 3:
+//     Input:  nums = [-2147483648, 0, 7, 7]
+//     Output: [-2147483648, 0]
+//     Explanation:
+//       - Pass 1 XORs all values in uint32_t: 0x80000000U ^ 0U ^ 7U ^ 7U =
+//         0x80000000U.
+//       - Compute diff_bit = 0x80000000U & (~0x80000000U + 1U) = 0x80000000U in
+//         unsigned arithmetic, avoiding signed negation overflow on INT_MIN.
+//       - Pass 2 XORs only elements with bit 31 set (-2147483648), giving first =
+//         -2147483648, and sets second = 0x80000000U ^ 0x80000000U = 0, returning
+//         [-2147483648, 0].
+//
 // Algorithm:
 //   XOR Partitioning via Lowest Differing Bit:
 //   1. XOR all elements of `nums` into `total_xor`. Every duplicated pair

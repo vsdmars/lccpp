@@ -7,6 +7,42 @@
 //   preserving relative order. Place the compacted result in the first `k`
 //   slots of `nums` and return `k`. Extra memory must be O(1).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 1, 1, 2, 2, 3]
+//     Output: k = 5, nums[:k] = [1, 1, 2, 2, 3]
+//     Explanation:
+//       - Initialize write = 0 (kMaxCopies = 2); the first two 1s pass write < 2,
+//         writing nums[0] = 1 and nums[1] = 1 and advancing write to 2.
+//       - Skip the third 1 because 1 > nums[write - 2] (1 > nums[0] = 1) is false,
+//         keeping write at 2.
+//       - Write both 2s since 2 > nums[0] (1) and 2 > nums[1] (1), placing them at
+//         nums[2] and nums[3] and advancing write to 4.
+//       - Write 3 because 3 > nums[2] (2), setting nums[4] = 3 and returning write
+//         = 5 with kept prefix [1, 1, 2, 2, 3].
+//
+//   Example 2:
+//     Input:  nums = [0, 0, 1, 1, 1, 1, 2, 3, 3]
+//     Output: k = 7, nums[:k] = [0, 0, 1, 1, 2, 3, 3]
+//     Explanation:
+//       - Keep the first two 0s via write < 2 so nums[0..2) = [0, 0] and write = 2.
+//       - Keep the first two 1s because 1 > nums[0] (0) and 1 > nums[1] (0),
+//         updating nums[2] = 1, nums[3] = 1, and write = 4; skip the third and
+//         fourth 1s since 1 > nums[2] (1) is false.
+//       - Accept 2 (2 > nums[2] = 1) into nums[4], then accept both 3s (3 > nums[3]
+//         = 1 and 3 > nums[4] = 2) into nums[5] and nums[6], advancing write to 7.
+//       - Return k = 7 with compacted prefix [0, 0, 1, 1, 2, 3, 3].
+//
+//   Example 3:
+//     Input:  nums = [7, 7, 7, 7, 7]
+//     Output: k = 2, nums[:k] = [7, 7]
+//     Explanation:
+//       - Keep the first two 7s via write < 2, setting nums[0] = 7, nums[1] = 7,
+//         and write = 2.
+//       - Skip each of the remaining three 7s because val > nums[write - 2] checks
+//         7 > nums[0] (7), which is false.
+//       - Return k = 2 with kept prefix [7, 7].
+//
 // Algorithm:
 //   Slow/fast two-pointer compaction exploiting the non-decreasing sort order.
 //   Maintain a write index `write` marking the next output slot. For every

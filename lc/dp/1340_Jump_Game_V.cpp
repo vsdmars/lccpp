@@ -8,6 +8,40 @@
 //   index `k` strictly between `i` and `j` also satisfies `arr[i] > arr[k]`.
 //   Return the maximum number of indices you can visit.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [6, 4, 14, 6, 8, 13, 9, 7, 10, 6, 12], d = 2
+//     Output: 4
+//     Explanation:
+//       - dfs(6) at value 9 jumps right to index 7 (7 < 9, dfs(7) = 1) while left
+//         neighbor index 5 (13 >= 9) blocks leftward jumps, yielding memo[6] = 2.
+//       - dfs(8) at value 10 can jump left to index 6 (9 < 10) for 1 + memo[6] = 3
+//         or to index 7 or 9 for 2, setting memo[8] = 3.
+//       - dfs(10) at value 12 scans left up to d = 2 and jumps to index 8 (10 <
+//         12), achieving 1 + memo[8] = 4 (path 10 -> 8 -> 6 -> 7).
+//       - After computing dfs(i) for all indices, std::ranges::max(memo) returns 4.
+//
+//   Example 2:
+//     Input:  arr = [3, 3, 3, 3, 3], d = 3
+//     Output: 1
+//     Explanation:
+//       - For each index i in 0..4, dfs(i) initializes best = 1.
+//       - Both the right scan (arr[i + 1] == 3 >= arr[i]) and left scan (arr[i - 1]
+//         == 3 >= arr[i]) break immediately at step = 1 whenever in bounds.
+//       - Every entry in memo becomes 1, so std::ranges::max(memo) returns 1.
+//
+//   Example 3:
+//     Input:  arr = [10, 12, 1], d = 2
+//     Output: 2
+//     Explanation:
+//       - At index 0 (10), the right scan stops at index 1 (12 >= 10), blocking a
+//         jump of distance 2 over index 1 to index 2 (1), so memo[0] = 1.
+//       - At index 2 (1), the left scan stops immediately at index 1 (12 >= 1), so
+//         memo[2] = 1.
+//       - At index 1 (12), jumping left to index 0 gives 1 + memo[0] = 2 and
+//         jumping right to index 2 gives 1 + memo[2] = 2, so memo[1] = 2 and
+//         max(memo) returns 2.
+//
 // Algorithm:
 //   Top-down DFS with memoization over the implicit DAG of valid jumps. Because
 //   every legal jump moves to a strictly smaller value (`arr[i] > arr[j]`), the

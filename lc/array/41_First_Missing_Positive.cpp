@@ -7,6 +7,41 @@
 //   the smallest positive integer (>= 1) that does not appear in `nums`.
 //   The algorithm must run in O(n) time and use O(1) auxiliary space.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 4, -1, 1]
+//     Output: 2
+//     Explanation:
+//       - With n = 4, at idx = 0 (nums[0] = 3), target = 2 holds -1 != 3, so swap
+//         them to get [-1, 4, 3, 1] and stop since -1 < 1.
+//       - At idx = 1 (nums[1] = 4), swap with target = 3 (1) to get [-1, 1, 3, 4],
+//         then swap nums[1] = 1 with target = 0 (-1) to get [1, -1, 3, 4].
+//       - At idx = 2 (3) and idx = 3 (4), each value already equals nums[target],
+//         so Phase 1 ends with [1, -1, 3, 4].
+//       - In Phase 2, idx = 0 holds 1 == 1 while idx = 1 holds -1 != 2, returning
+//         2.
+//
+//   Example 2:
+//     Input:  nums = [7, 8, 9, 11, 12]
+//     Output: 1
+//     Explanation:
+//       - With n = 5, every element exceeds n, so the Phase 1 while condition
+//         nums[idx] <= 5 is never satisfied and no swaps occur.
+//       - In Phase 2, idx = 0 holds nums[0] = 7 != 1, immediately returning 1.
+//
+//   Example 3:
+//     Input:  nums = [2, 2, 1, 1, 3, 3]
+//     Output: 4
+//     Explanation:
+//       - At idx = 0 and idx = 1, nums[idx] = 2 matches nums[1] = 2, so the
+//         duplicate check breaks without swapping.
+//       - At idx = 2 (1), swap with nums[0] (2) to form [1, 2, 2, 1, 3, 3], then
+//         break because nums[2] == nums[1] == 2.
+//       - At idx = 4 (3), swap with nums[2] (2) to form [1, 2, 3, 1, 2, 3], while
+//         remaining duplicate indices break cleanly.
+//       - In Phase 2, indices 0, 1, and 2 match 1, 2, and 3, and idx = 3 holds 1 !=
+//         4, returning 4.
+//
 // Algorithm:
 //   In-place cyclic sort (index hashing). For an array of length n, the
 //   smallest missing positive integer is guaranteed to lie in [1, n + 1] by

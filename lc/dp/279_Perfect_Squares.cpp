@@ -5,6 +5,37 @@
 //   Given a positive integer `n`, return the least number of perfect square
 //   numbers (1, 4, 9, 16, ...) whose sum equals `n`.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 12
+//     Output: 3
+//     Explanation:
+//       - Initialize dp[0] = 0 and compute dp[1..11] bottom-up, including dp[3] =
+//         3, dp[8] = 2 (4 + 4), and dp[11] = 3 (9 + 1 + 1).
+//       - At x = 12, test squares s * s <= 12 for s in {1, 2, 3}: dp[11] + 1 = 4,
+//         dp[8] + 1 = 3, and dp[3] + 1 = 4.
+//       - Select the minimum dp[12] = 3 (representing 4 + 4 + 4) and return 3.
+//
+//   Example 2:
+//     Input:  n = 13
+//     Output: 2
+//     Explanation:
+//       - Initialize dp[0] = 0 and fill dp[1..12] bottom-up, obtaining dp[4] = 1,
+//         dp[9] = 1, and dp[12] = 3.
+//       - At x = 13, evaluate s in {1, 2, 3}: dp[12] + 1 = 4, dp[9] + 1 = 2, and
+//         dp[4] + 1 = 2.
+//       - Store dp[13] = 2 (representing 4 + 9) and return 2.
+//
+//   Example 3:
+//     Input:  n = 7
+//     Output: 4
+//     Explanation:
+//       - Initialize dp[0] = 0 and fill dp[1..6] bottom-up to get dp[1] = 1, dp[2]
+//         = 2, dp[3] = 3, dp[4] = 1, dp[5] = 2, and dp[6] = 3.
+//       - At x = 7, only s = 1 (s^2 = 1) and s = 2 (s^2 = 4) satisfy s * s <= 7,
+//         yielding candidates dp[6] + 1 = 4 and dp[3] + 1 = 4.
+//       - Record dp[7] = 4 (4 + 1 + 1 + 1) and return 4.
+//
 // Algorithm:
 //   Bottom-up unbounded-knapsack dynamic programming (primary `numSquares`),
 //   plus a top-down memoized DFS variant (`numSquaresMemo`) mirroring the

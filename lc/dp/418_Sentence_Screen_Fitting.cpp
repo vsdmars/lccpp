@@ -10,6 +10,45 @@
 //   Constraints: 1 <= sentence.size() <= 100, 1 <= word.size() <= 10,
 //   1 <= rows, cols <= 20,000.
 //
+// Examples:
+//   Example 1:
+//     Input:  sentence = ["hello", "world"], rows = 2, cols = 8
+//     Output: 1
+//     Explanation:
+//       - Flatten sentence into cyclic string formatted = "hello world " with
+//         cycle_len = 12 and start pos = 0.
+//       - Row 0 advances pos from 0 to 8, lands on 'r' in "world", and rewinds to
+//         pos = 6 right after the space at index 5.
+//       - Row 1 advances pos from 6 to 14 (14 % 12 = 2, 'l' in "hello") and rewinds
+//         to pos = 12 right after the space at index 11.
+//       - Return pos / cycle_len = 12 / 12 = 1 complete sentence fitted.
+//
+//   Example 2:
+//     Input:  sentence = ["a", "bcd", "e"], rows = 3, cols = 6
+//     Output: 2
+//     Explanation:
+//       - Flatten sentence into cyclic string formatted = "a bcd e " with cycle_len
+//         = 8 and start pos = 0.
+//       - Row 0 advances pos to 6, lands on 'e' with formatted[5] == ' ', so the
+//         rewind loop exits immediately leaving pos = 6.
+//       - Row 1 advances pos to 12 (12 % 8 = 4, 'd' in "bcd") and rewinds back to
+//         pos = 10 because formatted[9 % 8] == ' '.
+//       - Row 2 advances pos to 16 (16 % 8 = 0, 'a') where formatted[15 % 8] == '
+//         ', keeping pos = 16, and returns 16 / 8 = 2.
+//
+//   Example 3:
+//     Input:  sentence = ["hello", "world"], rows = 3, cols = 4
+//     Output: 0
+//     Explanation:
+//       - Flatten sentence into formatted = "hello world " with cycle_len = 12 and
+//         start pos = 0.
+//       - Row 0 advances pos to 4 ('o' in "hello"), and since no space precedes
+//         indices 0 through 3, the rewind loop decrements pos all the way back to
+//         0.
+//       - Rows 1 and 2 repeat the same advance to 4 and full rewind to 0 because
+//         "hello" (length 5) cannot fit in 4 columns.
+//       - Return pos / cycle_len = 0 / 12 = 0.
+//
 // Algorithm:
 //   Concatenate all words with single spaces plus a trailing space into one
 //   cyclic template string `formatted` of length L. Track a cursor `pos`

@@ -11,6 +11,40 @@
 //     - 1 <= k <= 1000
 //     - arr[i] < arr[j] for 0 <= i < j < arr.length
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [2, 3, 4, 7, 11], k = 5
+//     Output: 9
+//     Explanation:
+//       - Initialize left = 0 and right = 5; at mid = 2 (arr[2] = 4),
+//         missing_before_mid = 4 - (2 + 1) = 1 < 5, so advance left = 3.
+//       - At mid = 4 (arr[4] = 11), missing_before_mid = 11 - (4 + 1) = 6 >= 5, so
+//         narrow right = 4.
+//       - At mid = 3 (arr[3] = 7), missing_before_mid = 7 - (3 + 1) = 3 < 5, so set
+//         left = 4; now left == right == 4, and returning left + k = 4 + 5 gives 9.
+//
+//   Example 2:
+//     Input:  arr = [1, 2, 3, 4], k = 2
+//     Output: 6
+//     Explanation:
+//       - Initialize left = 0 and right = 4; at mid = 2 (arr[2] = 3),
+//         missing_before_mid = 3 - 3 = 0 < 2, so set left = 3.
+//       - At mid = 3 (arr[3] = 4), missing_before_mid = 4 - 4 = 0 < 2, so set left
+//         = 4.
+//       - Now left == right == 4, indicating all 4 elements of arr precede the 2nd
+//         missing positive integer, and returning left + k = 4 + 2 yields 6.
+//
+//   Example 3:
+//     Input:  arr = [5, 6, 7], k = 4
+//     Output: 4
+//     Explanation:
+//       - Initialize left = 0 and right = 3; at mid = 1 (arr[1] = 6),
+//         missing_before_mid = 6 - 2 = 4 >= 4, so narrow right = 1.
+//       - At mid = 0 (arr[0] = 5), missing_before_mid = 5 - 1 = 4 >= 4, so narrow
+//         right = 0.
+//       - With left == right == 0, no elements of arr are smaller than the answer,
+//         so return left + k = 0 + 4 = 4.
+//
 // Algorithm:
 //   Primary (Binary Search):
 //     Because `arr` is strictly increasing and 1-based positive integers start

@@ -10,6 +10,43 @@
 //   structure must be preserved: if parent P and child C both end up in the
 //   same resulting subtree, C must remain a child of P.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [4, 2, 6, 1, 3, 5, 7], target = 2
+//     Output: [[2, 1], [4, 3, 6, null, null, 5, 7]]
+//     Explanation:
+//       - At root 4 > 2, keep 4 and its right subtree [6, 5, 7] in the > 2 part and
+//         recurse on 4->left (2).
+//       - At 2 <= 2, keep 2 and its left child 1 in the <= 2 part and recurse on
+//         2->right (3).
+//       - At 3 > 2, splitting 3->left (nullptr) returns {nullptr, nullptr}, so node
+//         3 returns {nullptr, 3}.
+//       - Unwinding rewires 2->right = nullptr and 4->left = 3, returning {[2, 1],
+//         [4, 3, 6, null, null, 5, 7]}.
+//
+//   Example 2:
+//     Input:  root = [10, 5, 15, 2, 8, 12, 20], target = 7
+//     Output: [[5, 2], [10, 8, 15, null, null, 12, 20]]
+//     Explanation:
+//       - At root 10 > 7, recurse on 10->left (5) while keeping 10 and [15, 12, 20]
+//         in the > 7 subtree.
+//       - At 5 <= 7, recurse on 5->right (8) while keeping 5 and 2 in the <= 7
+//         subtree.
+//       - At 8 > 7, 8->left is nullptr so node 8 returns {nullptr, 8} up to 5.
+//       - Node 5 sets 5->right = nullptr and returns {5, 8} to 10, which sets
+//         10->left = 8 and returns {[5, 2], [10, 8, 15, null, null, 12, 20]}.
+//
+//   Example 3:
+//     Input:  root = [4, 2, 6, 1, 3, 5, 7], target = 0
+//     Output: [[], [4, 2, 6, 1, 3, 5, 7]]
+//     Explanation:
+//       - Since 4 > 0, 2 > 0, and 1 > 0, recursion follows the left spine 4 -> 2 ->
+//         1 down to 1->left (nullptr).
+//       - The base case returns {nullptr, nullptr}, and unwinding reattaches
+//         1->left = nullptr, 2->left = 1, and 4->left = 2.
+//       - The <= 0 partition remains empty (nullptr) while the > 0 partition
+//         preserves the entire tree [4, 2, 6, 1, 3, 5, 7].
+//
 // Algorithm:
 //   Single-path recursive BST split:
 //   At each node along the search path for `target`:

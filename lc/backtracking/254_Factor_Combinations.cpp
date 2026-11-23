@@ -8,6 +8,47 @@
 //   Constraints: 1 <= n <= 10^7. Prime numbers and `n = 1` have no valid
 //   factor combinations and return an empty list.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 12
+//     Output: [[2, 2, 3], [2, 6], [3, 4]]
+//     Explanation:
+//       - Call `dfs(12, 2)` and loop `factor` from `2` while `factor <= 12 /
+//         factor`.
+//       - At `factor = 2`, `quotient = 6` records `[2, 6]` in `results` and
+//         recurses into `dfs(6, 2)` with `path = [2]`.
+//       - Inside `dfs(6, 2)`, `factor = 2` (`2 <= 6 / 2 = 3`) gives `quotient = 3`,
+//         recording `[2, 2, 3]`, and `dfs(3, 2)` stops immediately since `2 > 3 / 2
+//         = 1`.
+//       - Back in `dfs(12, 2)`, `factor = 3` (`3 <= 12 / 3 = 4`) gives `quotient =
+//         4`, recording `[3, 4]`, while `dfs(4, 3)` exits immediately (`3 > 4 / 3 =
+//         1`).
+//       - At `factor = 4`, `4 > 12 / 4 = 3` terminates the loop, yielding the
+//         factor combinations `[2, 2, 3]`, `[2, 6]`, and `[3, 4]`.
+//
+//   Example 2:
+//     Input:  n = 8
+//     Output: [[2, 2, 2], [2, 4]]
+//     Explanation:
+//       - Call `dfs(8, 2)` with loop condition `factor <= 8 / factor`.
+//       - At `factor = 2`, `quotient = 4` records `[2, 4]` and recurses into
+//         `dfs(4, 2)` with `path = [2]`.
+//       - Inside `dfs(4, 2)`, `factor = 2` (`2 <= 4 / 2 = 2`) gives `quotient = 2`,
+//         recording `[2, 2, 2]`, and `dfs(2, 2)` exits immediately since `2 > 2 / 2
+//         = 1`.
+//       - Returning to `dfs(8, 2)`, `factor = 3 > 8 / 3 = 2` ends the loop,
+//         yielding `[2, 2, 2]` and `[2, 4]`.
+//
+//   Example 3:
+//     Input:  n = 37
+//     Output: []
+//     Explanation:
+//       - Call `dfs(37, 2)` and iterate `factor` from `2` through `6` (`6 <= 37 / 6
+//         = 6`).
+//       - Every divisor check `37 % factor == 0` fails across `factor = 2..6`, so
+//         no combination is added to `results`.
+//       - Once `factor = 7 > 37 / 7 = 5`, the loop exits and returns `[]`.
+//
 // Algorithm:
 //   Backtracking with Square-Root Pruning and Non-Decreasing Invariant:
 //   Maintain the current `remaining` quotient, the minimum allowed next factor

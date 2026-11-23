@@ -8,6 +8,40 @@
 //   signed integer.
 //   Constraints: 1 <= nums.length <= 2 * 10^4; -10 <= nums[i] <= 10.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 3, -2, 4]
+//     Output: 6
+//     Explanation:
+//       - Initialize best = 2, max_prod = 2, and min_prod = 2 from nums[0] = 2.
+//       - At i = 1 (val = 3), ext_max = 6 and ext_min = 6 yield max_prod = 6,
+//         min_prod = 3, and best = 6.
+//       - At i = 2 (val = -2), ext_max = -12 and ext_min = -6 yield max_prod = -2
+//         and min_prod = -12, keeping best = 6.
+//       - At i = 3 (val = 4), ext_max = -8 and ext_min = -48 reset max_prod = 4 and
+//         set min_prod = -48, returning best = 6.
+//
+//   Example 2:
+//     Input:  nums = [-2, 0, -1]
+//     Output: 0
+//     Explanation:
+//       - Initialize best = -2, max_prod = -2, and min_prod = -2 from nums[0] = -2.
+//       - At i = 1 (val = 0), ext_max = 0 and ext_min = 0 reset max_prod = 0 and
+//         min_prod = 0, updating best = 0.
+//       - At i = 2 (val = -1), ext_max = 0 and ext_min = 0 produce max_prod = 0 and
+//         min_prod = -1, leaving best = 0.
+//
+//   Example 3:
+//     Input:  nums = [-3, 1, -100]
+//     Output: 300
+//     Explanation:
+//       - Initialize best = -3, max_prod = -3, and min_prod = -3 from nums[0] = -3.
+//       - At i = 1 (val = 1), ext_max = -3 and ext_min = -3 restart max_prod = 1
+//         while keeping min_prod = -3, updating best = 1.
+//       - At i = 2 (val = -100), ext_max = -100 and ext_min = (-3) * (-100) = 300
+//         swap extremes to give max_prod = 300 and min_prod = -100, updating best =
+//         300.
+//
 // Algorithm:
 //   Single-pass O(1)-space Dynamic Programming tracking both maximum and
 //   minimum subarray products ending at the current index:

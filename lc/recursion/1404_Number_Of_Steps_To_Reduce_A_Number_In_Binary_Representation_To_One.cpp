@@ -9,6 +9,43 @@
 //     - If the current number is odd, add 1 to it.
 //   It is guaranteed that the number can always be reduced to 1.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "1101"
+//     Output: 6
+//     Explanation:
+//       - Scan right-to-left from i = 3 down to i = 1 starting with steps = 0 and
+//         carry = 0.
+//       - At i = 3 (s[3] = '1'), bit = 1 + 0 = 1 (odd), so add 1 and divide by 2:
+//         steps becomes 2 and carry becomes 1.
+//       - At i = 2 (s[2] = '0'), bit = 0 + 1 = 1 (odd), so add 1 and divide by 2:
+//         steps becomes 4 and carry stays 1.
+//       - At i = 1 (s[1] = '1'), bit = 1 + 1 = 2 (even), so divide by 2: steps
+//         becomes 5 and carry remains 1.
+//       - At index 0 (leading '1'), remaining carry = 1 adds one final division,
+//         returning steps + carry = 5 + 1 = 6.
+//
+//   Example 2:
+//     Input:  s = "111"
+//     Output: 4
+//     Explanation:
+//       - Initialize steps = 0 and carry = 0, scanning s = "111" from i = 2 down to
+//         i = 1.
+//       - At i = 2, bit = 1 + 0 = 1 (odd), advancing steps to 2 and setting carry =
+//         1.
+//       - At i = 1, bit = 1 + 1 = 2 (even), incrementing steps by 1 to 3 while
+//         keeping carry = 1.
+//       - At index 0, remaining carry = 1 requires one final halving step,
+//         returning 3 + 1 = 4.
+//
+//   Example 3:
+//     Input:  s = "1"
+//     Output: 0
+//     Explanation:
+//       - Check the length guard s.size() <= 1uz, which is true for s = "1".
+//       - Return 0 immediately in both numSteps and numStepsRecursive because the
+//         binary number is already 1.
+//
 // Algorithm:
 //   Implements both an iterative (`numSteps`) and a recursive
 //   (`numStepsRecursive`) right-to-left (LSB to bit 1) carry-propagation scan

@@ -7,6 +7,43 @@
 //   to `target`, and return that sum. You may assume each input has exactly
 //   one closest sum.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [-1, 2, 1, -4], target = 1
+//     Output: 2
+//     Explanation:
+//       - Sort nums to [-4, -1, 1, 2] and initialize best_sum = -4 + (-1) + 1 = -4
+//         with min_diff = |-4 - 1| = 5.
+//       - For anchor i = 0 (-4), left = 1 (-1) and right = 3 (2) give sum = -3
+//         (diff = 4 < 5), updating best_sum = -3; advancing left to 2 (1) gives sum
+//         = -1 (diff = 2 < 4), updating best_sum = -1 and min_diff = 2.
+//       - For anchor i = 1 (-1), left = 2 (1) and right = 3 (2) give sum = -1 + 1 +
+//         2 = 2 (diff = |2 - 1| = 1 < 2), updating best_sum = 2 and returning 2
+//         after the loop finishes.
+//
+//   Example 2:
+//     Input:  nums = [4, 0, 5, -5, 3, 3, 0, -4, -5], target = -2
+//     Output: -2
+//     Explanation:
+//       - Sort nums to [-5, -5, -4, 0, 0, 3, 3, 4, 5] and initialize best_sum = -5
+//         + (-5) + (-4) = -14 with min_diff = 12.
+//       - At anchor i = 0 (-5), left moves from 1 (-5) to 2 (-4) to 3 (0) against
+//         right = 8 (5), narrowing best_sum to -4 (min_diff = 2).
+//       - With left = 3 (0), right steps inward from 8 (5) to 7 (4) giving sum = -1
+//         (best_sum = -1, min_diff = 1), and then to 6 (3) where -5 + 0 + 3 = -2 ==
+//         target, returning -2 immediately.
+//
+//   Example 3:
+//     Input:  nums = [1, 1, 1, 0], target = -100
+//     Output: 2
+//     Explanation:
+//       - Sort nums to [0, 1, 1, 1] and initialize best_sum = 0 + 1 + 1 = 2 with
+//         min_diff = |2 - (-100)| = 102.
+//       - At anchor i = 0 (0), left = 1 (1) and right = 3 (1) give sum = 2 > -100,
+//         so right skips duplicate 1s down to left without improving min_diff.
+//       - At anchor i = 1 (1), left = 2 (1) and right = 3 (1) give sum = 3 > -100
+//         (diff = 103), so the search finishes and returns best_sum = 2.
+//
 // Algorithm:
 //   Sort-and-two-pointers. Sort `nums` ascending, initialize `best_sum` with
 //   the first three elements, and iterate over each distinct anchor index `i`

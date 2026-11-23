@@ -8,6 +8,45 @@
 //   0 cells that must be flipped.
 //   Constraints: 2 <= n <= 100, grid[i][j] in {0, 1}, exactly two islands.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[0, 1], [1, 0]]
+//     Output: 1
+//     Explanation:
+//       - `findFirstLand` scans row-major and finds the first `1` at `(0, 1)`.
+//       - `collectFirstIsland` marks `(0, 1)` as `2` and seeds `frontier` with `(0,
+//         1)`.
+//       - At `flips = 0`, expanding `(0, 1)` marks water neighbors `(0, 0)` and
+//         `(1, 1)` as `2`, enqueues them, and increments `flips` to `1`.
+//       - At `flips = 1`, popping `(0, 0)` inspects neighbor `(1, 0)` which holds
+//         `1`, returning `1`.
+//
+//   Example 2:
+//     Input:  grid = [[0, 1, 0], [0, 0, 0], [0, 0, 1]]
+//     Output: 2
+//     Explanation:
+//       - `findFirstLand` locates `(0, 1)` and `collectFirstIsland` marks it `2`,
+//         initializing `frontier = [(0, 1)]`.
+//       - At `flips = 0`, `(0, 1)` marks water cells `(1, 1)`, `(0, 2)`, and `(0,
+//         0)` as `2` and enqueues them before incrementing `flips` to `1`.
+//       - At `flips = 1`, the wave expands to water cells `(2, 1)`, `(1, 0)`, and
+//         `(1, 2)`, marking them `2` and incrementing `flips` to `2`.
+//       - At `flips = 2`, popping `(2, 1)` sees `grid[2][2] == 1` (the second
+//         island), immediately returning `2`.
+//
+//   Example 3:
+//     Input:  grid = [[1, 1, 1, 1, 1], [1, 0, 0, 0, 1], [1, 0, 1, 0, 1], [1, 0, 0,
+//             0, 1], [1, 1, 1, 1, 1]]
+//     Output: 1
+//     Explanation:
+//       - `findFirstLand` finds `(0, 0)`, and `collectFirstIsland` marks all 16
+//         outer-ring `1`s as `2` and places them into `frontier` while leaving the
+//         center `(2, 2)` as `1`.
+//       - At `flips = 0`, expanding the 16 ring cells marks the 8 inner water cells
+//         around `(2, 2)` as `2`, enqueues them, and increments `flips` to `1`.
+//       - At `flips = 1`, popping `(1, 2)` reaches neighbor `(2, 2)` with value
+//         `1`, returning `1`.
+//
 // Algorithm:
 //   Two-stage BFS (Component Discovery + Multi-Source Shortest-Path Expansion):
 //   1. Discover First Island: Scan the grid for the first land cell (value 1)

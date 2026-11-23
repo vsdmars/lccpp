@@ -8,6 +8,46 @@
 //   infinitely, enclose the repeating cycle in parentheses (e.g. 2/3 -> "0.(6)",
 //   4/333 -> "0.(012)").
 //
+// Examples:
+//   Example 1:
+//     Input:  numerator = 4, denominator = 333
+//     Output: "0.(012)"
+//     Explanation:
+//       - Both operands are positive and non-zero, so num = 4, den = 333, integer
+//         quotient 4 / 333 = 0, and initial remainder rem = 4 produce "0.".
+//       - For rem = 4, record rem_to_index[4] = 2, append digit (4 * 10) / 333 = 0
+//         ("0.0"), and update rem = 40.
+//       - For rem = 40, record rem_to_index[40] = 3, append digit (40 * 10) / 333 =
+//         1 ("0.01"), and update rem = 67.
+//       - For rem = 67, record rem_to_index[67] = 4, append digit (67 * 10) / 333 =
+//         2 ("0.012"), and update rem = 4.
+//       - Remainder 4 is already in rem_to_index at index 2, so '(' is inserted at
+//         index 2 and ')' is appended to return "0.(012)".
+//
+//   Example 2:
+//     Input:  numerator = 7, denominator = -12
+//     Output: "-0.58(3)"
+//     Explanation:
+//       - Opposite signs push '-', and widening to 64-bit yields num = 7, den = 12,
+//         integer quotient 0, and rem = 7, initializing result to "-0.".
+//       - At rem = 7 (index 3), append (70 / 12) = 5 ("-0.5") with new rem = 10; at
+//         rem = 10 (index 4), append (100 / 12) = 8 ("-0.58") with new rem = 4.
+//       - At rem = 4 (index 5), append (40 / 12) = 3 ("-0.583") and compute rem =
+//         40 % 12 = 4.
+//       - Remainder 4 is found in rem_to_index at index 5, so '(' is inserted at
+//         index 5 and ')' is appended, returning "-0.58(3)".
+//
+//   Example 3:
+//     Input:  numerator = -2147483648, denominator = -1
+//     Output: "2147483648"
+//     Explanation:
+//       - Both operands are negative and numerator is non-zero, so no '-' sign is
+//         emitted.
+//       - Casting to std::int64_t before std::abs safely yields num = 2147483648
+//         and den = 1 without 32-bit signed overflow.
+//       - Integer division gives num / den = 2147483648 and rem = num % den = 0, so
+//         the function returns "2147483648" immediately.
+//
 // Algorithm:
 //   Long division with remainder-position cycle detection.
 //   1. Handle zero numerator immediately to avoid producing "-0".

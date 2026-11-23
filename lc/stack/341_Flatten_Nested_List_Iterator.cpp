@@ -7,6 +7,50 @@
 //   other lists, implement a lazy iterator (`NestedIterator`) with `next()`
 //   and `hasNext()` that yields all integers in left-to-right flattened order.
 //
+// Examples:
+//   Example 1:
+//     Input:  nestedList = [[1, 1], 2, [1, 1]]
+//     Output: [1, 1, 2, 1, 1]
+//     Explanation:
+//       - Initialize stack_ with root frame (nestedList, index = 0); first
+//         hasNext() sees [1, 1], advances root index to 1, pushes ([1, 1], index =
+//         0), and stops on integer 1.
+//       - The first two next() calls return 1 and 1 as the child frame index
+//         advances from 0 to 2.
+//       - Next hasNext() pops the exhausted [1, 1] frame and stops on root element
+//         2 at index 1, so next() returns 2 and advances root index to 2.
+//       - Next hasNext() pushes the trailing [1, 1] frame, two next() calls yield 1
+//         and 1, and a final hasNext() pops both exhausted frames and returns
+//         false.
+//
+//   Example 2:
+//     Input:  nestedList = [1, [4, [6]]]
+//     Output: [1, 4, 6]
+//     Explanation:
+//       - Initialize stack_ with root frame at index = 0; hasNext() stops
+//         immediately at integer 1, and next() returns 1 while advancing root index
+//         to 1.
+//       - Next hasNext() sees [4, [6]], advances root index to 2, pushes ([4, [6]],
+//         index = 0), and stops on integer 4 so next() returns 4.
+//       - Next hasNext() sees [6] at index 1 of [4, [6]], advances that frame to
+//         index 2, pushes ([6], index = 0), and stops on 6 so next() returns 6.
+//       - Final hasNext() sees every remaining frame at index == list->size(), pops
+//         all three frames, and returns false.
+//
+//   Example 3:
+//     Input:  nestedList = [[], [42], [[]]], calls = [hasNext(), hasNext(), next(),
+//             hasNext()]
+//     Output: [true, true, 42, false]
+//     Explanation:
+//       - First hasNext() pushes and immediately pops the leading empty list [],
+//         then descends into [42] at root index 1 (advancing root index to 2) and
+//         returns true with the cursor on 42.
+//       - Second hasNext() sees the top frame ([42], index = 0) already points to
+//         integer 42 and returns true idempotently without advancing.
+//       - next() returns 42 and increments the [42] frame's index to 1.
+//       - Final hasNext() pops ([42], 1), descends into [[]] and its empty inner
+//         list [], pops all exhausted frames, and returns false.
+//
 // Algorithm:
 //   Lazy explicit-stack traversal using `(list_ptr, index)` cursor frames:
 //   - Maintain a stack of active list frames, initialized with the top-level

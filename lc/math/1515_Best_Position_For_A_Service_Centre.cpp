@@ -10,6 +10,43 @@
 //   Return that minimum total distance (answers within 1e-5 are accepted).
 //   Constraints: 1 <= positions.length <= 50, 0 <= xi, yi <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  positions = [[0, 1], [1, 0], [1, 2], [2, 1]]
+//     Output: 4.0
+//     Explanation:
+//       - Compute the centroid (x, y) = ((0 + 1 + 1 + 2) / 4, (1 + 0 + 2 + 1) / 4)
+//         = (1.0, 1.0), where total_distance is 1 + 1 + 1 + 1 = 4.0.
+//       - Starting with step = 100.0, none of the four cardinal neighbors (1, 1 +/-
+//         step) or (1 +/- step, 1) yields a smaller sum than 4.0, so improved
+//         remains false and step halves each iteration.
+//       - Once step drops below or equal to 1e-7, the compass search loop
+//         terminates and returns best_dist = 4.0.
+//
+//   Example 2:
+//     Input:  positions = [[1, 1], [3, 3]]
+//     Output: 2.828427 (2 * sqrt(2))
+//     Explanation:
+//       - Initialize at the centroid (x, y) = (2.0, 2.0), where total_distance to
+//         (1, 1) and (3, 3) is sqrt(2) + sqrt(2) = 2.828427.
+//       - Because (2.0, 2.0) is already the midpoint on the line segment connecting
+//         the two points, no cardinal step (+/-step, 0) or (0, +/-step) decreases
+//         best_dist.
+//       - The step size repeatedly halves from 100.0 until step <= 1e-7, returning
+//         2.828427.
+//
+//   Example 3:
+//     Input:  positions = [[0, 0], [1, 0], [10, 0]]
+//     Output: 10.0
+//     Explanation:
+//       - Start at the centroid (x, y) = (11/3, 0.0) = (3.6667, 0.0) with initial
+//         best_dist = 11/3 + 8/3 + 19/3 = 12.6667 and step = 100.0.
+//       - After five halvings with no improvement (100.0 down to 3.125), stepping
+//         left (-3.125, 0) to (0.5417, 0.0) lowers total_distance to 0.5417 +
+//         0.4583 + 9.4583 = 10.4583.
+//       - Further step halvings allow smaller rightward moves toward the 1D median
+//         (1.0, 0.0), converging within step <= 1e-7 and returning 10.0.
+//
 // Algorithm:
 //   Finding the geometric median (Fermat-Weber point) minimizes a convex
 //   objective function `f(x, y)` (note: the arithmetic mean minimizes squared

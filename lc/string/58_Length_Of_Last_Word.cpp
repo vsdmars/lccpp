@@ -11,6 +11,37 @@
 //   - s consists of only English letters and spaces `' '`
 //   - There is at least one word in s
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "Hello World"
+//     Output: 5
+//     Explanation:
+//       - Initialize end = 11 (s.size()); because s[10] == 'd' is non-space, Phase
+//         1 stops immediately with end = 11.
+//       - Phase 2 sets start = 11 and decrements across 'd', 'l', 'r', 'o', 'W'
+//         until s[start - 1] == s[5] == ' ', stopping at start = 6.
+//       - Return end - start = 11 - 6 = 5.
+//
+//   Example 2:
+//     Input:  s = "   fly me   to   the moon  "
+//     Output: 4
+//     Explanation:
+//       - Initialize end = 27 and decrement past the two trailing spaces at indices
+//         26 and 25, stopping at end = 25 where s[24] == 'n'.
+//       - Set start = 25 and walk backward across 'n', 'o', 'o', 'm' until s[start
+//         - 1] == s[20] == ' ', stopping at start = 21.
+//       - Return end - start = 25 - 21 = 4.
+//
+//   Example 3:
+//     Input:  s = "     "
+//     Output: 0
+//     Explanation:
+//       - Initialize end = 5 and decrement past all five spaces at indices 4 down
+//         to 0, reaching end = 0.
+//       - Phase 2 starts at start = 0, so the start > 0 guard prevents any
+//         decrement.
+//       - Return end - start = 0 - 0 = 0.
+//
 // Algorithm:
 //   Single reverse scan from the end of `s` without allocating or splitting:
 //   1. Start an exclusive boundary index `end = s.size()` and step backward

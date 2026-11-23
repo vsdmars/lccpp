@@ -8,6 +8,40 @@
 //   subtrees of every node never differ by more than 1. If multiple valid
 //   balanced BSTs exist, any one of them may be returned.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, null, 2, null, 3, null, 4]
+//     Output: [3, 2, 4, 1] (height 3, in-order [1, 2, 3, 4])
+//     Explanation:
+//       - collect_inorder traverses the right-skewed chain and records the sorted
+//         node pointers [1, 2, 3, 4].
+//       - build_balanced(nodes, 0, 4) selects mid = 0 + (4 - 0) / 2 = 2 (node 3) as
+//         the new root.
+//       - The left slice [0, 2) selects mid = 1 (node 2) with left child nodes[0]
+//         (node 1) and null right child, while the right slice [3, 4) selects node
+//         4.
+//       - The resulting tree [3, 2, 4, 1] preserves in-order [1, 2, 3, 4] with
+//         balanced height 3.
+//
+//   Example 2:
+//     Input:  root = [7, 6, null, 5, null, 4, null, 3, null, 2, null, 1]
+//     Output: [4, 2, 6, 1, 3, 5, 7] (height 3, in-order [1, 2, 3, 4, 5, 6, 7])
+//     Explanation:
+//       - collect_inorder walks the left-skewed chain from bottom to top, producing
+//         sorted pointers [1, 2, 3, 4, 5, 6, 7].
+//       - build_balanced(nodes, 0, 7) picks mid = 3 (node 4) as the root, splitting
+//         the remaining nodes into [0, 3) and [4, 7).
+//       - The left slice [0, 3) builds subtree [2, 1, 3] and the right slice [4, 7)
+//         builds subtree [6, 5, 7], yielding a complete height-3 tree.
+//
+//   Example 3:
+//     Input:  root = [42]
+//     Output: [42] (height 1)
+//     Explanation:
+//       - collect_inorder visits the single node and stores [42] in sorted_nodes.
+//       - build_balanced(nodes, 0, 1) chooses mid = 0 (node 42) and attaches null
+//         for empty slices [0, 0) and [1, 1), returning node 42 with height 1.
+//
 // Algorithm:
 //   1. Perform an in-order traversal (left -> node -> right) of the input BST
 //      to collect all node pointers in strictly ascending value order.

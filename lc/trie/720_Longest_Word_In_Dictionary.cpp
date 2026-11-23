@@ -9,6 +9,44 @@
 //   return the lexicographically smallest one; return `""` if none exists.
 //   Typical constraints: 1 <= words.length <= 1000, 1 <= words[i].length <= 30.
 //
+// Examples:
+//   Example 1:
+//     Input:  words = ["w", "wo", "wor", "worl", "world"]
+//     Output: "world"
+//     Explanation:
+//       - All five strings are inserted into the trie with is_end = true at depths
+//         1 through 5.
+//       - DFS starts at root with current = "" and best = "", then descends through
+//         'w' -> 'o' -> 'r' -> 'l' -> 'd' because every node along the path has
+//         is_end == true.
+//       - Each step strictly increases current.size() over best.size(), updating
+//         best through "w", "wo", "wor", "worl", and finally returning "world".
+//
+//   Example 2:
+//     Input:  words = ["a", "banana", "app", "appl", "ap", "apply", "apple"]
+//     Output: "apple"
+//     Explanation:
+//       - The trie marks is_end = true for "a", "ap", "app", "appl", "apple",
+//         "apply", and "banana", while intermediate nodes for "b", "ba", ...,
+//         "banan" have is_end = false.
+//       - DFS enters 'a' (is_end == true) and recurses along 'p' -> 'p' -> 'l',
+//         updating best up to "appl".
+//       - From "appl", DFS scans children 0..25 in 'a'..'z' order, visiting 'e'
+//         before 'y' to set best = "apple"; when 'y' is visited next, "apply" has
+//         length 5 (not > best.size()), so best stays "apple".
+//       - At the root, child 'b' has is_end == false so the "banana" branch is
+//         pruned immediately, returning "apple".
+//
+//   Example 3:
+//     Input:  words = ["ab", "abc", "cd"]
+//     Output: ""
+//     Explanation:
+//       - Inserting "ab", "abc", and "cd" creates root children 'a' and 'c', both
+//         with is_end = false because no single-letter word exists.
+//       - In dfs from root (0), the guard child != kNoChild && nodes[child].is_end
+//         fails for every slot 0..25.
+//       - No child branch is entered, leaving best as "" and returning "".
+//
 // Algorithm:
 //   Trie Construction + Lexicographical Prefix-Gated DFS:
 //   1. Insert every word from `words` into an arena-backed trie (`nodes`),

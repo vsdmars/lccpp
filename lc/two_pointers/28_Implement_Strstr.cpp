@@ -7,6 +7,40 @@
 //   not part of `haystack`. By convention (matching C `strstr` and classic
 //   LeetCode #28), an empty `needle` matches at index `0`.
 //
+// Examples:
+//   Example 1:
+//     Input:  haystack = "hello", needle = "ll"
+//     Output: 2
+//     Explanation:
+//       - Compute needle_len = 2 and max_start = 5 - 2 = 3, scanning start from 0
+//         to 3.
+//       - At start = 0 ('h' != 'l') and start = 1 ('e' != 'l'), skip immediately on
+//         the first-character check.
+//       - At start = 2, haystack[2] == 'l' matches needle[0] and haystack.substr(2,
+//         2) == "ll" matches needle, returning 2.
+//
+//   Example 2:
+//     Input:  haystack = "mississippi", needle = "issip"
+//     Output: 4
+//     Explanation:
+//       - Compute needle_len = 5 and max_start = 11 - 5 = 6.
+//       - Skip start = 0 ('m' != 'i'); at start = 1, haystack[1] == 'i' passes the
+//         first-character check, but substr(1, 5) = "issis" != "issip".
+//       - Skip start = 2 ('s' != 'i') and start = 3 ('s' != 'i') without allocating
+//         or comparing substrings.
+//       - At start = 4, haystack[4] == 'i' and haystack.substr(4, 5) == "issip"
+//         matches needle, returning 4.
+//
+//   Example 3:
+//     Input:  haystack = "aaaaa", needle = "bba"
+//     Output: -1
+//     Explanation:
+//       - Compute needle_len = 3 and max_start = 5 - 3 = 2.
+//       - For start = 0, 1, and 2, haystack[start] is 'a' != 'b', so every
+//         alignment fails the first-character filter.
+//       - Exhaust all valid alignments up to max_start without a match and return
+//         -1.
+//
 // Algorithm:
 //   Two-pointer sliding-window substring search. First handle edge cases:
 //   return `0` when `needle` is empty and `-1` when `haystack` is shorter

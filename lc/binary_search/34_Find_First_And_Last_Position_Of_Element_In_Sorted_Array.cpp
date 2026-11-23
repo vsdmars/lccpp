@@ -7,6 +7,36 @@
 //   If `target` is not found, return `{-1, -1}`. The algorithm must run in
 //   O(log n) time.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [5, 7, 7, 8, 8, 10], target = 8
+//     Output: [3, 4]
+//     Explanation:
+//       - Run std::ranges::lower_bound(nums, 8) to locate the first element >= 8 at
+//         index 3, where *first == 8.
+//       - Run std::ranges::upper_bound(first, nums.end(), 8) on [3, 6) to find the
+//         first element > 8 at index 5 (value 10).
+//       - Compute start_idx = 3 and end_idx = 5 - 1 = 4, returning [3, 4].
+//
+//   Example 2:
+//     Input:  nums = [5, 7, 7, 8, 8, 10], target = 6
+//     Output: [-1, -1]
+//     Explanation:
+//       - Run std::ranges::lower_bound(nums, 6) to find the first element >= 6,
+//         which lands at index 1 (nums[1] = 7).
+//       - Observe *first != 6 (7 != 6), confirming 6 is absent from nums.
+//       - Return [-1, -1] immediately without performing the upper-bound search.
+//
+//   Example 3:
+//     Input:  nums = [7, 7, 7, 7], target = 7
+//     Output: [0, 3]
+//     Explanation:
+//       - Run std::ranges::lower_bound(nums, 7), which points to index 0 where
+//         *first == 7.
+//       - Run std::ranges::upper_bound(first, nums.end(), 7), which finds no
+//         element > 7 and returns nums.end() (index 4).
+//       - Compute start_idx = 0 and end_idx = 4 - 1 = 3, returning [0, 3].
+//
 // Algorithm:
 //   Perform two binary searches corresponding to lower and upper bounds:
 //   1. `std::ranges::lower_bound(nums, target)` finds the first iterator `first`

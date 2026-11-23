@@ -6,6 +6,35 @@
 //   F(n) = F(n - 1) + F(n - 2) for n > 1. Given an integer `n`, return F(n).
 //   Constraints: 0 <= n <= 30.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 4
+//     Output: 3
+//     Explanation:
+//       - Initialize rolling state variables prev2 = 0 (F(0)) and prev1 = 1 (F(1)).
+//       - At i = 2, compute curr = 0 + 1 = 1 and advance to prev2 = 1, prev1 = 1.
+//       - At i = 3, compute curr = 1 + 1 = 2 and advance to prev2 = 1, prev1 = 2.
+//       - At i = 4, compute curr = 1 + 2 = 3, update prev2 = 2 and prev1 = 3, and
+//         return prev1 = 3.
+//
+//   Example 2:
+//     Input:  n = 10
+//     Output: 55
+//     Explanation:
+//       - Start with prev2 = 0 and prev1 = 1 before iterating i from 2 to 10.
+//       - Advance (prev2, prev1) across i = 2..6 through (1, 1), (1, 2), (2, 3),
+//         (3, 5), and (5, 8).
+//       - Advance (prev2, prev1) across i = 7..10 through (8, 13), (13, 21), (21,
+//         34), and (34, 55).
+//       - Exit the loop after i = 10 and return prev1 = 55.
+//
+//   Example 3:
+//     Input:  n = 0
+//     Output: 0
+//     Explanation:
+//       - Evaluate the base guard `if (n <= 0)` at the start of fib(0).
+//       - Bypass the rolling-variable loop and immediately return 0.
+//
 // Algorithm:
 //   1. Bottom-Up Iterative DP (`fib`):
 //      Since F(i) depends only on the two immediately preceding terms, keep

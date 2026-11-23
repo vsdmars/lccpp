@@ -7,6 +7,36 @@
 //   returning the sum of elements `nums[left] + nums[left + 1] + ... + nums[right]`
 //   for 0 <= left <= right < nums.size().
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["NumArray", "sumRange", "sumRange", "sumRange"], args =
+//             [[[-2, 0, 3, -5, 2, -1]], [0, 2], [2, 5], [0, 5]]
+//     Output: [null, 1, -1, -3]
+//     Explanation:
+//       - The constructor builds the 1-indexed prefix-sum array prefix_ = [0, -2,
+//         -2, 1, -4, -2, -3].
+//       - sumRange(0, 2) returns prefix_[3] - prefix_[0] = 1 - 0 = 1.
+//       - sumRange(2, 5) returns prefix_[6] - prefix_[2] = -3 - (-2) = -1.
+//       - sumRange(0, 5) returns prefix_[6] - prefix_[0] = -3 - 0 = -3.
+//
+//   Example 2:
+//     Input:  operations = ["NumArray", "sumRange"], args = [[[42]], [0, 0]]
+//     Output: [null, 42]
+//     Explanation:
+//       - The constructor builds prefix_ = [0, 42] with the leading zero sentinel
+//         at index 0.
+//       - sumRange(0, 0) computes prefix_[1] - prefix_[0] = 42 - 0 = 42.
+//
+//   Example 3:
+//     Input:  operations = ["NumArray", "sumRange", "sumRange"], args = [[[-1, -2,
+//             -3, -4]], [0, 3], [1, 2]]
+//     Output: [null, -10, -5]
+//     Explanation:
+//       - The constructor accumulates the negative values into prefix_ = [0, -1,
+//         -3, -6, -10].
+//       - sumRange(0, 3) computes prefix_[4] - prefix_[0] = -10 - 0 = -10.
+//       - sumRange(1, 2) computes prefix_[3] - prefix_[1] = -6 - (-1) = -5.
+//
 // Algorithm:
 //   Prefix-sum (cumulative sum) precomputation.
 //   In the constructor, build a 1-indexed prefix-sum array `prefix_` of size

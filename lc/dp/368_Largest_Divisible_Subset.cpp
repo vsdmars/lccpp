@@ -7,6 +7,43 @@
 //   either `answer[i] % answer[j] == 0` or `answer[j] % answer[i] == 0`. If
 //   multiple subsets achieve the maximum size, return any one of them.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3]
+//     Output: [1, 2]
+//     Explanation:
+//       - Sorting leaves sorted_nums = [1, 2, 3], with dp = [1, 1, 1] and parent =
+//         [-1, -1, -1].
+//       - At i = 1 (2), 2 % 1 == 0 updates dp[1] = 2, parent[1] = 0, and best_idx =
+//         1.
+//       - At i = 2 (3), 3 % 1 == 0 sets dp[2] = 2 and parent[2] = 0 while 3 % 2 !=
+//         0; since dp[2] is not strictly greater than dp[1], best_idx stays 1.
+//       - Walking parent backward from best_idx = 1 (2 -> 1) and reversing returns
+//         [1, 2].
+//
+//   Example 2:
+//     Input:  nums = [24, 12, 30, 1]
+//     Output: [1, 12, 24]
+//     Explanation:
+//       - Sorting produces sorted_nums = [1, 12, 24, 30] with dp = [1, 1, 1, 1] and
+//         parent = [-1, -1, -1, -1].
+//       - At i = 1 (12), divisibility by 1 sets dp[1] = 2, parent[1] = 0, and
+//         best_idx = 1.
+//       - At i = 2 (24), divisibility by 12 (dp[1] = 2) beats divisibility by 1,
+//         updating dp[2] = 3, parent[2] = 1, and best_idx = 2.
+//       - At i = 3 (30), 30 is only divisible by 1 so dp[3] = 2; backtracking from
+//         best_idx = 2 (24 -> 12 -> 1) and reversing gives [1, 12, 24].
+//
+//   Example 3:
+//     Input:  nums = [3, 5, 7, 11]
+//     Output: [3]
+//     Explanation:
+//       - Sorting preserves sorted_nums = [3, 5, 7, 11], initialized with dp = [1,
+//         1, 1, 1], parent = [-1, -1, -1, -1], and best_idx = 0.
+//       - All elements are pairwise coprime so sorted_nums[i] % sorted_nums[j] == 0
+//         never holds for j < i, leaving dp = [1, 1, 1, 1] and best_idx = 0.
+//       - Reconstructing from best_idx = 0 yields the single-element subset [3].
+//
 // Algorithm:
 //   Sorting + Longest-Increasing-Subsequence-style DP with Parent Pointers.
 //   Divisibility is transitive on positive integers: if `a < b < c`, `b % a == 0`,

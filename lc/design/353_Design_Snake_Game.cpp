@@ -15,6 +15,51 @@
 //     - Otherwise the tail pops off and the score is unchanged.
 //   Return the updated score after each move, or -1 if the game is over.
 //
+// Examples:
+//   Example 1:
+//     Input:  SnakeGame(3, 2, [[1, 2], [0, 1]]); moves: "R", "D", "R", "U", "L",
+//             "U", "D"
+//     Output: [0, 0, 1, 1, 2, -1, -1]
+//     Explanation:
+//       - Initial state places the snake at (0, 0) in body_ and {0} in occupied_,
+//         with food_idx_ = 0 and score_ = 0.
+//       - "R" moves to (0, 1) and "D" moves to (1, 1) without eating, each popping
+//         the old tail before inserting the new head and returning 0.
+//       - "R" lands on (1, 2) matching food_[0], keeping the tail at (1, 1),
+//         incrementing food_idx_ to 1 and score_ to 1; "U" shifts to (0, 2) (score
+//         1), and "L" eats food_[1] at (0, 1) to reach body_ = [(0, 1), (0, 2), (1,
+//         2)] and score 2.
+//       - The second "U" moves to head_r = -1 < 0, failing the wall check and
+//         setting game_over_ = true to return -1, so the final "D" immediately
+//         returns -1.
+//
+//   Example 2:
+//     Input:  SnakeGame(2, 2, [[0, 1], [1, 1], [1, 0]]); moves: "R", "D", "L", "U",
+//             "R"
+//     Output: [1, 2, 3, 3, 3]
+//     Explanation:
+//       - Moves "R", "D", and "L" eat all three food items in order, growing body_
+//         to [(1, 0), (1, 1), (0, 1), (0, 0)] with occupied_ = {2, 3, 1, 0} and
+//         score_ = 3.
+//       - On "U" toward (0, 0), food_idx_ == food_.size() so eats_food is false;
+//         tail (0, 0) (key 0) is popped from body_ and erased from occupied_ before
+//         the self-collision check.
+//       - Because occupied_ now holds only {2, 3, 1}, (0, 0) is safe, pushes to the
+//         front of body_, and returns 3; "R" likewise vacates (0, 1) before moving
+//         into it and returns 3.
+//
+//   Example 3:
+//     Input:  SnakeGame(3, 3, [[0, 1], [0, 2], [1, 2], [1, 1]]); moves: "R", "R",
+//             "D", "L", "U"
+//     Output: [1, 2, 3, 4, -1]
+//     Explanation:
+//       - Moves "R", "R", "D", and "L" consume all four food coordinates, growing
+//         body_ to [(1, 1), (1, 2), (0, 2), (0, 1), (0, 0)] with score_ = 4.
+//       - Move "U" computes next head (0, 1) (key 1) and, since no food remains,
+//         pops only tail (0, 0) from body_ and occupied_.
+//       - Cell (0, 1) is still present in occupied_, so occupied_.contains(1) sets
+//         game_over_ = true and returns -1.
+//
 // Algorithm:
 //   Maintain the snake's ordered body segments in a double-ended queue (head
 //   at front, tail at back) paired with a hash set of currently occupied cells

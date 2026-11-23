@@ -8,6 +8,42 @@
 //   return the `k`-th symbol (0 or 1) in row `n`.
 //   Constraints: 1 <= n <= 30, 1 <= k <= 2^(n - 1).
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 2, k = 2
+//     Output: 1
+//     Explanation:
+//       - Call kthGrammar(2, 2), which recurses to its parent at row n - 1 = 1 and
+//         position (2 + 1) / 2 = 1.
+//       - Base case kthGrammar(1, 1) sees n == 1 and returns 0.
+//       - Back at (2, 2), k = 2 is even (a right child), so it flips the parent bit
+//         and returns 1 - 0 = 1.
+//
+//   Example 2:
+//     Input:  n = 4, k = 6
+//     Output: 0
+//     Explanation:
+//       - kthGrammar(4, 6) recurses up the ancestor chain (4, 6) -> (3, 3) -> (2,
+//         2) -> (1, 1) using parent position (k + 1) / 2.
+//       - Base case kthGrammar(1, 1) returns 0, and at (2, 2) even k = 2 flips it
+//         to 1 - 0 = 1.
+//       - At (3, 3), odd k = 3 (left child) preserves the parent bit and returns 1.
+//       - At (4, 6), even k = 6 (right child) flips the parent bit and returns 1 -
+//         1 = 0.
+//
+//   Example 3:
+//     Input:  n = 10, k = 12
+//     Output: 1
+//     Explanation:
+//       - Recursive calls map (n, k) to (n - 1, (k + 1) / 2) along (10, 12) -> (9,
+//         6) -> (8, 3) -> (7, 2) -> (6, 1) -> ... -> (1, 1).
+//       - From base case (1, 1) = 0 down to (6, 1), every k = 1 is odd, so
+//         kthGrammar(6, 1) stays 0.
+//       - At (7, 2) even k = 2 flips the bit to 1 - 0 = 1, and at (8, 3) odd k = 3
+//         preserves 1.
+//       - At (9, 6) even k = 6 flips 1 to 0, and at (10, 12) even k = 12 flips 0 to
+//         return 1.
+//
 // Algorithm:
 //   The table forms an implicit full binary tree of height `n` rooted at
 //   `(row 1, col 1) = 0`:

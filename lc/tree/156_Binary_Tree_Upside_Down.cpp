@@ -10,6 +10,44 @@
 //     3. The original root becomes the new right child.
 //   Return the root of the transformed tree.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, 4, 5]
+//     Output: [4, 5, 2, null, null, 3, 1]
+//     Explanation:
+//       - upsideDownBinaryTree(1) recurses along the left spine 1 -> 2 -> 4 and
+//         returns leaf 4 as new_root because 4->left == nullptr.
+//       - Unwinding to root = 2 rewires 4->left = 2->right (5) and 4->right = 2,
+//         then clears 2->left and 2->right to nullptr.
+//       - Unwinding to root = 1 rewires 2->left = 1->right (3) and 2->right = 1,
+//         then clears 1->left and 1->right to nullptr.
+//       - Returning new_root (4) produces the flipped level-order tree [4, 5, 2,
+//         null, null, 3, 1].
+//
+//   Example 2:
+//     Input:  root = [1, 2, null, 4, 5]
+//     Output: [4, 5, 2, null, null, null, 1]
+//     Explanation:
+//       - upsideDownBinaryTree(1) follows the left spine to 4, establishing 4 as
+//         new_root.
+//       - At root = 2, 4->left is set to 5, 4->right is set to 2, and node 2's
+//         child pointers are cleared.
+//       - At root = 1, because 1->right is nullptr, 2->left becomes nullptr and
+//         2->right becomes 1 (with 1's children cleared), yielding [4, 5, 2, null,
+//         null, null, 1].
+//
+//   Example 3:
+//     Input:  root = [1, 2, null, 3]
+//     Output: [3, null, 2, null, 1]
+//     Explanation:
+//       - Recursive upsideDownBinaryTree reaches leaf 3 as new_root, then attaches
+//         2 as 3->right and 1 as 2->right while setting all left children to
+//         nullptr.
+//       - Equivalently, upsideDownBinaryTreeIterative collects levels [[1], [2],
+//         [3]] and pops them bottom-up to link 3 -> right: 2 -> right: 1 with null
+//         left pointers.
+//       - Both implementations return the right-skewed chain [3, null, 2, null, 1].
+//
 // Algorithm:
 //   1. Recursive left-spine reversal (primary):
 //      Base case: an empty tree or a single node with no left child is already

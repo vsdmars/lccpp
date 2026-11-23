@@ -8,6 +8,41 @@
 //     i - k <= r <= i + k  and  j - k <= c <= j + k.
 //   Constraints: 1 <= m, n, k <= 100, 1 <= mat[i][j] <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  mat = [[1, 2, 3], [4, 5, 6], [7, 8, 9]], k = 1
+//     Output: [[12, 21, 16], [27, 45, 33], [24, 39, 28]]
+//     Explanation:
+//       - Build the 4x4 zero-padded prefix table where rows 1..3 hold [0, 1, 3, 6],
+//         [0, 5, 12, 21], and [0, 12, 27, 45].
+//       - For (0, 0), clamp to [0, 2) x [0, 2) and evaluate prefix[2][2] -
+//         prefix[0][2] - prefix[2][0] + prefix[0][0] = 12.
+//       - For (1, 1), clamp to [0, 3) x [0, 3) to obtain prefix[3][3] = 45; for (2,
+//         2), clamp to [1, 3) x [1, 3) to obtain 45 - 6 - 12 + 1 = 28.
+//       - Applying the same O(1) inclusion-exclusion query to all 9 cells yields
+//         [[12, 21, 16], [27, 45, 33], [24, 39, 28]].
+//
+//   Example 2:
+//     Input:  mat = [[1, 2, 3], [4, 5, 6], [7, 8, 9]], k = 2
+//     Output: [[45, 45, 45], [45, 45, 45], [45, 45, 45]]
+//     Explanation:
+//       - Build the 4x4 prefix table whose bottom-right entry prefix[3][3] equals
+//         45 (the sum of the entire 3x3 matrix).
+//       - With radius k = 2, every cell (r, c) clamps to r1 = 0, r2 = 3, c1 = 0, c2
+//         = 3.
+//       - Every cell evaluates prefix[3][3] - prefix[0][3] - prefix[3][0] +
+//         prefix[0][0] = 45, filling the 3x3 output with 45.
+//
+//   Example 3:
+//     Input:  mat = [[1, 2], [3, 4]], k = 0
+//     Output: [[1, 2], [3, 4]]
+//     Explanation:
+//       - Build the 3x3 prefix table [[0, 0, 0], [0, 1, 3], [0, 4, 10]].
+//       - With radius k = 0, each cell (r, c) clamps to the 1x1 half-open window
+//         [r, r + 1) x [c, c + 1).
+//       - Inclusion-exclusion recovers each single element (e.g., 10 - 3 - 4 + 1 =
+//         4 at (1, 1)), returning [[1, 2], [3, 4]].
+//
 // Algorithm:
 //   1. 2D Prefix Sum / Summed-Area Table (`matrixBlockSum`, optimal):
 //      Build a 1-indexed `(m + 1) x (n + 1)` integral image `prefix` where

@@ -7,6 +7,41 @@
 //   a single-node tree is trivially symmetric. Node counts range from 0 to
 //   1,000, with node values in [-100, 100].
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 2, 3, 4, 4, 3]
+//     Output: true
+//     Explanation:
+//       - Verify root node 1 is non-null and seed the BFS queue with the mirrored
+//         pair (left=2, right=2).
+//       - Pop (2, 2), confirm their values match, and enqueue the outer pair (3, 3)
+//         and inner pair (4, 4).
+//       - Pop (3, 3) and (4, 4), confirm equal values for both pairs, and enqueue
+//         their four (nullptr, nullptr) leaf-child pairs.
+//       - Pop the four (nullptr, nullptr) pairs via continue until the queue
+//         empties, then return true.
+//
+//   Example 2:
+//     Input:  root = [1, 2, 2, null, 3, null, 3]
+//     Output: false
+//     Explanation:
+//       - Seed the BFS queue with (root->left=2, root->right=2) below root node 1.
+//       - Pop (2, 2), see matching values, and enqueue the outer pair (nullptr, 3)
+//         and inner pair (3, nullptr).
+//       - Pop (nullptr, 3): left is null while right has value 3, so mirror
+//         symmetry fails and the function immediately returns false.
+//
+//   Example 3:
+//     Input:  root = [1, 2, 2, null, 3, 3, null, 4, 5, 5, 4]
+//     Output: true
+//     Explanation:
+//       - Seed the queue with (2, 2), pop it, and enqueue the outer pair (nullptr,
+//         nullptr) and inner pair (3, 3).
+//       - Skip (nullptr, nullptr) via continue, then pop (3, 3) and enqueue outer
+//         (4, 4) and inner (5, 5).
+//       - Pop (4, 4) and (5, 5), confirm equal values, and skip their four
+//         (nullptr, nullptr) child pairs until the queue drains and returns true.
+//
 // Algorithm:
 //   We provide two BFS approaches:
 //   1. Mirrored-pair BFS (`isSymmetric`): Seed a FIFO queue with the pair

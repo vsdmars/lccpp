@@ -7,6 +7,39 @@
 //   those letters. Characters are case-sensitive (e.g., "Aa" is not a
 //   palindrome).
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abccccdd"
+//     Output: 7
+//     Explanation:
+//       - Phase 1 counts ASCII character frequencies into freq: 'a': 1, 'b': 1,
+//         'c': 4, 'd': 2.
+//       - Phase 2 accumulates (cnt / 2) * 2 across all buckets: 'c' adds 4 and 'd'
+//         adds 2 for length = 6, while 'a' and 'b' set has_center = true.
+//       - Since has_center is true, one unpaired character is placed in the middle,
+//         returning length + 1 = 7.
+//
+//   Example 2:
+//     Input:  s = "bananas"
+//     Output: 5
+//     Explanation:
+//       - Phase 1 populates freq with 'a': 3, 'n': 2, 'b': 1, and 's': 1.
+//       - Phase 2 adds (3 / 2) * 2 = 2 for 'a' and (2 / 2) * 2 = 2 for 'n' to reach
+//         length = 4, while odd counts 'a', 'b', and 's' set has_center = true.
+//       - At most one leftover odd character can occupy the palindrome center, so
+//         returning length + 1 yields 5.
+//
+//   Example 3:
+//     Input:  s = "Aa"
+//     Output: 1
+//     Explanation:
+//       - Phase 1 increments separate case-sensitive buckets freq[65] = 1 ('A') and
+//         freq[97] = 1 ('a').
+//       - Phase 2 computes (1 / 2) * 2 = 0 pairs for both buckets (length = 0) and
+//         sets has_center = true.
+//       - Returning length + 1 produces 1 because 'A' and 'a' cannot pair
+//         symmetrically.
+//
 // Algorithm:
 //   A palindrome mirrors characters on its left and right halves, plus at most
 //   one unpaired character placed in the exact center:

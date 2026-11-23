@@ -10,6 +10,36 @@
 //   1 <= connections.length <= min(n * (n - 1) / 2, 10^5), with no self-loops
 //   or duplicate cables.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 4, connections = [[0, 1], [0, 2], [1, 2]]
+//     Output: 1
+//     Explanation:
+//       - Since connections.size() is 3 >= n - 1 = 3, enough cables exist to
+//         connect all 4 computers.
+//       - DFS from node 0 marks {0, 1, 2} as visited and counts component 1.
+//       - Node 3 remains unvisited and isolated, so DFS from node 3 increments
+//         components to 2, and the solver returns components - 1 = 1.
+//
+//   Example 2:
+//     Input:  n = 6, connections = [[0, 1], [0, 2], [0, 3], [1, 2], [1, 3]]
+//     Output: 2
+//     Explanation:
+//       - Since connections.size() is 5 >= n - 1 = 5, rewiring redundant cables can
+//         unify the network.
+//       - DFS from node 0 traverses all edges among {0, 1, 2, 3}, counting
+//         component 1.
+//       - Isolated nodes 4 and 5 each trigger their own DFS pass, raising
+//         components to 3 and returning components - 1 = 2.
+//
+//   Example 3:
+//     Input:  n = 6, connections = [[0, 1], [0, 2], [0, 3], [1, 2]]
+//     Output: -1
+//     Explanation:
+//       - With n = 6, spanning all computers requires at least n - 1 = 5 cables.
+//       - Because connections.size() is 4 < 5, the early sufficiency check
+//         immediately returns -1.
+//
 // Algorithm:
 //   Edge-sufficiency check followed by connected-component counting via DFS.
 //   Key invariant: spanning `n` vertices requires at least `n - 1` edges, so

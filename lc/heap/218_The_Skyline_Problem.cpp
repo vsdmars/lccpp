@@ -11,6 +11,44 @@
 //   horizontal segment, with no two consecutive key points sharing the same
 //   height, ending with height 0 after the rightmost building.
 //
+// Examples:
+//   Example 1:
+//     Input:  buildings = [[2, 9, 10], [3, 7, 15], [5, 12, 12], [15, 20, 10], [19,
+//             24, 8]]
+//     Output: [[2, 10], [3, 15], [7, 12], [12, 0], [15, 10], [20, 8], [24, 0]]
+//     Explanation:
+//       - Start at x = 2 pushing (10, 9) to emit [2, 10], then advance to x = 3
+//         pushing (15, 7) to emit [3, 15], and at x = 5 push (12, 12) without
+//         changing top height 15.
+//       - At x = 7 (before next left = 15), pop (15, 7) to expose (12, 12) and emit
+//         [7, 12]; at x = 12 pop (12, 12) and expired (10, 9) so live empties and
+//         emits [12, 0].
+//       - At x = 15 push (10, 20) to emit [15, 10], and at x = 19 push (8, 24) with
+//         top height still 10 (suppressed).
+//       - Pop (10, 20) at x = 20 to emit [20, 8], then pop (8, 24) at x = 24 so
+//         live empties and emits [24, 0].
+//
+//   Example 2:
+//     Input:  buildings = [[0, 2, 3], [2, 5, 3]]
+//     Output: [[0, 3], [5, 0]]
+//     Explanation:
+//       - At x = 0, push (3, 2) into live and emit [0, 3].
+//       - At x = 2 <= live.top().right (2), push (3, 5); since (3, 5) has the same
+//         height 3 as skyline.back()[1], no key point is emitted.
+//       - At x = 5, pop (3, 5) and lazily pop expired (3, 2), leaving live empty
+//         and emitting [5, 0].
+//
+//   Example 3:
+//     Input:  buildings = [[1, 5, 6], [1, 5, 10], [2, 4, 8]]
+//     Output: [[1, 10], [5, 0]]
+//     Explanation:
+//       - At x = 1, the inner while loop pushes both (6, 5) and (10, 5) before
+//         checking height, so live.top() is (10, 5) and emits [1, 10].
+//       - At x = 2 <= 5, push (8, 4); live.top() remains (10, 5) with unchanged
+//         height 10, so no key point is emitted.
+//       - At x = 5, pop (10, 5) along with expired (8, 4) and (6, 5), emptying live
+//         and emitting [5, 0].
+//
 // Algorithm:
 //   Sweep-line with a lazy-deletion max-heap of active buildings:
 //   Maintain a max-heap `live` of `(height, right)` pairs representing

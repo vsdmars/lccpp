@@ -8,6 +8,45 @@
 //   without reordering the remaining characters). Duplicate words in `words`
 //   are counted once per occurrence.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abcde", words = ["a", "bb", "acd", "ace"]
+//     Output: 3
+//     Explanation:
+//       - Bucket initial word views by first character: buckets['a'] = ["a", "acd",
+//         "ace"] and buckets['b'] = ["bb"].
+//       - At ch = 'a', swap out buckets['a'] and advance each view: "a" becomes
+//         empty (matched = 1), while "acd" and "ace" move as "cd" and "ce" into
+//         buckets['c'].
+//       - At ch = 'b', advance "bb" to "b" and push it back into buckets['b'] so it
+//         does not consume the same 'b' twice.
+//       - At ch = 'c', advance "cd" to buckets['d'] and "ce" to buckets['e'], which
+//         both finish at 'd' and 'e' to reach matched = 3 while "b" remains
+//         unmatched.
+//
+//   Example 2:
+//     Input:  s = "aaa", words = ["a", "aa", "aaa", "aaaa"]
+//     Output: 3
+//     Explanation:
+//       - Place all four words into buckets['a'] = ["a", "aa", "aaa", "aaaa"].
+//       - At the first 'a', swap buckets['a'] into waiting so each suffix advances
+//         once: "a" finishes (matched = 1) and "aa", "aaa", "aaaa" re-queue as "a",
+//         "aa", "aaa".
+//       - At the second 'a', "a" finishes (matched = 2) and "aa", "aaa" advance to
+//         "a", "aa".
+//       - At the third 'a', "a" finishes (matched = 3) while "aa" becomes "a" in
+//         buckets['a'], leaving 3 matched words when s ends.
+//
+//   Example 3:
+//     Input:  s = "abcde", words = ["ace", "ace", "bd", "bd", "zz"]
+//     Output: 4
+//     Explanation:
+//       - Insert every word separately into buckets['a'] = ["ace", "ace"],
+//         buckets['b'] = ["bd", "bd"], and buckets['z'] = ["zz"].
+//       - As s scans 'a', 'b', 'c', 'd', 'e', both "bd" views finish at 'd'
+//         (matched = 2) and both "ace" views finish at 'e' (matched = 4).
+//       - Skip buckets['z'] since 'z' never appears in s, returning matched = 4.
+//
 // Algorithm:
 //   Instead of scanning `s` from scratch for each query word (which costs
 //   O(|words| * |s|)), process all words simultaneously in a single pass over

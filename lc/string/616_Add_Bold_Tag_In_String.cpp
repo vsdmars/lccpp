@@ -9,6 +9,46 @@
 //   Constraints: 1 <= s.size() <= 1000, 0 <= words.size() <= 100,
 //   1 <= words[i].size() <= 1000. (Equivalent to LeetCode #758.)
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abcxyz123", words = ["abc", "123"]
+//     Output: "<b>abc</b>xyz<b>123</b>"
+//     Explanation:
+//       - Allocate diff of size 10 filled with zeros; finding "abc" at index 0 sets
+//         diff[0] = 1, diff[3] = -1, and finding "123" at index 6 sets diff[6] = 1,
+//         diff[9] = -1.
+//       - Sweeping i = 0..2 keeps active = 1 > 0, so "<b>" opens at i = 0 and "abc"
+//         is appended.
+//       - At i = 3, active becomes 0 (1 + (-1)), closing "</b>" before appending
+//         "xyz" across i = 3..5.
+//       - At i = 6, active rises to 1, opening "<b>" before "123", and after i = 8
+//         finishes with in_bold == true, the trailing "</b>" is appended to return
+//         "<b>abc</b>xyz<b>123</b>".
+//
+//   Example 2:
+//     Input:  s = "aaabbcc", words = ["aaa", "aab", "bc"]
+//     Output: "<b>aaabbc</b>c"
+//     Explanation:
+//       - Matching each word marks intervals [0, 3) for "aaa", [1, 4) for "aab",
+//         and [4, 6) for "bc", yielding diff = [1, 1, 0, -1, 0, 0, -1, 0].
+//       - At index 4, the -1 from "aab" ending and +1 from "bc" starting cancel at
+//         diff[4] == 0, keeping the prefix sum active = [1, 2, 2, 1, 1, 1, 0]
+//         positive throughout i = 0..5.
+//       - Emit "<b>" at i = 0, append "aaabbc" while active > 0, and close "</b>"
+//         at i = 6 when active drops to 0 before appending the final 'c' to produce
+//         "<b>aaabbc</b>c".
+//
+//   Example 3:
+//     Input:  s = "baaaab", words = ["aa"]
+//     Output: "b<b>aaaa</b>b"
+//     Explanation:
+//       - Advancing pos = s.find("aa", pos + 1) by 1 finds three overlapping
+//         matches at indices 1, 2, and 3, producing diff = [0, 1, 1, 0, -1, -1, 0].
+//       - Taking the running prefix sum across i = 0..5 yields active = [0, 1, 2,
+//         2, 1, 0].
+//       - Index 0 ('b') is emitted unbolded, "<b>" wraps indices 1..4 ("aaaa"), and
+//         "</b>" closes at i = 5 before appending 'b', returning "b<b>aaaa</b>b".
+//
 // Algorithm:
 //   Interval coverage via a difference array (sweep-line / prefix-sum mask):
 //   1. Allocate a difference array `diff` of size `n + 1` initialized to 0.

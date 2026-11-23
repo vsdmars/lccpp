@@ -8,6 +8,41 @@
 //   Return an integer array `answer` where `answer[i]` is the next greater
 //   value for node `i`.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [2, 1, 5]
+//     Output: [5, 5, 0]
+//     Explanation:
+//       - Visit index 0 (val = 2): mono_stack is empty, so push {0, 2} and append 0
+//         (answer = [0]).
+//       - Visit index 1 (val = 1): 1 <= 2, so push {1, 1} onto mono_stack = [{0,
+//         2}, {1, 1}] and append 0 (answer = [0, 0]).
+//       - Visit index 2 (val = 5): pop {1, 1} (answer[1] = 5) and {0, 2} (answer[0]
+//         = 5), push {2, 5}, and append 0 to return [5, 5, 0].
+//
+//   Example 2:
+//     Input:  head = [2, 7, 4, 3, 5]
+//     Output: [7, 0, 5, 5, 0]
+//     Explanation:
+//       - At index 0 (2), push {0, 2}; at index 1 (7), pop {0, 2} to set answer[0]
+//         = 7, push {1, 7}, and leave answer = [7, 0].
+//       - At index 2 (4) and index 3 (3), neither exceeds the stack top, so
+//         mono_stack becomes [{1, 7}, {2, 4}, {3, 3}] with answer = [7, 0, 0, 0].
+//       - At index 4 (5), pop {3, 3} (answer[3] = 5) and {2, 4} (answer[2] = 5),
+//         stop before {1, 7} (7 >= 5), push {4, 5}, and append 0 to return [7, 0,
+//         5, 5, 0].
+//
+//   Example 3:
+//     Input:  head = [3, 3, 3]
+//     Output: [0, 0, 0]
+//     Explanation:
+//       - Visit index 0 (3): push {0, 3} onto mono_stack and append 0 to answer.
+//       - Visit indices 1 (3) and 2 (3): the strict check mono_stack.back().val <
+//         curr->val (3 < 3) is false, so nothing is popped and mono_stack holds
+//         [{0, 3}, {1, 3}, {2, 3}].
+//       - End traversal with all three unresolved slots keeping their default 0,
+//         returning [0, 0, 0].
+//
 // Algorithm:
 //   Single-pass monotonic decreasing stack storing `(index, value)` pairs:
 //   1. Traverse the linked list from head to tail while growing `answer`

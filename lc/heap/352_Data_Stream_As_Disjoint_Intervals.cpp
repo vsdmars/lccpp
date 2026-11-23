@@ -9,6 +9,55 @@
 //     sorted list of disjoint closed intervals `[start_i, end_i]` such that no
 //     two intervals overlap or are adjacent (`end_i + 1 < start_{i+1}`).
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["SummaryRanges", "addNum", "getIntervals", "addNum",
+//             "getIntervals", "addNum", "getIntervals", "addNum", "getIntervals",
+//             "addNum", "getIntervals"], args = [[], [1], [], [3], [], [7], [],
+//             [2], [], [6], []]
+//     Output: [null, null, [[1, 1]], null, [[1, 1], [3, 3]], null, [[1, 1], [3, 3],
+//             [7, 7]], null, [[1, 3], [7, 7]], null, [[1, 3], [6, 7]]]
+//     Explanation:
+//       - Adding 1, 3, and 7 records three disjoint singletons [1, 1], [3, 3], and
+//         [7, 7] in visited_ and min_heap_, so the first three getIntervals() calls
+//         return them unmerged.
+//       - addNum(2) pushes [2, 2] into min_heap_, and the fourth getIntervals()
+//         pops [1, 1], [2, 2], [3, 3], [7, 7] in sorted order, coalescing [1, 1],
+//         [2, 2], and [3, 3] into [1, 3] because head.start - 1 ==
+//         merged.back().end.
+//       - getIntervals() pushes the compacted intervals [1, 3] and [7, 7] back into
+//         min_heap_ and returns [[1, 3], [7, 7]].
+//       - addNum(6) pushes [6, 6], and the final getIntervals() merges [6, 6] with
+//         [7, 7] to return [[1, 3], [6, 7]].
+//
+//   Example 2:
+//     Input:  operations = ["SummaryRanges", "addNum", "addNum", "addNum",
+//             "addNum", "getIntervals", "addNum", "getIntervals"], args = [[], [1],
+//             [5], [2], [4], [], [3], []]
+//     Output: [null, null, null, null, null, [[1, 2], [4, 5]], null, [[1, 5]]]
+//     Explanation:
+//       - addNum calls for 1, 5, 2, and 4 insert four distinct singletons into
+//         visited_ and min_heap_.
+//       - The first getIntervals() drains [1, 1], [2, 2], [4, 4], [5, 5], merges
+//         adjacent pairs into [[1, 2], [4, 5]], and re-seeds min_heap_ with those
+//         two intervals.
+//       - addNum(3) pushes [3, 3], and the second getIntervals() drains [1, 2], [3,
+//         3], and [4, 5], bridging both intervals into [[1, 5]].
+//
+//   Example 3:
+//     Input:  operations = ["SummaryRanges", "getIntervals", "addNum", "addNum",
+//             "addNum", "addNum", "addNum", "addNum", "addNum", "addNum", "addNum",
+//             "getIntervals"], args = [[], [], [5], [4], [4], [3], [0], [2], [1],
+//             [0], [5], []]
+//     Output: [null, [], null, null, null, null, null, null, null, null, null, [[0,
+//             5]]]
+//     Explanation:
+//       - The initial getIntervals() finds min_heap_ empty and returns [].
+//       - Calling addNum on {5, 4, 4, 3, 0, 2, 1, 0, 5} deduplicates via visited_,
+//         pushing only the six unique singletons for 0 through 5 into min_heap_.
+//       - The final getIntervals() pops [0, 0] through [5, 5] in ascending order
+//         and coalesces every consecutive pair into [[0, 5]].
+//
 // Algorithm:
 //   Primary (`SummaryRanges`, Lazy Min-Heap Compaction):
 //     Matches the primary Python solution:

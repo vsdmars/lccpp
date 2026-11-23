@@ -11,6 +11,35 @@
 //   Constraints: 1 <= hand.length <= 10^4, 0 <= hand[i] <= 10^9,
 //   1 <= group_size <= hand.length.
 //
+// Examples:
+//   Example 1:
+//     Input:  hand = [1, 2, 3, 6, 2, 3, 4, 7, 8], group_size = 3
+//     Output: true
+//     Explanation:
+//       - Check hand.size() % 3 == 0 (9 % 3 == 0) and build ordered frequency map
+//         counts = {1: 1, 2: 2, 3: 2, 4: 1, 6: 1, 7: 1, 8: 1}.
+//       - Start at smallest key 1 (needed = 1): decrement counts[2] and counts[3]
+//         by 1, leaving {2: 1, 3: 1, 4: 1, 6: 1, 7: 1, 8: 1}.
+//       - Next active key 2 (needed = 1) consumes 3 and 4; then key 6 (needed = 1)
+//         consumes 7 and 8, exhausting counts and returning true.
+//
+//   Example 2:
+//     Input:  hand = [5, 5, 6, 7, 12, 13, 7, 8, 9], group_size = 3
+//     Output: false
+//     Explanation:
+//       - Pass the divisibility check (9 % 3 == 0) and build counts = {5: 2, 6: 1,
+//         7: 2, 8: 1, 9: 1, 12: 1, 13: 1}.
+//       - At smallest key 5 (needed = 2), consume_straights checks 5 + 1 = 6 and
+//         sees counts[6] = 1 < 2, returning false immediately.
+//
+//   Example 3:
+//     Input:  hand = [1, 2, 3, 4, 5], group_size = 4
+//     Output: false
+//     Explanation:
+//       - Evaluate the divisibility guard hand.size() % width = 5 % 4 = 1 != 0.
+//       - Return false immediately without building the frequency map because 5
+//         cards cannot form equal groups of 4.
+//
 // Algorithm:
 //   Greedy frequency-map partitioning in ascending key order:
 //   1. Quick divisibility guard: if `hand.size()` is not divisible by

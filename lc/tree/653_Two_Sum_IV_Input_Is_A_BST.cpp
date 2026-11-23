@@ -7,6 +7,42 @@
 //   sum to `k`, and `false` otherwise. Node count is in [1, 10^4], node values
 //   are in [-10^4, 10^4], and `k` is in [-10^5, 10^5].
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [5, 3, 6, 2, 4, null, 7], k = 9
+//     Output: true
+//     Explanation:
+//       - In-order DFS in findTarget starts with an empty seen set and reaches the
+//         leftmost node 2, where 9 - 2 = 7 is not in seen, so it inserts 2 (seen =
+//         {2}).
+//       - Visiting 3 checks 9 - 3 = 6 (absent, seen = {2, 3}), and visiting its
+//         right child 4 checks 9 - 4 = 5 (absent, seen = {2, 3, 4}).
+//       - Returning to root 5, seen.contains(9 - 5) finds 4 already in seen, so
+//         findTarget immediately returns true without traversing the right subtree.
+//
+//   Example 2:
+//     Input:  root = [5, 3, 6, 2, 4, null, 7], k = 28
+//     Output: false
+//     Explanation:
+//       - findTargetTwoPointers initializes left_it at minimum node 2 (stack [5, 3,
+//         2]) and right_it at maximum node 7 (stack [5, 6, 7]).
+//       - Because 2 + 7 = 9 < 28, left_it advances sequentially through 3 (sum 10),
+//         4 (sum 11), 5 (sum 12), and 6 (sum 13), each time staying below 28.
+//       - Advancing left_it from 6 pushes its right child 7, making left_it.peek()
+//         == right_it.peek() at node 7 so the loop exits and returns false.
+//
+//   Example 3:
+//     Input:  root = [2], k = 4
+//     Output: false
+//     Explanation:
+//       - In findTarget, the in-order DFS visits node 2 with an empty seen set and
+//         checks seen.contains(4 - 2) before inserting 2.
+//       - Because 2 is not yet in seen, it inserts 2 and recurses into the null
+//         right child, preventing node 2 from being paired with itself.
+//       - In findTargetTwoPointers, both left_it and right_it peek at the same node
+//         2, so left_it.peek() != right_it.peek() is immediately false and returns
+//         false.
+//
 // Algorithm:
 //   1. DFS with complement hash set (`findTarget`):
 //      Perform an in-order DFS while storing visited node values in a hash set.

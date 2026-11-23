@@ -8,6 +8,42 @@
 //   in-place as a single non-decreasing array occupying the first `m + n`
 //   slots of `nums1`. You may assume `nums1.size() >= m + n`.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums1 = [1, 2, 3, 0, 0, 0], m = 3, nums2 = [2, 5, 6], n = 3
+//     Output: nums1 = [1, 2, 2, 3, 5, 6]
+//     Explanation:
+//       - Initialize remaining-count cursors i = 3, j = 3, and write = 6.
+//       - Compare nums1[2] = 3 against nums2[2] = 6 (write 6 at nums1[5], j = 2),
+//         then nums1[2] = 3 against nums2[1] = 5 (write 5 at nums1[4], j = 1).
+//       - Next nums1[2] = 3 > nums2[0] = 2 places 3 at nums1[3] (i = 2), then
+//         nums1[1] = 2 > nums2[0] = 2 is false so 2 from nums2 is placed at
+//         nums1[2] (j = 0).
+//       - With j == 0, the trailing copy loop is skipped and nums1[0..1] ([1, 2])
+//         stay in place, yielding [1, 2, 2, 3, 5, 6].
+//
+//   Example 2:
+//     Input:  nums1 = [4, 5, 6, 0, 0, 0], m = 3, nums2 = [1, 2, 3], n = 3
+//     Output: nums1 = [1, 2, 3, 4, 5, 6]
+//     Explanation:
+//       - Start with i = 3, j = 3, and write = 6.
+//       - In the first loop, nums1[2] = 6, nums1[1] = 5, and nums1[0] = 4 all
+//         exceed nums2[2] = 3, so they are written to indices 5, 4, and 3, reducing
+//         i to 0 while write = 3 and j = 3.
+//       - The second loop copies the remaining prefix nums2[0..2] (3, 2, 1)
+//         backward into nums1[2], nums1[1], and nums1[0], yielding [1, 2, 3, 4, 5,
+//         6].
+//
+//   Example 3:
+//     Input:  nums1 = [0], m = 0, nums2 = [1], n = 1
+//     Output: nums1 = [1]
+//     Explanation:
+//       - Initialize i = 0, j = 1, and write = 1.
+//       - Since i == 0, the main merge loop while (i > 0uz && j > 0uz) does not
+//         execute.
+//       - The cleanup loop while (j > 0uz) decrements write and j to 0 and copies
+//         nums2[0] = 1 into nums1[0], producing [1].
+//
 // Algorithm:
 //   Reverse three-pointer merge starting from the back of the merged range.
 //   Merging forward would overwrite unconsumed elements of `nums1` unless an

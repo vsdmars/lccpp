@@ -9,6 +9,39 @@
 //   relative order from `arr` while allowing arbitrary deletions.
 //   Constraints: 1 <= arr.length <= 10^5, -10^4 <= arr[i], difference <= 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [1, 2, 3, 4], difference = 1
+//     Output: 4
+//     Explanation:
+//       - For num = 1, dp.find(0) misses, so dp[1] = 1 and longest = 1.
+//       - For num = 2, dp.find(1) yields 1, setting dp[2] = 2 and longest = 2.
+//       - For num = 3 and num = 4, each lookup of num - 1 extends the chain to
+//         dp[3] = 3 and dp[4] = 4, returning longest = 4.
+//
+//   Example 2:
+//     Input:  arr = [1, 5, 7, 8, 5, 3, 4, 2, 1], difference = -2
+//     Output: 4
+//     Explanation:
+//       - Process [1, 5, 7, 8]: none of their predecessors (3, 7, 9, 10) exist yet,
+//         so dp[1] = dp[5] = dp[7] = dp[8] = 1.
+//       - At the second 5, dp.find(5 - (-2)) finds dp[7] = 1 and sets dp[5] = 2; at
+//         3, dp.find(5) yields 2 and sets dp[3] = 3.
+//       - At 4, dp.find(6) misses (dp[4] = 1), and at 2, dp.find(4) sets dp[2] = 2.
+//       - At the final 1, dp.find(3) returns 3, updating dp[1] = 4 (for subsequence
+//         [7, 5, 3, 1]) and returning longest = 4.
+//
+//   Example 3:
+//     Input:  arr = [1, 2, 1, 3, 1, 2, 1], difference = 0
+//     Output: 4
+//     Explanation:
+//       - Process the first 1 and 2 with missing keys in dp, setting dp[1] = 1 and
+//         dp[2] = 1.
+//       - At the second 1, dp.find(1 - 0) hits dp[1] = 1 and updates dp[1] = 2; at
+//         3, dp[3] = 1.
+//       - Subsequent matches at the third 1, second 2, and final 1 update dp[1] =
+//         3, dp[2] = 2, and dp[1] = 4, returning longest = 4.
+//
 // Algorithm:
 //   Use single-pass dynamic programming indexed by element value rather than
 //   array position. Define `dp[v]` as the maximum length of a valid arithmetic

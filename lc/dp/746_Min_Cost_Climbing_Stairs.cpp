@@ -7,6 +7,41 @@
 //   may start at index 0 or index 1 with zero initial cost. Return the minimum
 //   cost to reach the top of the floor (one position past the last stair).
 //
+// Examples:
+//   Example 1:
+//     Input:  cost = [10, 15, 20]
+//     Output: 15
+//     Explanation:
+//       - Initialize rolling DP variables prev2 = 0 (dp[0]) and prev1 = 0 (dp[1])
+//         for n = 3.
+//       - At i = 2, compute one_step = 0 + 15 = 15 and two_steps = 0 + 10 = 10,
+//         setting curr = 10 and (prev2, prev1) = (0, 10).
+//       - At i = 3, compute one_step = 10 + 20 = 30 and two_steps = 0 + 15 = 15,
+//         setting curr = 15 and returning prev1 = 15.
+//
+//   Example 2:
+//     Input:  cost = [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]
+//     Output: 6
+//     Explanation:
+//       - Start with prev2 = 0 and prev1 = 0 for n = 10.
+//       - Compute i = 2..5: dp[2] = min(100, 1) = 1, dp[3] = min(2, 100) = 2, dp[4]
+//         = min(3, 2) = 2, and dp[5] = min(3, 3) = 3.
+//       - Skip the 100-cost stairs at indices 5 and 8 across i = 6..9: dp[6] =
+//         min(103, 3) = 3, dp[7] = min(4, 103) = 4, dp[8] = min(5, 4) = 4, and
+//         dp[9] = min(104, 5) = 5.
+//       - At i = 10, compute curr = min(dp[9] + cost[9], dp[8] + cost[8]) = min(5 +
+//         1, 4 + 100) = 6 and return 6.
+//
+//   Example 3:
+//     Input:  cost = [5, 10]
+//     Output: 5
+//     Explanation:
+//       - Confirm n = 2 >= 2 and initialize prev2 = 0 (dp[0]) and prev1 = 0
+//         (dp[1]).
+//       - Run the single iteration i = 2: compute one_step = 0 + cost[1] = 10 and
+//         two_steps = 0 + cost[0] = 5, setting prev1 = min(10, 5) = 5 and returning
+//         5.
+//
 // Algorithm:
 //   Bottom-up linear dynamic programming with O(1) rolling state. Define
 //   `dp[i]` as the minimum cost to arrive at stair `i` (before paying

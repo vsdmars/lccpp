@@ -7,6 +7,40 @@
 //   letters, digits, symbols, and spaces (standard ASCII bytes), and may be
 //   empty (in which case the answer is 0).
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abcabcbb"
+//     Output: 3
+//     Explanation:
+//       - At right = 0..2 ('a', 'b', 'c'), all last_seen entries are -1, so left
+//         stays 0, last_seen records a:0, b:1, c:2, and max_len reaches 3 ("abc").
+//       - At right = 3 ('a'), left updates to max(0, last_seen['a'] + 1) = 1
+//         ("bca", length 3) and last_seen['a'] becomes 3.
+//       - At right = 4 ('b') and right = 5 ('c'), left advances to 2 ("cab") then 3
+//         ("abc"), keeping max_len = 3.
+//       - At right = 6 ('b') and right = 7 ('b'), left jumps to 5 ("cb", length 2)
+//         then 7 ("b", length 1), so the loop finishes and returns max_len = 3.
+//
+//   Example 2:
+//     Input:  s = "abba"
+//     Output: 2
+//     Explanation:
+//       - At right = 0 ('a') and right = 1 ('b'), last_seen records a:0 and b:1
+//         with left = 0, giving max_len = 2 ("ab").
+//       - At right = 2 ('b'), left jumps to max(0, last_seen['b'] + 1) = 2 ("b",
+//         length 1) and last_seen['b'] updates to 2.
+//       - At right = 3 ('a'), last_seen['a'] + 1 = 1 is stale behind left = 2, so
+//         max(2, 1) keeps left = 2 and window "ba" gives max_len = 2.
+//
+//   Example 3:
+//     Input:  s = ""
+//     Output: 0
+//     Explanation:
+//       - Initialize the 256-entry last_seen array to -1, max_len = 0, and left =
+//         0.
+//       - Since s.size() is 0, the right loop executes zero iterations and returns
+//         max_len = 0.
+//
 // Algorithm:
 //   Sliding window with direct last-seen index tracking. Maintain a valid
 //   window `[left, right]` that contains only distinct characters. As `right`

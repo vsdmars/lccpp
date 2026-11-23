@@ -7,6 +7,42 @@
 //   such that abs(i - j) <= index_diff and abs(nums[i] - nums[j]) <=
 //   value_diff; otherwise return false.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3, 1], index_diff = 3, value_diff = 0
+//     Output: true
+//     Explanation:
+//       - Compute bucket width = value_diff + 1 = 1 and window = 3, mapping each
+//         non-negative integer val to bucketId = val.
+//       - For i = 0, 1, 2, buckets accumulates {1: 1, 2: 2, 3: 3} with no
+//         same-bucket or adjacent-bucket matches within distance 0 and no evictions
+//         yet since i < 3.
+//       - At i = 3 (val = 1, bid = 1), buckets.contains(1) is true because nums[0]
+//         = 1 is still in the active window, so return true.
+//
+//   Example 2:
+//     Input:  nums = [-1, 2], index_diff = 1, value_diff = 3
+//     Output: true
+//     Explanation:
+//       - Set width = 3 + 1 = 4 and window = 1.
+//       - At i = 0, val = -1 maps via ((-1 + 1) / 4) - 1 to bid = -1, storing
+//         buckets[-1] = -1.
+//       - At i = 1, val = 2 maps to bid = 2 / 4 = 0, which is not in buckets, so
+//         check adjacent bucket bid - 1 = -1.
+//       - Because val - buckets[-1] = 2 - (-1) = 3 <= value_diff (3), immediately
+//         return true.
+//
+//   Example 3:
+//     Input:  nums = [1, 10, 20, 1], index_diff = 2, value_diff = 0
+//     Output: false
+//     Explanation:
+//       - Set width = 1 and window = 2, inserting buckets[1] = 1 at i = 0 and
+//         buckets[10] = 10 at i = 1.
+//       - At i = 2, insert buckets[20] = 20 and since i >= window (2), evict
+//         nums[0] = 1 from bucket 1, leaving buckets = {10: 10, 20: 20}.
+//       - At i = 3, val = 1 (bid = 1) finds neither bucket 1 nor adjacent buckets 0
+//         or 2, so the loop finishes and returns false.
+//
 // Algorithm:
 //   Sliding-window bucket sort (pigeonhole principle):
 //   - Partition the integer number line into contiguous half-open buckets of

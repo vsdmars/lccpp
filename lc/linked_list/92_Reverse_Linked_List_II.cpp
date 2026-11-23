@@ -8,6 +8,39 @@
 //   modified list head.
 //   Constraints: 1 <= n <= 500, -500 <= Node.val <= 500, 1 <= left <= right <= n.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3, 4, 5], left = 2, right = 4
+//     Output: [1, 4, 3, 2, 5]
+//     Explanation:
+//       - Create dummy(0, head), advance before_left left - 1 = 1 step to node 1,
+//         and set sublist_tail = node 2.
+//       - Reverse count = 4 - 2 + 1 = 3 nodes starting with cur = 2 and flip_prev =
+//         nullptr: point 2 -> nullptr, then 3 -> 2, then 4 -> 3, leaving flip_prev
+//         = 4 and cur = 5.
+//       - Attach the suffix via sublist_tail->next = cur (2 -> 5) and the prefix
+//         via before_left->next = flip_prev (1 -> 4).
+//       - Return dummy.next, producing [1, 4, 3, 2, 5].
+//
+//   Example 2:
+//     Input:  head = [1, 2, 3, 4], left = 1, right = 4
+//     Output: [4, 3, 2, 1]
+//     Explanation:
+//       - Create dummy(0, head) with before_left = &dummy; since left == 1,
+//         before_left stays at dummy and sublist_tail = node 1.
+//       - Reverse count = 4 - 1 + 1 = 4 nodes: flip_prev chains 1 -> nullptr, 2 ->
+//         1, 3 -> 2, and 4 -> 3, ending with flip_prev = 4 and cur = nullptr.
+//       - Link sublist_tail->next = nullptr (node 1) and before_left->next = node
+//         4, returning dummy.next as [4, 3, 2, 1].
+//
+//   Example 3:
+//     Input:  head = [1, 2, 3], left = 2, right = 2
+//     Output: [1, 2, 3]
+//     Explanation:
+//       - Evaluate the early-return guard if (head == nullptr || left >= right).
+//       - Because left >= right (2 >= 2), return head directly without altering any
+//         pointers, yielding [1, 2, 3].
+//
 // Algorithm:
 //   1. Handle trivial inputs (`head == nullptr` or `left >= right`) early.
 //   2. Anchor a stack-allocated dummy sentinel before `head` so reversing a

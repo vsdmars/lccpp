@@ -7,6 +7,43 @@
 //   each of the k lists. An interval [a, b] is smaller than [c, d] if
 //   (b - a) < (d - c), or if (b - a) == (d - c) and a < c.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [[4, 10, 15, 24, 26], [0, 9, 12, 20], [5, 18, 22, 30]]
+//     Output: [20, 24]
+//     Explanation:
+//       - Seed min_heap with (0, list 1, idx 0), (4, list 0, idx 0), and (5, list
+//         2, idx 0), setting current_max = 5 and best range [0, 5] (span 5).
+//       - Repeatedly pop the minimum entry and advance its list, scanning through
+//         windows [4, 9], [5, 10], [9, 18], [10, 18], [12, 18], [15, 20], and [18,
+//         24] without beating span 5.
+//       - After advancing list 0 to 24 and list 2 to 22, popping (20, list 1, idx
+//         3) sees current_max = 24, updating the best range to [20, 24] (span 4 <
+//         5).
+//       - List 1 has no element after 20 (next_idx == 4), so the loop terminates
+//         and returns [20, 24].
+//
+//   Example 2:
+//     Input:  nums = [[-10, -5, 0], [-8, -2, 4], [-6, 1, 5]]
+//     Output: [-8, -5]
+//     Explanation:
+//       - Initialize min_heap with -10, -8, and -6, setting current_max = -6 and
+//         initial best range [-10, -6] (span 4).
+//       - Pop -10 from list 0 and push -5 (current_max = -5), then pop -8 from list
+//         1 to record [-8, -5] with span 3 < 4.
+//       - Continue advancing through [-6, -2] (span 4), [-5, 1] (span 6), and [-2,
+//         1] (span 3, loses tie-break because -2 > -8) until list 0 finishes at 0,
+//         returning [-8, -5].
+//
+//   Example 3:
+//     Input:  nums = [[10, 20, 30]]
+//     Output: [10, 10]
+//     Explanation:
+//       - Seed min_heap with (10, list 0, idx 0) and current_max = 10, initializing
+//         best range to [10, 10] (span 0).
+//       - Advance through (20, list 0, idx 1) and (30, list 0, idx 2), each giving
+//         span 0 with larger left endpoints until list 0 ends, returning [10, 10].
+//
 // Algorithm:
 //   K-Way Min-Heap Window Tracking:
 //   1. Maintain a window containing exactly one active element from each of

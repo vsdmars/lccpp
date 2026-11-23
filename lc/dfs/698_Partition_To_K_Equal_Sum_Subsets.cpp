@@ -7,6 +7,45 @@
 //   subsets whose element sums are all equal.
 //   Constraints: 1 <= k <= nums.size() <= 16, 1 <= nums[i] <= 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [4, 3, 2, 3, 5, 2, 1], k = 4
+//     Output: true
+//     Explanation:
+//       - The total sum is 20 and 20 % 4 == 0, giving target = 5; sorting
+//         descending yields nums = [5, 4, 3, 3, 2, 2, 1] and buckets = [5, 5, 5,
+//         5].
+//       - Elements idx = 0..3 (values 5, 4, 3, 3) are placed into buckets 0, 1, 2,
+//         and 3 respectively, leaving remaining capacities [0, 1, 2, 2].
+//       - Next, idx = 4 (val = 2) fills bucket 2 to 0, idx = 5 (val = 2) fills
+//         bucket 3 to 0, and idx = 6 (val = 1) fills bucket 1 to 0.
+//       - When idx reaches 7 (nums.size()), all elements have been placed without
+//         negative capacities, so backtrack returns true.
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 3, 4], k = 3
+//     Output: false
+//     Explanation:
+//       - canPartitionKSubsets confirms k = 3 > 0 and nums.size() = 4 >= 3, then
+//         sums nums to total = 10.
+//       - Because total % k = 10 % 3 = 1 != 0, no partition into 3 equal-sum
+//         subsets is possible and the function immediately returns false.
+//
+//   Example 3:
+//     Input:  nums = [2, 2, 2, 2, 3, 4, 5], k = 4
+//     Output: false
+//     Explanation:
+//       - Summing nums gives total = 20 and target = 5; descending sort yields [5,
+//         4, 3, 2, 2, 2, 2] with buckets = [5, 5, 5, 5].
+//       - Backtracking places 5 into bucket 0, 4 into bucket 1, and 3 into bucket
+//         2, leaving buckets = [0, 1, 2, 5] with no value 1 available to complete
+//         bucket 1.
+//       - Every way of placing the first three 2s into buckets 2 and 3 reduces
+//         buckets to [0, 1, 0, 1], leaving the final 2 unable to fit anywhere.
+//       - has_same_capacity_before and empty-bucket pruning (buckets[bucket] ==
+//         target) skip symmetric states until all branches fail and false is
+//         returned.
+//
 // Algorithm:
 //   Compute the total sum of `nums`. If `total % k != 0`, an equal partition
 //   is impossible; otherwise each subset must sum to `target = total / k`.

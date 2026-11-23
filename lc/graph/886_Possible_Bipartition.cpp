@@ -9,6 +9,40 @@
 //   Constraints: 1 <= n <= 2000, 0 <= dislikes.size() <= 10^4, no self-loops
 //   or duplicate pairs; the dislike graph may be disconnected.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 4, dislikes = [[1, 2], [1, 3], [2, 4]]
+//     Output: true
+//     Explanation:
+//       - Build undirected adjacency list adj (1 -> [2, 3], 2 -> [1, 4], 3 -> [1],
+//         4 -> [2]) with color initialized to -1.
+//       - Start dfs(1, 0) to set color[1] = 0, then call dfs(2, 1) which sets
+//         color[2] = 1 and dfs(4, 0) which sets color[4] = 0.
+//       - Return to vertex 1 and call dfs(3, 1) to set color[3] = 1; all vertices
+//         1..4 are consistently 2-colored, returning true.
+//
+//   Example 2:
+//     Input:  n = 3, dislikes = [[1, 2], [1, 3], [2, 3]]
+//     Output: false
+//     Explanation:
+//       - Call dfs(1, 0) to set color[1] = 0, then recurse to neighbor 2 via dfs(2,
+//         1) setting color[2] = 1.
+//       - From vertex 2, recurse to uncolored neighbor 3 via dfs(3, 0) setting
+//         color[3] = 0.
+//       - From vertex 3, edge (3, 1) expects color[1] == 1, which conflicts with
+//         color[1] == 0 and returns false.
+//
+//   Example 3:
+//     Input:  n = 5, dislikes = [[1, 2], [3, 4], [4, 5], [3, 5]]
+//     Output: false
+//     Explanation:
+//       - At i = 1, dfs(1, 0) successfully 2-colors the first component with
+//         color[1] = 0 and color[2] = 1.
+//       - At i = 3, dfs(3, 0) enters the disconnected second component and assigns
+//         color[3] = 0, color[4] = 1, and color[5] = 0.
+//       - From vertex 5, neighbor 3 has color[3] = 0 instead of expected 1,
+//         detecting the odd cycle and returning false.
+//
 // Algorithm:
 //   Model the problem as 2-coloring an undirected graph (testing whether it is
 //   bipartite, i.e., free of odd-length cycles). Two implementations are

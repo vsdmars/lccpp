@@ -10,6 +10,39 @@
 //   exist two turned-on bulbs with strictly k turned-off bulbs between them
 //   (and no turned-on bulbs in between). Return -1 if no such day exists.
 //
+// Examples:
+//   Example 1:
+//     Input:  bulbs = [1, 3, 2], k = 1
+//     Output: 2
+//     Explanation:
+//       - On day 1 (pos = 1), insert 1 into blooming = {1}; it has no predecessor
+//         or successor to check.
+//       - On day 2 (pos = 3), insert 3 into blooming = {1, 3} and inspect immediate
+//         predecessor 1.
+//       - The gap between 1 and 3 is (3 - 1) - 1 = 1 == k, so return day 2
+//         immediately.
+//
+//   Example 2:
+//     Input:  bulbs = [1, 2, 3], k = 1
+//     Output: -1
+//     Explanation:
+//       - On day 1 (pos = 1), blooming = {1} has no neighbors.
+//       - On day 2 (pos = 2), blooming = {1, 2} has predecessor 1 with gap (2 - 1)
+//         - 1 = 0 != 1.
+//       - On day 3 (pos = 3), blooming = {1, 2, 3} has predecessor 2 with gap (3 -
+//         2) - 1 = 0 != 1, so the loop finishes and returns -1.
+//
+//   Example 3:
+//     Input:  bulbs = [6, 1, 4, 3, 2, 5], k = 1
+//     Output: 3
+//     Explanation:
+//       - On day 1 (pos = 6), blooming = {6} has no neighbors; on day 2 (pos = 1),
+//         blooming = {1, 6} has successor gap (6 - 1) - 1 = 4 != 1.
+//       - On day 3 (pos = 4), insert 4 into blooming = {1, 4, 6}, giving
+//         predecessor gap (4 - 1) - 1 = 2 and successor gap (6 - 4) - 1 = 1.
+//       - Because successor 6 yields exact gap 1 == k, return earliest day 3
+//         without checking later days.
+//
 // Algorithm:
 //   1. Balanced BST (std::set<int>, primary approach matching sorted insertion):
 //      Maintain the sorted set of currently blooming positions day by day.

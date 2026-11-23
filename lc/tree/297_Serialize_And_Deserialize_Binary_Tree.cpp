@@ -7,6 +7,41 @@
 //   back into an exact copy of the original binary tree (preserving every node
 //   value, including negative integers, and exact parent-child topology).
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, null, null, 4, 5]
+//     Output: serialized = "1 2 # # 3 4 # # 5 # #", deserialized = [1, 2, 3, null,
+//             null, 4, 5]
+//     Explanation:
+//       - serialize visits nodes in preorder, emitting "1", leaf "2 # #", "3", leaf
+//         "4 # #", and leaf "5 # #" to produce "1 2 # # 3 4 # # 5 # #".
+//       - deserialize reads "1" via std::from_chars to construct root 1, then
+//         decodes left child 2 whose two "#" tokens produce nullptr children.
+//       - Continuing from root 1's right child, decode_node parses 3, attaches left
+//         leaf 4 ("# #") and right leaf 5 ("# #"), and restores [1, 2, 3, null,
+//         null, 4, 5].
+//
+//   Example 2:
+//     Input:  root = [-5, null, 0, 42, null, null, -999]
+//     Output: serialized = "-5 # 0 42 # -999 # # #", deserialized = [-5, null, 0,
+//             42, null, null, -999]
+//     Explanation:
+//       - serialize emits "-5", its null left sentinel "#", right child "0", "0"'s
+//         left child "42", "42"'s null left "#", and "-999 # #" followed by "0"'s
+//         null right "#".
+//       - deserialize parses negative integer "-5", consumes "#" for left =
+//         nullptr, and recursively reconstructs 0 -> left 42 -> right -999 while
+//         terminating each missing branch on "#".
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: serialized = "#", deserialized = []
+//     Explanation:
+//       - serialize(nullptr) sees node == nullptr immediately and appends the
+//         single sentinel "#".
+//       - deserialize("#") reads token "#" via next_token at pos = 0 and returns
+//         nullptr without allocating a node.
+//
 // Algorithm:
 //   Preorder DFS traversal with explicit null sentinels (`"#"`) separated by
 //   single spaces:

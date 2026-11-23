@@ -14,6 +14,38 @@
 //     allowed, while shorthand `"::"` compression and extra (>4) digits are
 //     disallowed.
 //
+// Examples:
+//   Example 1:
+//     Input:  queryIP = "172.16.254.1"
+//     Output: "IPv4"
+//     Explanation:
+//       - Count '.' occurrences in "172.16.254.1" and get 3, dispatching to IPv4
+//         validation.
+//       - Split on '.' into four std::string_view segments: ["172", "16", "254",
+//         "1"].
+//       - Verify each segment has length 1..3, no leading '0' when length > 1, only
+//         ASCII digits, and numeric values 172, 16, 254, 1 all <= 255, returning
+//         "IPv4".
+//
+//   Example 2:
+//     Input:  queryIP = "2001:0db8:85a3:0:0:8A2E:0370:7334"
+//     Output: "IPv6"
+//     Explanation:
+//       - Count '.' (0) and ':' (7) in the input, dispatching to IPv6 validation.
+//       - Split on ':' into eight segments: ["2001", "0db8", "85a3", "0", "0",
+//         "8A2E", "0370", "7334"].
+//       - Verify every segment has length 1..4 and contains only hexadecimal
+//         characters ('0'-'9', 'a'-'f', 'A'-'F'), returning "IPv6".
+//
+//   Example 3:
+//     Input:  queryIP = "172.16.254.01"
+//     Output: "Neither"
+//     Explanation:
+//       - Count 3 '.' delimiters and split into ["172", "16", "254", "01"].
+//       - Pass is_valid_ipv4_segment on "172", "16", and "254", then reject "01"
+//         because segment.size() > 1 && segment[0] == '0'.
+//       - Return "Neither" since not all segments are valid IPv4 octets.
+//
 // Algorithm:
 //   Dispatch by counting delimiters first:
 //   1. If `queryIP` contains exactly 3 dots (`'.'`), split it into 4

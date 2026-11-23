@@ -6,6 +6,45 @@
 //   return the length of the longest substring that appears at least twice in
 //   `s` (occurrences may overlap). Return 0 if no repeating substring exists.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abbaba"
+//     Output: 2
+//     Explanation:
+//       - Initialize max_len = 0 and sweep offset = 1 across s[0..4] vs s[1..5],
+//         where only s[1] == s[2] ('b') matches for same_cnt = 1 and max_len = 1.
+//       - At offset = 2, compare s[0..3] against s[2..5]: s[2] == s[4] ('b') sets
+//         same_cnt = 1 and s[3] == s[5] ('a') increments same_cnt = 2, updating
+//         max_len = 2 for substring "ba".
+//       - At offset = 3 (n - offset = 3 > 2), s[0] == s[3] ('a') and s[1] == s[4]
+//         ('b') again reach same_cnt = 2 ("ab") before s[2] != s[5] resets same_cnt
+//         = 0.
+//       - At offset = 4, remaining diagonal length n - offset = 2 is no longer
+//         greater than max_len = 2, so the loop prunes early and returns 2.
+//
+//   Example 2:
+//     Input:  s = "aaaaa"
+//     Output: 4
+//     Explanation:
+//       - Start at offset = 1 (limit = 4) and compare s[i] with s[i + 1] for i =
+//         0..3.
+//       - Every pair compares 'a' == 'a', incrementing same_cnt through 1, 2, 3,
+//         and 4 and updating max_len = 4 for the overlapping substring "aaaa" at
+//         [0..3] and [1..4].
+//       - Before offset = 2 starts, n - offset = 3 <= max_len = 4, so the outer
+//         loop terminates immediately via early pruning and returns 4.
+//
+//   Example 3:
+//     Input:  s = "abcd"
+//     Output: 0
+//     Explanation:
+//       - At offset = 1, compare adjacent pairs ('a','b'), ('b','c'), and
+//         ('c','d'); all mismatch, keeping same_cnt = 0 and max_len = 0.
+//       - At offset = 2, compare ('a','c') and ('b','d'); both mismatch, keeping
+//         max_len = 0.
+//       - At offset = 3, compare ('a','d'); it mismatches, ending the sweep with
+//         max_len = 0.
+//
 // Algorithm:
 //   1. Diagonal Shifted Comparison (primary, matching the Python solution):
 //      In the classic Longest Common Substring DP table where

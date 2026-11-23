@@ -10,6 +10,44 @@
 //   Follow-up: Count the ships in a single pass with O(1) extra space and
 //   without mutating the board.
 //
+// Examples:
+//   Example 1:
+//     Input:  board = [['X', '.', '.', 'X'], ['.', '.', '.', 'X'], ['.', '.', '.',
+//             'X']]
+//     Output: 2
+//     Explanation:
+//       - Scanning row-major, countBattleships finds 'X' at (0, 0), increments
+//         ships to 1, and sinkShip replaces (0, 0) with '.' with no adjacent 'X'
+//         neighbors.
+//       - At (0, 3), countBattleships increments ships to 2 and sinkShip
+//         flood-fills downward through (0, 3) -> (1, 3) -> (2, 3), sinking all
+//         three cells to '.' so (1, 3) and (2, 3) are not recounted.
+//       - Equivalently, countBattleshipsOnePass increments ships only at (0, 0) and
+//         (0, 3) where neither the cell above nor the cell to the left is 'X',
+//         returning 2.
+//
+//   Example 2:
+//     Input:  board = [['X', '.', '.', 'X'], ['X', '.', '.', 'X'], ['.', 'X', '.',
+//             'X']]
+//     Output: 3
+//     Explanation:
+//       - At (0, 0), ships becomes 1 and sinkShip visits only 4-directional
+//         neighbors, flipping (0, 0) and (1, 0) to '.' while leaving diagonal (2,
+//         1) untouched.
+//       - At (0, 3), ships becomes 2 and sinkShip sinks the vertical ship across
+//         (0, 3), (1, 3), and (2, 3).
+//       - When the scan reaches (2, 1), it is still 'X' so ships increments to 3,
+//         matching countBattleshipsOnePass which finds ship heads at (0, 0), (0,
+//         3), and (2, 1).
+//
+//   Example 3:
+//     Input:  board = [['.']]
+//     Output: 0
+//     Explanation:
+//       - Both countBattleships and countBattleshipsOnePass inspect cell (0, 0) and
+//         observe '.' instead of 'X'.
+//       - No flood-fill or ship-head increment occurs, so both methods return 0.
+//
 // Algorithm:
 //   1. Primary (DFS Flood-Fill): Iterate over every cell; whenever an unvisited
 //      'X' is encountered, increment the ship count and launch a 4-directional

@@ -7,6 +7,38 @@
 //   than 25% of the time. Return that integer.
 //   Constraints: 1 <= arr.length <= 10^4, 0 <= arr[i] <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [1, 2, 2, 6, 6, 6, 6, 7, 10]
+//     Output: 6
+//     Explanation:
+//       - Compute n = 9 and threshold = 9 / 4 = 2, and set quarter checkpoints at
+//         indices {2, 4, 6}.
+//       - Probe idx = 2 where arr[2] = 2; equal_range spans [1, 3) with length 2,
+//         which is not > 2.
+//       - Probe idx = 4 where arr[4] = 6; equal_range spans [3, 7) with length 4 >
+//         2, so return 6.
+//
+//   Example 2:
+//     Input:  arr = [1, 2, 3, 4, 4, 4, 5, 6]
+//     Output: 4
+//     Explanation:
+//       - Compute n = 8 and threshold = 8 / 4 = 2, and set quarter checkpoints at
+//         indices {2, 4, 6}.
+//       - Probe idx = 2 where arr[2] = 3; equal_range spans [2, 3) with length 1 <=
+//         2.
+//       - Probe idx = 4 where arr[4] = 4; equal_range spans [3, 6) with length 3 >
+//         2, so return 4.
+//
+//   Example 3:
+//     Input:  arr = [42]
+//     Output: 42
+//     Explanation:
+//       - Compute n = 1 and threshold = 1 / 4 = 0, so the quarter checkpoints {n/4,
+//         n/2, 3n/4} evaluate to {0, 0, 0}.
+//       - Probe idx = 0 where arr[0] = 42; equal_range spans [0, 1) with length 1 >
+//         0, so return 42.
+//
 // Algorithm:
 //   1. Frequency Counting (`findSpecialInteger`, matching the Python source):
 //      Count occurrences of each value in a hash map and return the value

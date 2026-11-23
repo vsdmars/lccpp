@@ -7,6 +7,47 @@
 //     nums[0] <= nums[1] >= nums[2] <= nums[3] >= nums[4] ...
 //   Multiple valid reorderings may exist; any valid permutation is accepted.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 5, 2, 1, 6, 4]
+//     Output: nums = [3, 5, 1, 6, 2, 4]
+//     Explanation:
+//       - Start with expect_up = true and inspect idx = 1: nums[0] = 3 <= nums[1] =
+//         5 holds, so no swap occurs and expect_up flips to false.
+//       - At idx = 2 with expect_up = false, nums[1] = 5 >= nums[2] = 2 holds, so
+//         no swap occurs and expect_up flips to true.
+//       - At idx = 3 with expect_up = true, nums[2] = 2 > nums[3] = 1 fails the
+//         condition, so swap them to get [3, 5, 1, 2, 6, 4] and flip expect_up to
+//         false.
+//       - At idx = 4 with expect_up = false, nums[3] = 2 < nums[4] = 6 fails the
+//         condition, so swap them to get [3, 5, 1, 6, 2, 4] and flip expect_up to
+//         true.
+//       - At idx = 5 with expect_up = true, nums[4] = 2 <= nums[5] = 4 holds,
+//         leaving the final valid wiggle array [3, 5, 1, 6, 2, 4].
+//
+//   Example 2:
+//     Input:  nums = [5, 2, 0, -1, -4, -9]
+//     Output: nums = [2, 5, -1, 0, -9, -4]
+//     Explanation:
+//       - At idx = 1 with expect_up = true, nums[0] = 5 > nums[1] = 2, so swap them
+//         to produce [2, 5, 0, -1, -4, -9].
+//       - At idx = 2 with expect_up = false, nums[1] = 5 >= nums[2] = 0 holds with
+//         no swap.
+//       - At idx = 3 with expect_up = true, nums[2] = 0 > nums[3] = -1, so swap
+//         them to produce [2, 5, -1, 0, -4, -9].
+//       - At idx = 4 with expect_up = false, nums[3] = 0 >= nums[4] = -4 holds with
+//         no swap.
+//       - At idx = 5 with expect_up = true, nums[4] = -4 > nums[5] = -9, so swap
+//         them to finish with [2, 5, -1, 0, -9, -4].
+//
+//   Example 3:
+//     Input:  nums = [7]
+//     Output: nums = [7]
+//     Explanation:
+//       - Check the early-return guard nums.size() < 2uz, which is true for length
+//         1.
+//       - Return immediately without modifying nums, leaving [7] unchanged.
+//
 // Algorithm:
 //   Single-pass greedy adjacent swap:
 //   Traverse index `i` from `1` to `n - 1` while alternating the expected

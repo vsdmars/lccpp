@@ -7,6 +7,49 @@
 //   that every subsequence consists of strictly consecutive integers
 //   (x, x + 1, x + 2, ...) and has length at least 3.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3, 3, 4, 5]
+//     Output: true
+//     Explanation:
+//       - Count all elements into remaining = {1: 1, 2: 1, 3: 2, 4: 1, 5: 1} with
+//         tails initially empty.
+//       - At num = 1, tails[0] is 0 while remaining[2] > 0 and remaining[3] > 0, so
+//         open [1, 2, 3] by decrementing remaining[1..3] and setting tails[3] = 1.
+//       - Skip num = 2 because remaining[2] == 0 after being consumed in [1, 2, 3].
+//       - At the first num = 3, remaining[3] is 1, tails[2] is 0, and remaining[4]
+//         > 0 and remaining[5] > 0, so open [3, 4, 5] by decrementing
+//         remaining[3..5] and setting tails[5] = 1.
+//       - Skip the remaining 3, 4, and 5 since their remaining counts are now 0,
+//         and return true.
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 3, 4, 5, 5, 6, 7]
+//     Output: true
+//     Explanation:
+//       - Count remaining = {1: 1, 2: 1, 3: 1, 4: 1, 5: 2, 6: 1, 7: 1} and start at
+//         num = 1 by forming [1, 2, 3], leaving tails[3] = 1 and remaining[1..3] =
+//         0.
+//       - Skip 2 and 3, then at num = 4 find tails[3] = 1 > 0 and greedily extend
+//         that sequence instead of starting [4, 5, 6], updating tails[3] = 0,
+//         tails[4] = 1, and remaining[4] = 0.
+//       - At the first num = 5, find tails[4] = 1 > 0 and extend again, setting
+//         tails[4] = 0, tails[5] = 1, and remaining[5] = 1.
+//       - At the second num = 5, tails[4] is 0 while remaining[6] = 1 and
+//         remaining[7] = 1, so open [5, 6, 7], set tails[7] = 1, skip the consumed
+//         6 and 7, and return true.
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 3, 4, 4, 5]
+//     Output: false
+//     Explanation:
+//       - Count remaining = {1: 1, 2: 1, 3: 1, 4: 2, 5: 1} and start [1, 2, 3] at
+//         num = 1, setting tails[3] = 1 and remaining[1..3] = 0.
+//       - Skip 2 and 3, then at the first num = 4 extend via tails[3] = 1, updating
+//         tails[3] = 0, tails[4] = 1, and remaining[4] = 1.
+//       - At the second num = 4, tails[3] is 0 (cannot extend) and remaining[6] is
+//         absent (cannot start [4, 5, 6]), so immediately return false.
+//
 // Algorithm:
 //   Greedy frequency-and-tail tracking in a single sorted pass:
 //     1. Count all unused occurrences of every value in `remaining`.

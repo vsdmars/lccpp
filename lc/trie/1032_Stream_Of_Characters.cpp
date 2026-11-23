@@ -9,6 +9,63 @@
 //   returns `true` if any non-empty suffix of the stream matches a word in
 //   `words`, or `false` otherwise.
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["StreamChecker", "query", "query", "query", "query",
+//             "query", "query", "query", "query", "query", "query", "query",
+//             "query"], args = [[["cd", "f", "kl"]], ["a"], ["b"], ["c"], ["d"],
+//             ["e"], ["f"], ["g"], ["h"], ["i"], ["j"], ["k"], ["l"]]
+//     Output: [null, false, false, false, true, false, true, false, false, false,
+//             false, false, true]
+//     Explanation:
+//       - The constructor inserts reversed words "dc", "f", and "lk" into nodes_
+//         from root 0 and sets max_word_len_ = 2.
+//       - Queries 'a', 'b', and 'c' push each letter to the front of stream_
+//         (evicting 'a' once size exceeds 2) and find no matching first child from
+//         root 0, returning false three times.
+//       - query('d') makes stream_ = ['d', 'c'] and traverses 'd' then 'c' to a
+//         node with is_end = true (matching "cd"), returning true.
+//       - query('e') fails on missing child 'e' at root 0 (false), while query('f')
+//         matches root child 'f' with is_end = true (matching "f"), returning true.
+//       - Queries 'g' through 'k' fail at root 0 because none of them starts a
+//         reversed dictionary word, returning five consecutive false results.
+//       - query('l') makes stream_ = ['l', 'k'] and traverses 'l' then 'k' to
+//         is_end = true (matching "kl"), returning true.
+//
+//   Example 2:
+//     Input:  operations = ["StreamChecker", "query", "query", "query", "query",
+//             "query", "query"], args = [[["ab", "bab", "ab", "xyz"]], ["b"],
+//             ["a"], ["b"], ["x"], ["y"], ["z"]]
+//     Output: [null, false, false, true, false, false, true]
+//     Explanation:
+//       - The constructor inserts reversed words "ba", "bab", "ba", and "zyx" into
+//         nodes_ and records max_word_len_ = 3.
+//       - query('b') sets stream_ = ['b'] and reaches the non-terminal 'b' child of
+//         root 0 before stream_ ends, returning false.
+//       - query('a') sets stream_ = ['a', 'b'] and immediately hits kNoChild on 'a'
+//         at root 0, returning false.
+//       - query('b') sets stream_ = ['b', 'a', 'b'] and follows 'b' then 'a' to
+//         is_end = true (matching "ab"), returning true without needing to check
+//         the longer "bab" suffix.
+//       - query('x') and query('y') evict older characters past length 3 and fail
+//         on missing root children 'x' and 'y', returning false for both.
+//       - query('z') sets stream_ = ['z', 'y', 'x'] and traverses 'z' -> 'y' -> 'x'
+//         to is_end = true (matching "xyz"), returning true.
+//
+//   Example 3:
+//     Input:  operations = ["StreamChecker", "query", "query", "query"], args =
+//             [[["a"]], ["a"], ["b"], ["a"]]
+//     Output: [null, true, false, true]
+//     Explanation:
+//       - The constructor inserts reversed "a" under root 0 with is_end = true and
+//         sets max_word_len_ = 1.
+//       - query('a') pushes 'a' into stream_ and immediately matches root 0's 'a'
+//         child with is_end = true, returning true.
+//       - query('b') pushes 'b' and pops 'a' to keep stream_.size() <= 1, then
+//         finds no 'b' child at root 0 and returns false.
+//       - query('a') pushes 'a' and pops 'b', matching the 'a' terminal node again
+//         and returning true.
+//
 // Algorithm:
 //   Builds a reversed Trie during construction by inserting every word from
 //   its last character to its first. Reversing the dictionary turns suffix

@@ -9,6 +9,37 @@
 //   Once the knight leaves the board it stops moving. Return the probability
 //   that the knight remains on the board after all `k` moves.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3, k = 2, row = 0, column = 0
+//     Output: 0.0625
+//     Explanation:
+//       - Initialize a 3x3 dp grid with dp[0][0] = 1.0 and all other cells 0.0.
+//       - On step 1, advanceOneStep distributes 1.0 * 0.125 = 0.125 from (0, 0) to
+//         the two in-bounds targets (1, 2) and (2, 1), discarding the six off-board
+//         jumps.
+//       - On step 2, (1, 2) adds 0.125 * 0.125 = 0.015625 to (0, 0) and (2, 0),
+//         while (2, 1) adds 0.015625 to (0, 0) and (0, 2).
+//       - Sum the remaining non-zero probabilities dp[0][0] = 0.03125, dp[0][2] =
+//         0.015625, and dp[2][0] = 0.015625 to return 0.0625.
+//
+//   Example 2:
+//     Input:  n = 1, k = 0, row = 0, column = 0
+//     Output: 1.0
+//     Explanation:
+//       - Verify that starting square (0, 0) lies inside the 1x1 board.
+//       - Trigger the k == 0 check and return 1.0 immediately because no moves are
+//         attempted.
+//
+//   Example 3:
+//     Input:  n = 3, k = 1, row = 1, column = 1
+//     Output: 0.0
+//     Explanation:
+//       - Initialize dp[1][1] = 1.0 at the center of the 3x3 board.
+//       - In the single step, every offset in kKnightMoves shifts either row or
+//         column by +-2 from 1 to -1 or 3, which is outside [0, 3).
+//       - All cells in next_dp stay 0.0, so summing the grid returns 0.0.
+//
 // Algorithm:
 //   Bottom-up Markov-chain dynamic programming with two rolling n x n grids.
 //   Let `dp[r][c]` be the probability that the knight is still on the board

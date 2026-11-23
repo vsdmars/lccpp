@@ -7,6 +7,36 @@
 //   return that single unique element. The solution must run in O(n) linear
 //   time and use only O(1) constant auxiliary space.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 2, 1]
+//     Output: 1
+//     Explanation:
+//       - Initialize uint32_t accumulator acc = 0.
+//       - XOR with the first 2 gives acc = 0 ^ 2 = 2, and XOR with the second 2
+//         cancels it to acc = 2 ^ 2 = 0.
+//       - XOR with 1 produces acc = 0 ^ 1 = 1, which is returned as 1.
+//
+//   Example 2:
+//     Input:  nums = [4, 1, 2, 1, 2]
+//     Output: 4
+//     Explanation:
+//       - Initialize acc = 0, then fold 4 and 1 to get acc = 0 ^ 4 ^ 1 = 5.
+//       - Fold 2 to update acc = 5 ^ 2 = 7.
+//       - Fold the duplicate 1 (7 ^ 1 = 6) and duplicate 2 (6 ^ 2 = 4) to cancel
+//         both pairs and return 4.
+//
+//   Example 3:
+//     Input:  nums = [-3, 7, -3, 0, 7]
+//     Output: 0
+//     Explanation:
+//       - Cast -3 to uint32_t (0xFFFFFFFD) and XOR into acc = 0, giving acc =
+//         0xFFFFFFFD.
+//       - XOR with 7U yields acc = 0xFFFFFFFA, and XOR with the second -3U cancels
+//         -3 to leave acc = 7U.
+//       - XOR with 0U preserves acc = 7U, and XOR with the second 7U cancels 7 to
+//         0U, returning 0.
+//
 // Algorithm:
 //   XOR Accumulation: Bitwise XOR is associative, commutative, self-inverse
 //   (`x ^ x == 0`), and has 0 as its identity element (`x ^ 0 == x`). Folding

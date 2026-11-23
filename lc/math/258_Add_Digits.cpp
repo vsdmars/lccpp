@@ -7,6 +7,34 @@
 //   return that digit. The follow-up asks for an O(1) time solution without
 //   any loop or recursion.
 //
+// Examples:
+//   Example 1:
+//     Input:  num = 38
+//     Output: 2
+//     Explanation:
+//       - Check the base case `num == 0`; since `38 != 0`, proceed to modular
+//         reduction.
+//       - Compute `remainder = 38 % 9 = 2`.
+//       - Because `remainder != 0`, return `2` (matching `3 + 8 = 11` and `1 + 1 =
+//         2`).
+//
+//   Example 2:
+//     Input:  num = 18
+//     Output: 9
+//     Explanation:
+//       - Check the base case `num == 0`; since `18 != 0`, proceed to modular
+//         reduction.
+//       - Compute `remainder = 18 % 9 = 0`.
+//       - Because `num > 0` and `remainder == 0`, return `9` instead of `0`.
+//
+//   Example 3:
+//     Input:  num = 0
+//     Output: 0
+//     Explanation:
+//       - Check the base case `num == 0`, which is true.
+//       - Return `0` immediately because `0` is the only non-negative integer whose
+//         digital root is `0`.
+//
 // Algorithm:
 //   Use the congruence property of the base-10 digital root. Because
 //   10^k === 1 (mod 9) for every k >= 0, a number's decimal representation

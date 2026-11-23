@@ -15,6 +15,42 @@
 //        characters (not even CDATA or another tag) may appear outside the
 //        single outermost closed tag.
 //
+// Examples:
+//   Example 1:
+//     Input:  code = "<DIV>This is the first line <![CDATA[<div>]]></DIV>"
+//     Output: true
+//     Explanation:
+//       - At idx = 0, consume_start_tag validates "DIV" (length 3, all uppercase
+//         A-Z), pushes "DIV" onto open_tags, and advances idx to 5.
+//       - Plain characters "This is the first line " advance idx one by one while
+//         open_tags holds ["DIV"] until "<![CDATA[" at idx = 28.
+//       - consume_cdata sees open_tags is non-empty, locates the first closing
+//         "]]>" at idx = 42, and jumps idx past it to 45 so "<div>" is ignored as
+//         raw CDATA text.
+//       - consume_end_tag parses "</DIV>", matches "DIV" against open_tags.back(),
+//         pops it, and finishes at idx = 51 with open_tags empty, returning true.
+//
+//   Example 2:
+//     Input:  code = "<A>  <B> </A>   </B>"
+//     Output: false
+//     Explanation:
+//       - consume_start_tag parses "<A>", pushes "A" onto open_tags, and skips the
+//         two spaces to reach "<B>".
+//       - consume_start_tag parses "<B>" and pushes "B", making open_tags = ["A",
+//         "B"], then advances past the space to "</A>".
+//       - consume_end_tag parses end tag "A", detects a mismatch with
+//         open_tags.back() ("B"), and immediately returns false.
+//
+//   Example 3:
+//     Input:  code = "<A></A><B></B>"
+//     Output: false
+//     Explanation:
+//       - consume_start_tag pushes "A" at "<A>" and consume_end_tag pops "A" at
+//         "</A>", leaving open_tags empty at idx = 7.
+//       - At the start of the next iteration (idx = 7, "<B>"), the guard idx > 0 &&
+//         open_tags.empty() triggers because content appears after the root tag
+//         closed, returning false.
+//
 // Algorithm:
 //   Perform a single left-to-right lexical scan using an explicit stack of
 //   currently open tag names (`std::string_view` slices into `code`):

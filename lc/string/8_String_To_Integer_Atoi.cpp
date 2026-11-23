@@ -11,6 +11,40 @@
 //   4. Clamp the resulting integer into the signed 32-bit range
 //      `[-2^31, 2^31 - 1]` (`[-2147483648, 2147483647]`).
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "   -42"
+//     Output: -42
+//     Explanation:
+//       - Phase 1 advances index i from 0 to 3 to skip the three leading ' '
+//         characters.
+//       - Phase 2 reads s[3] == '-', sets negative = true, and advances i to 4.
+//       - Phase 3 parses '4' (result = 4) and '2' (result = 42), both below
+//         kOverflowCutoff = 214748364, and returns -result = -42.
+//
+//   Example 2:
+//     Input:  s = "4193 with words"
+//     Output: 4193
+//     Explanation:
+//       - No leading spaces or sign appear at s[0] == '4', so negative remains
+//         false and i starts at 0.
+//       - Phase 3 consumes consecutive digits '4', '1', '9', '3', updating result
+//         through 4 -> 41 -> 419 -> 4193.
+//       - At s[4] == ' ', the digit loop terminates, ignoring " with words" and
+//         returning 4193.
+//
+//   Example 3:
+//     Input:  s = "-2147483649"
+//     Output: -2147483648
+//     Explanation:
+//       - Phase 2 consumes '-' (negative = true), and the first nine digits
+//         accumulate result = 214748364 (equal to kOverflowCutoff).
+//       - On the tenth digit '9' (digit = 9 > kMaxLastDigit = 7), the
+//         pre-multiplication guard result == kOverflowCutoff && digit >
+//         kMaxLastDigit triggers.
+//       - Return negative ? kMinInt : kMaxInt immediately, clamping to -2147483648
+//         without signed integer overflow.
+//
 // Algorithm:
 //   Single-pass deterministic linear scan with pre-multiplication overflow
 //   detection:

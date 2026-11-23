@@ -13,6 +13,39 @@
 //   Constraints:
 //   - 1 <= n <= 30
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 4
+//     Output: "1211"
+//     Explanation:
+//       - Initialize term = "1" for step 1 of the sequence.
+//       - At step = 1, describeNext("1") flushes the single run of length 1 of '1',
+//         producing "11".
+//       - At step = 2, describeNext("11") matches '1' at index 1 to reach run_len =
+//         2 and flushes "21".
+//       - At step = 3, describeNext("21") sees '1' != '2' at index 1, emits "12",
+//         resets run_len = 1, and flushes the trailing '1' to return "1211".
+//
+//   Example 2:
+//     Input:  n = 6
+//     Output: "312211"
+//     Explanation:
+//       - Iterate step = 1..4 to advance term from "1" through "11", "21", and
+//         "1211" to "111221".
+//       - At step = 5, describeNext("111221") counts three consecutive '1's at
+//         indices 0..2 and emits "31" when index 3 switches to '2'.
+//       - Scan '2' at indices 3..4 with run_len = 2 and emit "22" when index 5
+//         switches to '1'.
+//       - Flush the trailing run of one '1' after the loop to append "11", yielding
+//         "312211".
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: "1"
+//     Explanation:
+//       - Initialize term = "1" as the base sequence value.
+//       - Skip the loop for step = 1; step < 1 and return "1" immediately.
+//
 // Algorithm:
 //   Iterative run-length encoding:
 //   Start with `term = "1"` and apply `describeNext(term)` exactly `n - 1`

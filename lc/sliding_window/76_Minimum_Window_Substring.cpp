@@ -7,6 +7,44 @@
 //   contains every character in t with at least its multiplicity in t. If no
 //   such window exists, return the empty string "".
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "ADOBECODEBANC", t = "ABC"
+//     Output: "BANC"
+//     Explanation:
+//       - Initialize need['A'] = need['B'] = need['C'] = 1 and missing = 3.
+//       - Expanding right to 5 ("ADOBEC") reduces missing to 0; shrinking records
+//         length-6 window [0, 6) ("ADOBEC") before evicting 'A' at left = 0
+//         restores missing = 1 and leaves left = 1.
+//       - Expanding right to 10 ("DOBECODEBA") drops missing to 0 again, and
+//         shrinking advances left past 'D', 'O', surplus 'B' (index 3), 'E', and
+//         'C' (index 5, restoring missing = 1 at left = 6) without beating best_len
+//         = 6.
+//       - Expanding right to 12 ("ODEBANC") hits 'C' to restore missing = 0, and
+//         shrinking skips 'O', 'D', and 'E' until left = 9 ("BANC", length 4),
+//         updating best_start = 9 and best_len = 4 before evicting 'B' and
+//         returning "BANC".
+//
+//   Example 2:
+//     Input:  s = "abcdaadd", t = "aa"
+//     Output: "aa"
+//     Explanation:
+//       - Initialize need['a'] = 2 and missing = 2.
+//       - Expanding right to 4 ("abcda") satisfies both 'a' counts (missing = 0),
+//         records length-5 window "abcda", and advances left to 1 after evicting
+//         s[0] = 'a'.
+//       - At right = 5 ('a'), missing returns to 0, and shrinking skips 'b', 'c',
+//         and 'd' (whose need counts stay <= 0) until left = 4, recording [4, 6)
+//         ("aa", length 2) before evicting s[4] = 'a' and returning "aa".
+//
+//   Example 3:
+//     Input:  s = "a", t = "aa"
+//     Output: ""
+//     Explanation:
+//       - The upfront length guard checks s.size() < t.size() (1 < 2).
+//       - Because s cannot contain all characters of t with multiplicity, the
+//         function immediately returns "".
+//
 // Algorithm:
 //   Two-pointer sliding window with a signed deficit table (`need[256]`):
 //   1. Initialize `need[c]` with the frequency of each character `c` in `t`,

@@ -8,6 +8,40 @@
 //   board — or connected to a border 'O' — is NOT surrounded and must remain
 //   'O'.
 //
+// Examples:
+//   Example 1:
+//     Input:  board = [['X', 'X', 'X', 'X'], ['X', 'O', 'O', 'X'], ['X', 'X', 'O',
+//             'X'], ['X', 'O', 'X', 'X']]
+//     Output: [['X', 'X', 'X', 'X'], ['X', 'X', 'X', 'X'], ['X', 'X', 'X', 'X'],
+//             ['X', 'O', 'X', 'X']]
+//     Explanation:
+//       - Phase 1 scans top and bottom rows and calls markBorderConnected on (3, 1)
+//         == 'O', marking it as '#' (neighbor (2, 1) is 'X', so DFS stops).
+//       - Phase 2 checks left and right border columns for rows 1..2, all of which
+//         are 'X', leaving interior cells (1, 1), (1, 2), and (2, 2) as 'O'.
+//       - Phase 3 sweeps the 4x4 grid, flipping unreached 'O's at (1, 1), (1, 2),
+//         and (2, 2) to 'X' and restoring '#' at (3, 1) back to 'O'.
+//
+//   Example 2:
+//     Input:  board = [['X', 'O', 'X'], ['X', 'O', 'X'], ['X', 'O', 'X']]
+//     Output: [['X', 'O', 'X'], ['X', 'O', 'X'], ['X', 'O', 'X']]
+//     Explanation:
+//       - Phase 1 encounters border cell (0, 1) == 'O' and invokes
+//         markBorderConnected.
+//       - DFS traverses downward along column 1 and marks (0, 1), (1, 1), and (2,
+//         1) as '#'.
+//       - Phase 3 restores all three '#' cells back to 'O', leaving board
+//         unchanged.
+//
+//   Example 3:
+//     Input:  board = [['O']]
+//     Output: [['O']]
+//     Explanation:
+//       - With rows = 1 and cols = 1, Phase 1 runs markBorderConnected at (0, 0)
+//         and marks it '#'.
+//       - Phase 2 skips the interior column loop (1 < 0 is false), and Phase 3
+//         restores '#' at (0, 0) back to 'O'.
+//
 // Algorithm:
 //   Reverse-thinking border-seeded Depth-First Search (DFS) flood fill.
 //   Instead of testing whether every interior 'O' component reaches the border,

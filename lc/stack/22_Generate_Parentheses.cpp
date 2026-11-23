@@ -5,6 +5,43 @@
 //   Given an integer `n` representing `n` pairs of parentheses, generate all
 //   combinations of well-formed (balanced) parentheses of length `2 * n`.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3
+//     Output: ["((()))", "(()())", "(())()", "()(())", "()()()"]
+//     Explanation:
+//       - dfs(3, 3) starts with empty current; because Branch 1 ('(') always
+//         precedes Branch 2 (')'), the leftmost DFS path pushes three '(' then
+//         three ')' to emit "((()))".
+//       - Backtracking to open_rem = 1, close_rem = 3 (current = "((") takes Branch
+//         2 ('(' vs ')' choice) to explore "(()" and emit "(()())", then backtracks
+//         further to emit "(())()".
+//       - Backtracking to open_rem = 2, close_rem = 3 (current = "(") takes Branch
+//         2 to form "()", from which DFS explores "()(())" and "()()()".
+//       - All 5 Catalan combinations of length 6 satisfy 0 <= open_rem <= close_rem
+//         at every prefix and are collected in lexicographical '(' before ')'
+//         order.
+//
+//   Example 2:
+//     Input:  n = 2
+//     Output: ["(())", "()()"]
+//     Explanation:
+//       - dfs(2, 2) pushes '(' twice to reach dfs(0, 2) with current = "(("; since
+//         open_rem == 0 and close_rem > open_rem, it pushes ')' twice and records
+//         "(())".
+//       - Backtracking to dfs(1, 2) with current = "(" takes Branch 2 (close_rem 2
+//         > open_rem 1) to push ')', reaching dfs(1, 1) with current = "()".
+//       - From dfs(1, 1), only Branch 1 (open_rem == 1) is legal, pushing '(' then
+//         ')' to reach dfs(0, 0) and record "()()".
+//
+//   Example 3:
+//     Input:  n = 0
+//     Output: []
+//     Explanation:
+//       - generateParenthesis checks n <= 0 at entry.
+//       - It returns an empty std::vector<std::string> immediately without invoking
+//         dfs.
+//
 // Algorithm:
 //   Use depth-first backtracking with an explicit character stack `current`
 //   and two remaining-budget counters: `open_rem` (number of '(' left to

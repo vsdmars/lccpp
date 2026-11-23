@@ -6,6 +6,40 @@
 //   pick two integers from two *different* arrays to maximize their absolute
 //   difference `|a - b|`. Return this maximum distance.
 //
+// Examples:
+//   Example 1:
+//     Input:  arrays = [[1, 2, 3], [4, 5], [1, 2, 3]]
+//     Output: 4
+//     Explanation:
+//       - Seed min_val = 1, max_val = 3 from arrays[0] = [1, 2, 3], and initialize
+//         best = 0.
+//       - At i = 1 ([4, 5]), compute best = max(0, 5 - 1, 3 - 4) = 4, then update
+//         min_val = 1 and max_val = 5.
+//       - At i = 2 ([1, 2, 3]), compute best = max(4, 3 - 1, 5 - 1) = 4 and keep
+//         min_val = 1, max_val = 5, returning 4.
+//
+//   Example 2:
+//     Input:  arrays = [[1, 10], [2, 3]]
+//     Output: 8
+//     Explanation:
+//       - Seed min_val = 1, max_val = 10 from arrays[0] = [1, 10], and initialize
+//         best = 0.
+//       - At i = 1 ([2, 3]), compare strictly against prior arrays to get best =
+//         max(0, 3 - 1, 10 - 2) = 8, avoiding the invalid same-array difference 10
+//         - 1.
+//       - Update min_val = 1 and max_val = 10, then exit the loop and return 8.
+//
+//   Example 3:
+//     Input:  arrays = [[-10, -5], [-3, 0], [-2, 4]]
+//     Output: 14
+//     Explanation:
+//       - Seed min_val = -10, max_val = -5 from arrays[0] = [-10, -5], and
+//         initialize best = 0.
+//       - At i = 1 ([-3, 0]), update best = max(0, 0 - (-10), -5 - (-3)) = 10, then
+//         update min_val = -10 and max_val = 0.
+//       - At i = 2 ([-2, 4]), update best = max(10, 4 - (-10), 0 - (-2)) = 14,
+//         returning 14.
+//
 // Algorithm:
 //   Because every individual array is already sorted in ascending order, only
 //   its first element (`front()`, minimum) and last element (`back()`, maximum)

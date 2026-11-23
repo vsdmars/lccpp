@@ -7,6 +7,36 @@
 //   absolute differences `[|ans[0] - ans[1]|, |ans[1] - ans[2]|, ...,
 //   |ans[n - 2] - ans[n - 1]|]` contains *exactly* `k` distinct integers.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3, k = 1
+//     Output: [1, 2, 3]
+//     Explanation:
+//       - Compute prefix_end = 3 - 1 - 1 = 1, so Phase 1 appends 1 to result.
+//       - Start Phase 2 with lo = n - k = 2, hi = 3, and pick_low = true; append 2
+//         (lo = 3) and then 3 (hi = 2) before lo <= hi becomes false.
+//       - Adjacent differences in [1, 2, 3] are |2 - 1| = 1 and |3 - 2| = 1, giving
+//         k = 1 distinct difference.
+//
+//   Example 2:
+//     Input:  n = 3, k = 2
+//     Output: [1, 3, 2]
+//     Explanation:
+//       - Compute prefix_end = 3 - 2 - 1 = 0, so Phase 1 appends no prefix
+//         elements.
+//       - Start Phase 2 with lo = 3 - 2 = 1, hi = 3, and pick_low = true; alternate
+//         appending 1 (lo = 2), 3 (hi = 2), and 2 (lo = 3).
+//       - Adjacent differences in [1, 3, 2] are |3 - 1| = 2 and |2 - 3| = 1, giving
+//         k = 2 distinct differences.
+//
+//   Example 3:
+//     Input:  n = 2, k = 1
+//     Output: [1, 2]
+//     Explanation:
+//       - Compute prefix_end = 2 - 1 - 1 = 0, leaving Phase 1 empty.
+//       - Run Phase 2 with lo = 1 and hi = 2 to append 1 (lo = 2) followed by 2 (hi
+//         = 1), yielding [1, 2] with single adjacent difference 1.
+//
 // Algorithm:
 //   Constructive Monotonic Prefix + Alternating Zig-Zag Suffix (O(n) time,
 //   O(1) auxiliary space beyond the output array):

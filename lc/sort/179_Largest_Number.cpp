@@ -7,6 +7,37 @@
 //   forms the largest possible number, and return it as a string (without
 //   spurious leading zeros, e.g., [0, 0] returns "0").
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [10, 2]
+//     Output: "210"
+//     Explanation:
+//       - Convert nums to decimal strings parts = ["10", "2"] with total_length =
+//         3.
+//       - Sort parts with (a + b) > (b + a): since "210" > "102", "2" precedes "10"
+//         to give parts = ["2", "10"].
+//       - Verify parts[0] != "0" and concatenate parts into "210".
+//
+//   Example 2:
+//     Input:  nums = [3, 30, 34, 5, 9]
+//     Output: "9534330"
+//     Explanation:
+//       - Convert all elements into parts = ["3", "30", "34", "5", "9"].
+//       - Sort using (a + b) > (b + a): "9" and "5" lead ("95" > "59"), "34"
+//         precedes "3" ("343" > "334"), and "3" precedes "30" ("330" > "303"),
+//         yielding ["9", "5", "34", "3", "30"].
+//       - Confirm parts[0] != "0" and concatenate the sorted strings into
+//         "9534330".
+//
+//   Example 3:
+//     Input:  nums = [0, 0]
+//     Output: "0"
+//     Explanation:
+//       - Convert nums to parts = ["0", "0"] and run std::ranges::sort (leaving
+//         parts as ["0", "0"]).
+//       - Observe parts[0] == "0" and return "0" directly instead of concatenating
+//         "00".
+//
 // Algorithm:
 //   Convert every integer to its base-10 string representation and sort the
 //   strings using a custom strict-weak-ordering comparator:

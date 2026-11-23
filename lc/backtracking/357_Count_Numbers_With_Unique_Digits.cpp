@@ -7,6 +7,41 @@
 //   Constraints: 0 <= n <= 8 (and mathematically valid for any n >= 0 since
 //   no number with more than 10 digits can have all distinct decimal digits).
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 2
+//     Output: 91
+//     Explanation:
+//       - Since n != 0, initialize total = 10 for all single-digit numbers (0..9),
+//         unique_for_len = 9, and available = 9.
+//       - At digits = 2, multiply unique_for_len = 9 * 9 = 81 (9 non-zero leading
+//         digits times 9 remaining digits including 0).
+//       - Add 81 to total to get 10 + 81 = 91, decrement available to 8, and exit
+//         the loop at digits = 2 to return 91.
+//
+//   Example 2:
+//     Input:  n = 3
+//     Output: 739
+//     Explanation:
+//       - Initialize total = 10 for 1-digit numbers, unique_for_len = 9, and
+//         available = 9.
+//       - At digits = 2, compute unique_for_len = 9 * 9 = 81, update total = 10 +
+//         81 = 91, and decrement available to 8.
+//       - At digits = 3, compute unique_for_len = 81 * 8 = 648, update total = 91 +
+//         648 = 739, and return 739.
+//
+//   Example 3:
+//     Input:  n = 11
+//     Output: 8877691
+//     Explanation:
+//       - Start with total = 10, unique_for_len = 9, and available = 9 for 1-digit
+//         numbers.
+//       - For digits = 2 through 10, multiply unique_for_len by available (9 down
+//         to 1) and add 81 + 648 + 4536 + 27216 + 136080 + 544320 + 1632960 +
+//         3265920 + 3265920 to reach total = 8877691.
+//       - After digits = 10, available decrements to 0, so the loop condition
+//         available > 0 terminates before digits = 11 and returns 8877691.
+//
 // Algorithm:
 //   1. Combinatorial Bottom-Up DP (`countNumbersWithUniqueDigits`):
 //      Count valid numbers grouped by exact digit length `k`:

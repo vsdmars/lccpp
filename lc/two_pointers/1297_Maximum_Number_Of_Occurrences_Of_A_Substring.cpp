@@ -12,6 +12,42 @@
 //     - 1 <= maxLetters <= 26
 //     - 1 <= minSize <= maxSize <= min(26, s.length)
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "aababcaab", maxLetters = 2, minSize = 3, maxSize = 4
+//     Output: 2
+//     Explanation:
+//       - Slide a fixed window of length minSize = 3 across s (ignoring maxSize = 4
+//         because any valid length-4 substring has a valid length-3 prefix
+//         occurring at least as often).
+//       - Window [0..2] ("aab") has distinct = 2 <= 2 and sets substr_counts["aab"]
+//         = 1, while [1..3] ("aba"), [2..4] ("bab"), and [5..7] ("caa") each reach
+//         count 1, and [3..5] ("abc") and [4..6] ("bca") are skipped because
+//         distinct = 3 > 2.
+//       - At right = 8, window [6..8] ("aab") has distinct = 2 <= 2 and increments
+//         substr_counts["aab"] to 2, yielding max_occurrences = 2.
+//
+//   Example 2:
+//     Input:  s = "aabcabcab", maxLetters = 2, minSize = 2, maxSize = 3
+//     Output: 3
+//     Explanation:
+//       - Slide a fixed window of length minSize = 2 over s while maintaining
+//         char_freq and distinct in O(1) per character.
+//       - Every 2-character window has at most 2 distinct letters: "ab" appears at
+//         [1..2], [4..5], and [7..8], incrementing substr_counts["ab"] to 1, 2, and
+//         3, while "aa", "bc", and "ca" each occur at most twice.
+//       - The loop finishes with max_occurrences = 3.
+//
+//   Example 3:
+//     Input:  s = "abcde", maxLetters = 2, minSize = 3, maxSize = 3
+//     Output: 0
+//     Explanation:
+//       - Slide a fixed window of length minSize = 3 across "abcde", examining
+//         "abc" at [0..2], "bcd" at [1..3], and "cde" at [2..4].
+//       - Each window has distinct = 3, which exceeds maxLetters = 2, so
+//         substr_counts is never updated.
+//       - Return max_occurrences = 0.
+//
 // Algorithm:
 //   Key greedy observation: If a valid substring T of length L > minSize
 //   occurs f times in `s`, then its length-`minSize` prefix P has at most as

@@ -9,6 +9,54 @@
 //     (the middle value for an odd count, or the average of the two middle
 //     values for an even count).
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["MedianFinder", "addNum", "findMedian", "addNum",
+//             "findMedian", "addNum", "findMedian"], args = [[], [1], [], [2], [],
+//             [3], []]
+//     Output: [null, null, 1.0, null, 1.5, null, 2.0]
+//     Explanation:
+//       - addNum(1) sees lower_.size() == upper_.size() (0 == 0), pushes 1 through
+//         upper_ into lower_ so lower_ = [1] and upper_ = [], and findMedian()
+//         returns lower_.top() = 1.0.
+//       - addNum(2) sees lower_.size() > upper_.size(), pushes 2 to lower_ and
+//         moves lower_.top() = 2 to upper_ so lower_ = [1] and upper_ = [2], and
+//         findMedian() returns (1.0 + 2.0) / 2.0 = 1.5.
+//       - addNum(3) sees equal heap sizes, pushes 3 to upper_ and moves
+//         upper_.top() = 2 to lower_ so lower_ = [2, 1] and upper_ = [3], and
+//         findMedian() returns lower_.top() = 2.0.
+//
+//   Example 2:
+//     Input:  operations = ["MedianFinder", "addNum", "findMedian", "addNum",
+//             "findMedian", "addNum", "findMedian", "addNum", "findMedian",
+//             "addNum", "findMedian"], args = [[], [-1], [], [-2], [], [-3], [],
+//             [-4], [], [-5], []]
+//     Output: [null, null, -1.0, null, -1.5, null, -2.0, null, -2.5, null, -3.0]
+//     Explanation:
+//       - addNum(-1) places -1 into lower_ via upper_ so lower_ = [-1], upper_ =
+//         [], and findMedian() returns -1.0.
+//       - addNum(-2) pushes -2 into lower_ and moves max top -1 into upper_,
+//         leaving lower_ = [-2] and upper_ = [-1] for median (-2.0 + -1.0) / 2.0 =
+//         -1.5.
+//       - addNum(-3) pushes -3 into upper_ and moves min top -3 into lower_, giving
+//         lower_ = [-2, -3] and upper_ = [-1] for median -2.0.
+//       - addNum(-4) transfers -2 from lower_ to upper_ (median -2.5), and
+//         addNum(-5) transfers -5 from upper_ to lower_ so lower_ = [-3, -4, -5]
+//         and upper_ = [-2, -1], returning -3.0.
+//
+//   Example 3:
+//     Input:  operations = ["MedianFinder", "addNum", "addNum", "findMedian"], args
+//             = [[], [-2147483648], [2147483647], []]
+//     Output: [null, null, null, -0.5]
+//     Explanation:
+//       - addNum(-2147483648) balances equal-sized heaps by moving -2147483648
+//         through upper_ into lower_.
+//       - addNum(2147483647) pushes 2147483647 into lower_, where it becomes the
+//         max top and transfers to upper_, leaving lower_ = [-2147483648] and
+//         upper_ = [2147483647].
+//       - findMedian() casts both heap tops to double before adding to avoid 32-bit
+//         signed overflow, returning (-2147483648.0 + 2147483647.0) / 2.0 = -0.5.
+//
 // Algorithm:
 //   Maintain two balanced heaps partitioning all seen numbers into a smaller
 //   half (`lower_`, max-heap) and a larger half (`upper_`, min-heap):

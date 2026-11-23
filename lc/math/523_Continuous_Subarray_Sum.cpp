@@ -9,6 +9,48 @@
 //   Constraints: 1 <= nums.size() <= 10^5, 0 <= nums[i] <= 10^9,
 //   1 <= k <= 2^31 - 1 (legacy inputs with k == 0 are also handled safely).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [23, 2, 4, 6, 7], k = 6
+//     Output: true
+//     Explanation:
+//       - Initialize running_sum = 0, prev_mod = 0, and seen_mods = {} to enforce a
+//         subarray length of at least 2 via delayed insertion.
+//       - At num = 23: running_sum = 23, curr_mod = 23 % 6 = 5 (not in {}), then
+//         insert prev_mod = 0 so seen_mods = {0} and update prev_mod = 5.
+//       - At num = 2: running_sum = 25, curr_mod = 25 % 6 = 1 (not in {0}), then
+//         insert prev_mod = 5 so seen_mods = {0, 5} and update prev_mod = 1.
+//       - At num = 4: running_sum = 29, curr_mod = 29 % 6 = 5 matches 5 in
+//         seen_mods (corresponding to subarray [2, 4] summing to 6), so the
+//         function returns true.
+//
+//   Example 2:
+//     Input:  nums = [23, 2, 6, 4, 7], k = 13
+//     Output: false
+//     Explanation:
+//       - Start with running_sum = 0, prev_mod = 0, and seen_mods = {}.
+//       - Scanning 23, 2, 6, 4, 7 yields running_sum values 23, 25, 31, 35, 42 and
+//         remainders curr_mod = running_sum % 13 equal to 10, 12, 5, 9, 3.
+//       - Before each lookup, seen_mods holds {0}, {0, 10}, {0, 10, 12}, {0, 10,
+//         12, 5}, and {0, 10, 12, 5, 9}, so seen_mods.contains(curr_mod) is false
+//         at every step.
+//       - All elements are processed without a modular collision at distance >= 2,
+//         returning false.
+//
+//   Example 3:
+//     Input:  nums = [10, 0, 0], k = 0
+//     Output: true
+//     Explanation:
+//       - Initialize running_sum = 0, prev_mod = 0, and seen_mods = {}; because k
+//         == 0, curr_mod is set directly to running_sum.
+//       - At num = 10: running_sum = 10, curr_mod = 10 (not in {}), then seen_mods
+//         becomes {0} and prev_mod becomes 10.
+//       - At the first 0: running_sum = 10, curr_mod = 10 is absent from seen_mods
+//         = {0} because prev_mod = 10 was delayed, then seen_mods becomes {0, 10}
+//         and prev_mod = 10.
+//       - At the second 0: running_sum = 10, curr_mod = 10 is found in seen_mods =
+//         {0, 10} (subarray [0, 0] of length 2 sums to 0), returning true.
+//
 // Algorithm:
 //   Prefix sums with modular congruence and delayed hash-set insertion.
 //   Let P[i] be the sum of the first i elements (with P[0] = 0). A subarray

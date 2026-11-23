@@ -6,6 +6,39 @@
 //   square root `floor(sqrt(x))` (the decimal part is truncated) without using
 //   any built-in exponentiation or square-root functions.
 //
+// Examples:
+//   Example 1:
+//     Input:  x = 8
+//     Output: 2
+//     Explanation:
+//       - Skip the `x <= 1` guard and initialize 64-bit `target = 8` and Newton
+//         estimate `r = 8`.
+//       - Iteration 1 sees `8 * 8 = 64 > 8` and updates `r = (8 + 8 / 8) / 2 = 4`.
+//       - Iteration 2 sees `4 * 4 = 16 > 8` and updates `r = (4 + 8 / 4) / 2 = 3`.
+//       - Iteration 3 sees `3 * 3 = 9 > 8` and updates `r = (3 + 8 / 3) / 2 = 2`.
+//       - Loop terminates because `2 * 2 = 4 <= 8`, returning `2`.
+//
+//   Example 2:
+//     Input:  x = 16
+//     Output: 4
+//     Explanation:
+//       - Skip the `x <= 1` guard and initialize 64-bit `target = 16` and `r = 16`.
+//       - Iteration 1 sees `16 * 16 = 256 > 16` and updates `r = (16 + 16 / 16) / 2
+//         = 8`.
+//       - Iteration 2 sees `8 * 8 = 64 > 16` and updates `r = (8 + 16 / 8) / 2 =
+//         5`.
+//       - Iteration 3 sees `5 * 5 = 25 > 16` and updates `r = (5 + 16 / 5) / 2 =
+//         4`.
+//       - Loop terminates because `4 * 4 = 16 <= 16`, returning `4`.
+//
+//   Example 3:
+//     Input:  x = 0
+//     Output: 0
+//     Explanation:
+//       - Check the early-return guard `if (x <= 1)` for `x = 0`.
+//       - Since `0 <= 1` holds, bypass the Newton iteration loop and return `0`
+//         directly.
+//
 // Algorithm:
 //   Integer Newton-Raphson (Heron's / Babylonian) method for finding the
 //   positive root of `f(r) = r^2 - x = 0`. Starting from an upper bound

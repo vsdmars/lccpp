@@ -7,6 +7,43 @@
 //   can be trapped after raining. Water flows 4-directionally and leaks off
 //   the outer boundary of the grid.
 //
+// Examples:
+//   Example 1:
+//     Input:  heightMap = [[1, 4, 3, 1, 3, 2], [3, 2, 1, 3, 2, 4], [2, 3, 3, 2, 3,
+//             1]]
+//     Output: 4
+//     Explanation:
+//       - seed_boundary marks all 14 outer perimeter cells visited and pushes them
+//         into the min-heap.
+//       - Perimeter cells of height 1 and 2 pop first; only (1, 3) = 3 is
+//         discovered from (1, 0, 3) with 0 trapped water and pushed as (3, 1, 3).
+//       - When (3, 0, 2) pops, it visits (1, 2) = 1, traps 3 - 1 = 2 units of
+//         water, and pushes effective wall (3, 1, 2).
+//       - Expanding (3, 1, 2) visits (1, 1) = 2 (traps 3 - 2 = 1) and expanding (3,
+//         1, 3) visits (1, 4) = 2 (traps 3 - 2 = 1), giving total trapped water 2 +
+//         1 + 1 = 4.
+//
+//   Example 2:
+//     Input:  heightMap = [[9, 9, 9, 9], [9, 1, 2, 5], [9, 9, 9, 9]]
+//     Output: 7
+//     Explanation:
+//       - seed_boundary inserts all 10 perimeter cells: one cell (1, 3) at height 5
+//         and nine cells at height 9.
+//       - The lowest boundary cell (5, 1, 3) pops first and visits (1, 2) = 2,
+//         trapping 5 - 2 = 3 units and pushing (5, 1, 2).
+//       - Popping (5, 1, 2) visits (1, 1) = 1, trapping 5 - 1 = 4 units and pushing
+//         (5, 1, 1).
+//       - All interior cells are now visited, so remaining pops find no unvisited
+//         neighbors and return 3 + 4 = 7.
+//
+//   Example 3:
+//     Input:  heightMap = [[5, 1, 5], [5, 1, 5]]
+//     Output: 0
+//     Explanation:
+//       - Check grid dimensions: height_map.size() is 2, which is less than 3.
+//       - The early-return guard triggers immediately because every cell lies on
+//         the outer boundary, returning 0.
+//
 // Algorithm:
 //   Multi-source Best-First Search (Priority-Flood / Dijkstra-style boundary
 //   contraction) using a min-heap:

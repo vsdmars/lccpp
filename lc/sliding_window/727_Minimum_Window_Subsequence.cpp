@@ -8,6 +8,45 @@
 //   adjacent). If no such substring exists, return the empty string `""`. If
 //   multiple substrings share the minimum length, return the left-most one.
 //
+// Examples:
+//   Example 1:
+//     Input:  s1 = "abcdebdde", s2 = "bde"
+//     Output: "bcde"
+//     Explanation:
+//       - From search_from = 0, the forward scan matches 'b' at 1, 'd' at 3, and
+//         'e' at 4, setting window_end = 5.
+//       - The backward scan from index 4 matches 'e' at 4, 'd' at 3, and 'b' at 1,
+//         tightening the candidate to [1, 5) ("bcde", length 4) and advancing
+//         search_from to 1 + 1 = 2.
+//       - From search_from = 2, the forward scan matches 'b' at 5, 'd' at 6, and
+//         'e' at 8 (window_end = 9), and the backward scan tightens to [5, 9)
+//         ("bdde", length 4).
+//       - Since window_len < best_len (4 < 4) is false, the left-most match "bcde"
+//         is kept, and advancing search_from = 6 fails to find 'b', returning
+//         "bcde".
+//
+//   Example 2:
+//     Input:  s1 = "abbbbcabbc", s2 = "abc"
+//     Output: "abbc"
+//     Explanation:
+//       - From search_from = 0, the forward scan matches 'a' at 0, 'b' at 1, and
+//         'c' at 5 (window_end = 6), and the backward scan matches 'c' at 5, 'b' at
+//         4, and 'a' at 0 to record [0, 6) ("abbbbc", length 6).
+//       - Advancing search_from to back_pos + 1 = 1 lets the next forward scan find
+//         'a' at 6, 'b' at 7, and 'c' at 9 (window_end = 10).
+//       - The backward scan from index 9 matches 'c' at 9, 'b' at 8, and 'a' at 6,
+//         tightening the window to [6, 10) ("abbc", length 4 < 6) and updating
+//         best_start = 6, best_len = 4 before search_from = 7 finds no more 'a'.
+//
+//   Example 3:
+//     Input:  s1 = "jmeqksfrsdcmsiwvaovztaqenprpvnbstl", s2 = "u"
+//     Output: ""
+//     Explanation:
+//       - Starting at search_from = 0, the forward scan calls s1.find('u', 0),
+//         which returns std::string_view::npos because 'u' does not appear in s1.
+//       - Setting matched = false exits the loop immediately with best_len still 0,
+//         so minWindow returns "".
+//
 // Algorithm:
 //   Two-pointer forward-and-backward ("pinch / squeeze") search:
 //     1. Forward pass: starting from `search_from`, scan greedily through `s1`

@@ -7,6 +7,38 @@
 //   values in the BST. Returns -1 defensively if `root` is null or `k` is out
 //   of range.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 1, 4, null, 2], k = 2
+//     Output: 2
+//     Explanation:
+//       - kthSmallest seeds stack with the left spine from 3, leaving stack = [3,
+//         1].
+//       - First iteration pops 1; since k = 2 != 1, k decrements to 1 and 1's right
+//         child 2 is pushed onto stack = [3, 2].
+//       - Second iteration pops 2; since k == 1, the function returns 2 immediately
+//         without visiting 3 or 4.
+//
+//   Example 2:
+//     Input:  root = [5, 3, 6, 2, 4, null, null, 1], k = 3
+//     Output: 3
+//     Explanation:
+//       - The initial left-spine descent pushes [5, 3, 2, 1] onto stack.
+//       - First pop visits 1 (k becomes 2, null right child), and second pop visits
+//         2 (k becomes 1, null right child).
+//       - Third pop visits 3 with k == 1, returning 3 immediately without
+//         traversing nodes 4, 5, or 6.
+//
+//   Example 3:
+//     Input:  root = [5], k = 5
+//     Output: -1
+//     Explanation:
+//       - stack is seeded with the single node [5].
+//       - Popping 5 checks k == 1 (false), decrements k to 4, and finds no right
+//         child, leaving stack empty.
+//       - The loop terminates without reaching k == 1 and returns the defensive
+//         sentinel -1.
+//
 // Algorithm:
 //   Because an inorder traversal (Left -> Node -> Right) of a BST yields values
 //   in strictly ascending order, the k-th visited node is the k-th smallest

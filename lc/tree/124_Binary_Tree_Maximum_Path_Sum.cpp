@@ -8,6 +8,44 @@
 //   path does not need to pass through the root and does not need to end at
 //   leaf nodes. Node values may be negative.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3]
+//     Output: 6
+//     Explanation:
+//       - Initialize best_sum = INT_MIN and start postorder traversal max_gain(1).
+//       - Left leaf 2 has left_gain = 0 and right_gain = 0, updating best_sum =
+//         max(INT_MIN, 2 + 0 + 0) = 2 and returning 2 to node 1.
+//       - Right leaf 3 has left_gain = 0 and right_gain = 0, updating best_sum =
+//         max(2, 3 + 0 + 0) = 3 and returning 3 to node 1.
+//       - At root 1, left_gain = max(0, 2) = 2 and right_gain = max(0, 3) = 3 give
+//         path_through_node = 1 + 2 + 3 = 6, updating best_sum = 6 and returning 6.
+//
+//   Example 2:
+//     Input:  root = [-10, 9, 20, null, null, 15, 7]
+//     Output: 42
+//     Explanation:
+//       - Visit leaf 9 (updates best_sum = 9, returns 9), then in subtree 20 visit
+//         leaves 15 (updates best_sum = 15, returns 15) and 7 (7 < 15, returns 7).
+//       - At node 20, left_gain = 15 and right_gain = 7 yield path_through_node =
+//         20 + 15 + 7 = 42, updating best_sum = 42 and returning single-branch gain
+//         20 + max(15, 7) = 35.
+//       - At root -10, left_gain = 9 and right_gain = 35 yield path_through_node =
+//         -10 + 9 + 35 = 34, which does not beat best_sum = 42, so maxPathSum
+//         returns 42.
+//
+//   Example 3:
+//     Input:  root = [-10, -20, -5]
+//     Output: -5
+//     Explanation:
+//       - Initialize best_sum = INT_MIN and evaluate leaves -20 (best_sum = -20,
+//         returns -20) and -5 (best_sum = max(-20, -5) = -5, returns -5).
+//       - At root -10, clamp both negative child returns with std::max(0, ...) to
+//         left_gain = 0 and right_gain = 0 so path_through_node = -10 + 0 + 0 =
+//         -10.
+//       - Since -10 <= best_sum (-5), best_sum remains -5 and maxPathSum returns
+//         -5.
+//
 // Algorithm:
 //   Solve with bottom-up postorder tree dynamic programming (DFS):
 //     - Every valid path in a tree has a unique highest node (lowest common

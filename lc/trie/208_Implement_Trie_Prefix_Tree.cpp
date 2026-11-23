@@ -12,6 +12,56 @@
 //   Typical constraints: 1 <= word.length, prefix.length <= 2000; up to
 //   3 * 10^4 total calls across all three methods.
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["Trie", "insert", "search", "search", "startsWith",
+//             "insert", "search"], args = [[], ["apple"], ["apple"], ["app"],
+//             ["app"], ["app"], ["app"]]
+//     Output: [null, null, true, false, true, null, true]
+//     Explanation:
+//       - Trie() allocates root node 0 in nodes_, and insert("apple") creates nodes
+//         1 through 5 along 'a'->'p'->'p'->'l'->'e' with nodes_[5].is_end = true.
+//       - search("apple") follows nodes 0 -> 1 -> 2 -> 3 -> 4 -> 5 via find_node
+//         and returns true because nodes_[5].is_end is true.
+//       - search("app") reaches node 3 where is_end is false and returns false,
+//         whereas startsWith("app") returns true because find_node("app") succeeds.
+//       - insert("app") traverses existing nodes 0 -> 1 -> 2 -> 3 and sets
+//         nodes_[3].is_end = true, making the final search("app") return true.
+//
+//   Example 2:
+//     Input:  operations = ["Trie", "insert", "insert", "search", "startsWith",
+//             "search", "startsWith", "search", "search", "startsWith"], args =
+//             [[], ["hello"], ["world"], ["a"], ["a"], ["hello"], ["hel"], ["hel"],
+//             ["world"], ["worlds"]]
+//     Output: [null, null, null, false, false, true, true, false, true, false]
+//     Explanation:
+//       - Inserting "hello" and "world" builds two separate branches under root 0
+//         at children['h' - 'a'] and children['w' - 'a'], marking the final 'o' and
+//         'd' nodes with is_end = true.
+//       - search("a") and startsWith("a") find nodes_[0].children[0] == kNoChild
+//         and return false.
+//       - search("hello") reaches the terminal 'o' node and returns true, while
+//         startsWith("hel") succeeds at the first 'l' node (true) and search("hel")
+//         returns false because is_end is false there.
+//       - search("world") returns true at the terminal 'd' node, whereas
+//         startsWith("worlds") hits kNoChild on 's' from that node and returns
+//         false.
+//
+//   Example 3:
+//     Input:  operations = ["Trie", "search", "startsWith", "insert", "insert",
+//             "search", "startsWith", "search", "startsWith"], args = [[], ["a"],
+//             ["a"], ["a"], ["a"], ["a"], ["a"], ["ab"], ["ab"]]
+//     Output: [null, false, false, null, null, true, true, false, false]
+//     Explanation:
+//       - Initially root 0 has all child slots set to kNoChild, so search("a") and
+//         startsWith("a") return false.
+//       - The first insert("a") allocates node 1 at nodes_[0].children[0] with
+//         is_end = true, and the second insert("a") traverses the same slot
+//         idempotently.
+//       - search("a") and startsWith("a") both locate node 1 and return true.
+//       - search("ab") and startsWith("ab") reach node 1 on 'a' and then encounter
+//         nodes_[1].children[1] == kNoChild for 'b', returning false.
+//
 // Algorithm:
 //   Store the trie in a contiguous flat arena (`std::vector<Node>`) where node
 //   index 0 is always the root. Because no valid edge ever points back to the

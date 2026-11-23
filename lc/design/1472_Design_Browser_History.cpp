@@ -10,6 +10,61 @@
 //     - `forward(steps)`: move at most `steps` pages forward in history and
 //       return the resulting current URL.
 //
+// Examples:
+//   Example 1:
+//     Input:  ["BrowserHistory", "visit", "visit", "visit", "back", "back",
+//             "forward", "visit", "forward", "back", "back"], [["leetcode.com"],
+//             ["google.com"], ["facebook.com"], ["youtube.com"], [1], [1], [1],
+//             ["linkedin.com"], [2], [2], [7]]
+//     Output: [null, null, null, null, "facebook.com", "google.com",
+//             "facebook.com", null, "linkedin.com", "google.com", "leetcode.com"]
+//     Explanation:
+//       - Construction pushes `"leetcode.com"` at index `0`, and three `visit`
+//         calls append `"google.com"`, `"facebook.com"`, and `"youtube.com"`,
+//         setting `current_ = 3` and `last_valid_ = 3`.
+//       - `back(1)` moves `current_` to `2` (`"facebook.com"`), `back(1)` moves
+//         `current_` to `1` (`"google.com"`), and `forward(1)` moves `current_` to
+//         `2` (`"facebook.com"`).
+//       - `visit("linkedin.com")` increments `current_` to `3`, overwrites
+//         `history_[3]` in place, and sets `last_valid_ = 3` to discard
+//         `"youtube.com"`.
+//       - `forward(2)` clamps `min(3, 3 + 2) = 3` (`"linkedin.com"`), `back(2)`
+//         moves `current_` to `1` (`"google.com"`), and `back(7)` clamps `7 >= 1`
+//         to `0` (`"leetcode.com"`).
+//
+//   Example 2:
+//     Input:  ["BrowserHistory", "back", "back", "forward", "forward"],
+//             [["home.dev"], [1], [100], [1], [100]]
+//     Output: [null, "home.dev", "home.dev", "home.dev", "home.dev"]
+//     Explanation:
+//       - Initializing with `"home.dev"` sets `history_ = ["home.dev"]`, `current_
+//         = 0`, and `last_valid_ = 0`.
+//       - Both `back(1)` and `back(100)` trigger `step_count >= current_`, clamping
+//         `current_` to `0` without unsigned underflow and returning `"home.dev"`.
+//       - Both `forward(1)` and `forward(100)` evaluate `min(0, 0 + step_count) =
+//         0`, keeping `current_` at `0` and returning `"home.dev"`.
+//
+//   Example 3:
+//     Input:  ["BrowserHistory", "visit", "visit", "visit", "back", "visit",
+//             "forward", "back", "forward", "visit", "visit", "visit", "back",
+//             "forward"], [["a.com"], ["b.com"], ["c.com"], ["d.com"], [10],
+//             ["x.com"], [5], [1], [1], ["y.com"], ["z.com"], ["w.com"], [2], [10]]
+//     Output: [null, null, null, null, "a.com", null, "x.com", "a.com", "x.com",
+//             null, null, null, "y.com", "w.com"]
+//     Explanation:
+//       - Visiting `"b.com"`, `"c.com"`, and `"d.com"` grows `history_` to size `4`
+//         (`last_valid_ = 3`), and `back(10)` rewinds `current_` to `0`
+//         (`"a.com"`).
+//       - `visit("x.com")` overwrites `history_[1]` and sets `last_valid_ = 1`,
+//         logically truncating `"c.com"` and `"d.com"` so `forward(5)` clamps at
+//         `1` (`"x.com"`).
+//       - `back(1)` and `forward(1)` step between index `0` (`"a.com"`) and index
+//         `1` (`"x.com"`).
+//       - Subsequent visits overwrite indices `2` (`"y.com"`) and `3` (`"z.com"`)
+//         and append `"w.com"` at index `4`, updating `last_valid_ = 4` so
+//         `back(2)` lands at `2` (`"y.com"`) and `forward(10)` clamps to `4`
+//         (`"w.com"`).
+//
 // Algorithm:
 //   Store visited URLs in a contiguous `std::vector<std::string> history_`
 //   alongside two indices: `current_` (the active page) and `last_valid_` (the

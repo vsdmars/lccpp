@@ -6,6 +6,43 @@
 //   with non-negative integer values, return the minimum absolute difference
 //   between the values of any two distinct nodes in the tree.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, null, 3, 2]
+//     Output: 1
+//     Explanation:
+//       - Iterative in-order traversal seeds the stack with the leftmost spine from
+//         root 1: st = [1].
+//       - Pop 1 (prev_node becomes 1), then push 1->right (3) and its left child 2
+//         so st = [3, 2].
+//       - Pop 2, update min_diff = |2 - 1| = 1, and set prev_node = 2.
+//       - Pop 3, check |3 - 2| = 1 (min_diff stays 1), and return 1 when the stack
+//         is empty.
+//
+//   Example 2:
+//     Input:  root = [236, 104, 701, null, 227, null, 911]
+//     Output: 9
+//     Explanation:
+//       - Seed the stack with the leftmost spine [236, 104], then pop 104 (setting
+//         prev_node = 104) and push its right child 227.
+//       - Pop 227, compute |227 - 104| = 123 (min_diff = 123), and set prev_node =
+//         227.
+//       - Pop 236 and compare with its adjacent in-order predecessor 227: |236 -
+//         227| = 9 lowers min_diff to 9.
+//       - Continue in-order to 701 (|701 - 236| = 465) and 911 (|911 - 701| = 210),
+//         returning min_diff = 9.
+//
+//   Example 3:
+//     Input:  root = [5, 5]
+//     Output: 0
+//     Explanation:
+//       - Seed the stack along the leftmost spine from root 5: st = [5 (root), 5
+//         (left)].
+//       - Pop the left child 5 first; since prev_node is nullptr, set prev_node =
+//         5.
+//       - Pop the root 5 next, compute |5 - 5| = 0 to update min_diff = 0, and
+//         return 0.
+//
 // Algorithm:
 //   Two complementary O(n) algorithms are implemented (matching both the
 //   primary and `review()` solutions in the Python reference):

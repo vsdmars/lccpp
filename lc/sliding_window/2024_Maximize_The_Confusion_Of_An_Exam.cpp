@@ -10,6 +10,46 @@
 //   Constraints: 1 <= answerKey.length <= 5 * 10^4,
 //   answerKey[i] in {'T', 'F'}, 1 <= k <= answerKey.length.
 //
+// Examples:
+//   Example 1:
+//     Input:  answerKey = "TTFF", k = 2
+//     Output: 4
+//     Explanation:
+//       - Run maxWindowWithFlips("TTFF", 'T', 2) to maximize 'F's: remaining_flips
+//         drops 2 -> 1 -> 0 on "TT" and stays 0 on "FF", leaving left = 0 and
+//         length 4 - 0 = 4.
+//       - Run maxWindowWithFlips("TTFF", 'F', 2) to maximize 'T's: remaining_flips
+//         stays 2 on "TT" and drops 2 -> 1 -> 0 on "FF", leaving left = 0 and
+//         length 4 - 0 = 4.
+//       - Return std::max(4, 4) = 4.
+//
+//   Example 2:
+//     Input:  answerKey = "TTFTTFTT", k = 1
+//     Output: 5
+//     Explanation:
+//       - Run maxWindowWithFlips("TTFTTFTT", 'T', 1) to count consecutive 'F's:
+//         remaining_flips drops below 0 at index 1 and later 'T's advance left to
+//         6, yielding 8 - 6 = 2.
+//       - Run maxWindowWithFlips("TTFTTFTT", 'F', 1) to count consecutive 'T's:
+//         remaining_flips hits 0 at index 2 ('F'), allowing window [0..4] ("TTFTT")
+//         of length 5.
+//       - At indices 5..7 ('F', 'T', 'T'), remaining_flips drops to -1 and left
+//         advances through indices 0, 1, and 2 (where 'F' restores remaining_flips
+//         to 0), ending at left = 3.
+//       - Return std::max(2, 8 - 3) = 5.
+//
+//   Example 3:
+//     Input:  answerKey = "TTFTTFTT", k = 0
+//     Output: 2
+//     Explanation:
+//       - With flip_char = 'T' and k = 0, every 'T' shifts left forward except
+//         across 'F's at indices 2 and 5, finishing at left = 7 for length 8 - 7 =
+//         1.
+//       - With flip_char = 'F' and k = 0, remaining_flips becomes -1 at indices 2
+//         and 5 while advancing left restores it at indices 2 and 5, finishing at
+//         left = 6 for length 8 - 6 = 2.
+//       - Return std::max(1, 2) = 2 (matching the longest unflipped run "TT").
+//
 // Algorithm:
 //   Run a non-shrinking sliding window twice — once treating `'T'` as the
 //   character to flip (producing a run of `'F'`s) and once treating `'F'` as

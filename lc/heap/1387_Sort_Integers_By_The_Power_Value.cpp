@@ -9,6 +9,39 @@
 //   all integers in `[lo, hi]` by ascending power value (breaking ties by
 //   ascending integer value) and return the 1-indexed `k`-th integer.
 //
+// Examples:
+//   Example 1:
+//     Input:  lo = 12, hi = 15, k = 2
+//     Output: 13
+//     Explanation:
+//       - Compute memoized Collatz powers for [12, 15]: power(12) = 9, power(13) =
+//         9 (reusing memo[10] = 6), power(14) = 17 (reusing memo[13] = 9), and
+//         power(15) = 17 (reusing memo[40] = 8).
+//       - Build the min-heap in O(M) from [(9, 12), (9, 13), (17, 14), (17, 15)],
+//         ordered by (power, value) ascending.
+//       - Pop k - 1 = 1 time to remove (9, 12), leaving (9, 13) at the heap top,
+//         and return 13.
+//
+//   Example 2:
+//     Input:  lo = 7, hi = 11, k = 4
+//     Output: 7
+//     Explanation:
+//       - Evaluate memoized power values over [7, 11]: power(7) = 16, power(8) = 3,
+//         power(9) = 19, power(10) = 6, and power(11) = 14.
+//       - Heapify the entries into a min-heap ordered by (power, value): [(3, 8),
+//         (6, 10), (14, 11), (16, 7), (19, 9)].
+//       - Pop k - 1 = 3 times to discard (3, 8), (6, 10), and (14, 11), then return
+//         min_heap.top().value = 7.
+//
+//   Example 3:
+//     Input:  lo = 1, hi = 1, k = 1
+//     Output: 1
+//     Explanation:
+//       - Initialize memo[1] = 0 so compute_power(1) hits the hash map immediately
+//         and returns 0.
+//       - Build a single-element min-heap containing PowerEntry{power=0, value=1},
+//         perform 0 pops (k - 1 = 0), and return 1.
+//
 // Algorithm:
 //   Top-Down Memoized Collatz Computation + Min-Heap Selection:
 //   1. Compute `power(x)` recursively with a hash map memo table initialized

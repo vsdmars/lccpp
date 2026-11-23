@@ -9,6 +9,46 @@
 //   `word1` and `word2` are guaranteed to be distinct and present in
 //   `wordsDict`.
 //
+// Examples:
+//   Example 1:
+//     Input:  WordDistance(["practice", "makes", "perfect", "coding", "makes"]),
+//             queries: shortest("coding", "practice"), shortest("makes", "coding")
+//     Output: [3, 1]
+//     Explanation:
+//       - Constructor populates sorted index vectors in positions_: "practice" ->
+//         [0], "makes" -> [1, 4], "perfect" -> [2], and "coding" -> [3].
+//       - For shortest("coding", "practice"), pointers i = 0, j = 0 compare idx1 =
+//         [3] and idx2 = [0]; since 0 < 3, min_dist becomes 3 - 0 = 3 and j
+//         advances to 1, returning 3.
+//       - For shortest("makes", "coding"), pointers i = 0, j = 0 compare idx1 = [1,
+//         4] and idx2 = [3]; since 1 < 3, min_dist becomes 3 - 1 = 2 and i advances
+//         to 1.
+//       - At i = 1, j = 0, idx2[0] = 3 < idx1[1] = 4 tightens min_dist to min(2, 4
+//         - 3) = 1 and triggers the early return of 1.
+//
+//   Example 2:
+//     Input:  WordDistance(["a", "x", "x", "b", "c", "a", "b"]), query:
+//             shortest("x", "c")
+//     Output: 2
+//     Explanation:
+//       - Constructor indexes sorted occurrences in positions_, including "x" ->
+//         [1, 2] and "c" -> [4].
+//       - Start two-pointer merge with i = 0, j = 0; since idx1[0] = 1 < idx2[0] =
+//         4, update min_dist = 4 - 1 = 3 and advance i to 1.
+//       - At i = 1, j = 0, idx1[1] = 2 < idx2[0] = 4 tightens min_dist to min(3, 4
+//         - 2) = 2 and advances i to 2, ending the loop and returning 2.
+//
+//   Example 3:
+//     Input:  WordDistance(["start", "mid", "mid", "mid", "mid", "end"]), query:
+//             shortest("start", "end")
+//     Output: 5
+//     Explanation:
+//       - Constructor records "start" -> [0], "mid" -> [1, 2, 3, 4], and "end" ->
+//         [5].
+//       - At i = 0, j = 0 over idx1 = [0] and idx2 = [5], idx1[0] = 0 < idx2[0] = 5
+//         sets min_dist = 5 - 0 = 5 and advances i to 1, terminating the merge and
+//         returning 5.
+//
 // Algorithm:
 //   Precompute an inverted index in the constructor mapping each unique word
 //   to the list of positions where it appears. Because we scan `wordsDict`

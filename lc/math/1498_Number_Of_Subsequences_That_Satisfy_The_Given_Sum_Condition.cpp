@@ -8,6 +8,45 @@
 //   `target`. Because the count may be very large, return it modulo 10^9 + 7.
 //   Constraints: 1 <= nums.length <= 10^5, 1 <= nums[i], target <= 10^6.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 5, 6, 7], target = 9
+//     Output: 4
+//     Explanation:
+//       - Sort a copy of nums to [3, 5, 6, 7], precompute pow2 = [1, 2, 4, 8], and
+//         initialize left = 0, right = 3, result = 0.
+//       - At left = 0, right = 3, sorted[0] + sorted[3] = 3 + 7 = 10 > 9, so
+//         decrement right to 2.
+//       - At left = 0, right = 2, sorted[0] + sorted[2] = 3 + 6 = 9 <= 9, so add
+//         pow2[2 - 0] = 4 to result (result = 4) and increment left to 1.
+//       - At left = 1, right = 2, sorted[1] + sorted[2] = 5 + 6 = 11 > 9,
+//         decrementing right to 1; at left = 1, right = 1, 5 + 5 = 10 > 9
+//         decrements right to 0, ending the loop and returning 4.
+//
+//   Example 2:
+//     Input:  nums = [3, 3, 6, 8], target = 10
+//     Output: 6
+//     Explanation:
+//       - Sort nums to [3, 3, 6, 8], precompute pow2 = [1, 2, 4, 8], and start with
+//         left = 0, right = 3, result = 0.
+//       - At left = 0, right = 3, 3 + 8 = 11 > 10, so decrement right to 2.
+//       - At left = 0, right = 2, 3 + 6 = 9 <= 10, so add pow2[2] = 4 (result = 4)
+//         and advance left to 1.
+//       - At left = 1, right = 2, 3 + 6 = 9 <= 10, so add pow2[1] = 2 (result = 6)
+//         and advance left to 2; at left = 2, right = 2, 6 + 6 = 12 > 10 decrements
+//         right to 1 and exits, returning 6.
+//
+//   Example 3:
+//     Input:  nums = [5, 6, 7], target = 9
+//     Output: 0
+//     Explanation:
+//       - Sort nums to [5, 6, 7], precompute pow2 = [1, 2, 4], and initialize left
+//         = 0, right = 2, result = 0.
+//       - At left = 0, right = 2, 5 + 7 = 12 > 9 decrements right to 1, and at left
+//         = 0, right = 1, 5 + 6 = 11 > 9 decrements right to 0.
+//       - At left = 0, right = 0, 5 + 5 = 10 > 9 triggers the right == 0 guard to
+//         break out of the loop and return 0.
+//
 // Algorithm:
 //   Key insight: Whether a subsequence satisfies `min + max <= target` depends
 //   only on the chosen multiset of elements, not on their original order in

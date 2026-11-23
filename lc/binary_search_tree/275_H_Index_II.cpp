@@ -8,6 +8,44 @@
 //   The h-index is the maximum value `h` such that the researcher has at least
 //   `h` papers that have each been cited at least `h` times.
 //
+// Examples:
+//   Example 1:
+//     Input:  citations = [0, 1, 3, 5, 6]
+//     Output: 3
+//     Explanation:
+//       - Initialize n = 5 and half-open binary search bounds [left, right) = [0,
+//         5).
+//       - Iteration 1 checks mid = 2 with papers_at_or_above = 5 - 2 = 3; since
+//         citations[2] = 3 >= 3, shrink right = 2.
+//       - Iteration 2 checks mid = 1 with papers_at_or_above = 5 - 1 = 4; since
+//         citations[1] = 1 < 4, advance left = 2.
+//       - Now left == right == 2, so the loop ends and returns n - left = 5 - 2 =
+//         3.
+//
+//   Example 2:
+//     Input:  citations = [1, 2, 100]
+//     Output: 2
+//     Explanation:
+//       - Initialize n = 3 and binary search bounds [left, right) = [0, 3).
+//       - Iteration 1 checks mid = 1 with papers_at_or_above = 3 - 1 = 2; since
+//         citations[1] = 2 >= 2, set right = 1.
+//       - Iteration 2 checks mid = 0 with papers_at_or_above = 3 - 0 = 3; since
+//         citations[0] = 1 < 3, set left = 1.
+//       - Now left == right == 1, so the loop exits and returns n - left = 3 - 1 =
+//         2.
+//
+//   Example 3:
+//     Input:  citations = [0, 0, 0, 0]
+//     Output: 0
+//     Explanation:
+//       - Initialize n = 4 and binary search bounds [left, right) = [0, 4).
+//       - Iteration 1 checks mid = 2 with papers_at_or_above = 4 - 2 = 2; since
+//         citations[2] = 0 < 2, advance left = 3.
+//       - Iteration 2 checks mid = 3 with papers_at_or_above = 4 - 3 = 1; since
+//         citations[3] = 0 < 1, advance left = 4.
+//       - Now left == right == 4, so the loop ends and returns n - left = 4 - 4 =
+//         0.
+//
 // Algorithm:
 //   Binary search for the leftmost index `i` in `[0, n]` such that the suffix
 //   `citations[i .. n - 1]` of length `h = n - i` satisfies

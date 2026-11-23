@@ -9,6 +9,40 @@
 //   Constraints: target.length == arr.length, 1 <= length <= 1000,
 //   1 <= target[i], arr[i] <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  target = [1, 2, 3, 4], arr = [2, 4, 1, 3]
+//     Output: true
+//     Explanation:
+//       - Verify target.size() == arr.size() == 4, then build counts = {1: 1, 2: 1,
+//         3: 1, 4: 1} from target.
+//       - Scan arr = [2, 4, 1, 3], finding each value in counts with positive
+//         remaining count and decrementing counts[2], counts[4], counts[1], and
+//         counts[3] from 1 to 0.
+//       - Finish scanning arr without encountering a missing or exhausted entry and
+//         return true.
+//
+//   Example 2:
+//     Input:  target = [3, 7, 9], arr = [3, 7, 11]
+//     Output: false
+//     Explanation:
+//       - Confirm both arrays have length 3 and populate counts = {3: 1, 7: 1, 9:
+//         1} from target.
+//       - Match arr[0] = 3 (decrementing counts[3] to 0) and arr[1] = 7
+//         (decrementing counts[7] to 0).
+//       - Look up arr[2] = 11 in counts, observe it == counts.end(), and return
+//         false immediately.
+//
+//   Example 3:
+//     Input:  target = [1, 2, 2], arr = [1, 1, 2]
+//     Output: false
+//     Explanation:
+//       - Confirm both arrays have length 3 and tally target into counts = {1: 1,
+//         2: 2}.
+//       - Match arr[0] = 1, decrementing counts[1] from 1 to 0.
+//       - Check arr[1] = 1, find it->second == 0 (no remaining budget for 1), and
+//         return false.
+//
 // Algorithm:
 //   Reversing a 2-element subarray is an adjacent swap, and adjacent swaps
 //   generate every permutation (as in bubble sort). Conversely, reversing a

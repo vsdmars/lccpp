@@ -9,6 +9,40 @@
 //   minimum number of bricks. Passing exactly through a brick seam/edge does
 //   not count as crossing a brick. Return the minimum number of crossed bricks.
 //
+// Examples:
+//   Example 1:
+//     Input:  wall = [[1, 2, 2, 1], [3, 1, 2], [1, 3, 2], [2, 4], [3, 1, 2], [1, 3,
+//             1, 1]]
+//     Output: 2
+//     Explanation:
+//       - Accumulate interior brick seam coordinates per row (excluding each row's
+//         last brick): row 0 adds {1, 3, 5}, row 1 adds {3, 4}, row 2 adds {1, 4},
+//         row 3 adds {2}, row 4 adds {3, 4}, and row 5 adds {1, 4, 5}.
+//       - edge_counts reaches {1: 3, 2: 1, 3: 3, 4: 4, 5: 2}, giving
+//         max_aligned_edges = 4 at x-coordinate 4.
+//       - Subtracting from wall.size() = 6 yields 6 - 4 = 2 crossed bricks along
+//         the vertical cut at x = 4.
+//
+//   Example 2:
+//     Input:  wall = [[2, 3], [1, 1, 3], [2, 1, 2]]
+//     Output: 0
+//     Explanation:
+//       - Accumulating interior prefix widths records seam {2} for row 0, {1, 2}
+//         for row 1, and {2, 3} for row 2.
+//       - edge_counts reaches {1: 1, 2: 3, 3: 1}, so max_aligned_edges = 3 at
+//         x-coordinate 2.
+//       - Since all 3 rows have a seam at x = 2, the minimum crossed bricks is 3 -
+//         3 = 0.
+//
+//   Example 3:
+//     Input:  wall = [[1], [1], [1]]
+//     Output: 3
+//     Explanation:
+//       - Each row has size 1, so the inner loop condition i + 1 < row.size() is
+//         false and no interior seams are recorded.
+//       - edge_counts remains empty with max_aligned_edges = 0, so the cut crosses
+//         all 3 - 0 = 3 bricks.
+//
 // Algorithm:
 //   Minimizing the number of crossed bricks is equivalent to maximizing the
 //   number of interior brick seams aligned at the same horizontal coordinate:

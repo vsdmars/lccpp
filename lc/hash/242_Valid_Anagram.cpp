@@ -8,6 +8,42 @@
 //   Constraints: 1 <= s.length, t.length <= 5 * 10^4; lowercase English letters.
 //   Follow-up: How to adapt if inputs contain arbitrary Unicode code points?
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "anagram", t = "nagaram"
+//     Output: true
+//     Explanation:
+//       - Check `s.size() == t.size()` (both equal `7`) and zero-initialize the
+//         26-element `counts` array.
+//       - In one loop over `i = 0..6`, increment `counts[s[i] - 'a']` and decrement
+//         `counts[t[i] - 'a']`, yielding net balances `'a': 3 - 3 = 0`, `'n': 1 - 1
+//         = 0`, `'g': 1 - 1 = 0`, `'r': 1 - 1 = 0`, and `'m': 1 - 1 = 0`.
+//       - Confirm via `std::ranges::all_of` that all 26 entries in `counts` equal
+//         `0`, returning `true`.
+//
+//   Example 2:
+//     Input:  s = "rat", t = "car"
+//     Output: false
+//     Explanation:
+//       - Verify equal length `3` and allocate the zero-initialized 26-element
+//         `counts` array.
+//       - Scan `i = 0..2` updating `(r, c)`, `(a, a)`, and `(t, r)`, which leaves
+//         `counts['c' - 'a'] = -1` and `counts['t' - 'a'] = +1` while `'r'` and
+//         `'a'` net to `0`.
+//       - Detect nonzero entries in `counts` via `std::ranges::all_of` and return
+//         `false`.
+//
+//   Example 3:
+//     Input:  s = "aacc", t = "ccac"
+//     Output: false
+//     Explanation:
+//       - Verify equal length `4` and scan `i = 0..3` incrementing counts for `s`
+//         and decrementing for `t`.
+//       - After all four positions, `counts['a' - 'a']` is `2 - 1 = +1` and
+//         `counts['c' - 'a']` is `2 - 3 = -1`.
+//       - Since `counts` contains nonzero entries, `std::ranges::all_of` evaluates
+//         to `false`.
+//
 // Algorithm:
 //   1. Lowercase ASCII (`isAnagram`):
 //      First check `s.size() == t.size()`; different lengths cannot be anagrams.

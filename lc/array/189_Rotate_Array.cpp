@@ -6,6 +6,36 @@
 //   in-place, where `k` is non-negative. That is, every element originally at
 //   index `i` moves to index `(i + k) % n`.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3, 4, 5, 6, 7], k = 3
+//     Output: [5, 6, 7, 1, 2, 3, 4]
+//     Explanation:
+//       - Compute shift = 3 % 7 = 3 and place split at nums.begin() + 3.
+//       - Reverse the full array to [7, 6, 5, 4, 3, 2, 1].
+//       - Reverse the first 3 elements [7, 6, 5] to get [5, 6, 7, 4, 3, 2, 1].
+//       - Reverse the remaining 4 elements [4, 3, 2, 1] to yield [5, 6, 7, 1, 2, 3,
+//         4].
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 3], k = 5
+//     Output: [2, 3, 1]
+//     Explanation:
+//       - Normalize k = 5 over length 3 to get effective shift = 5 % 3 = 2 and set
+//         split = nums.begin() + 2.
+//       - Reverse the entire array to [3, 2, 1].
+//       - Reverse the prefix [3, 2] before split to obtain [2, 3, 1].
+//       - Reverse the 1-element suffix [1] from split to end, leaving [2, 3, 1].
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 3, 4], k = 8
+//     Output: [1, 2, 3, 4]
+//     Explanation:
+//       - Pass the initial size/k guard (size 4 > 1 and k = 8 > 0) and compute
+//         shift = 8 % 4 = 0.
+//       - Since shift == 0, return immediately without performing any reversals,
+//         leaving [1, 2, 3, 4] unchanged.
+//
 // Algorithm:
 //   Three-Reversal In-Place Rotation:
 //     First normalize `shift = k % n`; if `n <= 1` or `shift == 0`, the array

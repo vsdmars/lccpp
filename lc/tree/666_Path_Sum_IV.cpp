@@ -11,6 +11,43 @@
 //   Given a valid connected binary tree in this representation, return the sum
 //   of all root-to-leaf path sums.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [113, 215, 221]
+//     Output: 12
+//     Explanation:
+//       - Reverse iteration visits 221 (level 2, col 2, val 1) first; neither child
+//         (3, 3) nor (3, 4) exists, so leaf_count[202] = 1 and subtree_sum[202] = 0
+//         + 0 + 1 * 1 = 1.
+//       - Next, 215 (level 2, col 1, val 5) has no level-3 children (3, 1) or (3,
+//         2), so leaf_count[201] = 1 and subtree_sum[201] = 1 * 5 = 5.
+//       - Finally, root 113 (level 1, col 1, val 3) combines children 201 and 202:
+//         leaf_count[101] = 1 + 1 = 2 and subtree_sum[101] = 5 + 1 + 2 * 3 = 12.
+//
+//   Example 2:
+//     Input:  nums = [112, 212, 223, 322, 433]
+//     Output: 14
+//     Explanation:
+//       - Reverse iteration starts at leaf 433 (level 4, col 3, val 3) with
+//         leaf_count[403] = 1 and subtree_sum[403] = 3, then processes parent 322
+//         (level 3, col 2, val 2) whose left child is 403 to get leaf_count[302] =
+//         1 and subtree_sum[302] = 3 + 0 + 1 * 2 = 5.
+//       - Leaf 223 (level 2, col 2, val 3) has no level-3 children, yielding
+//         leaf_count[202] = 1 and subtree_sum[202] = 3.
+//       - Node 212 (level 2, col 1, val 2) aggregates right child 302 into
+//         leaf_count[201] = 1 and subtree_sum[201] = 0 + 5 + 1 * 2 = 7.
+//       - Root 112 (level 1, col 1, val 2) merges children 201 and 202 to give
+//         leaf_count[101] = 1 + 1 = 2 and subtree_sum[101] = 7 + 3 + 2 * 2 = 14.
+//
+//   Example 3:
+//     Input:  nums = [119]
+//     Output: 9
+//     Explanation:
+//       - Reverse iteration visits the sole node 119 (level 1, col 1, val 9) and
+//         looks up absent child keys 201 and 202, yielding 0 child leaves.
+//       - Clamping child_leaves = 0 with std::max(1, 0) sets leaf_count[101] = 1
+//         and subtree_sum[101] = 0 + 0 + 1 * 9 = 9, which is returned.
+//
 // Algorithm:
 //   Because `nums` is sorted ascending by `(D, P)`, iterating in reverse visits
 //   every node strictly after its left child `(D + 1, 2*P - 1)` and right child

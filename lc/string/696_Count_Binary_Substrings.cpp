@@ -8,6 +8,43 @@
 //   consecutively. Identical substrings occurring at different positions are
 //   counted separately.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "00110011"
+//     Output: 6
+//     Explanation:
+//       - Initialize count = 0, prev_run = 0, curr_run = 1 at index 0 ('0'), then
+//         extend curr_run to 2 at i = 1 ('0') without incrementing count because 2
+//         > 0.
+//       - At i = 2 ('1'), transition sets prev_run = 2 and curr_run = 1 (<= 2,
+//         count = 1), and i = 3 ('1') gives curr_run = 2 (<= 2, count = 2).
+//       - The remaining transitions at i = 4 ('0') and i = 6 ('1') each set
+//         prev_run = 2 and step curr_run through 1 and 2, adding 2 counts per
+//         boundary for a total of 6.
+//
+//   Example 2:
+//     Input:  s = "10101"
+//     Output: 4
+//     Explanation:
+//       - Initialize count = 0, prev_run = 0, and curr_run = 1 at index 0 ('1').
+//       - For each i = 1, 2, 3, 4, s[i] differs from s[i - 1], so each iteration
+//         updates prev_run = 1 and resets curr_run = 1.
+//       - Because curr_run <= prev_run (1 <= 1) holds at all four transitions,
+//         count increments four times and returns 4.
+//
+//   Example 3:
+//     Input:  s = "0001001111"
+//     Output: 4
+//     Explanation:
+//       - Process the initial run "000" (i = 0..2), reaching curr_run = 3 with
+//         prev_run = 0 and count = 0.
+//       - At i = 3 ('1'), transition sets prev_run = 3, curr_run = 1 <= 3 (count =
+//         1); at i = 4 ('0'), transition sets prev_run = 1, curr_run = 1 <= 1
+//         (count = 2), while i = 5 ('0') gives curr_run = 2 > 1.
+//       - At i = 6 ('1'), transition sets prev_run = 2, curr_run = 1 <= 2 (count =
+//         3), and i = 7 ('1') gives curr_run = 2 <= 2 (count = 4), while i = 8, 9
+//         (curr_run = 3, 4 > 2) leave count = 4.
+//
 // Algorithm:
 //   Any valid substring must straddle exactly one transition boundary between a
 //   maximal run of identical bits and the immediately following maximal run of

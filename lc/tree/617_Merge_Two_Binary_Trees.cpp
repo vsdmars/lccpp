@@ -9,6 +9,43 @@
 //   non-null node (and its structure) is used in the merged tree. Both trees
 //   have between 0 and 2,000 nodes with values in [-10^4, 10^4].
 //
+// Examples:
+//   Example 1:
+//     Input:  root1 = [1, 3, 2, 5], root2 = [2, 1, 3, null, 4, null, 7]
+//     Output: [3, 4, 5, 5, 4, null, 7]
+//     Explanation:
+//       - At the root pair (1, 2), both nodes exist so the merged root gets value 1
+//         + 2 = 3.
+//       - Recurse/stack onto left children (3, 1) to produce 3 + 1 = 4, and right
+//         children (2, 3) to produce 2 + 3 = 5.
+//       - Under left child 4, left pair (5, nullptr) creates node 5 + 0 = 5, and
+//         right pair (nullptr, 4) creates node 0 + 4 = 4 (or grafts node 4 directly
+//         in mergeTreesInPlace).
+//       - Under right child 5, left pair (nullptr, nullptr) yields nullptr and
+//         right pair (nullptr, 7) yields 0 + 7 = 7, giving level-order [3, 4, 5, 5,
+//         4, null, 7].
+//
+//   Example 2:
+//     Input:  root1 = [1], root2 = [1, 2]
+//     Output: [2, 2]
+//     Explanation:
+//       - At the root pair (1, 1), sum both values to get merged root value 1 + 1 =
+//         2.
+//       - Left child pair (nullptr, 2) produces node 0 + 2 = 2 (grafted directly
+//         onto root1->left in mergeTreesInPlace).
+//       - Right child pair (nullptr, nullptr) produces nullptr, yielding [2, 2].
+//
+//   Example 3:
+//     Input:  root1 = [-1, -2, null, -3], root2 = [1, null, 2, null, 3]
+//     Output: [0, -2, 2, -3, null, null, 3]
+//     Explanation:
+//       - At the root pair (-1, 1), both nodes overlap so the merged root value is
+//         -1 + 1 = 0.
+//       - On the left side, (node -2, nullptr) preserves root1's left-skewed chain
+//         (-2 with left child -3).
+//       - On the right side, (nullptr, node 2) preserves root2's right-skewed chain
+//         (2 with right child 3), producing [0, -2, 2, -3, null, null, 3].
+//
 // Algorithm:
 //   1. Non-mutating recursive DFS (`mergeTrees`):
 //      Simultaneously traverse `(r1, r2)` in pre-order. If both pointers are

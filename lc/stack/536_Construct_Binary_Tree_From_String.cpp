@@ -8,6 +8,46 @@
 //   `val(left)(right)`. The left child is always constructed before the right
 //   child when present, and an empty string represents an empty tree.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "4(2(3)(1))(6(5))"
+//     Output: [4, 2, 6, 3, 1, 5]
+//     Explanation:
+//       - Parse 4 and push node 4 onto stack, skip '(', parse 2 (stack = [4, 2]),
+//         skip '(', and parse 3 (stack = [4, 2, 3]).
+//       - At the ')' after 3, pop 3 and attach it as 2->left (stack = [4, 2]); then
+//         skip '(', parse 1, and on ')' pop 1 into 2->right.
+//       - On the next ')', pop 2 and attach it as 4->left (stack = [4]).
+//       - Skip '(', parse 6 (stack = [4, 6]), skip '(', parse 5 (stack = [4, 6,
+//         5]), pop 5 on ')' into 6->left, and pop 6 on the final ')' into 4->right.
+//       - Return stack.front() (root 4), whose serialized structure is
+//         "4(2(3)(1))(6(5))" (level-order [4, 2, 6, 3, 1, 5]).
+//
+//   Example 2:
+//     Input:  s = "51(232)(-434)"
+//     Output: [51, 232, -434]
+//     Explanation:
+//       - parse_int reads multi-digit 51 at index 0 and pushes node 51 onto stack
+//         ([51]).
+//       - Skip '(', parse 232 (stack = [51, 232]), and on ')' pop 232 and attach it
+//         as 51->left since 51->left == nullptr.
+//       - Skip '(', parse_int consumes '-' and digits to create node -434 (stack =
+//         [51, -434]), and on ')' pop -434 into 51->right.
+//       - Return root 51, representing [51, 232, -434] ("51(232)(-434)").
+//
+//   Example 3:
+//     Input:  s = "1(2(3(4)))"
+//     Output: [1, 2, null, 3, null, 4]
+//     Explanation:
+//       - Scan left-to-right parsing 1, 2, 3, and 4 across opening '(' delimiters,
+//         pushing each node onto stack ([1, 2, 3, 4]).
+//       - At the first ')', pop 4 and attach it as 3->left since 3->left == nullptr
+//         (stack = [1, 2, 3]).
+//       - At the second ')', pop 3 into 2->left, and at the final ')', pop 2 into
+//         1->left.
+//       - Return root 1, forming the left-skewed chain [1, 2, null, 3, null, 4]
+//         ("1(2(3(4)))") with all right pointers null.
+//
 // Algorithm:
 //   Scan the string left-to-right using an explicit ancestor stack:
 //     - When a signed integer token is encountered, parse its value, allocate

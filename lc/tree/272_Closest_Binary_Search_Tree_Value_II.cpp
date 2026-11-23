@@ -7,6 +7,42 @@
 //   that are closest to `target` (in any order). It is guaranteed that there is
 //   a unique set of `k` closest values.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [4, 2, 5, 1, 3], target = 3.714286, k = 2
+//     Output: [4, 3]
+//     Explanation:
+//       - Walk down from 4 to 2 to 3 against target = 3.714286, populating
+//         pred_stack = [2, 3] (values <= target) and succ_stack = [4] (values >
+//         target).
+//       - Compare top predecessor 3 (|3 - 3.714286| = 0.714286) with top successor
+//         4 (|4 - 3.714286| = 0.285714); append 4 and advance succ_stack by pushing
+//         4->right (5).
+//       - Compare predecessor 3 (0.714286) with successor 5 (1.285714); append 3 to
+//         reach k = 2 values, returning [4, 3] (which sorts to [3, 4]).
+//
+//   Example 2:
+//     Input:  root = [4, 2, 5, 1, 3], target = -10.5, k = 3
+//     Output: [1, 2, 3]
+//     Explanation:
+//       - Walk down the left spine from 4 to 2 to 1; since every node exceeds
+//         -10.5, pred_stack stays empty and succ_stack = [4, 2, 1].
+//       - Pop successor 1 (no right child) and append 1, then pop successor 2 and
+//         push its right child 3 onto succ_stack = [4, 3].
+//       - Pop successor 3 and append it to complete k = 3 values, returning [1, 2,
+//         3].
+//
+//   Example 3:
+//     Input:  root = [4, 2, 5, 1, 3], target = 3.0, k = 3
+//     Output: [3, 2, 4]
+//     Explanation:
+//       - Partition the search path for 3.0 into pred_stack = [2, 3] and succ_stack
+//         = [4].
+//       - Pick 3 first since |3 - 3.0| = 0 <= |4 - 3.0| = 1, then on the tie |2 -
+//         3.0| = 1 <= |4 - 3.0| = 1 pick 2 and push 2->left (1) onto pred_stack.
+//       - Compare predecessor 1 (|1 - 3.0| = 2) against successor 4 (|4 - 3.0| = 1)
+//         and append 4, returning [3, 2, 4] (which sorts to [2, 3, 4]).
+//
 // Algorithm:
 //   1. Lazy Two-Stack Predecessor/Successor Search (primary, answers follow-up):
 //      Maintain two BST iterator stacks initialized along the single root-to-

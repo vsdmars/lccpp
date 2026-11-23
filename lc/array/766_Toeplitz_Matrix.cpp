@@ -7,6 +7,38 @@
 //   top-left to bottom-right contains the same value throughout.
 //   Constraints: 1 <= m, n <= 20; 0 <= matrix[r][c] <= 99.
 //
+// Examples:
+//   Example 1:
+//     Input:  matrix = [[1, 2, 3, 4], [5, 1, 2, 3], [9, 5, 1, 2]]
+//     Output: true
+//     Explanation:
+//       - Determine dimensions rows = 3 and cols = 4, leaving row 0 and column 0 as
+//         diagonal starts.
+//       - At r = 1, verify matrix[1][1] == matrix[0][0] (1 == 1), matrix[1][2] ==
+//         matrix[0][1] (2 == 2), and matrix[1][3] == matrix[0][2] (3 == 3).
+//       - At r = 2, verify matrix[2][1] == matrix[1][0] (5 == 5), matrix[2][2] ==
+//         matrix[1][1] (1 == 1), and matrix[2][3] == matrix[1][2] (2 == 2).
+//       - All interior cells match their immediate top-left neighbors, so return
+//         true.
+//
+//   Example 2:
+//     Input:  matrix = [[1, 2], [2, 2]]
+//     Output: false
+//     Explanation:
+//       - Determine dimensions rows = 2 and cols = 2, starting the nested check at
+//         r = 1, c = 1.
+//       - Compare matrix[1][1] (2) with its top-left neighbor matrix[0][0] (1).
+//       - Since 2 != 1, return false immediately.
+//
+//   Example 3:
+//     Input:  matrix = [[1, 2, 3, 4]]
+//     Output: true
+//     Explanation:
+//       - Determine dimensions rows = 1 and cols = 4.
+//       - The outer loop r from 1 while r < rows does not execute because rows ==
+//         1.
+//       - Every cell in the single row starts a length-1 diagonal, so return true.
+//
 // Algorithm:
 //   Every cell `(r, c)` on a top-left-to-bottom-right diagonal shares the same
 //   diagonal identifier `r - c` and has `(r - 1, c - 1)` as its immediate

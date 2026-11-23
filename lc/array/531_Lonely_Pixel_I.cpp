@@ -7,6 +7,40 @@
 //   pixel is a `'B'` at position `(r, c)` such that row `r` and column `c`
 //   contain no other `'B'` pixels.
 //
+// Examples:
+//   Example 1:
+//     Input:  picture = [['W', 'W', 'B'], ['W', 'B', 'W'], ['B', 'W', 'W']]
+//     Output: 3
+//     Explanation:
+//       - Pass 1 scans the 3x3 grid and tallies black pixels per row and column,
+//         producing `row_black = [1, 1, 1]` and `col_black = [1, 1, 1]`.
+//       - In Pass 2, row `0` has `row_black[0] == 1` with `'B'` at `(0, 2)` and
+//         `col_black[2] == 1`, incrementing `lonely` to `1`.
+//       - Rows `1` and `2` also satisfy `row_black[r] == 1` with their `'B'` pixels
+//         at `(1, 1)` and `(2, 0)` having `col_black[1] == 1` and `col_black[0] ==
+//         1`, bringing `lonely` to `3`.
+//
+//   Example 2:
+//     Input:  picture = [['W', 'W', 'B'], ['W', 'B', 'B'], ['B', 'W', 'W']]
+//     Output: 1
+//     Explanation:
+//       - Pass 1 counts `'B'` cells across the 3x3 grid, yielding `row_black = [1,
+//         2, 1]` and `col_black = [1, 1, 2]`.
+//       - In Pass 2, row `0` has `row_black[0] == 1` with `'B'` at `(0, 2)`, but
+//         `col_black[2] == 2` so it is not counted as lonely.
+//       - Row `1` is skipped immediately because `row_black[1] == 2 != 1`.
+//       - Row `2` has `row_black[2] == 1` with `'B'` at `(2, 0)` and `col_black[0]
+//         == 1`, incrementing `lonely` to `1` and returning `1`.
+//
+//   Example 3:
+//     Input:  picture = [['B', 'B'], ['B', 'B']]
+//     Output: 0
+//     Explanation:
+//       - Pass 1 scans the 2x2 grid and records `row_black = [2, 2]` and `col_black
+//         = [2, 2]`.
+//       - In Pass 2, both rows `0` and `1` fail the `row_black[r] == 1` check and
+//         are skipped, returning `lonely = 0`.
+//
 // Algorithm:
 //   Use two passes with per-row and per-column frequency tables:
 //     1. Counting pass: Scan the entire grid once and tally the number of `'B'`

@@ -6,6 +6,41 @@
 //   remove the n-th node from the end of the list and return the updated head.
 //   Follow-up requirement: solve in a single pass over the list.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3, 4, 5], n = 2
+//     Output: [1, 2, 3, 5]
+//     Explanation:
+//       - Attach sentinel dummy(0) before node 1 and initialize both slow and fast
+//         at &dummy.
+//       - Advance fast by n = 2 steps to node 2 so fast leads slow by 2 links.
+//       - Advance slow and fast in lockstep until fast reaches tail node 5, moving
+//         slow to node 3 (predecessor of node 4).
+//       - Unlink removed node 4 by setting 3->next = 5 and return dummy.next ([1,
+//         2, 3, 5]).
+//
+//   Example 2:
+//     Input:  head = [1], n = 1
+//     Output: []
+//     Explanation:
+//       - Attach sentinel dummy(0) before node 1 with slow = &dummy and fast =
+//         &dummy.
+//       - Advance fast by n = 1 step to node 1; because fast->next is nullptr, the
+//         lockstep loop does not run and slow stays at &dummy.
+//       - Unlink dummy.next (node 1) by setting dummy.next = nullptr and return
+//         dummy.next ([]).
+//
+//   Example 3:
+//     Input:  head = [10, 20, 30, 40], n = 4
+//     Output: [20, 30, 40]
+//     Explanation:
+//       - Attach sentinel dummy(0) before node 10 with slow = &dummy and fast =
+//         &dummy.
+//       - Advance fast by n = 4 steps across 10 -> 20 -> 30 -> 40 until fast sits
+//         at tail node 40.
+//       - Since fast->next is nullptr, slow remains at &dummy; bypass head node 10
+//         via dummy.next = 20 and return [20, 30, 40].
+//
 // Algorithm:
 //   One-pass two-pointer ("fast/slow gap") technique with a sentinel dummy node
 //   pointing to `head`:

@@ -10,6 +10,52 @@
 //   Repeatedly encoding the same long URL should remain consistent, and
 //   distinct long URLs must map to distinct short URLs without collisions.
 //
+// Examples:
+//   Example 1:
+//     Input:  encode("https://leetcode.com/problems/design-tinyurl"), decode(tiny)
+//     Output: tiny = "http://tinyurl.com/a1B2c3" (6-char Base-62 code),
+//             decode(tiny) = "https://leetcode.com/problems/design-tinyurl"
+//     Explanation:
+//       - encode checks url_to_code_ for
+//         "https://leetcode.com/problems/design-tinyurl" and does not find an
+//         existing entry.
+//       - generateCode draws 6 uniform random characters from the 62-character
+//         kAlphabet (for example "a1B2c3") and verifies code_to_url_ does not
+//         already contain it.
+//       - Both maps record the bijection ("a1B2c3" <->
+//         "https://leetcode.com/problems/design-tinyurl") and buildShortUrl
+//         prepends "http://tinyurl.com/" to return "http://tinyurl.com/a1B2c3".
+//       - decode verifies the "http://tinyurl.com/" prefix, strips it to extract
+//         "a1B2c3", and returns the stored original URL from code_to_url_.
+//
+//   Example 2:
+//     Input:  encode("http://haha"), encode("http://haha"),
+//             encode("https://example.org/path?q=1&b=2#frag"), decode(tiny1_a),
+//             decode(tiny2)
+//     Output: tiny1_a == tiny1_b != tiny2; decode(tiny1_a) = "http://haha",
+//             decode(tiny2) = "https://example.org/path?q=1&b=2#frag"
+//     Explanation:
+//       - The first encode("http://haha") generates an unused 6-character code c1,
+//         stores ("http://haha" <-> c1) in both maps, and returns tiny1_a =
+//         "http://tinyurl.com/" + c1.
+//       - The second encode("http://haha") hits url_to_code_["http://haha"] and
+//         immediately returns buildShortUrl(c1), guaranteeing tiny1_a == tiny1_b.
+//       - encode("https://example.org/path?q=1&b=2#frag") generates a new code c2
+//         not present in code_to_url_ (so c2 != c1 and tiny2 != tiny1_a) and
+//         records the second bijection.
+//       - decode(tiny1_a) and decode(tiny2) look up c1 and c2 in code_to_url_ to
+//         recover "http://haha" and "https://example.org/path?q=1&b=2#frag"
+//         respectively.
+//
+//   Example 3:
+//     Input:  decode("pica"), decode("http://tinyurl.com/000000")
+//     Output: "", ""
+//     Explanation:
+//       - For "pica", short_url.starts_with("http://tinyurl.com/") is false, so
+//         decode returns an empty string immediately.
+//       - For "http://tinyurl.com/000000", decode strips the prefix to get code
+//         "000000", fails to find it in code_to_url_, and returns an empty string.
+//
 // Algorithm:
 //   Maintain a bidirectional hash-map bijection between original URLs and
 //   randomly generated 6-character Base-62 codes (62^6 ≈ 56.8 billion unique

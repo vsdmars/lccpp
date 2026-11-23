@@ -11,6 +11,39 @@
 //     - 4-byte char: `11110xxx 10xxxxxx 10xxxxxx 10xxxxxx`
 //   Constraints: 1 <= data.length <= 2 * 10^4, 0 <= data[i] <= 255.
 //
+// Examples:
+//   Example 1:
+//     Input:  data = [197, 130, 1]
+//     Output: true
+//     Explanation:
+//       - With `remaining = 0`, byte `197` (`11000101_2`) matches 2-byte lead
+//         prefix `110xxxxx` (`(197 & 0xE0) == 0xC0`), setting `remaining = 1`.
+//       - Byte `130` (`10000010_2`) matches continuation prefix `10xxxxxx` (`(130 &
+//         0xC0) == 0x80`), decrementing `remaining` to `0`.
+//       - Byte `1` (`00000001_2`) matches 1-byte ASCII `0xxxxxxx` (`(1 & 0x80) ==
+//         0`), keeping `remaining = 0`, and the loop ends with `remaining == 0` so
+//         `true` is returned.
+//
+//   Example 2:
+//     Input:  data = [235, 140, 4]
+//     Output: false
+//     Explanation:
+//       - With `remaining = 0`, byte `235` (`11101011_2`) matches 3-byte lead
+//         prefix `1110xxxx` (`(235 & 0xF0) == 0xE0`), setting `remaining = 2`.
+//       - Byte `140` (`10001100_2`) matches continuation pattern `10xxxxxx`,
+//         decrementing `remaining` to `1`.
+//       - Byte `4` (`00000100_2`) fails `(4 & 0xC0) == 0x80` (`0 != 0x80`),
+//         immediately returning `false`.
+//
+//   Example 3:
+//     Input:  data = [197]
+//     Output: false
+//     Explanation:
+//       - With `remaining = 0`, byte `197` (`11000101_2`) matches 2-byte lead
+//         prefix `110xxxxx`, setting `remaining = 1`.
+//       - The array ends while `remaining == 1`, so `remaining == 0` evaluates to
+//         `false` for the truncated sequence.
+//
 // Algorithm:
 //   Run a single-pass deterministic finite-state machine over the byte stream,
 //   maintaining `remaining` — the number of `10xxxxxx` continuation bytes still

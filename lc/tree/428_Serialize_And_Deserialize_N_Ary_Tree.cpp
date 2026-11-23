@@ -7,6 +7,44 @@
 //   and deserialize that string back into the exact original N-ary tree
 //   structure and values.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, null, 3, 2, 4, null, 5, 6]
+//     Output: serialize(root) = "1 3 5 # 6 # # 2 # 4 # #", deserialize(encoded) =
+//             [1, null, 3, 2, 4, null, 5, 6]
+//     Explanation:
+//       - serialize runs preorder DFS from root 1, emitting "1", recursing into
+//         child 3 -> 5 -> "#" -> 6 -> "#" and closing 3 with "#", then emitting "2
+//         # 4 #" and a final "#" for root 1.
+//       - deserialize splits "1 3 5 # 6 # # 2 # 4 # #" into 12 string_view tokens,
+//         parses root Node(1) at idx = 0, and advances idx to 1.
+//       - dfs(1) parses child 3 at idx = 1, recursively attaches leaves 5 (at idx =
+//         2, closed at 3) and 6 (at idx = 4, closed at 5), and consumes 3's closing
+//         "#" at idx = 6.
+//       - Continuing from idx = 7, dfs(1) parses child 2 (closed at 8) and child 4
+//         (closed at 10), then advances idx past root 1's closing "#" at idx = 11
+//         to return the reconstructed tree.
+//
+//   Example 2:
+//     Input:  root = [99]
+//     Output: serialize(root) = "99 #", deserialize("99 #") = [99]
+//     Explanation:
+//       - serialize visits node 99, appends "99", skips the empty children loop,
+//         and appends the closing sentinel "#" to return "99 #".
+//       - deserialize splits "99 #" into ["99", "#"], constructs root Node(99) at
+//         idx = 0, and increments idx to 1.
+//       - dfs(root) sees tokens[1] == "#", skips child parsing, advances idx past
+//         the sentinel, and returns the single-node tree [99].
+//
+//   Example 3:
+//     Input:  root = [] (nullptr)
+//     Output: serialize(nullptr) = "", deserialize("") = [] (nullptr)
+//     Explanation:
+//       - serialize checks root == nullptr at entry and immediately returns the
+//         empty string "".
+//       - deserialize calls split_tokens("") which returns an empty token vector,
+//         causing it to return nullptr directly.
+//
 // Algorithm:
 //   Use Preorder DFS with an explicit end-of-children sentinel `"#"`:
 //     - Serialize:

@@ -8,6 +8,47 @@
 //   edges on a longest simple path between any two nodes.
 //   Constraints: 0 <= edges.size() < 10^4; the edges form a valid tree.
 //
+// Examples:
+//   Example 1:
+//     Input:  edges = [[0, 1], [1, 2], [2, 3], [1, 4], [4, 5]]
+//     Output: 4
+//     Explanation:
+//       - Build the undirected adjacency list for 6 nodes (0:[1], 1:[0,2,4],
+//         2:[1,3], 3:[2], 4:[1,5], 5:[4]) and call dfs(0, -1).
+//       - Leaf 3 returns 0 so node 2 sees branch_len = 1 (diameter = max(0, 1 + 0)
+//         = 1) and returns 1; similarly leaf 5 returns 0 so node 4 sees branch_len
+//         = 1 and returns 1.
+//       - At node 1, child 2 yields branch_len = 1 + 1 = 2 and child 4 yields
+//         branch_len = 1 + 1 = 2, setting top1 = 2, top2 = 2, updating diameter =
+//         max(1, 2 + 2) = 4, and returning top1 = 2.
+//       - Root 0 receives branch_len = 2 + 1 = 3 from node 1 (top1 = 3, top2 = 0),
+//         keeping diameter = 4 and returning 4.
+//
+//   Example 2:
+//     Input:  edges = [[0, 1], [1, 2], [1, 3], [3, 4], [4, 5], [2, 6], [6, 7], [7,
+//             8]]
+//     Output: 7
+//     Explanation:
+//       - Build adj for 9 nodes and root the post-order DFS at node 0 via dfs(0,
+//         -1).
+//       - Down branch 1 -> 3 -> 4 -> 5, depths return 0 from 5, 1 from 4, and 2
+//         from 3, giving node 1 a candidate branch_len = 2 + 1 = 3.
+//       - Down branch 1 -> 2 -> 6 -> 7 -> 8, depths return 0 from 8, 1 from 7, 2
+//         from 6, and 3 from 2, giving node 1 a candidate branch_len = 3 + 1 = 4.
+//       - At node 1, top1 = 4 and top2 = 3 combine into diameter = max(diameter, 4
+//         + 3) = 7 (path 5-4-3-1-2-6-7-8), returning top1 = 4 to root 0 whose
+//         single child branch 4 + 1 = 5 leaves diameter = 7.
+//
+//   Example 3:
+//     Input:  edges = [[0, 1]]
+//     Output: 1
+//     Explanation:
+//       - Build adj for 2 nodes (0:[1], 1:[0]) and start dfs(0, -1).
+//       - In dfs(1, 0), neighbor 0 equals parent and is skipped, so top1 = 0, top2
+//         = 0, diameter = 0, and dfs(1, 0) returns 0.
+//       - Back at dfs(0, -1), child 1 yields branch_len = 0 + 1 = 1 (top1 = 1, top2
+//         = 0), updating diameter = max(0, 1 + 0) = 1 and returning 1.
+//
 // Algorithm:
 //   Build an undirected adjacency list for the N = edges.size() + 1 nodes and
 //   root the tree arbitrarily at node 0. Run a single post-order DFS that

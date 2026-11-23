@@ -7,6 +7,41 @@
 //   number of times, return the lexicographically smallest string that can be
 //   obtained after any sequence of allowed swaps.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "dcab", pairs = [[0, 3], [1, 2]]
+//     Output: "bacd"
+//     Explanation:
+//       - Build undirected adjacency lists of size 4 with edges 0 <-> 3 and 1 <->
+//         2.
+//       - At i = 0, DFS visits component {0, 3}, collecting comp_indices = [0, 3]
+//         and comp_chars = "db"; sorting both to [0, 3] and "bd" sets s[0] = 'b'
+//         and s[3] = 'd' (s becomes "bcad").
+//       - At i = 1, DFS visits component {1, 2}, collecting comp_indices = [1, 2]
+//         and comp_chars = "ca"; sorting to [1, 2] and "ac" sets s[1] = 'a' and
+//         s[2] = 'c'.
+//       - Skip already visited indices 2 and 3 and return "bacd".
+//
+//   Example 2:
+//     Input:  s = "dcab", pairs = [[0, 3], [1, 2], [0, 2]]
+//     Output: "abcd"
+//     Explanation:
+//       - Build undirected adjacency lists with edges 0 <-> 3, 1 <-> 2, and 0 <->
+//         2, connecting all four indices into one component.
+//       - At i = 0, DFS traverses 0 -> 3 -> 2 -> 1, collecting comp_indices = [0,
+//         3, 2, 1] and comp_chars = "dbac".
+//       - Sort comp_indices to [0, 1, 2, 3] and comp_chars to "abcd", write s[0..3]
+//         = "abcd", skip visited indices 1..3, and return "abcd".
+//
+//   Example 3:
+//     Input:  s = "dcba", pairs = []
+//     Output: "dcba"
+//     Explanation:
+//       - Construct adj of size 4 with no edges so adj[i].empty() is true for all i
+//         in 0..3.
+//       - Every iteration of the outer loop hits the skip condition adj[i].empty(),
+//         leaving s unchanged and returning "dcba".
+//
 // Algorithm:
 //   Connected-components DFS with greedy per-component sorting. Treat string
 //   indices `0..N-1` as vertices and each pair `[a, b]` as an undirected edge.

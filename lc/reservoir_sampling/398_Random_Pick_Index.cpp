@@ -8,6 +8,43 @@
 //   such that `nums[i] == target`. It is guaranteed that `target` exists in
 //   `nums`, and every valid index must have equal probability of being chosen.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3, 3, 3], pick(3)
+//     Output: 4 (any of 2, 3, or 4 with equal 1/3 probability)
+//     Explanation:
+//       - In Solution::pick(3), scan i = 0..4 with chosen = -1, seen = 0, skipping
+//         i = 0 (nums[0] = 1) and i = 1 (nums[1] = 2).
+//       - At i = 2 (nums[2] == 3, seen = 1), dist(0, 0) always returns 0 and sets
+//         chosen = 2; at i = 3 (seen = 2), dist(0, 1) overwrites with 3 with
+//         probability 1/2.
+//       - At i = 4 (seen = 3), dist(0, 2) selects 4 with probability 1/3 so each of
+//         {2, 3, 4} has overall 1/3 probability (while HashMapSolution::pick(3)
+//         samples directly from index_map_[3] = {2, 3, 4}), returning 4.
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 3, 3, 3, 3, 4, 5, 5, 5, 7, 7, 7], pick(4)
+//     Output: 6
+//     Explanation:
+//       - In Solution::pick(4), scan indices 0..12 and skip all elements until i =
+//         6 where nums[6] == 4.
+//       - Increment seen to 1, draw 0 from dist(0, 0), and set chosen = 6; no later
+//         elements match 4, so 6 is returned.
+//       - In HashMapSolution::pick(4), index_map_.at(4) holds {6}, so sampling
+//         dist(0, 0) directly returns 6 in O(1) time.
+//
+//   Example 3:
+//     Input:  nums = [9, 9, 9, 9], pick(9)
+//     Output: 2 (any of 0, 1, 2, or 3 with equal 1/4 probability)
+//     Explanation:
+//       - Scan all four matching indices i = 0, 1, 2, 3 in nums = [9, 9, 9, 9],
+//         incrementing seen from 1 through 4.
+//       - Set chosen = 0 at i = 0 (1/1), replace with 1 at i = 1 (1/2), replace
+//         with 2 at i = 2 (1/3), and keep chosen = 2 at i = 3 when dist(0, 3) != 0
+//         (probability 3/4).
+//       - Each index 0..3 survives with exact probability 1/4, returning a uniform
+//         valid index such as 2.
+//
 // Algorithm:
 //   Implements two complementary approaches demonstrating the space-time
 //   trade-off:

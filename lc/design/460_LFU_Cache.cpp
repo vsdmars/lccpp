@@ -13,6 +13,47 @@
 //       share the minimum frequency, evict the least recently used (LRU) among
 //       them.
 //
+// Examples:
+//   Example 1:
+//     Input:  LFUCache(2); put(1, 1); put(2, 2); get(1); put(3, 3); get(2); get(3);
+//             put(4, 4); get(1); get(3); get(4)
+//     Output: [null, null, null, 1, null, -1, 3, null, -1, 3, 4]
+//     Explanation:
+//       - put(1, 1) and put(2, 2) insert both keys into bucket 1 ([2, 1]
+//         MRU-to-LRU) with min_freq_ = 1.
+//       - get(1) returns 1 and calls promote() to splice key 1 into bucket 2 ([1]),
+//         while min_freq_ remains 1 because key 2 is still in bucket 1.
+//       - put(3, 3) sees size == capacity_ (2), evicts the back of bucket min_freq_
+//         = 1 (key 2), inserts key 3 into bucket 1, and keeps min_freq_ = 1, so
+//         get(2) returns -1.
+//       - get(3) returns 3, splices key 3 to the front of bucket 2 ([3, 1]), erases
+//         empty bucket 1, and advances min_freq_ to 2.
+//       - put(4, 4) evicts the LRU entry at the back of bucket 2 (key 1) and
+//         inserts key 4 at bucket 1 with min_freq_ = 1, so get(1) returns -1 while
+//         get(3) returns 3 and get(4) returns 4.
+//
+//   Example 2:
+//     Input:  LFUCache(2); put(1, 10); put(2, 20); put(1, 100); put(3, 30); get(2);
+//             get(1); get(3)
+//     Output: [null, null, null, null, null, -1, 100, 30]
+//     Explanation:
+//       - put(1, 10) and put(2, 20) populate bucket 1 as [2, 1] with min_freq_ = 1.
+//       - put(1, 100) finds key 1 in key_to_iter_, updates its value to 100, and
+//         promotes it to bucket 2 ([1]).
+//       - put(3, 30) evicts the back of bucket min_freq_ = 1 (key 2), erases bucket
+//         1, and inserts (3, 30) into bucket 1 with min_freq_ = 1.
+//       - get(2) misses and returns -1, whereas get(1) returns 100 and get(3)
+//         returns 30.
+//
+//   Example 3:
+//     Input:  LFUCache(0); put(1, 10); get(1)
+//     Output: [null, null, -1]
+//     Explanation:
+//       - LFUCache(0) sets capacity_ = 0 with empty freq_to_list_ and key_to_iter_.
+//       - put(1, 10) hits the capacity_ <= 0 guard and returns immediately without
+//         storing key 1.
+//       - get(1) fails to find key 1 in key_to_iter_ and returns -1.
+//
 // Algorithm:
 //   Partition cached entries by exact access frequency into per-frequency
 //   doubly linked lists, ordered from most recently used (front) to least

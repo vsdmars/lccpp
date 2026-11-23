@@ -9,6 +9,37 @@
 //      1 if `num < pick` (your guess is lower than the picked number),
 //      0 if `num == pick` (exact match).
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 10, pick = 6
+//     Output: 6
+//     Explanation:
+//       - Initialize the closed search interval to lo = 1 and hi = 10.
+//       - Probe mid = 1 + (10 - 1) / 2 = 5; guess(5) returns 1 (too low), so narrow
+//         to lo = 6, hi = 10.
+//       - Probe mid = 6 + (10 - 6) / 2 = 8; guess(8) returns -1 (too high), so
+//         narrow to lo = 6, hi = 7.
+//       - Probe mid = 6 + (7 - 6) / 2 = 6; guess(6) returns 0, returning 6 after 3
+//         oracle calls.
+//
+//   Example 2:
+//     Input:  n = 1, pick = 1
+//     Output: 1
+//     Explanation:
+//       - Initialize the single-element interval to lo = 1 and hi = 1.
+//       - Probe mid = 1 + (1 - 1) / 2 = 1; guess(1) returns 0, immediately
+//         returning 1 in 1 oracle call.
+//
+//   Example 3:
+//     Input:  n = 2147483647, pick = 2147483647
+//     Output: 2147483647
+//     Explanation:
+//       - Initialize lo = 1 and hi = 2147483647 (INT_MAX).
+//       - Compute overflow-safe midpoints via lo + (hi - lo) / 2, starting at mid =
+//         1073741824 where guess(1073741824) returns 1 and raises lo to 1073741825.
+//       - Repeatedly advance lo = mid + 1 until lo = hi = 2147483647, where
+//         guess(2147483647) returns 0 and returns 2147483647 in 31 oracle calls.
+//
 // Algorithm:
 //   Standard three-way binary search over the closed interval [lo, hi] = [1, n]:
 //     - Compute overflow-safe midpoint `mid = lo + ((hi - lo) / 2)`.

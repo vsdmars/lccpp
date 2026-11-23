@@ -9,6 +9,42 @@
 //   iff at least one ship lies inside or on the boundary of that rectangle,
 //   return the exact number of ships while making at most 400 oracle calls.
 //
+// Examples:
+//   Example 1:
+//     Input:  ships = [[1, 1], [2, 2], [3, 3], [5, 5]], topRight = [4, 4],
+//             bottomLeft = [0, 0]
+//     Output: 3
+//     Explanation:
+//       - countShips calls sea.hasShips([4, 4], [0, 0]), which returns true while
+//         ignoring [5, 5] outside the queried bounds.
+//       - The rectangle splits at mid_x = 2, mid_y = 2 into four disjoint
+//         quadrants: [0..2, 0..2], [3..4, 3..4], [0..2, 3..4], and [3..4, 0..2].
+//       - Quadrants [0..2, 3..4] and [3..4, 0..2] each return 0 in a single
+//         hasShips call because they contain no ships.
+//       - Quadrant [0..2, 0..2] recurses down to single points [1, 1] and [2, 2] to
+//         return 2, and [3..4, 3..4] narrows down to [3, 3] to return 1, summing to
+//         3.
+//
+//   Example 2:
+//     Input:  ships = [], topRight = [1000, 1000], bottomLeft = [0, 0]
+//     Output: 0
+//     Explanation:
+//       - Bounds check passes for [0, 0] and [1000, 1000], so countShips invokes
+//         sea.hasShips([1000, 1000], [0, 0]).
+//       - The oracle finds no ships inside the rectangle and returns false after 1
+//         query.
+//       - countShips immediately returns 0 without subdividing into quadrants.
+//
+//   Example 3:
+//     Input:  ships = [[7, 9]], topRight = [7, 9], bottomLeft = [7, 9]
+//     Output: 1
+//     Explanation:
+//       - Bounds check passes since 7 <= 7 and 9 <= 9, and sea.hasShips([7, 9], [7,
+//         9]) returns true.
+//       - The base-case check bottom_left == top_right evaluates to true at [7, 9].
+//       - countShips returns 1 directly without computing midpoints or making
+//         recursive calls.
+//
 // Algorithm:
 //   2D divide-and-conquer (implicit quadtree search). For a rectangle
 //   `[bottom_left, top_right]`, first discard inverted bounds and immediately

@@ -9,6 +9,45 @@
 //   return the minimum number of turns required to reach `target`, or -1 if it
 //   is impossible.
 //
+// Examples:
+//   Example 1:
+//     Input:  deadends = ["0201", "0101", "0102", "1212", "2002"], target = "0202"
+//     Output: 6
+//     Explanation:
+//       - Encode and mark deadends {201, 101, 102, 1212, 2002} as true in visited,
+//         then mark 0 ("0000") visited and push 0 onto frontier.
+//       - Expand BFS levels 1 through 5 by rotating one wheel +1 or -1 mod 10 per
+//         step, skipping blocked deadends such as 101 ("0101"), 102 ("0102"), and
+//         201 ("0201").
+//       - Reach 1202 ("1202") at turn 5 along the path "0000" -> "1000" -> "1100"
+//         -> "1200" -> "1201" -> "1202".
+//       - At turns = 6, expand_neighbors rotates the thousands wheel of 1202 by -1
+//         mod 10 to generate 202 ("0202"), matching target_code and returning 6.
+//
+//   Example 2:
+//     Input:  deadends = ["8888"], target = "0009"
+//     Output: 1
+//     Explanation:
+//       - Mark visited[8888] = true; neither 0 ("0000") nor target_code = 9
+//         ("0009") is blocked, so push 0 onto frontier.
+//       - At turns = 1, pop 0 and run expand_neighbors across the four place values
+//         {1000, 100, 10, 1}.
+//       - At place 1 (digit = 0), computing (digit + 9) % 10 wraps around to 9 and
+//         generates candidate 9, which matches target_code and immediately returns
+//         1.
+//
+//   Example 3:
+//     Input:  deadends = ["8887", "8889", "8878", "8898", "8788", "8988", "7888",
+//             "9888"], target = "8888"
+//     Output: -1
+//     Explanation:
+//       - Mark all eight 1-turn neighbors of 8888 as true in visited, then push 0
+//         ("0000") onto frontier.
+//       - Run BFS over reachable non-deadend states; because every neighbor of 8888
+//         is already marked visited, no state can transition into 8888.
+//       - Once all reachable states are exhausted and frontier becomes empty,
+//         return -1.
+//
 // Algorithm:
 //   Model the 10,000 possible 4-digit combinations as vertices 0..9999 in an
 //   unweighted undirected graph where each vertex has 8 neighbors (turning

@@ -6,6 +6,42 @@
 //   strictly increasing subsequence. A subsequence preserves relative order
 //   of elements from nums without requiring them to be contiguous.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [10, 9, 2, 5, 3, 7, 101, 18]
+//     Output: 4
+//     Explanation:
+//       - Process 10, 9, and 2: each replaces tails[0] (after 10 is appended),
+//         tightening tails from [10] to [9] to [2].
+//       - Process 5: lower_bound returns tails.end(), appending 5 to form tails =
+//         [2, 5]; then 3 replaces 5 via lower_bound to give [2, 3].
+//       - Process 7 and 101: both exceed the last tail, extending tails to [2, 3,
+//         7] and then [2, 3, 7, 101].
+//       - Process 18: lower_bound([2, 3, 7, 101], 18) points to 101, replacing it
+//         to yield tails = [2, 3, 7, 18] and returning tails.size() = 4.
+//
+//   Example 2:
+//     Input:  nums = [0, 1, 0, 3, 2, 3]
+//     Output: 4
+//     Explanation:
+//       - Process 0 and 1 to build tails = [0, 1], then process the second 0 which
+//         overwrites tails[0] = 0 without changing length.
+//       - Process 3: 3 > 1 extends tails to [0, 1, 3].
+//       - Process 2: lower_bound([0, 1, 3], 2) replaces 3 with 2, giving tails =
+//         [0, 1, 2].
+//       - Process the final 3: 3 > 2 appends to form tails = [0, 1, 2, 3] and
+//         returns 4.
+//
+//   Example 3:
+//     Input:  nums = [7, 7, 7, 7]
+//     Output: 1
+//     Explanation:
+//       - Process the first 7: tails is empty, so append 7 to get tails = [7].
+//       - For each remaining 7, lower_bound([7], 7) points to tails[0] because 7 >=
+//         7, overwriting tails[0] = 7 rather than extending.
+//       - Return tails.size() = 1 since strictly increasing subsequences cannot
+//         extend on equal values.
+//
 // Algorithm:
 //   1. Patience Sorting with Binary Search (optimal, O(n log n) time, O(n) space):
 //      Maintain a vector `tails` where `tails[k]` stores the smallest possible

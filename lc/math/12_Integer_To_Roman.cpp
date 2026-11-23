@@ -7,6 +7,46 @@
 //   L=50, C=100, D=500, M=1000) and the six subtractive forms (IV=4, IX=9,
 //   XL=40, XC=90, CD=400, CM=900).
 //
+// Examples:
+//   Example 1:
+//     Input:  num = 58
+//     Output: "LVIII"
+//     Explanation:
+//       - Skip table entries from (1000, "M") down to (90, "XC") because 58 < value
+//         for each.
+//       - At (50, "L"), compute repeat = 58 / 50 = 1, append "L" to result, and
+//         update num = 58 % 50 = 8.
+//       - Skip 40, 10, and 9, then at (5, "V") compute repeat = 8 / 5 = 1, append
+//         "V" (result = "LV"), and update num = 8 % 5 = 3.
+//       - Skip 4, then at (1, "I") compute repeat = 3 / 1 = 3, append "III", and
+//         reduce num to 0 to return "LVIII".
+//
+//   Example 2:
+//     Input:  num = 1994
+//     Output: "MCMXCIV"
+//     Explanation:
+//       - At (1000, "M"), compute repeat = 1994 / 1000 = 1, append "M", and update
+//         num = 1994 % 1000 = 994.
+//       - At (900, "CM"), compute repeat = 994 / 900 = 1, append "CM" (result =
+//         "MCM"), and update num = 994 % 900 = 94.
+//       - Skip 500, 400, and 100; at (90, "XC"), append "XC" once (result =
+//         "MCMXC") and update num = 94 % 90 = 4.
+//       - Skip 50, 40, 10, 9, and 5; at (4, "IV"), append "IV" once and set num =
+//         0, ending the loop and returning "MCMXCIV".
+//
+//   Example 3:
+//     Input:  num = 3999
+//     Output: "MMMCMXCIX"
+//     Explanation:
+//       - At (1000, "M"), compute repeat = 3999 / 1000 = 3, append "MMM", and
+//         update num = 3999 % 1000 = 999.
+//       - At (900, "CM"), append "CM" once (result = "MMMCM") and update num = 999
+//         % 900 = 99.
+//       - At (90, "XC"), append "XC" once (result = "MMMCMXC") and update num = 99
+//         % 90 = 9.
+//       - At (9, "IX"), append "IX" once and set num = 0, terminating the loop with
+//         "MMMCMXCIX".
+//
 // Algorithm:
 //   Greedy decomposition over a fixed descending table of all 13 canonical
 //   Roman value-symbol pairs (the seven base symbols interleaved with the six

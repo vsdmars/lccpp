@@ -8,6 +8,35 @@
 //   such that the researcher has published at least h papers that have each
 //   been cited at least h times.
 //
+// Examples:
+//   Example 1:
+//     Input:  citations = [3, 0, 6, 1, 5]
+//     Output: 3
+//     Explanation:
+//       - Sort citations in descending order to obtain [6, 5, 3, 1, 0].
+//       - At h = 0, citations[0] = 6 >= 1, so advance h to 1; at h = 1,
+//         citations[1] = 5 >= 2, so advance h to 2.
+//       - At h = 2, citations[2] = 3 >= 3, so advance h to 3.
+//       - At h = 3, citations[3] = 1 < 4, so the scan stops and returns h = 3.
+//
+//   Example 2:
+//     Input:  citations = [1, 3, 1]
+//     Output: 1
+//     Explanation:
+//       - Sort citations in descending order to obtain [3, 1, 1].
+//       - At h = 0, citations[0] = 3 >= 1, so advance h to 1.
+//       - At h = 1, citations[1] = 1 < 2, so the loop exits and returns h = 1.
+//
+//   Example 3:
+//     Input:  citations = [100]
+//     Output: 1
+//     Explanation:
+//       - With n = 1, hIndex keeps [100] sorted descending and sees citations[0] =
+//         100 >= 1 at h = 0, advancing h to 1.
+//       - Now h = 1 equals citations.size(), so the loop ends and returns 1 (and
+//         hIndexCounting similarly clamps 100 into buckets[1] = 1 and returns h =
+//         1).
+//
 // Algorithm:
 //   1. Descending Sort + Linear Scan (`hIndex`):
 //      Sort `citations` in descending order. After sorting, the first (i + 1)

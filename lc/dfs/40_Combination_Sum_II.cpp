@@ -10,6 +10,51 @@
 //   Constraints: 1 <= candidates.length <= 100, 1 <= candidates[i] <= 50,
 //   1 <= target <= 30.
 //
+// Examples:
+//   Example 1:
+//     Input:  candidates = [10, 1, 2, 7, 6, 1, 5], target = 8
+//     Output: [[1, 1, 6], [1, 2, 5], [1, 7], [2, 6]]
+//     Explanation:
+//       - Sorting candidates yields [1, 1, 2, 5, 6, 7, 10], and dfs(0, 8) begins at
+//         start = 0.
+//       - Picking index 0 (1) and index 1 (1, allowed since i == start = 1) leaves
+//         remaining = 6, where index 4 (6) hits remaining = 0 and records [1, 1, 6]
+//         before 7 > 6 breaks.
+//       - Backtracking to [1] (remaining = 7), index 2 (2) pairs with index 3 (5)
+//         to record [1, 2, 5], index 4 (6) leaves remaining = 1 and prunes, and
+//         index 5 (7) hits remaining = 0 to record [1, 7].
+//       - Back at start = 0, index 1 (1) is skipped because i > 0 and candidates[1]
+//         == candidates[0], avoiding duplicate branches.
+//       - Picking index 2 (2) pairs with index 4 (6) to record [2, 6], and larger
+//         starting elements either fail to hit 0 or break at 10 > 8.
+//
+//   Example 2:
+//     Input:  candidates = [2, 5, 2, 1, 2], target = 5
+//     Output: [[1, 2, 2], [5]]
+//     Explanation:
+//       - Sorting produces [1, 2, 2, 2, 5], and dfs(0, 5) starts by picking index 0
+//         (1) to recurse with remaining = 4.
+//       - Under [1], picking index 1 (2) and index 2 (2, allowed at start = 2)
+//         reaches remaining = 0 to record [1, 2, 2], while index 3 (2) at depth 2
+//         is skipped as a duplicate sibling.
+//       - Back at start = 0, picking index 1 (2) cannot sum to 3 with {2, 2, 5},
+//         and indices 2 and 3 (both 2) are skipped by i > start && candidates[i] ==
+//         candidates[i - 1].
+//       - Finally, index 4 (5) hits remaining = 0 directly and records [5],
+//         yielding [[1, 2, 2], [5]].
+//
+//   Example 3:
+//     Input:  candidates = [1, 1, 1, 1], target = 2
+//     Output: [[1, 1]]
+//     Explanation:
+//       - On the sorted array [1, 1, 1, 1], dfs(0, 2) chooses index 0 (1) and calls
+//         dfs(1, 1).
+//       - At dfs(1, 1), index 1 (1) is accepted because i == start = 1, hitting
+//         remaining = 0 to record [1, 1], while indices 2 and 3 are skipped as
+//         duplicates.
+//       - Back at dfs(0, 2), indices 1, 2, and 3 all satisfy i > 0 && candidates[i]
+//         == candidates[i - 1] and are skipped, leaving [[1, 1]].
+//
 // Algorithm:
 //   Sort `candidates` ascending, then run backtracking DFS with level-based
 //   deduplication and suffix pruning:

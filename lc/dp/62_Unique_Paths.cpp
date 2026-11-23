@@ -8,6 +8,36 @@
 //   (m - 1, n - 1). The answer is guaranteed to fit within a 32-bit signed int
 //   (<= 2 * 10^9).
 //
+// Examples:
+//   Example 1:
+//     Input:  m = 3, n = 7
+//     Output: 28
+//     Explanation:
+//       - Since m < n (3 < 7), swap dimensions to rows = 7, cols = 3 and initialize
+//         dp = [1, 1, 1].
+//       - Loop r = 1..6 updating dp[c] += dp[c - 1] left-to-right: after r = 1 dp
+//         is [1, 2, 3], after r = 2 it is [1, 3, 6], and after r = 3 it is [1, 4,
+//         10].
+//       - Continuing through r = 4, 5, 6 produces [1, 5, 15], [1, 6, 21], and
+//         finally [1, 7, 28], returning dp[2] = 28.
+//
+//   Example 2:
+//     Input:  m = 3, n = 2
+//     Output: 3
+//     Explanation:
+//       - With m >= n, set rows = 3, cols = 2 and initialize dp = [1, 1].
+//       - For r = 1, dp[1] += dp[0] updates dp to [1, 2]; for r = 2, dp[1] += dp[0]
+//         updates dp to [1, 3], returning dp[1] = 3.
+//
+//   Example 3:
+//     Input:  m = 1, n = 10
+//     Output: 1
+//     Explanation:
+//       - Since m < n (1 < 10), swap dimensions to rows = 10, cols = 1 and
+//         initialize dp = [1].
+//       - For each r = 1..9, the inner loop c = 1..0 executes zero times, leaving
+//         dp[0] = 1 as the final answer.
+//
 // Algorithm:
 //   Bottom-up dynamic programming with 1D rolling-row space optimization.
 //   In the full 2D formulation, dp[r][c] = dp[r - 1][c] + dp[r][c - 1] with

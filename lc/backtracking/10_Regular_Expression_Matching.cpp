@@ -12,6 +12,48 @@
 //   lowercase English letters, `p` contains lowercase English letters, '.',
 //   and '*', and every '*' is guaranteed to have a valid preceding character.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "aab", p = "c*a*b"
+//     Output: true
+//     Explanation:
+//       - Start `dfs(0, 0)` where `p[1] == '*'`; since `s[0] = 'a' != 'c'`,
+//         `first_match` is `false`, so skip `"c*"` via `dfs(0, 2)`.
+//       - At `dfs(0, 2)` (`p[2..] = "a*b"`), `p[3] == '*'` and `s[0] == 'a'` allow
+//         taking the `first_match` branch `dfs(1, 2)` after `dfs(0, 4)` fails to
+//         match `"aab"` against `"b"`.
+//       - At `dfs(1, 2)`, `s[1] == 'a'` advances to `dfs(2, 2)`, where `s[2] = 'b'
+//         != 'a'` forces skipping `"a*"` to `dfs(2, 4)`.
+//       - At `dfs(2, 4)`, `s[2] == p[4] == 'b'` advances to `dfs(3, 5)`, where `j
+//         == 5 == n` and `i == 3 == m` return `true`.
+//
+//   Example 2:
+//     Input:  s = "mississippi", p = "mis*is*p*."
+//     Output: false
+//     Explanation:
+//       - Match `"mi"` literally via `dfs(0, 0) -> dfs(1, 1) -> dfs(2, 2)`.
+//       - Consume `"ss"` with the first `"s*"` (`dfs(2, 2) -> dfs(3, 2) -> dfs(4,
+//         2)`), skip `"s*"` to `dfs(4, 4)`, and match `'i'` to reach `dfs(5, 5)`.
+//       - Consume `"ss"` with the second `"s*"` (`dfs(5, 5) -> dfs(6, 5) -> dfs(7,
+//         5)`), then skip `"s*"` to `dfs(7, 7)` where `s[7..] = "ippi"` and `p[7..]
+//         = "p*."`.
+//       - At `dfs(7, 7)`, `s[7] = 'i' != 'p'` skips `"p*"` to `dfs(7, 9)`, which
+//         matches `'.'` against `'i'` to reach `dfs(8, 10)`; with `j == 10` (`n`)
+//         and `i == 8 != 11` (`m`), memoized evaluation returns `false` across all
+//         branches.
+//
+//   Example 3:
+//     Input:  s = "", p = "a*b*.*"
+//     Output: true
+//     Explanation:
+//       - In `isMatchDp`, set `dp[0][0] = 1` for empty string (`m = 0`) and pattern
+//         length `n = 6`.
+//       - Scan `j = 2..6` for `i = 0`: at `j = 2` (`p[1] = '*'`), assign `dp[0][2]
+//         = dp[0][0] = 1`.
+//       - At `j = 4` (`p[3] = '*'`), assign `dp[0][4] = dp[0][2] = 1`, and at `j =
+//         6` (`p[5] = '*'`), assign `dp[0][6] = dp[0][4] = 1`.
+//       - Return `dp[0][6] != 0`, which evaluates to `true`.
+//
 // Algorithm:
 //   1. Top-Down Memoized Backtracking (`isMatch`):
 //      Recursively decide whether `s[i..]` matches `p[j..]`.

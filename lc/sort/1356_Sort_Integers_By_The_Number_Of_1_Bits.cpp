@@ -8,6 +8,39 @@
 //   sort them in ascending numerical order.
 //   Constraints: 1 <= arr.length <= 500, 0 <= arr[i] <= 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+//     Output: [0, 1, 2, 4, 8, 3, 5, 6, 7]
+//     Explanation:
+//       - std::popcount groups values by 1-bit count: 0 has 0 bits; {1, 2, 4, 8}
+//         have 1 bit; {3, 5, 6} have 2 bits; and 7 has 3 bits.
+//       - The comparator orders smaller bit counts before larger ones, placing 0
+//         first, then the 1-bit group, then the 2-bit group, and 7 last.
+//       - Ties within each bit-count group fall back to lhs < rhs, yielding [0, 1,
+//         2, 4, 8, 3, 5, 6, 7].
+//
+//   Example 2:
+//     Input:  arr = [1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1]
+//     Output: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
+//     Explanation:
+//       - Every element is a power of two, so std::popcount returns 1 for all 11
+//         elements.
+//       - Because lhs_bits == rhs_bits on every comparison, the comparator always
+//         falls through to lhs < rhs.
+//       - std::ranges::sort orders the array strictly by value to [1, 2, 4, 8, 16,
+//         32, 64, 128, 256, 512, 1024].
+//
+//   Example 3:
+//     Input:  arr = [10000, 9999, 0, 8192]
+//     Output: [0, 8192, 10000, 9999]
+//     Explanation:
+//       - std::popcount computes bit counts of 0 for 0, 1 for 8192 (2^13), 5 for
+//         10000, and 8 for 9999.
+//       - Even though 9999 < 10000 numerically, 10000 has fewer 1-bits (5 < 8), so
+//         the primary popcount key places 10000 ahead of 9999.
+//       - Sorting by (popcount, value) produces [0, 8192, 10000, 9999].
+//
 // Algorithm:
 //   Sort `arr` in place using `std::ranges::sort` with a two-level comparator:
 //   first compare `std::popcount(static_cast<unsigned int>(x))`, and break ties

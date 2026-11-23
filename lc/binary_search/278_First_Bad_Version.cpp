@@ -8,6 +8,39 @@
 //   `isBadVersion(version)`, find the first bad version while minimizing the
 //   number of API calls.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 5, firstBadVersion = 4
+//     Output: 4
+//     Explanation:
+//       - Initialize closed search bounds lhs = 1 and rhs = 5.
+//       - Iteration 1 checks mid = 1 + (5 - 1) / 2 = 3; isBadVersion(3) is false,
+//         so narrow to [4, 5] by setting lhs = 4.
+//       - Iteration 2 checks mid = 4 + (5 - 4) / 2 = 4; isBadVersion(4) is true, so
+//         narrow to [4, 4] by setting rhs = 4.
+//       - Since lhs == rhs == 4, the loop ends and returns 4 after 2 oracle calls.
+//
+//   Example 2:
+//     Input:  n = 7, firstBadVersion = 5
+//     Output: 5
+//     Explanation:
+//       - Initialize search bounds lhs = 1 and rhs = 7.
+//       - Iteration 1 tests mid = 4 and gets false, updating lhs = 5; iteration 2
+//         tests mid = 6 and gets true, updating rhs = 6.
+//       - Iteration 3 tests mid = 5 + (6 - 5) / 2 = 5; isBadVersion(5) is true,
+//         updating rhs = 5.
+//       - The interval collapses to lhs == rhs == 5, returning 5 after 3 oracle
+//         calls.
+//
+//   Example 3:
+//     Input:  n = 1, firstBadVersion = 1
+//     Output: 1
+//     Explanation:
+//       - Initialize search bounds lhs = 1 and rhs = 1.
+//       - The loop condition while (lhs < rhs) is immediately false because 1 < 1
+//         does not hold.
+//       - Return lhs = 1 directly with 0 calls to isBadVersion.
+//
 // Algorithm:
 //   Lower-bound binary search over the monotonic boolean predicate
 //   `isBadVersion(v)` on the closed interval [lhs, rhs] = [1, n]:

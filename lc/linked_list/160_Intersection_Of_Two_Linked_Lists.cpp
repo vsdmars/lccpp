@@ -8,6 +8,43 @@
 //   `nullptr`. Both lists must retain their original structure after the
 //   function returns.
 //
+// Examples:
+//   Example 1:
+//     Input:  headA = [4, 1, 8, 4, 5], headB = [5, 6, 1, 8, 4, 5] (intersecting at
+//             node 8)
+//     Output: node with value 8 (shared tail [8, 4, 5])
+//     Explanation:
+//       - Initialize pa at 4 (headA) and pb at 5 (headB); both advance through
+//         their respective lists until pa hits nullptr after step 5 while pb is at
+//         5 (shared).
+//       - On step 6, pa wraps to headB (node 5) and pb reaches nullptr; on step 7,
+//         pa moves to 6 (headB) and pb wraps to headA (node 4).
+//       - After step 8 (pa = 1 in B, pb = 1 in A, distinct pointers), step 9
+//         advances both pa and pb to the shared node 8 so pa == pb and node 8 is
+//         returned.
+//
+//   Example 2:
+//     Input:  headA = [1, 9, 1, 2, 4], headB = [3, 2, 4] (intersecting at node 2)
+//     Output: node with value 2 (shared tail [2, 4])
+//     Explanation:
+//       - Start pa at 1 (headA) and pb at 3 (headB); after 3 steps pa sits at
+//         shared node 2 while pb reaches nullptr past node 4.
+//       - Wrap pb to headA (1) and advance pa to 4, then nullptr, and then wrap pa
+//         to headB (3) while pb walks 1 -> 9 -> 1.
+//       - On the next step pa advances from 3 to shared node 2 and pb advances from
+//         1 to shared node 2, terminating the loop with pa == pb at node 2.
+//
+//   Example 3:
+//     Input:  headA = [1, 2, 3, 4, 5], headB = [6, 7, 3, 4, 5] (no shared nodes)
+//     Output: nullptr
+//     Explanation:
+//       - Start pa at 1 (headA) and pb at 6 (headB); although both lists end with
+//         values 3, 4, 5, those nodes are distinct objects in memory so pa != pb at
+//         every step.
+//       - Because both lists have length 5, five lockstep advances move pa and pb
+//         simultaneously to nullptr, where pa == pb exits the loop and returns
+//         nullptr.
+//
 // Algorithm:
 //   Two-pointer path-equalization traversal:
 //   Initialize `pa = headA` and `pb = headB`. On each iteration while

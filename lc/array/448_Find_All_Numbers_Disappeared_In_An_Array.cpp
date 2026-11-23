@@ -8,6 +8,37 @@
 //   appear in `nums`. The algorithm should run in O(n) time and O(1) extra
 //   space (excluding the returned list).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [4, 3, 2, 7, 8, 2, 3, 1]
+//     Output: [5, 6]
+//     Explanation:
+//       - In Pass 1, values 4, 3, 2, 7, 8, and 1 negate nums[slot] for slots 3, 2,
+//         1, 6, 7, and 0 only when positive, leaving duplicate 2 and 3 slots
+//         negative.
+//       - After Pass 1, nums becomes [-4, -3, -2, -7, 8, 2, -3, -1].
+//       - In Pass 2, only indices 4 (8 > 0) and 5 (2 > 0) remain positive, so
+//         collect i + 1 to return [5, 6].
+//
+//   Example 2:
+//     Input:  nums = [1, 1]
+//     Output: [2]
+//     Explanation:
+//       - In Pass 1, the first 1 negates nums[0] to -1, and the second 1 sees
+//         nums[0] < 0 so it leaves nums[0] negative as [-1, 1].
+//       - In Pass 2, index 0 is negative while index 1 holds 1 > 0, appending 1 + 1
+//         = 2 and returning [2].
+//
+//   Example 3:
+//     Input:  nums = [2, 2, 2, 2]
+//     Output: [1, 3, 4]
+//     Explanation:
+//       - In Pass 1, the first 2 flips nums[1] from 2 to -2, and the remaining
+//         three 2s skip flipping because nums[1] is no longer > 0, leaving [2, -2,
+//         2, 2].
+//       - In Pass 2, positive entries at indices 0, 2, and 3 produce i + 1 values
+//         1, 3, and 4, returning [1, 3, 4].
+//
 // Algorithm:
 //   Use the input array itself as an in-place presence map via sign bits:
 //     1. Marking pass: For each element `raw` in `nums`, recover its original

@@ -6,6 +6,37 @@
 //   binary search trees (BSTs) that store exactly n nodes with distinct values
 //   from 1 to n.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3
+//     Output: 5
+//     Explanation:
+//       - Allocate dp = [1, 0, 0, 0] so dp[0] = 1 represents the single empty BST.
+//       - For m = 1, root i = 1 gives dp[1] = dp[0] * dp[0] = 1.
+//       - For m = 2, roots i = 1, 2 give dp[2] = dp[0] * dp[1] + dp[1] * dp[0] =
+//         1*1 + 1*1 = 2.
+//       - For m = 3, summing dp[i - 1] * dp[3 - i] over i = 1, 2, 3 yields 1*2 +
+//         1*1 + 2*1 = 5, returning dp[3] = 5.
+//
+//   Example 2:
+//     Input:  n = 4
+//     Output: 14
+//     Explanation:
+//       - Initialize dp[0] = 1 and populate dp[1] = 1, dp[2] = 2, and dp[3] = 5 in
+//         bottom-up order.
+//       - For m = 4, iterate root i from 1 to 4 and accumulate dp[0]*dp[3] +
+//         dp[1]*dp[2] + dp[2]*dp[1] + dp[3]*dp[0].
+//       - Evaluate 1*5 + 1*2 + 2*1 + 5*1 = 14 into dp[4] and return 14.
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: 1
+//     Explanation:
+//       - Allocate dp of size 2 initialized to [1, 0].
+//       - Run the outer loop for m = 1 and inner loop for i = 1, computing dp[1] =
+//         dp[0] * dp[0] = 1.
+//       - Return dp[1] = 1.
+//
 // Algorithm:
 //   Dynamic Programming (Catalan number recurrence).
 //   Choosing any value i in [1, m] as the root of an m-node BST partitions the

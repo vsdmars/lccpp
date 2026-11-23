@@ -10,6 +10,42 @@
 //   `head` pointer. When multiple insertion positions are valid, any may be
 //   chosen.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [3, 4, 1], insertVal = 2
+//     Output: [3, 4, 1, 2]
+//     Explanation:
+//       - Start at curr = 3 (next = 4): neither fits_between (3 <= 2 <= 4) nor
+//         fits_at_wrap (3 > 4) holds, so curr advances to 4.
+//       - At curr = 4 (next = 1): curr->val > next->val holds, but 2 >= 4 and 2 <=
+//         1 are both false, so curr advances to 1.
+//       - At curr = 1 (next = 3): fits_between (1 <= 2 <= 3) is true, so the scan
+//         breaks with curr on node 1.
+//       - Splice new Node(2, 3) after node 1 via curr->next and return the original
+//         head (node 3), yielding [3, 4, 1, 2].
+//
+//   Example 2:
+//     Input:  head = [3, 4, 1], insertVal = 5
+//     Output: [3, 4, 5, 1]
+//     Explanation:
+//       - Start at curr = 3 (next = 4): neither 3 <= 5 <= 4 nor 3 > 4 holds, so
+//         curr advances to 4.
+//       - At curr = 4 (next = 1): curr->val > next->val (4 > 1) and insertVal >=
+//         curr->val (5 >= 4), so fits_at_wrap is true and the loop breaks.
+//       - Insert new Node(5, 1) after node 4 and return the original head (node 3),
+//         producing [3, 4, 5, 1].
+//
+//   Example 3:
+//     Input:  head = [2, 2, 2, 2], insertVal = 3
+//     Output: [2, 3, 2, 2, 2]
+//     Explanation:
+//       - At every node starting from head (first 2), curr->val == next->val == 2,
+//         so neither 2 <= 3 <= 2 nor 2 > 2 ever triggers.
+//       - After advancing curr four times around the cycle, curr == head triggers
+//         the full-revolution break condition back at the initial node 2.
+//       - Splice new Node(3, curr->next) directly after head and return head,
+//         resulting in [2, 3, 2, 2, 2].
+//
 // Algorithm:
 //   Single-pass circular scan handling four structural cases:
 //   1. Empty list (`head == nullptr`): allocate `node` with `node->next = node`

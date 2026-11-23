@@ -9,6 +9,46 @@
 //   smaller one.
 //   Constraints: 1 <= n.size() <= 18, 1 <= int(n) <= 10^18 - 1.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = "123"
+//     Output: "121"
+//     Explanation:
+//       - Record cross-length boundary candidates 10^2 - 1 = 99 and 10^3 + 1 = 1001
+//         alongside num = 123.
+//       - With len = 3, half_len = 2, and is_odd = true, shift prefix = 12 by {-1,
+//         0, 1} to get 11, 12, and 13 (all within [10, 99]) and mirror them into
+//         111, 121, and 131.
+//       - Compare absolute differences from 123: |99 - 123| = 24, |1001 - 123| =
+//         878, |111 - 123| = 12, |121 - 123| = 2, and |131 - 123| = 8.
+//       - Select 121 as the candidate with minimum distance 2 and return "121".
+//
+//   Example 2:
+//     Input:  n = "100"
+//     Output: "99"
+//     Explanation:
+//       - Generate boundary candidates 10^2 - 1 = 99 and 10^3 + 1 = 1001 for len =
+//         3 and num = 100.
+//       - Mirror valid shifted prefixes from prefix = 10 (skipping 9 since it is
+//         below min_half = 10): 10 mirrors to 101 and 11 mirrors to 111.
+//       - Evaluate distances: |99 - 100| = 1, |1001 - 100| = 901, |101 - 100| = 1,
+//         and |111 - 100| = 11.
+//       - Break the distance-1 tie between 99 and 101 in favor of the smaller
+//         candidate, returning "99".
+//
+//   Example 3:
+//     Input:  n = "999999999999999999"
+//     Output: "1000000000000000001"
+//     Explanation:
+//       - For len = 18, add boundary candidates 10^17 - 1 = 99999999999999999 and
+//         10^18 + 1 = 1000000000000000001.
+//       - With half_len = 9, is_odd = false, and prefix = 999999999, prefix - 1 =
+//         999999998 mirrors to 999999998899999999, prefix mirrors to num itself
+//         (excluded), and prefix + 1 = 1000000000 exceeds max_half = 999999999 so
+//         it is skipped to avoid 20-digit overflow.
+//       - Among valid candidates, 1000000000000000001 has the smallest distance
+//         |1000000000000000001 - 999999999999999999| = 2 and is returned.
+//
 // Algorithm:
 //   Candidate generation around prefix mirroring and digit-length boundaries.
 //   Let L = n.size() and let `prefix` be the integer formed by the first

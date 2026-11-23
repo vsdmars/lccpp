@@ -10,6 +10,48 @@
 //   `next` (implementation also guards against `size <= 0` and uses 64-bit
 //   accumulation to prevent integer overflow on large values).
 //
+// Examples:
+//   Example 1:
+//     Input:  MovingAverage(3), next(1), next(10), next(3), next(5), next(2)
+//     Output: [1.0, 5.5, 4.66667, 6.0, 3.33333]
+//     Explanation:
+//       - MovingAverage(3) initializes max_size_ = 3, an empty deque window_, and
+//         running_sum_ = 0.
+//       - next(1) pushes 1 (window_ = [1], running_sum_ = 1) and returns 1 / 1 =
+//         1.0, then next(10) pushes 10 (window_ = [1, 10], running_sum_ = 11) and
+//         returns 11 / 2 = 5.5.
+//       - next(3) pushes 3 (window_ = [1, 10, 3], running_sum_ = 14) and returns
+//         14.0 / 3.0 (approx 4.66667).
+//       - next(5) pushes 5 so window_.size() == 4 > 3, subtracts and pops front 1
+//         (window_ = [10, 3, 5], running_sum_ = 18), and returns 18 / 3 = 6.0.
+//       - next(2) pushes 2, subtracts and pops front 10 (window_ = [3, 5, 2],
+//         running_sum_ = 10), and returns 10.0 / 3.0 (approx 3.33333).
+//
+//   Example 2:
+//     Input:  MovingAverage(1), next(4), next(-7), next(0)
+//     Output: [4.0, -7.0, 0.0]
+//     Explanation:
+//       - MovingAverage(1) sets max_size_ = 1 so window_ retains only the single
+//         most recent stream value.
+//       - next(4) pushes 4 (window_ = [4], running_sum_ = 4) and returns 4 / 1 =
+//         4.0.
+//       - next(-7) pushes -7, evicts front 4 (window_ = [-7], running_sum_ = -7),
+//         and returns -7 / 1 = -7.0.
+//       - next(0) pushes 0, evicts front -7 (window_ = [0], running_sum_ = 0), and
+//         returns 0 / 1 = 0.0.
+//
+//   Example 3:
+//     Input:  MovingAverage(2), next(-5), next(5), next(-3)
+//     Output: [-5.0, 0.0, 1.0]
+//     Explanation:
+//       - MovingAverage(2) sets max_size_ = 2 with running_sum_ = 0.
+//       - next(-5) pushes -5 (window_ = [-5], running_sum_ = -5) and returns -5 / 1
+//         = -5.0.
+//       - next(5) pushes 5 (window_ = [-5, 5], running_sum_ = 0) and returns 0 / 2
+//         = 0.0.
+//       - next(-3) pushes -3, subtracts and pops front -5 (window_ = [5, -3],
+//         running_sum_ = 2), and returns 2 / 2 = 1.0.
+//
 // Algorithm:
 //   Sliding-window FIFO queue with incremental sum maintenance. On each
 //   `next(val)` call, push `val` to the back of `window_` and add it to

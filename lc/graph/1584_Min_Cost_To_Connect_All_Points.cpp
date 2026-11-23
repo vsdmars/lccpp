@@ -10,6 +10,40 @@
 //   complete graph on `points`). Constraints: 1 <= points.length <= 1000,
 //   -10^6 <= xi, yi <= 10^6.
 //
+// Examples:
+//   Example 1:
+//     Input:  points = [[0, 0], [2, 2], [3, 10], [5, 2], [7, 0]]
+//     Output: 20
+//     Explanation:
+//       - Prim's algorithm seeds min_heap with (0, 0), visits point 0 = [0, 0]
+//         (total_cost = 0), and pushes (4, 1), (13, 2), (7, 3), and (7, 4).
+//       - It pops (4, 1) for [2, 2] (total_cost = 4) and relaxes min_dist for
+//         points 2 and 3 to 9 and 3, pushing (9, 2) and (3, 3).
+//       - Next it pops (3, 3) for [5, 2] (total_cost = 7), relaxing point 4 = [7,
+//         0] to 4 and pushing (4, 4), then pops (4, 4) (total_cost = 11).
+//       - After skipping stale heap entries (7, 3) and (7, 4), it pops (9, 2) for
+//         [3, 10] (total_cost = 20), reaching visited_count = 5 and returning 20.
+//
+//   Example 2:
+//     Input:  points = [[3, 12], [-2, 5], [-4, 1]]
+//     Output: 18
+//     Explanation:
+//       - Visiting point 0 = [3, 12] (total_cost = 0) pushes Manhattan distances
+//         (12, 1) to [-2, 5] and (18, 2) to [-4, 1].
+//       - Popping (12, 1) adds 12 (total_cost = 12) and relaxes point 2 = [-4, 1]
+//         from 18 down to |-4 - (-2)| + |1 - 5| = 6.
+//       - Popping (6, 2) adds 6 (total_cost = 18), reaches visited_count = 3, and
+//         returns 18.
+//
+//   Example 3:
+//     Input:  points = [[4, -9]]
+//     Output: 0
+//     Explanation:
+//       - minCostConnectPoints computes n = points.size() = 1 for the single-point
+//         input [[4, -9]].
+//       - Since n <= 1uz, the early guard returns 0 immediately without
+//         initializing min_heap or computing any Manhattan distances.
+//
 // Algorithm:
 //   Prim's Minimum Spanning Tree (MST) algorithm using a binary min-heap and
 //   best-known distance relaxation. Starting from point `0`, the loop pops the

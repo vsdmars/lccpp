@@ -8,6 +8,41 @@
 //   complete at least `totalTrips` trips.
 //   Constraints: 1 <= time.size() <= 10^5, 1 <= time[i], totalTrips <= 10^7.
 //
+// Examples:
+//   Example 1:
+//     Input:  time = [1, 2, 3], totalTrips = 5
+//     Output: 3
+//     Explanation:
+//       - Find min_bus_time = 1 and initialize 64-bit bounds low = 1 and high = 1 *
+//         5 = 5.
+//       - At mid = 3, can_complete sums 3/1 + 3/2 + 3/3 = 3 + 1 + 1 = 5 >= 5, so
+//         high shrinks to 3.
+//       - At mid = 2, can_complete sums 2/1 + 2/2 + 2/3 = 2 + 1 + 0 = 3 < 5, so low
+//         advances to 3.
+//       - The loop ends with low == high == 3 and returns 3.
+//
+//   Example 2:
+//     Input:  time = [5, 5, 5, 5], totalTrips = 13
+//     Output: 20
+//     Explanation:
+//       - Find min_bus_time = 5 and set bounds low = 1 and high = 5 * 13 = 65.
+//       - Probes at mid = 33 (can_complete reaches 18 >= 13 after three buses), mid
+//         = 25, and mid = 21 all meet target 13, while mid = 17 yields 4 * (17 / 5)
+//         = 12 < 13, narrowing [low, high] to [18, 21].
+//       - At mid = 19, the four buses complete 4 * (19 / 5) = 12 < 13 trips,
+//         raising low to 20.
+//       - At mid = 20, the buses complete 4 * (20 / 5) = 16 >= 13 trips, lowering
+//         high to 20 and returning 20.
+//
+//   Example 3:
+//     Input:  time = [2], totalTrips = 1
+//     Output: 2
+//     Explanation:
+//       - Find min_bus_time = 2 and initialize bounds low = 1 and high = 2 * 1 = 2.
+//       - At mid = 1, can_complete computes 1 / 2 = 0 < 1, advancing low to mid + 1
+//         = 2.
+//       - The loop terminates with low == high == 2 and returns 2.
+//
 // Algorithm:
 //   Binary search on the answer (parametric search over elapsed time `t`).
 //   The total trips completed by time `t`, f(t) = sum_i floor(t / time[i]), is

@@ -7,6 +7,41 @@
 //   characters into `"--"`. Return all possible states of the string after one
 //   valid move; if no valid move exists, return an empty list.
 //
+// Examples:
+//   Example 1:
+//     Input:  current_state = "++++"
+//     Output: ["--++", "+--+", "++--"]
+//     Explanation:
+//       - Verify current_state.size() == 4 >= 2 and scan adjacent pairs (i, i + 1)
+//         for i in {0, 1, 2}.
+//       - At i = 0, indices 0 and 1 are both '+', so copy "++++" and flip indices 0
+//         and 1 to '-' to append "--++".
+//       - At i = 1, flip indices 1 and 2 to append "+--+", and at i = 2, flip
+//         indices 2 and 3 to append "++--".
+//       - Return moves = ["--++", "+--+", "++--"].
+//
+//   Example 2:
+//     Input:  current_state = "++-+++"
+//     Output: ["---+++", "++---+", "++-+--"]
+//     Explanation:
+//       - At i = 0, current_state[0..1] is "++", so flipping indices 0 and 1
+//         appends "---+++".
+//       - At i = 1 ("+-") and i = 2 ("-+"), the pair is not "++", so both indices
+//         are skipped.
+//       - At i = 3 and i = 4, current_state[3..4] and current_state[4..5] are "++",
+//         appending "++---+" and "++-+--".
+//       - Return moves = ["---+++", "++---+", "++-+--"].
+//
+//   Example 3:
+//     Input:  current_state = "+-+-+"
+//     Output: []
+//     Explanation:
+//       - Verify current_state.size() == 5 >= 2 and inspect adjacent pairs (i, i +
+//         1) for i in {0, 1, 2, 3}.
+//       - Each pair is either "+-" or "-+", so the condition current_state[i] ==
+//         '+' && current_state[i + 1] == '+' is never true.
+//       - Return the empty vector [].
+//
 // Algorithm:
 //   Perform a single linear pass across adjacent index pairs `(i, i + 1)` for
 //   `0 <= i < n - 1`. Whenever `current_state[i] == '+'` and

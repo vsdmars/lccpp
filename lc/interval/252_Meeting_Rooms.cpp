@@ -9,6 +9,39 @@
 //   `[0, 10]` and `[10, 20]`) do not overlap.
 //   Constraints: 0 <= intervals.size() <= 10^4, 0 <= start_i < end_i <= 10^6.
 //
+// Examples:
+//   Example 1:
+//     Input:  intervals = [[0, 30], [5, 10], [15, 20]]
+//     Output: false
+//     Explanation:
+//       - Copy intervals into meetings and sort by start time: [(0, 30), (5, 10),
+//         (15, 20)].
+//       - At i = 1, compare meetings[1].first (5) with meetings[0].second (30): 5 <
+//         30 is true.
+//       - Return false immediately upon finding the overlap between (0, 30) and (5,
+//         10).
+//
+//   Example 2:
+//     Input:  intervals = [[10, 20], [0, 10], [20, 25]]
+//     Output: true
+//     Explanation:
+//       - Copy intervals into meetings and sort by start time: [(0, 10), (10, 20),
+//         (20, 25)].
+//       - At i = 1, meetings[1].first (10) < meetings[0].second (10) is false, so
+//         back-to-back meetings (0, 10) and (10, 20) do not overlap.
+//       - At i = 2, meetings[2].first (20) < meetings[1].second (20) is false, so
+//         the loop completes and returns true.
+//
+//   Example 3:
+//     Input:  intervals = [[0, 15], [16, 20], [13, 20], [21, 22]]
+//     Output: false
+//     Explanation:
+//       - Copy intervals into meetings and sort by start time: [(0, 15), (13, 20),
+//         (16, 20), (21, 22)].
+//       - At i = 1, check meetings[1].first (13) < meetings[0].second (15): the
+//         condition holds (13 < 15).
+//       - Return false because (13, 20) starts before (0, 15) ends.
+//
 // Algorithm:
 //   Copy the intervals into pairs `(start, end)` and sort them in ascending
 //   order by start time (breaking ties by end time). Scan adjacent pairs from

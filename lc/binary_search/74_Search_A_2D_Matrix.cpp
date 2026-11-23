@@ -7,6 +7,42 @@
 //   greater than the last integer of the previous row, determine whether a
 //   given `target` integer exists in the matrix in O(log(m * n)) time.
 //
+// Examples:
+//   Example 1:
+//     Input:  matrix = [[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 50]], target =
+//             3
+//     Output: true
+//     Explanation:
+//       - With rows = 3 and cols = 4, initialize virtual 1D bounds left = 0 and
+//         right = 12.
+//       - At mid = 6, map to row = 6 / 4 = 1 and col = 6 % 4 = 2 (matrix[1][2] = 16
+//         > 3), so set right = 6.
+//       - At mid = 3, map to row = 0 and col = 3 (matrix[0][3] = 7 > 3), so set
+//         right = 3.
+//       - At mid = 1, map to row = 0 and col = 1 (matrix[0][1] = 3 == target),
+//         returning true.
+//
+//   Example 2:
+//     Input:  matrix = [[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 50]], target =
+//             13
+//     Output: false
+//     Explanation:
+//       - Initialize virtual 1D bounds left = 0 and right = 12 for the 3 x 4
+//         matrix.
+//       - At mid = 6, matrix[1][2] = 16 > 13 sets right = 6; at mid = 3,
+//         matrix[0][3] = 7 < 13 sets left = 4.
+//       - At mid = 5, matrix[1][1] = 11 < 13 sets left = 6.
+//       - The loop terminates with left == right == 6, so return false.
+//
+//   Example 3:
+//     Input:  matrix = [[1], [3], [5]], target = 3
+//     Output: true
+//     Explanation:
+//       - Verify the matrix and its first row are non-empty, then set rows = 3,
+//         cols = 1, left = 0, and right = 3.
+//       - Compute mid = 1 and map it to row = 1 / 1 = 1 and col = 1 % 1 = 0.
+//       - Compare matrix[1][0] = 3 with target = 3 and return true.
+//
 // Algorithm:
 //   Because the row-major ordering of the matrix is strictly sorted globally,
 //   treat the `m x n` grid as a virtual 1D sorted array of length `m * n`

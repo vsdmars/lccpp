@@ -6,6 +6,38 @@
 //   adjacent equal characters and delete them until no adjacent duplicate pair
 //   remains. Return the resulting unique string.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abbaca"
+//     Output: "ca"
+//     Explanation:
+//       - Push 'a' then 'b' onto result, forming "ab".
+//       - Next 'b' matches result.back() ('b'), so pop 'b' to leave result = "a".
+//       - Next 'a' now matches result.back() ('a'), triggering a cascading pop that
+//         empties result to "".
+//       - Push 'c' then 'a' onto the empty buffer since neither matches the top
+//         character, returning "ca".
+//
+//   Example 2:
+//     Input:  s = "azxxzy"
+//     Output: "ay"
+//     Explanation:
+//       - Push 'a' and 'z' onto result to form "az".
+//       - Push the first 'x' ("azx"), then pop it when the second 'x' matches
+//         result.back(), returning result to "az".
+//       - Next 'z' matches result.back() ('z'), so pop 'z' to leave result = "a".
+//       - Push 'y' onto "a", returning "ay".
+//
+//   Example 3:
+//     Input:  s = "aaaaa"
+//     Output: "a"
+//     Explanation:
+//       - Push the first 'a' ("a"), then pop it when the second 'a' matches
+//         result.back() ("").
+//       - Push the third 'a' ("a"), then pop it when the fourth 'a' matches
+//         result.back() ("").
+//       - Push the fifth 'a' onto the empty result buffer and return "a".
+//
 // Algorithm:
 //   Single-pass character stack. Use the output `std::string result` directly
 //   as a stack. For each character `ch` in `s`:

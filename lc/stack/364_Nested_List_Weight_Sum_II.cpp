@@ -10,6 +10,42 @@
 //   bottom-up as `maxDepth - depth + 1`. Return the sum of each integer
 //   multiplied by its weight.
 //
+// Examples:
+//   Example 1:
+//     Input:  nestedList = [[1, 1], 2, [1, 1]]
+//     Output: 8
+//     Explanation:
+//       - At BFS level 0 (depth 1), integer 2 sets level_sums[0] = 2 and
+//         deepest_int_depth = 1, while the two [1, 1] lists enqueue four 1s into
+//         next_level.
+//       - At BFS level 1 (depth 2), summing the four integers yields level_sums[1]
+//         = 4 and updates deepest_int_depth = 2, with next_level empty.
+//       - Prefix pass over depth = 0..1 computes depth 0 (running_sum = 2,
+//         weighted_sum = 2) and depth 1 (running_sum = 2 + 4 = 6, weighted_sum = 2
+//         + 6 = 8).
+//
+//   Example 2:
+//     Input:  nestedList = [1, [4, [6]]]
+//     Output: 17
+//     Explanation:
+//       - Level-by-level BFS records level_sums = [1, 4, 6] across depths 1, 2, and
+//         3, setting deepest_int_depth = 3.
+//       - Prefix pass adds depth 0 (running_sum = 1, weighted_sum = 1) and depth 1
+//         (running_sum = 5, weighted_sum = 1 + 5 = 6).
+//       - At depth 2, running_sum becomes 5 + 6 = 11 and weighted_sum becomes 6 +
+//         11 = 17, matching 1*3 + 4*2 + 6*1.
+//
+//   Example 3:
+//     Input:  nestedList = [1, [[[]]]]
+//     Output: 1
+//     Explanation:
+//       - At BFS level 0 (depth 1), integer 1 gives level_sums[0] = 1 with
+//         saw_integer = true, setting deepest_int_depth = 1, and enqueues [[[]]].
+//       - BFS expands levels 1, 2, and 3 through the nested empty lists with
+//         level_sum = 0 and saw_integer = false, so deepest_int_depth remains 1.
+//       - Prefix pass runs only for depth = 0 < 1, returning weighted_sum = 1 so
+//         deeper empty lists do not inflate maxDepth.
+//
 // Algorithm:
 //   Breadth-first level-by-level traversal with running prefix accumulation:
 //   1. Traverse the nested structure one depth level at a time using two

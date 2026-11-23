@@ -8,6 +8,42 @@
 //   duplicate subtree, return the root node of any one occurrence (in any
 //   order). Tree size is in [1, 5000] and values are in [-200, 200].
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, 4, null, 2, 4, null, null, 4]
+//     Output: [[2, 4], [4]]
+//     Explanation:
+//       - Post-order DFS serializes the left subtree under 2 as leaf "4,#,#" (count
+//         1) and parent "2,4,#,#,#" (count 1).
+//       - Under right child 3, the leftmost leaf 4 produces "4,#,#" a second time
+//         (counts["4,#,#"] == 2), so node 4 is added to duplicates.
+//       - Its parent 2 produces "2,4,#,#,#" a second time (counts["2,4,#,#,#"] ==
+//         2), so subtree [2, 4] is added to duplicates.
+//       - The rightmost leaf 4 increments counts["4,#,#"] to 3 (not 2), and nodes 3
+//         and 1 have unique signatures, leaving duplicate subtrees [2, 4] and [4].
+//
+//   Example 2:
+//     Input:  root = [2, 1, 1]
+//     Output: [[1]]
+//     Explanation:
+//       - DFS visits the left leaf 1 and records signature "1,#,#" (or
+//         SubtreeKey{1, 0, 0} -> id 1) with count 1.
+//       - DFS visits the right leaf 1, increments the count of "1,#,#" to 2, and
+//         pushes that node 1 into duplicates.
+//       - Root 2 receives unique signature "2,1,#,#,1,#,#" (count 1), returning
+//         [[1]].
+//
+//   Example 3:
+//     Input:  root = [0, 1, 12, 23, null, 3, null]
+//     Output: []
+//     Explanation:
+//       - DFS computes comma-delimited signature "1,23,#,#,#" for the left subtree
+//         (count 1) and "12,3,#,#,#" for the right subtree (count 1).
+//       - Because comma delimiters (and separate val/left_id/right_id fields in
+//         findDuplicateSubtreesLinear) distinguish (1, 23) from (12, 3), no false
+//         collision occurs.
+//       - All subtree counts remain 1, so the returned duplicate list is empty.
+//
 // Algorithm:
 //   1. Delimited post-order serialization (`findDuplicateSubtrees`):
 //      Recursively serialize every subtree into an unambiguous preorder string

@@ -11,6 +11,43 @@
 //   Constraints: 1 <= rows, cols <= 100, and at most 1,000 calls to `get()`
 //   are permitted.
 //
+// Examples:
+//   Example 1:
+//     Input:  mat = [[0, 0], [1, 1]]
+//     Output: 0
+//     Explanation:
+//       - Retrieve dimensions {2, 2} and start the staircase pointer at top-right
+//         corner (row = 0, col = 1).
+//       - Query get(0, 1) == 0, so row 0 has no 1s at or left of column 1 and the
+//         scan steps down to (1, 1).
+//       - Query get(1, 1) == 1, so column 1 is a valid candidate and the scan steps
+//         left to (1, 0).
+//       - Query get(1, 0) == 1, stepping left to col = -1 to exit the loop and
+//         return col + 1 = 0.
+//
+//   Example 2:
+//     Input:  mat = [[0, 0, 0, 1], [0, 0, 1, 1], [0, 1, 1, 1]]
+//     Output: 1
+//     Explanation:
+//       - Retrieve dimensions {3, 4} and begin at (row = 0, col = 3).
+//       - Query get(0, 3) == 1 to step left to (0, 2), then query get(0, 2) == 0 to
+//         step down to (1, 2).
+//       - Query get(1, 2) == 1 to step left to (1, 1), then query get(1, 1) == 0 to
+//         step down to (2, 1).
+//       - Query get(2, 1) == 1 to step left to (2, 0), then query get(2, 0) == 0 to
+//         step down to row = 3 and exit.
+//       - Since col = 0 differs from cols - 1 = 3, return col + 1 = 1.
+//
+//   Example 3:
+//     Input:  mat = [[0, 0], [0, 0]]
+//     Output: -1
+//     Explanation:
+//       - Retrieve dimensions {2, 2} and initialize the pointer at (row = 0, col =
+//         1).
+//       - Query get(0, 1) == 0 to step down to (1, 1), then query get(1, 1) == 0 to
+//         step down to row = 2 and end the loop.
+//       - Because col stayed at cols - 1 = 1 without ever moving left, return -1.
+//
 // Algorithm:
 //   Top-Right Staircase Scan (monotonic two-pointer walk):
 //   Start at the top-right corner `(row = 0, col = cols - 1)`. Because every

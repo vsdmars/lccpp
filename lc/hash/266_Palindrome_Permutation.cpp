@@ -7,6 +7,35 @@
 //   Constraints: 1 <= s.length <= 5000; `s` consists of ASCII characters
 //   (lowercase English letters on LeetCode, handled for full ASCII here).
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "code"
+//     Output: false
+//     Explanation:
+//       - Initialize the 256-bit `odd_parity` bitset to all zeros.
+//       - Flip the bits for `'c'`, `'o'`, `'d'`, and `'e'`, leaving four distinct
+//         bits set to `1`.
+//       - Evaluate `odd_parity.count() <= 1`: since `4 > 1`, return `false`.
+//
+//   Example 2:
+//     Input:  s = "carerac"
+//     Output: true
+//     Explanation:
+//       - Start with `odd_parity` all zeros and flip bits left-to-right for `'c'`,
+//         `'a'`, `'r'`, `'e'`, `'r'`, `'a'`, and `'c'`.
+//       - Each of `'c'`, `'a'`, and `'r'` is flipped twice and cancels back to `0`,
+//         leaving only the bit for `'e'` set to `1`.
+//       - Since `odd_parity.count() == 1 <= 1`, return `true`.
+//
+//   Example 3:
+//     Input:  s = "aabbcc"
+//     Output: true
+//     Explanation:
+//       - Scan `"aabbcc"`, flipping the bit for each character in `odd_parity`.
+//       - Because `'a'`, `'b'`, and `'c'` each appear twice, every flipped bit
+//         toggles twice and returns to `0`.
+//       - Observe `odd_parity.count() == 0 <= 1` and return `true`.
+//
 // Algorithm:
 //   In any palindrome, every character appearing on the left half must be
 //   paired with an identical character on the right half, leaving at most one

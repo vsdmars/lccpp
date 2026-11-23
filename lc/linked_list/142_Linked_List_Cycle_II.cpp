@@ -7,6 +7,41 @@
 //   in the list can be reached again by continuously following the `next`
 //   pointer. The linked list must not be modified.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [3, 2, 0, -4], pos = 1
+//     Output: node at index 1 (val = 2)
+//     Explanation:
+//       - Initialize `slow` and `fast` at index `0` (`3`), where tail index `3`
+//         (`-4`) connects back to index `1` (`2`).
+//       - Phase 1 steps `(slow, fast)` to `(idx 1, idx 2)`, then `(idx 2, idx 1)`,
+//         and finally `(idx 3, idx 3)`, setting `has_cycle = true` and breaking.
+//       - Phase 2 sets `entry = head` (index `0`, `3`) while `slow` stays at index
+//         `3` (`-4`).
+//       - Advance both pointers one step: `entry` moves to index `1` (`2`) and
+//         `slow` moves along the back-edge to index `1` (`2`), so `entry == slow`
+//         and index `1` is returned.
+//
+//   Example 2:
+//     Input:  head = [1, 2, 3, 4, 5], pos = 2
+//     Output: node at index 2 (val = 3)
+//     Explanation:
+//       - Initialize `slow` and `fast` at index `0` (`1`), with tail index `4`
+//         (`5`) pointing to index `2` (`3`) to form a 3-node cycle.
+//       - Phase 1 steps `(slow, fast)` to `(idx 1, idx 2)`, `(idx 2, idx 4)`, and
+//         `(idx 3, idx 3)`, meeting at index `3` (`4`).
+//       - Phase 2 starts `entry` at index `0` (`1`) with `slow` at index `3` (`4`),
+//         advancing both together to `(idx 1, idx 4)` and then `(idx 2, idx 2)`.
+//       - Return `entry` at index `2` (`3`), where `entry == slow`.
+//
+//   Example 3:
+//     Input:  head = [1], pos = -1
+//     Output: nullptr
+//     Explanation:
+//       - Check the early guard `head == nullptr || head->next == nullptr`, which
+//         holds because the single node has `next == nullptr`.
+//       - Return `nullptr` immediately to indicate there is no cycle.
+//
 // Algorithm:
 //   Floyd's Tortoise and Hare (two-phase cycle detection):
 //   Phase 1 (Detect cycle): Advance `slow` by 1 step and `fast` by 2 steps from

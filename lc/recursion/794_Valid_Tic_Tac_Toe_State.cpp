@@ -9,6 +9,37 @@
 //   immediately once either player forms three identical marks in a row,
 //   column, or diagonal (or all 9 cells are filled).
 //
+// Examples:
+//   Example 1:
+//     Input:  board = ["XOX", "O O", "XOX"]
+//     Output: true
+//     Explanation:
+//       - Count all marks on the 3x3 grid to get x_count = 4 and o_count = 4,
+//         satisfying o_count <= x_count and x_count - o_count <= 1.
+//       - Check all 3 rows, 3 columns, and 2 diagonals via hasWin for both 'X' and
+//         'O', finding x_wins = false and o_wins = false.
+//       - Since neither player has formed a winning line and move counts are valid,
+//         return true.
+//
+//   Example 2:
+//     Input:  board = ["XXX", "OOX", "OOX"]
+//     Output: true
+//     Explanation:
+//       - Count the marks to find x_count = 5 and o_count = 4, which passes the
+//         move-count invariant.
+//       - Run hasWin to get x_wins = true (row 0 and column 2 both contain three
+//         'X's) and o_wins = false.
+//       - Verify the 'X'-win invariant x_count == o_count + 1 (5 == 4 + 1), which
+//         holds and returns true.
+//
+//   Example 3:
+//     Input:  board = ["O  ", "   ", "   "]
+//     Output: false
+//     Explanation:
+//       - Scan the board to count x_count = 0 and o_count = 1.
+//       - Evaluate o_count > x_count (1 > 0), which fails immediately and returns
+//         false because 'X' must move first.
+//
 // Algorithm:
 //   Checks the necessary and sufficient invariants of a reachable 3x3
 //   Tic-Tac-Toe board directly without searching the game tree:

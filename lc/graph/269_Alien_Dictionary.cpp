@@ -8,6 +8,43 @@
 //   `words` in a valid alien alphabetical order. If multiple valid orders
 //   exist, return any one; if the input is contradictory or invalid, return "".
 //
+// Examples:
+//   Example 1:
+//     Input:  words = ["wrt", "wrf", "er", "ett", "rftt"]
+//     Output: "wertf"
+//     Explanation:
+//       - build_graph marks the 5 present letters (e, f, r, t, w) and extracts
+//         directed edges from the first differing character of each adjacent word
+//         pair: t -> f, w -> e, r -> t, and e -> r.
+//       - topo_sort seeds the queue with 'w' because it is the only present letter
+//         with indegree 0.
+//       - Kahn's BFS pops 'w', 'e', 'r', 't', and 'f' in sequence as each
+//         neighbor's indegree drops to 0, appending them to order.
+//       - Because order.size() == 5 matches unique_chars, topo_sort returns
+//         "wertf".
+//
+//   Example 2:
+//     Input:  words = ["z", "x", "z"]
+//     Output: ""
+//     Explanation:
+//       - build_graph marks 'z' and 'x' as present (unique_chars = 2) and records
+//         edges z -> x from ("z", "x") and x -> z from ("x", "z").
+//       - Both 'z' and 'x' now have indegree 1, so topo_sort starts with an empty
+//         queue and emits an empty order string.
+//       - Since order.size() (0) != unique_chars (2), a cycle is detected and
+//         alienOrder returns "".
+//
+//   Example 3:
+//     Input:  words = ["abc", "ab"]
+//     Output: ""
+//     Explanation:
+//       - add_ordering_edge compares w1 = "abc" and w2 = "ab" over min_len = 2
+//         characters and finds no differing index since 'a' == 'a' and 'b' == 'b'.
+//       - The prefix check w1.size() <= w2.size() (3 <= 2) evaluates to false, so
+//         add_ordering_edge and build_graph return false.
+//       - alienOrder detects the invalid prefix ordering and immediately returns
+//         "".
+//
 // Algorithm:
 //   1. Graph construction (`build_graph`): scan all words to record which of
 //      the 26 lowercase letters appear, then compare every adjacent pair

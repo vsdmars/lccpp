@@ -8,6 +8,36 @@
 //   largest integer in `nums`. Duplicate values are counted distinctly (e.g.,
 //   in ["1", "2", "2"], the 1st and 2nd largest are "2", and the 3rd is "1").
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = ["3", "6", "7", "10"], k = 4
+//     Output: "3"
+//     Explanation:
+//       - Push string views "3", "6", "7", and "10" into min_heap; because size
+//         never exceeds k = 4, no elements are popped.
+//       - NumericGreater ranks longer string "10" above equal-length strings "7",
+//         "6", and "3", placing "3" at min_heap.top().
+//       - Return min_heap.top(), which is "3".
+//
+//   Example 2:
+//     Input:  nums = ["2", "21", "12", "1"], k = 3
+//     Output: "2"
+//     Explanation:
+//       - Push "2", "21", and "12" into min_heap, leaving {"2", "12", "21"} with
+//         "2" at the top.
+//       - Push "1" so min_heap size becomes 4 > 3, then pop the smallest entry "1"
+//         to restore size 3 with {"2", "12", "21"}.
+//       - Return min_heap.top() = "2" as the 3rd largest integer string.
+//
+//   Example 3:
+//     Input:  nums = ["1", "2", "2"], k = 2
+//     Output: "2"
+//     Explanation:
+//       - Push "1" and "2" into min_heap to hold {"1", "2"} with "1" at the top.
+//       - Push the second "2", causing min_heap size 3 > 2 and popping "1" while
+//         keeping both "2" entries.
+//       - Return min_heap.top() = "2", counting duplicate values distinctly.
+//
 // Algorithm:
 //   Because strings can have up to 100 digits, they overflow 64-bit and even
 //   128-bit integer types. Since strings contain only ASCII digits and have no

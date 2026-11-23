@@ -8,6 +8,38 @@
 //   Constraints: 1 <= nums.length <= 10, -10 <= nums[i] <= 10, all elements
 //   are distinct.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3]
+//     Output: [[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]
+//     Explanation:
+//       - Reserve `2^3 = 8` entries in `results` and call `dfs(0)` with `path =
+//         []`, immediately pushing `[]`.
+//       - At `i = 0`, push `1` (`path = [1]`) and recurse through `dfs(1)` to
+//         record `[1]`, `[1, 2]`, `[1, 2, 3]`, and after popping `2`, `[1, 3]`.
+//       - Return to `dfs(0)` with `path = []`, then push `2` at `i = 1` so `dfs(2)`
+//         records `[2]` and `[2, 3]`.
+//       - Finally push `3` at `i = 2` so `dfs(3)` records `[3]`, completing all 8
+//         subsets.
+//
+//   Example 2:
+//     Input:  nums = [0]
+//     Output: [[], [0]]
+//     Explanation:
+//       - Reserve `2^1 = 2` entries in `results` and call `dfs(0)` with `path =
+//         []`, pushing `[]`.
+//       - At `i = 0`, push `0` into `path`, call `dfs(1)` to push `[0]` (its loop
+//         `i < 1` does not run), and pop `0` on return.
+//
+//   Example 3:
+//     Input:  nums = []
+//     Output: [[]]
+//     Explanation:
+//       - Compute `n = 0`, reserve `2^0 = 1` entry in `results`, and invoke
+//         `dfs(0)` with an empty `path`.
+//       - Push `[]` into `results` and exit immediately because `start < n` (`0 <
+//         0`) is false.
+//
 // Algorithm:
 //   Three classic approaches to enumerating all 2^n subsets are provided:
 //   1. Backtracking DFS (`subsets`):

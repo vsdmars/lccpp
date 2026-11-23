@@ -10,6 +10,42 @@
 //   1 <= total, cost1, cost2 <= 10^6. Because the answer can reach ~5 * 10^11
 //   (when total = 10^6 and cost1 = cost2 = 1), the return type must be 64-bit.
 //
+// Examples:
+//   Example 1:
+//     Input:  total = 20, cost1 = 10, cost2 = 5
+//     Output: 9
+//     Explanation:
+//       - Keep step = 10 and other = 5 since cost1 >= cost2, with budget = 20 and
+//         ways = 0.
+//       - At spend = 0, remaining = 20 allows (20 / 5) + 1 = 5 pencil counts
+//         (0..4), updating ways = 5.
+//       - At spend = 10, remaining = 10 allows (10 / 5) + 1 = 3 pencil counts
+//         (0..2), updating ways = 8.
+//       - At spend = 20, remaining = 0 allows (0 / 5) + 1 = 1 pencil count (0),
+//         updating ways = 9 before spend = 30 exits the loop.
+//
+//   Example 2:
+//     Input:  total = 10, cost1 = 3, cost2 = 4
+//     Output: 8
+//     Explanation:
+//       - Swap cost1 and cost2 since 3 < 4, giving step = 4, other = 3, budget =
+//         10, and ways = 0.
+//       - At spend = 0, remaining = 10 contributes (10 / 3) + 1 = 4 ways, setting
+//         ways = 4.
+//       - At spend = 4, remaining = 6 contributes (6 / 3) + 1 = 3 ways, setting
+//         ways = 7.
+//       - At spend = 8, remaining = 2 contributes (2 / 3) + 1 = 1 way, setting ways
+//         = 8 before spend = 12 exits the loop.
+//
+//   Example 3:
+//     Input:  total = 5, cost1 = 10, cost2 = 10
+//     Output: 1
+//     Explanation:
+//       - Initialize step = 10, other = 10, budget = 5, and ways = 0.
+//       - At spend = 0, remaining = 5 contributes (5 / 10) + 1 = 1 way (0 pens, 0
+//         pencils), updating ways = 1.
+//       - Advance spend to 10 > 5, terminating the loop and returning 1.
+//
 // Algorithm:
 //   Fix the amount spent on one utensil and count all feasible quantities of
 //   the other in O(1) arithmetic:

@@ -6,6 +6,48 @@
 //   `getMin()` — retrieving the minimum element currently in the stack — all
 //   in O(1) time.
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["MinStack", "push", "push", "push", "getMin", "pop",
+//             "top", "getMin"], args = [[], [-2], [0], [-3], [], [], [], []]
+//     Output: [null, null, null, null, -3, null, 0, -2]
+//     Explanation:
+//       - push(-2) initializes stack_ with Entry{value: -2, min_so_far: -2}, and
+//         push(0) computes min(0, -2) = -2 to push {0, -2}.
+//       - push(-3) computes min(-3, -2) = -3 and pushes {-3, -3}, so getMin() reads
+//         stack_.back().min_so_far and returns -3.
+//       - pop() removes {-3, -3}, exposing {0, -2} at the top so top() returns 0
+//         and getMin() returns -2.
+//
+//   Example 2:
+//     Input:  operations = ["MinStack", "push", "push", "push", "push", "pop",
+//             "getMin", "top"], args = [[], [-10], [3], [-27], [7], [], [], []]
+//     Output: [null, null, null, null, null, null, -27, -27]
+//     Explanation:
+//       - push(-10) and push(3) populate stack_ with [{-10, -10}, {3, -10}].
+//       - push(-27) updates the prefix minimum to -27 and pushes {-27, -27}, then
+//         push(7) keeps min(7, -27) = -27 and pushes {7, -27}.
+//       - pop() removes {7, -27}, leaving {-27, -27} on top so both getMin() and
+//         top() return -27.
+//
+//   Example 3:
+//     Input:  operations = ["MinStack", "push", "push", "push", "push", "getMin",
+//             "pop", "getMin", "top", "pop", "getMin", "pop", "getMin", "top"],
+//             args = [[], [INT_MAX], [1], [1], [INT_MIN], [], [], [], [], [], [],
+//             [], [], []]
+//     Output: [null, null, null, null, null, INT_MIN, null, 1, 1, null, 1, null,
+//             INT_MAX, INT_MAX]
+//     Explanation:
+//       - Pushing INT_MAX, 1, 1, and INT_MIN builds stack_ as [{INT_MAX, INT_MAX},
+//         {1, 1}, {1, 1}, {INT_MIN, INT_MIN}], so the first getMin() returns
+//         INT_MIN.
+//       - The first pop() removes {INT_MIN, INT_MIN}, leaving {1, 1} on top so
+//         getMin() and top() both return 1.
+//       - The second pop() removes one {1, 1} while the duplicate {1, 1} underneath
+//         preserves getMin() == 1.
+//       - The third pop() leaves only {INT_MAX, INT_MAX}, restoring both getMin()
+//         and top() to INT_MAX.
+//
 // Algorithm:
 //   Augment each pushed element with the running minimum of the stack up to
 //   and including that element: store `Entry{value, min_so_far}`.

@@ -11,6 +11,47 @@
 //   shortest distance to its nearest gate. Rooms unreachable from any gate
 //   must remain `INF`.
 //
+// Examples:
+//   Example 1:
+//     Input:  rooms = [[2147483647, -1, 0, 2147483647], [2147483647, 2147483647,
+//             2147483647, -1], [2147483647, -1, 2147483647, -1], [0, -1,
+//             2147483647, 2147483647]]
+//     Output: [[3, -1, 0, 1], [2, 2, 1, -1], [1, -1, 2, -1], [0, -1, 3, 4]]
+//     Explanation:
+//       - Scan rooms row-major and seed the BFS frontier queue with both gates (0,
+//         2) and (3, 0) at distance 0.
+//       - Pop (0, 2) with next_dist = 1 to update empty neighbors (0, 3) = 1 and
+//         (1, 2) = 1 and enqueue them, then pop (3, 0) to update (2, 0) = 1 and
+//         enqueue it.
+//       - Pop the distance-1 cells: (1, 2) sets (1, 1) = 2 and (2, 2) = 2, while
+//         (2, 0) sets (1, 0) = 2, enqueueing all three.
+//       - Expand distance-2 cells: (2, 2) sets (3, 2) = 3 and (1, 0) sets (0, 0) =
+//         3, then (3, 2) sets (3, 3) = 4 while walls (-1) and already-filled cells
+//         are skipped.
+//
+//   Example 2:
+//     Input:  rooms = [[0, 2147483647, 2147483647, 2147483647, 0]]
+//     Output: [[0, 1, 2, 1, 0]]
+//     Explanation:
+//       - Seed frontier with both gates (0, 0) and (0, 4) simultaneously at
+//         distance 0.
+//       - Pop (0, 0) with next_dist = 1 to set rooms[0][1] = 1 and enqueue (0, 1),
+//         then pop (0, 4) to set rooms[0][3] = 1 and enqueue (0, 3).
+//       - Pop (0, 1) with next_dist = 2 to set rooms[0][2] = 2 and enqueue (0, 2);
+//         when (0, 3) and (0, 2) are popped, no kEmpty neighbors remain so (0, 2)
+//         keeps its shortest distance 2.
+//
+//   Example 3:
+//     Input:  rooms = [[0, -1, 2147483647], [2147483647, -1, 2147483647]]
+//     Output: [[0, -1, 2147483647], [1, -1, 2147483647]]
+//     Explanation:
+//       - Seed frontier with the single gate (0, 0).
+//       - Pop (0, 0) with next_dist = 1: neighbor (0, 1) is a wall (-1) and
+//         skipped, while empty neighbor (1, 0) becomes 1 and is enqueued.
+//       - Pop (1, 0) with next_dist = 2: its right neighbor (1, 1) is a wall (-1)
+//         and (0, 0) is not kEmpty, so frontier empties and unreachable cells (0,
+//         2) and (1, 2) remain 2147483647.
+//
 // Algorithm:
 //   Multi-source Breadth-First Search (reverse flood-fill from all gates):
 //   Instead of launching an O(m * n) BFS from each empty room, enqueue every

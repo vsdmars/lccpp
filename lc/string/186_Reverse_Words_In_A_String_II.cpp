@@ -6,6 +6,43 @@
 //   leading or trailing spaces and exactly one space between adjacent words,
 //   reverse the order of the words in-place using O(1) extra space.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = ['t', 'h', 'e', ' ', 's', 'k', 'y', ' ', 'i', 's', ' ', 'b', 'l',
+//             'u', 'e']
+//     Output: ['b', 'l', 'u', 'e', ' ', 'i', 's', ' ', 's', 'k', 'y', ' ', 't',
+//             'h', 'e']
+//     Explanation:
+//       - Stage 1 calls std::ranges::reverse(s) to reverse all 15 characters
+//         in-place into "eulb si yks eht".
+//       - Stage 2 finds the space at index 4, reverses [0, 4) in-place from "eulb"
+//         to "blue", and advances word_start to index 5.
+//       - Subsequent iterations locate the remaining space delimiters and reverse
+//         "si" to "is", "yks" to "sky", and "eht" to "the" in-place.
+//       - When word_end hits s.end() after "the", the loop breaks with s holding
+//         "blue is sky the".
+//
+//   Example 2:
+//     Input:  s = ['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
+//     Output: ['w', 'o', 'r', 'l', 'd', ' ', 'h', 'e', 'l', 'l', 'o']
+//     Explanation:
+//       - Stage 1 reverses the entire 11-character buffer in-place to "dlrow
+//         olleh".
+//       - Stage 2 finds the space at index 5, reverses [0, 5) to restore "world",
+//         and steps word_start to index 6.
+//       - Searching from index 6 finds word_end == s.end(), reverses [6, 11) from
+//         "olleh" to "hello", and exits the loop.
+//
+//   Example 3:
+//     Input:  s = ['a', 'n', 't', 'i', 'g', 'r', 'a', 'v', 'i', 't', 'y']
+//     Output: ['a', 'n', 't', 'i', 'g', 'r', 'a', 'v', 'i', 't', 'y']
+//     Explanation:
+//       - Stage 1 reverses all 11 characters in-place into "ytivargitna".
+//       - Stage 2 searches from s.begin() for ' ', reaches word_end == s.end(), and
+//         reverses the entire range [0, 11) back to "antigravity".
+//       - Because word_end == s.end(), the loop terminates with the single word
+//         unchanged.
+//
 // Algorithm:
 //   Classic two-stage in-place reversal (also known as the reversal algorithm
 //   for block/array rotation):

@@ -6,6 +6,40 @@
 //   of the longest contiguous substring `t` of `s` such that every distinct
 //   character appearing in `t` occurs at least `k` times.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "aaabb", k = 3
+//     Output: 3
+//     Explanation:
+//       - Count letter frequencies in "aaabb" as 'a': 3 and 'b': 2, identifying 'b'
+//         (2 < 3) as an invalid split character.
+//       - Partition "aaabb" around 'b' at indices 3 and 4, producing a single
+//         non-empty segment "aaa" (indices 0..2).
+//       - Recurse on "aaa", where freq['a'] = 3 >= 3 makes all_valid true and
+//         returns length 3.
+//
+//   Example 2:
+//     Input:  s = "ababbc", k = 2
+//     Output: 5
+//     Explanation:
+//       - Count frequencies in "ababbc" as 'a': 2, 'b': 3, and 'c': 1, marking 'c'
+//         (1 < 2) as the only split boundary at index 5.
+//       - Recurse on the single segment "ababb" (indices 0..4), whose counts are
+//         'a': 2 and 'b': 3.
+//       - Confirm every present character in "ababb" meets k = 2 (all_valid is
+//         true) and return its length 5.
+//
+//   Example 3:
+//     Input:  s = "ababacb", k = 3
+//     Output: 0
+//     Explanation:
+//       - Count frequencies in "ababacb" as 'a': 3, 'b': 3, and 'c': 1, splitting
+//         at 'c' (index 5) into "ababa" and "b".
+//       - Recurse on "ababa", where frequencies become 'a': 3 and 'b': 2, causing
+//         'b' (2 < 3) to split "ababa" into three "a" segments.
+//       - Hit the base case sub.size() < 3 on each "a" segment and on the trailing
+//         "b" segment, returning 0 across all branches.
+//
 // Algorithm:
 //   Divide-and-Conquer on Invalid Split Characters:
 //   In any candidate substring `sub`:

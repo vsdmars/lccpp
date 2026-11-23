@@ -8,6 +8,45 @@
 //   treating missing trailing revisions as 0. Return -1 if `version1 < version2`,
 //   1 if `version1 > version2`, and 0 if they are equal.
 //
+// Examples:
+//   Example 1:
+//     Input:  version1 = "1.0.1", version2 = "1"
+//     Output: 1
+//     Explanation:
+//       - Iteration 1 starts at i = 0, j = 0 and extracts rev1 = "1" (advancing i
+//         to 2) and rev2 = "1" (advancing j to 1), which are equal.
+//       - Iteration 2 starts at i = 2, j = 1; nextCanonicalRevision strips leading
+//         zeros from "0" to yield rev1 = "" (advancing i to 4), while exhausted
+//         version2 yields rev2 = "", so both compare equal.
+//       - Iteration 3 starts at i = 4, j = 1 and extracts rev1 = "1" (advancing i
+//         to 5) against rev2 = "" from the exhausted version2.
+//       - Because rev1.size() (1) is greater than rev2.size() (0), compareVersion
+//         returns 1 immediately.
+//
+//   Example 2:
+//     Input:  version1 = "7.5.2.4", version2 = "7.5.3"
+//     Output: -1
+//     Explanation:
+//       - Iteration 1 extracts rev1 = "7" (i = 2) and rev2 = "7" (j = 2), which
+//         match.
+//       - Iteration 2 extracts rev1 = "5" (i = 4) and rev2 = "5" (j = 4), which
+//         also match.
+//       - Iteration 3 extracts rev1 = "2" (i = 6) and rev2 = "3" (j = 5); both have
+//         length 1 and "2" < "3", so compareVersion returns -1 without inspecting
+//         the trailing "4".
+//
+//   Example 3:
+//     Input:  version1 = "1.0.000.00", version2 = "1"
+//     Output: 0
+//     Explanation:
+//       - Iteration 1 extracts rev1 = "1" (advancing i to 2) and rev2 = "1"
+//         (advancing j to 1), which are equal.
+//       - Iterations 2 through 4 scan "0", "000", and "00" in version1 (advancing i
+//         to 4, 8, and 10), trimming all leading '0' characters to produce rev1 =
+//         "" each time while exhausted version2 returns rev2 = "".
+//       - Once both cursors reach the ends of their strings (i = 10, j = 1) with no
+//         differing revision, the loop exits and returns 0.
+//
 // Algorithm:
 //   Stream both version strings simultaneously with two cursors (`i` and `j`)
 //   without splitting or allocating arrays:

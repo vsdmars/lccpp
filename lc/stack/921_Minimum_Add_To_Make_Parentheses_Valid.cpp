@@ -6,6 +6,38 @@
 //   number of parentheses (`(` or `)`) that must be inserted at any positions
 //   to make `s` a valid balanced parentheses string.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "())"
+//     Output: 1
+//     Explanation:
+//       - Initialize need_left = 0 and need_right = 0.
+//       - Index 0 ('(') increments need_right to 1, and index 1 (')') pairs with it
+//         to decrement need_right back to 0.
+//       - Index 2 (')') sees need_right == 0 and increments need_left to 1,
+//         returning need_left + need_right = 1.
+//
+//   Example 2:
+//     Input:  s = "()))(("
+//     Output: 4
+//     Explanation:
+//       - Index 0 ('(') sets need_right = 1, and index 1 (')') matches it to reset
+//         need_right = 0.
+//       - Indices 2 and 3 (')') both encounter need_right == 0, incrementing
+//         need_left twice to 2.
+//       - Indices 4 and 5 ('(') increment need_right twice to 2, returning
+//         need_left + need_right = 2 + 2 = 4.
+//
+//   Example 3:
+//     Input:  s = ")("
+//     Output: 2
+//     Explanation:
+//       - Initialize need_left = 0 and need_right = 0.
+//       - Index 0 (')') finds need_right == 0 so no opening '(' is available to
+//         pair with it, incrementing need_left to 1.
+//       - Index 1 ('(') increments need_right to 1, returning need_left +
+//         need_right = 1 + 1 = 2.
+//
 // Algorithm:
 //   1) Greedy Balance Counters (`minAddToMakeValid`):
 //      Scan `s` left-to-right tracking two counts:

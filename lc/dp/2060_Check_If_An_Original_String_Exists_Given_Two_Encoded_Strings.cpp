@@ -11,6 +11,47 @@
 //   could have been encoded as both `s1` and `s2`, and `false` otherwise.
 //   Constraints: 1 <= s1.length, s2.length <= 40; consecutive digits <= 3.
 //
+// Examples:
+//   Example 1:
+//     Input:  s1 = "l123e", s2 = "44"
+//     Output: true
+//     Explanation:
+//       - From canMatch(0, 0, 0), s1[0] is 'l' while s2[0] starts digit run "44",
+//         so tryDigitRunS2 calls generatePossibleLengths("44") -> {8, 44} and
+//         branches on len = 8 to canMatch(0, 2, 8).
+//       - With diff = 8 > 0, matchLetters consumes s1[0] = 'l' and recurses to
+//         canMatch(1, 2, 7).
+//       - At i = 1, tryDigitRunS1 expands "123" into {6, 15, 24, 123} and takes len
+//         = 6 to reach canMatch(4, 2, 7 - 6 = 1).
+//       - With diff = 1 > 0, matchLetters consumes s1[4] = 'e' to reach the base
+//         case canMatch(5, 2, 0) where diff == 0, returning true.
+//
+//   Example 2:
+//     Input:  s1 = "internationalization", s2 = "i18n"
+//     Output: true
+//     Explanation:
+//       - At canMatch(0, 0, 0), s1[0] == s2[0] == 'i' matches via matchLetters and
+//         advances to canMatch(1, 1, 0).
+//       - At j = 1, tryDigitRunS2 expands "18" into {9, 18} and tries len = 18,
+//         reaching canMatch(1, 3, 18).
+//       - With diff = 18 > 0, matchLetters consumes the 18 letters
+//         "nternationalizatio" in s1 one step at a time until canMatch(19, 3, 0).
+//       - At (19, 3, 0), s1[19] == s2[3] == 'n' matches into the end state
+//         canMatch(20, 4, 0) with diff == 0, returning true.
+//
+//   Example 3:
+//     Input:  s1 = "x94", s2 = "x14"
+//     Output: false
+//     Explanation:
+//       - At canMatch(0, 0, 0), s1[0] == s2[0] == 'x' matches and moves to
+//         canMatch(1, 1, 0).
+//       - tryDigitRunS1 expands "94" into {13, 94}, branching to canMatch(3, 1,
+//         -13) and canMatch(3, 1, -94).
+//       - From each branch, tryDigitRunS2 expands "14" into {5, 14}, reaching
+//         terminal states (3, 3, diff) with diff in {-8, 1, -89, -80}.
+//       - Because diff != 0 in all four terminal states, every branch fails, gets
+//         marked in failed_, and possiblyEquals returns false.
+//
 // Algorithm:
 //   Memoized DFS over aligned string positions and wildcard length offset:
 //   1. Maintain state `(i, j, diff)`, where `i` is the next unread index in

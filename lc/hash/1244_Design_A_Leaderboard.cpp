@@ -13,6 +13,50 @@
 //   Constraints: 1 <= playerId, K <= 10^4; 1 <= score <= 100; at most 1000
 //   operations; K <= current number of active players when top(K) is called.
 //
+// Examples:
+//   Example 1:
+//     Input:  ["Leaderboard", "addScore", "addScore", "addScore", "addScore",
+//             "addScore", "top", "reset", "reset", "addScore", "top"], [[], [1,
+//             73], [2, 56], [3, 39], [4, 51], [5, 4], [1], [1], [2], [2, 51], [3]]
+//     Output: [null, null, null, null, null, null, 73, null, null, null, 141]
+//     Explanation:
+//       - The first five addScore calls populate scores_ = {1: 73, 2: 56, 3: 39, 4:
+//         51, 5: 4} and descending score_counts_ = {73: 1, 56: 1, 51: 1, 39: 1, 4:
+//         1}.
+//       - top(1) takes min(1, 1) = 1 player at the highest score 73 and returns 73.
+//       - reset(1) and reset(2) remove players 1 and 2 from scores_ and erase keys
+//         73 and 56 from score_counts_; addScore(2, 51) then inserts scores_[2] =
+//         51, updating score_counts_ to {51: 2, 39: 1, 4: 1}.
+//       - top(3) takes 2 players at score 51 (total = 102, remaining = 1) and 1
+//         player at score 39 (total = 141, remaining = 0), returning 141.
+//
+//   Example 2:
+//     Input:  ["Leaderboard", "addScore", "addScore", "addScore", "top", "top",
+//             "addScore", "top", "top", "addScore", "top"], [[], [1, 10], [2, 10],
+//             [3, 10], [2], [3], [1, 25], [1], [2], [2, 25], [2]]
+//     Output: [null, null, null, null, 20, 30, null, 35, 45, null, 70]
+//     Explanation:
+//       - Inserting players 1, 2, and 3 with score 10 produces score_counts_ = {10:
+//         3}, so top(2) returns 2 * 10 = 20 and top(3) returns 3 * 10 = 30.
+//       - addScore(1, 25) decrements score_counts_[10] to 2, updates scores_[1] to
+//         35, and adds score_counts_[35] = 1, giving score_counts_ = {35: 1, 10:
+//         2}.
+//       - top(1) returns 35, and top(2) sums 1 * 35 + 1 * 10 = 45.
+//       - addScore(2, 25) moves player 2 from 10 to 35 (score_counts_ = {35: 2, 10:
+//         1}), so top(2) takes both players at 35 and returns 70.
+//
+//   Example 3:
+//     Input:  ["Leaderboard", "addScore", "top", "reset", "top", "addScore",
+//             "top"], [[], [10, 100], [1], [10], [1], [10, 42], [1]]
+//     Output: [null, null, 100, null, 0, null, 42]
+//     Explanation:
+//       - addScore(10, 100) records scores_[10] = 100 and score_counts_[100] = 1,
+//         so top(1) returns 100.
+//       - reset(10) decrements and erases 100 from score_counts_ and erases player
+//         10 from scores_; top(1) sees an empty score_counts_ map and returns 0.
+//       - addScore(10, 42) treats player 10 as new, setting scores_[10] = 42 and
+//         score_counts_[42] = 1, so top(1) returns 42.
+//
 // Algorithm:
 //   Maintain a two-index structure: a hash map mapping each active playerId to
 //   its current cumulative score, paired with a descending ordered frequency

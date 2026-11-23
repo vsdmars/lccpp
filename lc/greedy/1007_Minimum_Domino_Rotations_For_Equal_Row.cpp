@@ -8,6 +8,39 @@
 //   number of rotations required so that either every value in tops is equal
 //   or every value in bottoms is equal, or return -1 if it is impossible.
 //
+// Examples:
+//   Example 1:
+//     Input:  tops = [2, 1, 2, 4, 2, 2], bottoms = [5, 2, 6, 2, 3, 2]
+//     Output: 2
+//     Explanation:
+//       - Test candidate target = tops[0] = 2 in rotationsForTarget across i =
+//         0..5.
+//       - Every domino contains 2; tops[i] != 2 at indices 1 and 3 gives
+//         flip_to_top = 2, while bottoms[i] != 2 at indices 0, 2, and 4 gives
+//         flip_to_bottom = 3.
+//       - Return std::min(2, 3) = 2 immediately without needing to check bottoms[0]
+//         = 5.
+//
+//   Example 2:
+//     Input:  tops = [3, 5, 1, 2, 3], bottoms = [3, 6, 3, 3, 4]
+//     Output: -1
+//     Explanation:
+//       - Test candidate target = tops[0] = 3; at i = 1, tops[1] = 5 != 3 and
+//         bottoms[1] = 6 != 3, so rotationsForTarget returns -1.
+//       - Since bottoms[0] == tops[0] == 3, skip the duplicate second candidate and
+//         return -1.
+//
+//   Example 3:
+//     Input:  tops = [5, 2, 2, 2], bottoms = [2, 6, 4, 1]
+//     Output: 1
+//     Explanation:
+//       - Test target = tops[0] = 5 first; at i = 1, neither tops[1] = 2 nor
+//         bottoms[1] = 6 equals 5, returning from_top = -1.
+//       - Because bottoms[0] = 2 != tops[0] = 5, evaluate rotationsForTarget(2,
+//         tops, bottoms).
+//       - All dominoes contain 2, with flip_to_top = 1 (from i = 0) and
+//         flip_to_bottom = 3 (from i = 1, 2, 3), returning std::min(1, 3) = 1.
+//
 // Algorithm:
 //   If a valid uniform row exists, its common value `target` MUST appear on
 //   the very first domino, leaving at most two candidates: tops[0] and

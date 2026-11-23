@@ -7,6 +7,43 @@
 //   two adjacent bits have the same value (e.g., 5 = 101_2 returns true,
 //   while 7 = 111_2 and 11 = 1011_2 return false).
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 5
+//     Output: true
+//     Explanation:
+//       - Convert n = 5 (101_2) to value = 5u and initialize expected_bit = 5u & 1u
+//         = 1u.
+//       - Iteration 1 verifies (5u & 1u) == 1u, toggles expected_bit to 0u, and
+//         shifts value right to 2u (10_2).
+//       - Iteration 2 verifies (2u & 1u) == 0u, toggles expected_bit to 1u, and
+//         shifts value right to 1u (1_2).
+//       - Iteration 3 verifies (1u & 1u) == 1u, toggles expected_bit to 0u, and
+//         shifts value to 0u, exiting the loop and returning true (matching 5 ^ 2 =
+//         7 with (7 & 8) == 0).
+//
+//   Example 2:
+//     Input:  n = 11
+//     Output: false
+//     Explanation:
+//       - Convert n = 11 (1011_2) to value = 11u and initialize expected_bit = 11u
+//         & 1u = 1u.
+//       - Iteration 1 verifies (11u & 1u) == 1u, toggles expected_bit to 0u, and
+//         shifts value right to 5u (101_2).
+//       - Iteration 2 finds (5u & 1u) == 1u != expected_bit (0u), immediately
+//         returning false (matching 11 ^ 5 = 14 with (14 & 15) = 14 != 0).
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: true
+//     Explanation:
+//       - Convert n = 1 (1_2) to value = 1u and initialize expected_bit = 1u & 1u =
+//         1u.
+//       - Iteration 1 checks (1u & 1u) == 1u, toggles expected_bit to 0u, and
+//         shifts value right to 0u.
+//       - The while (value != 0u) loop ends and returns true (matching 1 ^ 0 = 1
+//         with (1 & 2) == 0).
+//
 // Algorithm:
 //   1. Bit-by-bit scan (primary): Track the expected least-significant bit
 //      starting with (n & 1). Repeatedly verify that the current LSB equals

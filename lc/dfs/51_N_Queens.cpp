@@ -8,6 +8,44 @@
 //   configurations, where each configuration is a list of n strings of length
 //   n using 'Q' for a queen and '.' for an empty square.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 4
+//     Output: [[".Q..", "...Q", "Q...", "..Q."], ["..Q.", "Q...", "...Q", ".Q.."]]
+//     Explanation:
+//       - Initialize board to four "...." rows, col_used of size 4, and
+//         anti_diag_used / main_diag_used of size 7 to 0.
+//       - Row 0 at col = 0 finds no valid completion across rows 1-3 and
+//         backtracks; placing at (0, 1) (anti_diag = 1, main_diag = 2) succeeds at
+//         (1, 3), (2, 0), and (3, 2) to emit [".Q..", "...Q", "Q...", "..Q."].
+//       - Backtracking to (0, 2) (anti_diag = 2, main_diag = 1) places queens at
+//         (1, 0), (2, 3), and (3, 1) to emit ["..Q.", "Q...", "...Q", ".Q.."],
+//         while (0, 3) fails to complete.
+//
+//   Example 2:
+//     Input:  n = 1
+//     Output: [["Q"]]
+//     Explanation:
+//       - Initialize board = ["."] and single-entry conflict arrays col_used,
+//         anti_diag_used, and main_diag_used to 0.
+//       - At row = 0, col = 0, all three conflict flags are 0, so 'Q' is placed at
+//         (0, 0) and dfs recurses to row = 1.
+//       - Because row == size (1 == 1), ["Q"] is appended to results and
+//         backtracking clears the flags before returning [["Q"]].
+//
+//   Example 3:
+//     Input:  n = 3
+//     Output: []
+//     Explanation:
+//       - Initialize board to three "..." rows and diagonal conflict tables of size
+//         5.
+//       - In row 0, placing at (0, 0) forces (1, 2) at row 1, which blocks every
+//         column in row 2; placing at (0, 1) attacks all three columns of row 1
+//         immediately; placing at (0, 2) symmetrically forces (1, 0) and blocks row
+//         2.
+//       - No branch reaches row == 3, so all placements backtrack and solveNQueens
+//         returns [].
+//
 // Algorithm:
 //   Row-by-row backtracking DFS with O(1) conflict lookup tables:
 //     - Because each row must contain exactly one queen, recursion advances

@@ -9,6 +9,45 @@
 //   tail must point back to the head. Return a pointer to the smallest element
 //   (or `nullptr` if the tree is empty).
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [4, 2, 5, 1, 3]
+//     Output: circular doubly linked list [1, 2, 3, 4, 5] (forward: [1, 2, 3, 4,
+//             5], backward: [5, 4, 3, 2, 1], head = 1)
+//     Explanation:
+//       - Initialize sentinel and prev = &sentinel, then push the left spine [4, 2,
+//         1] onto the stack.
+//       - Pop 1 (sentinel <-> 1, prev = 1), pop 2 (1 <-> 2, prev = 2, push right
+//         child 3), and pop 3 (2 <-> 3, prev = 3).
+//       - Pop 4 (3 <-> 4, prev = 4, push right child 5), then pop 5 (4 <-> 5, prev
+//         = 5).
+//       - Close the circular ring between head = sentinel.right (1) and tail prev
+//         (5) via 1->left = 5 and 5->right = 1, returning 1.
+//
+//   Example 2:
+//     Input:  root = [3, 2, null, 1]
+//     Output: circular doubly linked list [1, 2, 3] (forward: [1, 2, 3], backward:
+//             [3, 2, 1], head = 1)
+//     Explanation:
+//       - Push the entire left spine [3, 2, 1] onto the stack with prev =
+//         &sentinel.
+//       - Pop 1, 2, and 3 in order, linking sentinel <-> 1 <-> 2 <-> 3 with prev =
+//         3.
+//       - Close the ring by setting 1->left = 3 and 3->right = 1, returning head =
+//         1.
+//
+//   Example 3:
+//     Input:  root = [42]
+//     Output: circular doubly linked list [42] (single node 42 with left = 42,
+//             right = 42)
+//     Explanation:
+//       - Push 42 onto the stack, then pop it to link sentinel.right = 42 and
+//         advance prev = 42.
+//       - With no right child, the traversal loop finishes with head = 42 and prev
+//         = 42.
+//       - Close the circular links via 42->left = 42 and 42->right = 42, returning
+//         42.
+//
 // Algorithm:
 //   Two O(N) in-place approaches are provided:
 //     1. Iterative In-Order Traversal (`treeToDoublyList`):

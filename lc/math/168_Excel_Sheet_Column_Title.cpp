@@ -6,6 +6,39 @@
 //   return its corresponding spreadsheet column title where 1 -> "A", ...,
 //   26 -> "Z", 27 -> "AA", 28 -> "AB", etc.
 //
+// Examples:
+//   Example 1:
+//     Input:  columnNumber = 28
+//     Output: "AB"
+//     Explanation:
+//       - Iteration 1 decrements column_number from 28 to 27, computes offset = 27
+//         % 26 = 1 to push 'B', and sets column_number = 27 / 26 = 1.
+//       - Iteration 2 decrements column_number from 1 to 0, computes offset = 0 %
+//         26 = 0 to push 'A', and sets column_number = 0 / 26 = 0.
+//       - Reversing the collected string "BA" produces "AB".
+//
+//   Example 2:
+//     Input:  columnNumber = 702
+//     Output: "ZZ"
+//     Explanation:
+//       - Iteration 1 decrements 702 to 701, computes offset = 701 % 26 = 25 to
+//         push 'Z' ('A' + 25), and updates column_number = 701 / 26 = 26.
+//       - Iteration 2 decrements 26 to 25, computes offset = 25 % 26 = 25 to push
+//         'Z', and updates column_number = 25 / 26 = 0.
+//       - Reversing "ZZ" returns "ZZ".
+//
+//   Example 3:
+//     Input:  columnNumber = 750
+//     Output: "ABV"
+//     Explanation:
+//       - Iteration 1 decrements 750 to 749, computes 749 % 26 = 21 to push 'V'
+//         ('A' + 21), and sets column_number = 749 / 26 = 28.
+//       - Iteration 2 decrements 28 to 27, computes 27 % 26 = 1 to push 'B', and
+//         sets column_number = 27 / 26 = 1.
+//       - Iteration 3 decrements 1 to 0, computes 0 % 26 = 0 to push 'A', and sets
+//         column_number = 0 / 26 = 0.
+//       - Reversing the collected string "VBA" returns "ABV".
+//
 // Algorithm:
 //   Bijective base-26 conversion.
 //   Unlike standard base-26 (which uses digits 0..25), Excel column titles form

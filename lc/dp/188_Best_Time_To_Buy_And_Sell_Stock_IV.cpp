@@ -10,6 +10,40 @@
 //   Constraints: 0 <= k <= 100; 0 <= prices.length <= 1000;
 //   0 <= prices[j] <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  k = 2, prices = [3, 2, 6, 5, 0, 3]
+//     Output: 7
+//     Explanation:
+//       - Because k = 2 < n / 2 = 3, initialize rolling arrays prev_global,
+//         curr_global, and local_max of length 6 to all zeros.
+//       - For transaction i = 1, daily gain diff = 6 - 2 = 4 at j = 2 sets
+//         local_max[2] = 4 and curr_global[2] = 4, leaving prev_global = [0, 0, 4,
+//         4, 4, 4] after the row swap.
+//       - For transaction i = 2, days j = 1..4 maintain curr_global = [0, 0, 4, 4,
+//         4, ...], including local_max[4] = max(4 + 0, 4 - 5) = 4 at j = 4.
+//       - At j = 5 (price 3, diff = 3), start_new = prev_global[4] + 3 = 7 and
+//         extend_prev = local_max[4] + 3 = 7, updating curr_global[5] = 7 and
+//         returning 7.
+//
+//   Example 2:
+//     Input:  k = 100, prices = [1, 2, 3, 2, 5]
+//     Output: 5
+//     Explanation:
+//       - Since n = 5 and max_transactions = 100 >= n / 2 = 2, maxProfit takes the
+//         O(n) maxProfitUnlimited fast path.
+//       - Scanning j = 1..4 accumulates positive daily gains (2 - 1) = 1 at j = 1,
+//         (3 - 2) = 1 at j = 2, skips the drop at j = 3, and adds (5 - 2) = 3 at j
+//         = 4.
+//       - Returns the summed profit 1 + 1 + 3 = 5.
+//
+//   Example 3:
+//     Input:  k = 0, prices = [1, 5, 10]
+//     Output: 0
+//     Explanation:
+//       - Check the entry guard if (k <= 0 || n < 2) with k = 0 and n = 3.
+//       - Return 0 immediately because no transactions are allowed.
+//
 // Algorithm:
 //   1. Unlimited-Transaction Fast Path:
 //      - Because each profitable transaction requires at least 2 distinct days

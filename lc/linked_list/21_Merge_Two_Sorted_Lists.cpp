@@ -6,6 +6,42 @@
 //   merge them into a single sorted linked list by splicing together the
 //   existing nodes of the two lists, and return the head of the merged list.
 //
+// Examples:
+//   Example 1:
+//     Input:  list1 = [1, 2, 4], list2 = [1, 3, 4]
+//     Output: [1, 1, 2, 3, 4, 4]
+//     Explanation:
+//       - Initialize dummy(0) and tail = &dummy.
+//       - Compare 1 <= 1 to splice list1's 1 (merged: [1], list1 at 2), then 2 > 1
+//         to splice list2's 1 (merged: [1, 1], list2 at 3).
+//       - Compare 2 <= 3 to splice 2 (list1 at 4), then 4 > 3 to splice 3 (list2 at
+//         4), then 4 <= 4 to splice list1's 4 (list1 becomes nullptr).
+//       - Because list1 is now nullptr, exit the loop and attach the remaining
+//         list2 suffix [4] via tail->next = list2, returning dummy.next = [1, 1, 2,
+//         3, 4, 4].
+//
+//   Example 2:
+//     Input:  list1 = [-5, 0, 10], list2 = [-3, 0, 2]
+//     Output: [-5, -3, 0, 0, 2, 10]
+//     Explanation:
+//       - Initialize dummy(0) and tail = &dummy.
+//       - Compare -5 <= -3 to splice -5 (list1 at 0), then 0 > -3 to splice -3
+//         (list2 at 0).
+//       - Compare 0 <= 0 to splice list1's 0 (list1 at 10), then 10 > 0 to splice
+//         list2's 0 (list2 at 2), then 10 > 2 to splice 2 (list2 becomes nullptr).
+//       - Exit the loop with list2 == nullptr and attach the remaining list1 node
+//         [10] in O(1), returning [-5, -3, 0, 0, 2, 10].
+//
+//   Example 3:
+//     Input:  list1 = [], list2 = [0]
+//     Output: [0]
+//     Explanation:
+//       - Initialize dummy(0) and tail = &dummy with list1 = nullptr and list2 =
+//         node(0).
+//       - The while (list1 != nullptr && list2 != nullptr) loop is skipped because
+//         list1 is nullptr, so tail->next = list2 attaches [0] and returns
+//         dummy.next = [0].
+//
 // Algorithm:
 //   Iterative two-pointer merge with a sentinel dummy node:
 //   1. Maintain a `tail` pointer initialized to `&dummy`.

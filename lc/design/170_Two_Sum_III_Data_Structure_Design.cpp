@@ -8,6 +8,47 @@
 //     - `find(value)`: Returns true if there exists a pair of added numbers
 //       whose sum equals `value`, otherwise returns false.
 //
+// Examples:
+//   Example 1:
+//     Input:  ["TwoSum", "add", "add", "add", "find", "find"], [[], [1], [3], [5],
+//             [4], [7]]
+//     Output: [null, null, null, null, true, false]
+//     Explanation:
+//       - Three `add` calls populate `counts_` with `{1: 1, 3: 1, 5: 1}`.
+//       - `find(4)` visits `num = 1`, computes `complement = 4 - 1 = 3 != 1`, finds
+//         `3` in `counts_`, caches `4` in `found_cache_`, and returns `true`.
+//       - `find(7)` misses `found_cache_` and checks complements `6`, `4`, and `2`
+//         for keys `1`, `3`, and `5`; none exist in `counts_`, so it returns
+//         `false`.
+//
+//   Example 2:
+//     Input:  ["TwoSum", "add", "add", "add", "add", "add", "add", "add", "find",
+//             "find", "find", "find", "find", "find"], [[], [3], [4], [1], [-7],
+//             [9], [1], [1], [10], [10], [-3], [5], [15], [2]]
+//     Output: [null, null, null, null, null, null, null, null, true, true, true,
+//             true, false, true]
+//     Explanation:
+//       - The seven `add` calls build `counts_ = {3: 1, 4: 1, 1: 3, -7: 1, 9: 1}`.
+//       - The first `find(10)` pairs `9` with `1` and inserts `10` into
+//         `found_cache_`, so the second `find(10)` returns `true` immediately from
+//         `found_cache_`.
+//       - `find(-3)` matches `4` with `-7`, `find(5)` matches `4` with `1`, and
+//         `find(15)` finds no valid complement in `counts_` and returns `false`.
+//       - `find(2)` checks `num = 1` where `complement = 2 - 1 = 1 == num`; since
+//         `freq = 3 > 1`, it returns `true`.
+//
+//   Example 3:
+//     Input:  ["TwoSum", "add", "find", "add", "find"], [[], [0], [0], [0], [0]]
+//     Output: [null, null, false, null, true]
+//     Explanation:
+//       - The first `add(0)` sets `counts_ = {0: 1}`.
+//       - The first `find(0)` computes `complement = 0 - 0 = 0 == num`, checks
+//         `freq > 1` (`1 > 1` is false), and returns `false` without adding `0` to
+//         `found_cache_`.
+//       - The second `add(0)` increments `counts_[0]` to `2`, so the second
+//         `find(0)` satisfies `freq > 1`, caches `0` in `found_cache_`, and returns
+//         `true`.
+//
 // Algorithm:
 //   Frequency Hash Map with Positive-Hit Memoization:
 //   - Store added numbers in a frequency map `counts_` (`number -> count`).

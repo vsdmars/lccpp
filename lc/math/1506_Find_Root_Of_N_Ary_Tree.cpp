@@ -8,6 +8,42 @@
 //   the N-ary tree using O(1) extra space.
 //   Constraints: 1 <= tree.size() <= 5 * 10^4, all node values are unique.
 //
+// Examples:
+//   Example 1:
+//     Input:  tree = [node(5), node(3), node(6), node(1), node(4), node(2)] with
+//             edges 1 -> [3, 2, 4] and 3 -> [5, 6]
+//     Output: node(1)
+//     Explanation:
+//       - Initialize val_sum = 0 and scan tree in Pass 1: leaf node(5) adds 5
+//         (val_sum = 5), and node(3) adds 3 while subtracting children 5 + 6
+//         (val_sum = -3).
+//       - Leaf node(6) adds 6 (val_sum = 3), and node(1) adds 1 while subtracting
+//         children 3 + 2 + 4 (val_sum = -5).
+//       - Leaves node(4) and node(2) add 4 + 2 = 6, leaving val_sum = 1 after all
+//         non-root values cancel out.
+//       - Pass 2 scans tree and returns the unique node whose val equals val_sum
+//         (node(1)).
+//
+//   Example 2:
+//     Input:  tree = [node(-10), node(5), node(0), node(-5)] with edges 0 -> [-5,
+//             5] and -5 -> [-10]
+//     Output: node(0)
+//     Explanation:
+//       - Initialize val_sum = 0 and scan tree in Pass 1: leaf node(-10) adds -10
+//         (val_sum = -10) and leaf node(5) adds 5 (val_sum = -5).
+//       - Node(0) adds 0 and subtracts children (-5) + 5 = 0 (val_sum = -5), and
+//         node(-5) adds -5 while subtracting child -10 (val_sum = 0).
+//       - Pass 2 scans tree and returns the unique node with val == 0 (node(0)).
+//
+//   Example 3:
+//     Input:  tree = [node(42)] with no children
+//     Output: node(42)
+//     Explanation:
+//       - Since tree is non-empty, Pass 1 initializes val_sum = 0 and visits
+//         node(42), adding 42 and subtracting nothing for its empty children list
+//         (val_sum = 42).
+//       - Pass 2 scans tree, matches node(42)->val == 42, and returns node(42).
+//
 // Algorithm:
 //   Use an additive in-degree cancellation invariant in O(1) auxiliary space:
 //   - Every node in the tree appears exactly once in the top-level `tree` array.

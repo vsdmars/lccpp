@@ -10,6 +10,42 @@
 //   both endpoints).
 //   Constraints: 1 <= n <= 100, grid[i][j] in {0, 1}.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[0, 1], [1, 0]]
+//     Output: 2
+//     Explanation:
+//       - Confirm both start (0, 0) and target (1, 1) equal 0, then enqueue (0, 0,
+//         dist=1) and mark grid[0][0] = 1.
+//       - Pop (0, 0, 1) and inspect its 8 neighbors in kDirs8: (0, 1) and (1, 0)
+//         are blocked by 1, while diagonal neighbor (1, 1) is 0.
+//       - Mark grid[1][1] = 1, enqueue (1, 1, 2), and return 2 immediately when (1,
+//         1, 2) is popped as the target cell.
+//
+//   Example 2:
+//     Input:  grid = [[0, 0, 0], [1, 1, 0], [1, 1, 0]]
+//     Output: 4
+//     Explanation:
+//       - Enqueue (0, 0, dist=1) and set grid[0][0] = 1 since both (0, 0) and
+//         target (2, 2) are open (0).
+//       - Pop (0, 0, 1): only (0, 1) is open, so mark grid[0][1] = 1 and push (0,
+//         1, 2).
+//       - Pop (0, 1, 2): mark its two open neighbors (0, 2) and (1, 2) as 1 and
+//         push (0, 2, 3) and (1, 2, 3).
+//       - Pop (0, 2, 3) with no remaining open neighbors, then pop (1, 2, 3), mark
+//         (2, 2) = 1, push (2, 2, 4), and return 4 when (2, 2, 4) is popped.
+//
+//   Example 3:
+//     Input:  grid = [[0, 1, 0], [0, 1, 0], [0, 1, 0]]
+//     Output: -1
+//     Explanation:
+//       - Confirm endpoints (0, 0) and (2, 2) are 0, enqueue (0, 0, dist=1), and
+//         mark grid[0][0] = 1.
+//       - Pop (0, 0, 1) and push its only open neighbor (1, 0, 2), then pop (1, 0,
+//         2) and push (2, 0, 3).
+//       - Pop (2, 0, 3): column 1 is entirely 1s, leaving no unvisited open
+//         neighbors, so the frontier empties and the function returns -1.
+//
 // Algorithm:
 //   Single-source unweighted shortest-path BFS on an 8-connected grid:
 //   1. Guard: If the grid is empty or either endpoint `(0, 0)` or

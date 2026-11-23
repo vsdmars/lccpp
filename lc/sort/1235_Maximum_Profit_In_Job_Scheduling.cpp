@@ -8,6 +8,55 @@
 //   starts at time `X` is allowed to follow a job that ends at time `X`.
 //   Constraints: `1 <= n <= 5 * 10^4`, `1 <= startTime[i] < endTime[i] <= 10^9`.
 //
+// Examples:
+//   Example 1:
+//     Input:  startTime = [1, 2, 3, 3], endTime = [3, 4, 5, 6], profit = [50, 10,
+//             40, 70]
+//     Output: 120
+//     Explanation:
+//       - Pair and sort jobs by end time: (1, 3, 50), (2, 4, 10), (3, 5, 40), (3,
+//         6, 70), and initialize dp = [(0, 0)].
+//       - Job (1, 3, 50) finds predecessor (0, 0) via upper_bound(start=1),
+//         yielding candidate_profit = 50 > 0, so append (3, 50).
+//       - Job (2, 4, 10) has predecessor (0, 0) with prev_profit = 0;
+//         candidate_profit = 10 does not exceed dp.back().max_profit = 50, so dp is
+//         unchanged.
+//       - Job (3, 5, 40) finds predecessor (3, 50) (since end_time = 3 is not
+//         strictly greater than start = 3), giving candidate_profit = 50 + 40 = 90
+//         and appending (5, 90).
+//       - Job (3, 6, 70) also finds predecessor (3, 50) for start = 3, giving
+//         candidate_profit = 50 + 70 = 120 > 90, appending (6, 120) and returning
+//         120.
+//
+//   Example 2:
+//     Input:  startTime = [1, 2, 3, 4, 6], endTime = [3, 5, 10, 6, 9], profit =
+//             [20, 20, 100, 70, 60]
+//     Output: 150
+//     Explanation:
+//       - Sort jobs by end time: (1, 3, 20), (2, 5, 20), (4, 6, 70), (6, 9, 60),
+//         (3, 10, 100), with dp = [(0, 0)].
+//       - Job (1, 3, 20) appends (3, 20) to dp, while job (2, 5, 20) gets
+//         prev_profit = 0 and candidate_profit = 20 <= 20 so dp stays [(0, 0), (3,
+//         20)].
+//       - Job (4, 6, 70) matches predecessor (3, 20) for start = 4, giving
+//         candidate_profit = 20 + 70 = 90 and appending (6, 90).
+//       - Job (6, 9, 60) matches predecessor (6, 90) for start = 6, giving
+//         candidate_profit = 90 + 60 = 150 and appending (9, 150).
+//       - Job (3, 10, 100) uses predecessor (3, 20) for candidate_profit = 120 <=
+//         150, leaving dp.back().max_profit = 150 as the final result.
+//
+//   Example 3:
+//     Input:  startTime = [1, 2, 5], endTime = [5, 5, 8], profit = [10, 25, 30]
+//     Output: 55
+//     Explanation:
+//       - Sort jobs by end time: (1, 5, 10), (2, 5, 25), (5, 8, 30), and initialize
+//         dp = [(0, 0)].
+//       - Job (1, 5, 10) uses sentinel (0, 0) and appends (5, 10) to dp.
+//       - Job (2, 5, 25) gets candidate_profit = 25 > 10 and sees
+//         dp.back().end_time == 5, updating dp.back() in place to (5, 25).
+//       - Job (5, 8, 30) finds predecessor (5, 25), computes candidate_profit = 25
+//         + 30 = 55, appends (8, 55), and returns 55.
+//
 // Algorithm:
 //   Weighted Interval Scheduling via End-Time Sorting + Binary-Search DP:
 //   1. Pair each job into `(start, end, profit)` and sort ascending by `end`.

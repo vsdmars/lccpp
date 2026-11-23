@@ -8,6 +8,46 @@
 //   (0 <= a, b, c <= 100). Return any longest possible happy string (or `""`
 //   if none exists).
 //
+// Examples:
+//   Example 1:
+//     Input:  a = 1, b = 1, c = 7
+//     Output: "ccbccacc"
+//     Explanation:
+//       - Initialize max_heap with {(7, 'c'), (1, 'b'), (1, 'a')}, ordered by count
+//         descending then character descending.
+//       - Pop (7, 'c') then (6, 'c') in the first two steps to append 'c' twice,
+//         producing result = "cc" with (5, 'c') in max_heap.
+//       - Pop (5, 'c') on step 3, detect the trailing "cc", pop second-largest (1,
+//         'b') to append 'b' (result = "ccb"), and re-push (5, 'c').
+//       - Pop (5, 'c') and (4, 'c') to append two more 'c's (result = "ccbcc"),
+//         then pop (3, 'c') and use (1, 'a') as separator to reach "ccbcca".
+//       - Pop (3, 'c') and (2, 'c') to append "cc" (result = "ccbccacc"), then pop
+//         (1, 'c'), see trailing "cc" with an empty heap, and break to return
+//         "ccbccacc".
+//
+//   Example 2:
+//     Input:  a = 7, b = 1, c = 0
+//     Output: "aabaa"
+//     Explanation:
+//       - Push positive counts into max_heap as {(7, 'a'), (1, 'b')}, omitting 'c'
+//         since c = 0.
+//       - Pop (7, 'a') and (6, 'a') over the first two iterations to build result =
+//         "aa" and push (5, 'a') back.
+//       - Pop (5, 'a'), detect the trailing "aa", pop (1, 'b') to append a
+//         separator (result = "aab"), drop 'b' at count 0, and re-push (5, 'a').
+//       - Pop (5, 'a') and (4, 'a') to append 'a' twice (result = "aabaa"), then
+//         pop (3, 'a'), find max_heap empty for a separator, and return "aabaa".
+//
+//   Example 3:
+//     Input:  a = 0, b = 0, c = 5
+//     Output: "cc"
+//     Explanation:
+//       - Initialize max_heap with only {(5, 'c')} since a = 0 and b = 0.
+//       - Pop (5, 'c') and (4, 'c') across the first two iterations to append 'c'
+//         twice, yielding result = "cc" with (3, 'c') left on max_heap.
+//       - Pop (3, 'c'), detect that the last two characters are already 'c' while
+//         max_heap is empty, and break immediately to return "cc".
+//
 // Algorithm:
 //   Greedy Construction with a Max-Heap:
 //   1. Push every `(count, ch)` with `count > 0` into a max-heap ordered by

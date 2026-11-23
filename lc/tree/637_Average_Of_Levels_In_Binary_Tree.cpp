@@ -8,6 +8,40 @@
 //   count is in [1, 10^4] and node values span the full 32-bit signed range
 //   [-2^31, 2^31 - 1].
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 9, 20, null, null, 15, 7]
+//     Output: [3.0, 14.5, 11.0]
+//     Explanation:
+//       - Level 0: q holds [3] (level_size = 1); level_sum = 3 produces average 3 /
+//         1 = 3.0 and enqueues children 9 and 20.
+//       - Level 1: q holds [9, 20] (level_size = 2); level_sum = 9 + 20 = 29
+//         produces 29 / 2 = 14.5 and enqueues 20's children 15 and 7.
+//       - Level 2: q holds [15, 7] (level_size = 2); level_sum = 15 + 7 = 22
+//         produces 22 / 2 = 11.0, returning [3.0, 14.5, 11.0].
+//
+//   Example 2:
+//     Input:  root = [3, 9, 20, 8, null, 15, 7]
+//     Output: [3.0, 14.5, 10.0]
+//     Explanation:
+//       - Level 0: process [3] (level_size = 1) for average 3.0 and enqueue [9,
+//         20].
+//       - Level 1: process [9, 20] (level_size = 2, level_sum = 29) for average
+//         14.5 and enqueue 9's left child 8 plus 20's children 15 and 7.
+//       - Level 2: process [8, 15, 7] (level_size = 3, level_sum = 8 + 15 + 7 = 30)
+//         for average 30 / 3 = 10.0.
+//
+//   Example 3:
+//     Input:  root = [2147483647, 2147483647, 2147483647, -2147483648, -2147483648]
+//     Output: [2147483647.0, 2147483647.0, -2147483648.0]
+//     Explanation:
+//       - Level 0: level_size = 1 and 64-bit level_sum = 2147483647 yields
+//         2147483647.0.
+//       - Level 1: summing two INT_MAX nodes into int64_t level_sum = 4294967294
+//         avoids 32-bit overflow and divides by 2 to give 2147483647.0.
+//       - Level 2: summing two INT_MIN nodes into int64_t level_sum = -4294967296
+//         divides by 2 to give -2147483648.0.
+//
 // Algorithm:
 //   Perform a standard breadth-first search (level-order traversal). Process
 //   all nodes belonging to the current level in one inner loop:

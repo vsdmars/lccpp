@@ -8,6 +8,40 @@
 //   descendants.
 //   Constraints: 1 <= number of nodes <= 200, node->val in {0, 1}.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, null, 0, 0, 1]
+//     Output: [1, null, 0, null, 1]
+//     Explanation:
+//       - Post-order dfs recurses into right child 0 and visits its left leaf 0 and
+//         right leaf 1 first.
+//       - The left leaf 0 has val == 0 and null children so pruneTree returns
+//         nullptr to prune it, while the right leaf 1 is kept.
+//       - Returning to the right child 0, its right pointer is non-null, so it
+//         stays and root 1 returns [1, null, 0, null, 1].
+//
+//   Example 2:
+//     Input:  root = [1, 0, 1, 0, 0, 0, 1]
+//     Output: [1, null, 1, null, 1]
+//     Explanation:
+//       - In the left subtree rooted at 0, both 0 leaves return nullptr, leaving
+//         the left child 0 childless so it also returns nullptr.
+//       - In the right subtree rooted at 1, its left leaf 0 returns nullptr while
+//         its right leaf 1 is kept.
+//       - Returning to root 1, root->left is now nullptr and root->right is [1,
+//         null, 1], producing [1, null, 1, null, 1].
+//
+//   Example 3:
+//     Input:  root = [0, 0, 0, 0]
+//     Output: nullptr
+//     Explanation:
+//       - Post-order dfs reaches the deepest left leaf 0 and returns nullptr
+//         because val == 0 with null children.
+//       - Returning to the left child 0 and visiting the right leaf 0 both yield
+//         nullptr since neither has a 1 or remaining children.
+//       - At root 0, both left and right are now nullptr, so pruneTree returns
+//         nullptr.
+//
 // Algorithm:
 //   Use post-order DFS (`pruneTree`):
 //     1. Base case: if `root == nullptr`, return `nullptr`.

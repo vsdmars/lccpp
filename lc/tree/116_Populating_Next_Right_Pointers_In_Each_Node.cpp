@@ -9,6 +9,43 @@
 //   right node. Return the root of the modified tree.
 //   Constraint follow-up: solve using O(1) constant extra space.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, 4, 5, 6, 7]
+//     Output: [[1], [2, 3], [4, 5, 6, 7]] (next pointers per level: 1 -> nullptr, 2
+//             -> 3 -> nullptr, 4 -> 5 -> 6 -> 7 -> nullptr)
+//     Explanation:
+//       - Start with level_head = node 1 (1->next is nullptr) and create a
+//         stack-local sentinel node with tail = &sentinel.
+//       - Walk curr = 1, appending curr->left (2) and curr->right (3) to tail->next
+//         so sentinel.next is 2 -> 3 -> nullptr, then set level_head = 2.
+//       - At level 2 with a fresh sentinel, walk curr = 2 (appending 4, 5) then
+//         curr = curr->next = 3 (appending 6, 7), forming 4 -> 5 -> 6 -> 7 ->
+//         nullptr and advancing level_head = 4.
+//       - At level 3, walk 4 -> 5 -> 6 -> 7; all leaves have null children so
+//         sentinel.next remains nullptr, setting level_head = nullptr and returning
+//         root.
+//
+//   Example 2:
+//     Input:  root = [1]
+//     Output: [[1]] (1 -> nullptr)
+//     Explanation:
+//       - Set level_head = node 1 and initialize a fresh stack-local sentinel with
+//         tail = &sentinel.
+//       - Visit curr = 1; both curr->left and curr->right are nullptr, so no
+//         children are appended and sentinel.next stays nullptr.
+//       - Advance level_head = sentinel.next (nullptr), terminating the loop and
+//         returning root with root->next == nullptr.
+//
+//   Example 3:
+//     Input:  root = [] (nullptr)
+//     Output: nullptr
+//     Explanation:
+//       - Initialize level_head = root (nullptr) in connect (or hit the root ==
+//         nullptr early return in connectBfs).
+//       - Because level_head == nullptr, skip the outer while loop immediately and
+//         return nullptr.
+//
 // Algorithm:
 //   Two approaches (matching both methods in the Python source):
 //     1. O(1)-Space Level Threading (`connect`):

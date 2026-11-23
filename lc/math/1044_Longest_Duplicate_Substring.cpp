@@ -9,6 +9,44 @@
 //   Constraints: 2 <= s.length <= 3 * 10^4, `s` consists of lowercase English
 //   letters.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "banana"
+//     Output: "ana"
+//     Explanation:
+//       - Initialize binary search bounds over duplicate length as lo = 1 and hi =
+//         5 for s.size() = 6.
+//       - Probe mid = 3; find_duplicate_of_length hashes "ban" at 0, "ana" at 1,
+//         "nan" at 2, and "ana" at 3, verifies exact match with prev_start = 1, and
+//         updates best_start = 3, best_len = 3, lo = 4.
+//       - Probe mid = 4; find_duplicate_of_length scans "bana", "anan", and "nana"
+//         with no repeated hash match and returns nullopt, narrowing hi = 3.
+//       - Terminate when lo (4) > hi (3) and return s.substr(3, 3) = "ana".
+//
+//   Example 2:
+//     Input:  s = "abcd"
+//     Output: ""
+//     Explanation:
+//       - Initialize binary search bounds to lo = 1 and hi = 3 for s.size() = 4
+//         with best_start = 0 and best_len = 0.
+//       - Probe mid = 2; find_duplicate_of_length hashes "ab", "bc", and "cd"
+//         without any repeat, returning nullopt and setting hi = 1.
+//       - Probe mid = 1; find_duplicate_of_length hashes "a", "b", "c", and "d"
+//         with all unique keys, returning nullopt and setting hi = 0.
+//       - Exit the loop since lo (1) > hi (0) and return s.substr(0, 0) = "".
+//
+//   Example 3:
+//     Input:  s = "aaaaa"
+//     Output: "aaaa"
+//     Explanation:
+//       - Initialize binary search bounds to lo = 1 and hi = 4 for s.size() = 5.
+//       - Probe mid = 2 and then mid = 3; both find_duplicate_of_length calls match
+//         repeating hashes at index 1, advancing best_len to 3 and lo to 4.
+//       - Probe mid = 4; find_duplicate_of_length hashes "aaaa" at start = 0 and
+//         start = 1, confirms exact equality, and sets best_start = 1, best_len =
+//         4, lo = 5.
+//       - Stop when lo (5) > hi (4) and return s.substr(1, 4) = "aaaa".
+//
 // Algorithm:
 //   Binary search on substring length combined with double-hashed Rabin-Karp
 //   rolling hashes (plus exact substring verification on hash hits).

@@ -11,6 +11,43 @@
 //   exact same `(row, col)` position, sort those nodes by value ascending.
 //   Constraints: 1 <= number of nodes <= 1000, 0 <= node.val <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 9, 20, null, null, 15, 7]
+//     Output: [[9], [3, 15], [20], [7]]
+//     Explanation:
+//       - Wave 0 processes root 3 at col 0 into row_buckets[0] = [3], appends it to
+//         columns[0], and enqueues (9, -1) and (20, 1) into next_frontier.
+//       - Wave 1 processes (9, -1) and (20, 1), placing [9] in columns[-1] and [20]
+//         in columns[1], while enqueuing (15, 0) and (7, 2).
+//       - Wave 2 processes (15, 0) and (7, 2), appending [15] to columns[0] = [3,
+//         15] and [7] to columns[2] = [7].
+//       - Iterating columns in ascending key order (-1, 0, 1, 2) produces [[9], [3,
+//         15], [20], [7]].
+//
+//   Example 2:
+//     Input:  root = [5, 2, 3, 4, 7, 1]
+//     Output: [[4], [2], [5, 1, 7], [3]]
+//     Explanation:
+//       - Wave 0 records 5 in columns[0] and enqueues (2, -1) and (3, 1); wave 1
+//         records 2 in columns[-1], 3 in columns[1], and enqueues (4, -2), (7, 0),
+//         and (1, 0).
+//       - Wave 2 collects row_buckets[-2] = [4] and row_buckets[0] = [7, 1], since
+//         both 7 and 1 share (row=2, col=0).
+//       - Sorting row_buckets[0] reorders [7, 1] to [1, 7] before appending to
+//         columns[0], yielding columns[0] = [5, 1, 7].
+//       - Collecting columns for keys -2, -1, 0, and 1 returns [[4], [2], [5, 1,
+//         7], [3]].
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: []
+//     Explanation:
+//       - verticalTraversal checks root == nullptr at entry and returns an empty
+//         vector immediately.
+//       - verticalTraversalDfs invokes dfs(nullptr, 0, 0), hits the null base case,
+//         leaves columns empty, and also returns [].
+//
 // Algorithm:
 //   Two complementary approaches are implemented:
 //   1. Level-by-Level BFS (primary, `verticalTraversal`):

@@ -9,6 +9,53 @@
 //   creates at most double bookings; otherwise it returns `false` and leaves
 //   the calendar unchanged.
 //
+// Examples:
+//   Example 1:
+//     Input:  MyCalendarTwo(), book(10, 20), book(50, 60), book(10, 40), book(5,
+//             15), book(5, 10), book(25, 55)
+//     Output: [null, true, true, true, false, true, true]
+//     Explanation:
+//       - book(10, 20) and book(50, 60) have no existing overlaps, so calendar_
+//         stores [[10, 20), [50, 60)] and both return true.
+//       - book(10, 40) intersects [10, 20) in calendar_, adding [10, 20) to
+//         overlaps_ and [10, 40) to calendar_, returning true.
+//       - book(5, 15) intersects [10, 20) in overlaps_ (5 < 20 && 15 > 10), so
+//         Phase 1 immediately returns false without modifying calendar_ or
+//         overlaps_.
+//       - book(5, 10) touches 10 without intersecting [10, 20) or [10, 40) under
+//         half-open bounds, so it appends to calendar_ and returns true.
+//       - book(25, 55) avoids [10, 20) in overlaps_, records intersections [25, 40)
+//         and [50, 55) in overlaps_, appends [25, 55) to calendar_, and returns
+//         true.
+//
+//   Example 2:
+//     Input:  MyCalendarTwo(), book(0, 5), book(5, 10), book(5, 10), book(5, 10),
+//             book(0, 5), book(4, 6)
+//     Output: [null, true, true, true, false, true, false]
+//     Explanation:
+//       - book(0, 5) and book(5, 10) do not overlap because intersects checks start
+//         < other.end && end > other.start, so both commit to calendar_.
+//       - The second book(5, 10) finds no hit in overlaps_, records [5, 10) in
+//         overlaps_, and returns true; the third book(5, 10) hits [5, 10) in
+//         overlaps_ and returns false.
+//       - book(0, 5) avoids [5, 10) in overlaps_, intersects [0, 5) in calendar_,
+//         and adds [0, 5) to overlaps_, returning true.
+//       - book(4, 6) overlaps both [0, 5) and [5, 10) in overlaps_, so Phase 1
+//         rejects it with false.
+//
+//   Example 3:
+//     Input:  MyCalendarTwo(), book(1, 10), book(1, 10), book(5, 20), book(10, 20),
+//             book(10, 20), book(15, 16)
+//     Output: [null, true, true, false, true, true, false]
+//     Explanation:
+//       - The first two book(1, 10) calls succeed, recording [1, 10) in overlaps_
+//         and two copies of [1, 10) in calendar_.
+//       - book(5, 20) hits [1, 10) in overlaps_ during Phase 1 and returns false
+//         before Phases 2 and 3, leaving [10, 20) unbooked.
+//       - Two book(10, 20) calls then succeed because [10, 20) is disjoint from [1,
+//         10), creating [10, 20) in overlaps_ on the second call.
+//       - book(15, 16) intersects [10, 20) in overlaps_ and returns false.
+//
 // Algorithm:
 //   Maintain two interval lists: `calendar_` stores all accepted bookings, and
 //   `overlaps_` stores all double-booked intersections produced by pairs of

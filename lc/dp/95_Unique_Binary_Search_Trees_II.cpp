@@ -6,6 +6,40 @@
 //   unique binary search trees (BSTs) that store the exact set of values
 //   1, 2, ..., n. The trees may be returned in any order.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3
+//     Output: [[1, null, 2, null, 3], [1, null, 3, 2], [2, 1, 3], [3, 1, null,
+//             null, 2], [3, 2, null, 1]]
+//     Explanation:
+//       - Call generate(1, 3) and iterate root_val over 1, 2, and 3.
+//       - For root_val = 1, combine left {nullptr} from [1, 0] with the two
+//         subtrees from memoized [2, 3] to produce [1, null, 2, null, 3] and [1,
+//         null, 3, 2].
+//       - For root_val = 2, combine single-node left [1] from [1, 1] and right [3]
+//         from [3, 3] to produce [2, 1, 3].
+//       - For root_val = 3, combine the two subtrees from memoized [1, 2] with
+//         right {nullptr} from [4, 3] to produce [3, 1, null, null, 2] and [3, 2,
+//         null, 1], returning all 5 BSTs.
+//
+//   Example 2:
+//     Input:  n = 2
+//     Output: [[1, null, 2], [2, 1]]
+//     Explanation:
+//       - Call generate(1, 2) and try root_val = 1 and root_val = 2.
+//       - For root_val = 1, pair left {nullptr} from [1, 0] with right [2] from [2,
+//         2] to build [1, null, 2].
+//       - For root_val = 2, pair left [1] from [1, 1] with right {nullptr} from [3,
+//         2] to build [2, 1], caching and returning both trees.
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: [[1]]
+//     Explanation:
+//       - Call generate(1, 1) with root_val = 1 as the only candidate in [1, 1].
+//       - Both child sub-ranges [1, 0] and [2, 1] satisfy left > right and return
+//         the {nullptr} sentinel, producing the single leaf node [1].
+//
 // Algorithm:
 //   Top-down memoized interval DP / divide-and-conquer. Every BST over the
 //   inclusive value range [left, right] is uniquely determined by choosing a

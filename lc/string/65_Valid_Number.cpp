@@ -9,6 +9,38 @@
 //   '.'+digits, or digits+'.'+digits), and an optional exponent ('e' or 'E')
 //   followed by an optional sign and one or more digits.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = " 0.1 "
+//     Output: true
+//     Explanation:
+//       - Start in DFA state 1 and stay in state 1 on the leading space (' ',
+//         CharClass::kBlank).
+//       - Transition 1 -> 3 on '0' (kDigit), 3 -> 5 on '.' (kDot), and remain in
+//         state 5 on '1' (kDigit).
+//       - Transition 5 -> 9 on the trailing space (' ', kBlank) and return
+//         kAccepting[9], which is true.
+//
+//   Example 2:
+//     Input:  s = " 6e-1"
+//     Output: true
+//     Explanation:
+//       - Start in state 1, stay in state 1 on ' ', and transition 1 -> 3 on '6'
+//         (kDigit).
+//       - Transition 3 -> 6 on 'e' (kExp), 6 -> 7 on '-' (kSign), and 7 -> 8 on '1'
+//         (kDigit).
+//       - End of string is reached in state 8 where kAccepting[8] is true, so
+//         return true.
+//
+//   Example 3:
+//     Input:  s = ".e1"
+//     Output: false
+//     Explanation:
+//       - Start in state 1 and transition 1 -> 4 on '.' (kDot, leading dot without
+//         digits).
+//       - On 'e' (kExp), look up kTransitions[4][4] which yields dead state 0.
+//       - Because state == 0, immediately return false without scanning further.
+//
 // Algorithm:
 //   Model the lexical grammar of a decimal number as a 9-state Deterministic
 //   Finite Automaton (DFA). Classify each character into one of five input

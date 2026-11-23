@@ -13,6 +13,49 @@
 //   friends always succeed. Return a boolean array indicating each outcome.
 //   Typical constraints: 2 <= n <= 1000; restrictions, requests <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3, restrictions = [[0, 1]], requests = [[0, 2], [2, 1]]
+//     Output: [true, false]
+//     Explanation:
+//       - Initialize DisjointSet with three isolated nodes {0}, {1}, and {2}.
+//       - For request [0, 2], root_u = 0 and root_v = 2 differ; restriction [0, 1]
+//         has roots (0, 1) which do not match {0, 2}, so unite_roots(0, 2) merges
+//         {0, 2} and records true.
+//       - For request [2, 1], find(2) = 0 and find(1) = 1; restriction [0, 1] has
+//         roots (0, 1) matching {root_u, root_v}, so can_merge returns false and
+//         [2, 1] is rejected with false.
+//
+//   Example 2:
+//     Input:  n = 5, restrictions = [[0, 1], [1, 2], [2, 3]], requests = [[0, 4],
+//             [1, 2], [3, 1], [3, 4]]
+//     Output: [true, false, true, false]
+//     Explanation:
+//       - Request [0, 4] has roots 0 and 4 with no conflicting restriction, so
+//         unite_roots(0, 4) merges {0, 4} under root 0 and appends true.
+//       - Request [1, 2] has roots 1 and 2, directly violating restriction [1, 2],
+//         so it is rejected with false without modifying the DSU.
+//       - Request [3, 1] has roots 3 and 1; none of [0, 1], [1, 2], or [2, 3] has
+//         one endpoint in {3} and the other in {1}, so {3, 1} merges under root 3
+//         and appends true.
+//       - Request [3, 4] sees find(3) = 3 and find(4) = 0; restriction [0, 1] now
+//         has find(0) = 0 and find(1) = 3, matching {3, 0}, so the merge is blocked
+//         and false is appended.
+//
+//   Example 3:
+//     Input:  n = 5, restrictions = [[0, 1]], requests = [[0, 2], [1, 3], [2, 3],
+//             [0, 4], [3, 4], [2, 4]]
+//     Output: [true, true, false, true, false, true]
+//     Explanation:
+//       - Requests [0, 2] and [1, 3] violate no restrictions and create components
+//         {0, 2} (root 0) and {1, 3} (root 1), appending true and true.
+//       - Request [2, 3] has find(2) = 0 and find(3) = 1, conflicting with [0, 1],
+//         so it appends false and leaves {0, 2} and {1, 3} separate.
+//       - Request [0, 4] merges 4 into {0, 2} under root 0 (true), after which [3,
+//         4] sees roots 1 and 0 and is rejected (false).
+//       - Request [2, 4] finds find(2) == find(4) == 0, hitting the
+//         already-connected fast path to append true immediately.
+//
 // Algorithm:
 //   Disjoint Set Union (Union-Find) with Pre-Merge Conflict Validation:
 //   1. Maintain a single `DisjointSet` representing the current connected

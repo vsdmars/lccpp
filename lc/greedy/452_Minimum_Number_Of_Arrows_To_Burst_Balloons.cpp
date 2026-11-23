@@ -8,6 +8,47 @@
 //   satisfying x_start <= x <= x_end. Return the minimum number of arrows
 //   required to burst all balloons.
 //
+// Examples:
+//   Example 1:
+//     Input:  points = [[10, 16], [2, 8], [1, 6], [7, 12]]
+//     Output: 2
+//     Explanation:
+//       - Copy and sort the intervals by right endpoint ascending: [1, 6], [2, 8],
+//         [7, 12], [10, 16].
+//       - Initialize arrows = 1 and arrow_x = 6 from the first balloon [1, 6].
+//       - Check [2, 8]: start = 2 <= arrow_x (6), so the first arrow bursts it
+//         without incrementing arrows.
+//       - Check [7, 12]: start = 7 > arrow_x (6), so shoot a new arrow at arrow_x =
+//         12 and increment arrows to 2.
+//       - Check [10, 16]: start = 10 <= arrow_x (12), so the second arrow bursts it
+//         too, returning 2.
+//
+//   Example 2:
+//     Input:  points = [[0, 9], [1, 8], [7, 8], [1, 6], [9, 16], [7, 13], [7, 10],
+//             [6, 11], [6, 9], [9, 13]]
+//     Output: 3
+//     Explanation:
+//       - Sort intervals by end ascending: [1, 6], [1, 8], [7, 8], [0, 9], [6, 9],
+//         [7, 10], [6, 11], [7, 13], [9, 13], [9, 16].
+//       - Start with arrows = 1 and arrow_x = 6 from [1, 6]; [1, 8] has start = 1
+//         <= 6 and is burst by the same arrow.
+//       - At [7, 8], start = 7 > 6 forces arrows = 2 and arrow_x = 8, which also
+//         bursts [0, 9], [6, 9], [7, 10], [6, 11], and [7, 13] because all have
+//         start <= 8.
+//       - At [9, 13], start = 9 > 8 forces arrows = 3 and arrow_x = 13, which also
+//         covers [9, 16] (9 <= 13), returning 3.
+//
+//   Example 3:
+//     Input:  points = [[4, 12], [7, 8], [7, 9], [7, 9], [2, 8], [6, 7], [5, 14],
+//             [4, 13]]
+//     Output: 1
+//     Explanation:
+//       - Sort intervals by end ascending, placing [6, 7] first with the smallest
+//         right endpoint 7.
+//       - Initialize arrows = 1 and arrow_x = 7 from [6, 7].
+//       - Every subsequent interval has start <= 7 (7, 2, 7, 7, 4, 4, 5), so no
+//         interval triggers start > arrow_x and the function returns 1.
+//
 // Algorithm:
 //   This is the classic greedy interval-stabbing problem (dual of interval
 //   scheduling):

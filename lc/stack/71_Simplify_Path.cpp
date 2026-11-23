@@ -10,6 +10,41 @@
 //   The simplified absolute path must start with a single '/' and have no
 //   trailing '/' unless it is the root directory "/".
 //
+// Examples:
+//   Example 1:
+//     Input:  path = "/home/user/Documents/../Pictures"
+//     Output: "/home/user/Pictures"
+//     Explanation:
+//       - Because path starts with '/', set is_absolute = true and initialize an
+//         empty directory stack dirs.
+//       - Scan '/'-delimited tokens and push "home", "user", and "Documents" onto
+//         dirs.
+//       - On token "..", pop "Documents" from dirs (leaving ["home", "user"]), then
+//         push "Pictures".
+//       - Reconstruct the canonical path with a leading '/' and single '/'
+//         separators between dirs entries to return "/home/user/Pictures".
+//
+//   Example 2:
+//     Input:  path = "/.../a/../b/c/../d/./"
+//     Output: "/.../b/d"
+//     Explanation:
+//       - Push "..." as a normal directory name onto dirs since it is neither "."
+//         nor "..", followed by "a".
+//       - Pop "a" on the first "..", push "b" and "c" (dirs = ["...", "b", "c"]),
+//         and pop "c" on the second "..".
+//       - Push "d", ignore the single-dot token "." and trailing '/', and join
+//         ["...", "b", "d"] with '/' to return "/.../b/d".
+//
+//   Example 3:
+//     Input:  path = "/../"
+//     Output: "/"
+//     Explanation:
+//       - Set is_absolute = true from the leading '/' and skip to the token "..".
+//       - Because dirs is already empty, handling ".." is a no-op so dirs remains
+//         empty at root.
+//       - Skip the trailing '/' and reconstruct an absolute path from empty dirs,
+//         returning "/".
+//
 // Algorithm:
 //   Scan `path` once by splitting on '/' delimiters without allocating
 //   intermediate component strings (using `std::string_view` slices). Maintain

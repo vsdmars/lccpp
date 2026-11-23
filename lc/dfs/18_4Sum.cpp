@@ -10,6 +10,52 @@
 //   be returned in any order.
 //   Constraints: 1 <= n <= 200, -10^9 <= nums[i], target <= 10^9.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 0, -1, 0, -2, 2], target = 0
+//     Output: [[-2, -1, 1, 2], [-2, 0, 0, 2], [-1, 0, 0, 1]]
+//     Explanation:
+//       - Sorting nums produces [-2, -1, 0, 0, 1, 2], and kSum starts at start = 0,
+//         k = 4, remaining = 0 after confirming 0 lies within [min_possible = -8,
+//         max_possible = 8].
+//       - Fixing i = 0 (nums[0] = -2) recurses to k = 3, remaining = 2: choosing -1
+//         reduces to twoSum on [0, 0, 1, 2] where left = 4 (1) and right = 5 (2)
+//         match 3 and emit [-2, -1, 1, 2], then choosing 0 reduces to twoSum on [0,
+//         1, 2] where 0 + 2 = 2 emits [-2, 0, 0, 2].
+//       - The duplicate 0 at index 3 is skipped at k = 3 because nums[3] ==
+//         nums[2].
+//       - Advancing the outer loop to i = 1 (nums[1] = -1) fixes [-1, 0] at k = 3
+//         and runs twoSum on [0, 1, 2] with remaining = 1, matching 0 + 1 = 1 to
+//         emit [-1, 0, 0, 1].
+//       - Outer index i = 2 (nums[2] = 0) yields no match in [0, 1, 2] since 0 + 1
+//         + 2 != 0, and the loop ends at max_index = 2, returning all three unique
+//         quadruplets.
+//
+//   Example 2:
+//     Input:  nums = [2, 2, 2, 2, 2], target = 8
+//     Output: [[2, 2, 2, 2]]
+//     Explanation:
+//       - After sorting, nums remains [2, 2, 2, 2, 2] and the feasibility check at
+//         k = 4 passes with min_possible = max_possible = 8 == remaining.
+//       - The first branch fixes nums[0] = 2 and nums[1] = 2, then calls twoSum on
+//         indices [2..4] with remaining = 4.
+//       - twoSum matches nums[2] + nums[4] = 2 + 2 = 4, emits [2, 2, 2, 2], and
+//         skips both pointers past all duplicate 2s to terminate.
+//       - Backtracking skips every subsequent index where nums[i] == nums[i - 1] at
+//         both k = 3 and k = 4, producing only [[2, 2, 2, 2]].
+//
+//   Example 3:
+//     Input:  nums = [1000000000, 1000000000, 1000000000, 1000000000], target =
+//             -294967296
+//     Output: []
+//     Explanation:
+//       - Sorting preserves the four 1000000000 entries and target is widened to
+//         int64_t(-294967296).
+//       - At k = 4, start = 0, kSum computes min_possible = 1000000000LL * 4 =
+//         4000000000 in 64-bit arithmetic without 32-bit wrap-around.
+//       - Because remaining (-294967296) < min_possible (4000000000), kSum prunes
+//         immediately and returns [].
+//
 // Algorithm:
 //   Sort `nums` ascending, then reduce the problem recursively via generalized
 //   k-Sum DFS down to a linear-time Two-Pointer 2-Sum base case:

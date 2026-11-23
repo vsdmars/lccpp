@@ -6,6 +6,39 @@
 //   `nums` into `k` non-empty contiguous subarrays such that the largest sum
 //   among the `k` subarrays is minimized. Return that minimized largest sum.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [7, 2, 5, 10, 8], k = 2
+//     Output: 18
+//     Explanation:
+//       - Set search bounds to lo = max(nums) = 10 and hi = sum(nums) = 32.
+//       - Check mid = 21: canSplit forms [7, 2, 5] (sum 14) and [10, 8] (sum 18),
+//         using 2 <= 2 subarrays, so set hi = 21.
+//       - Check mid = 15: canSplit needs [7, 2, 5], [10], and [8] (3 > 2
+//         subarrays), so set lo = 16.
+//       - Check mid = 18: canSplit succeeds with [7, 2, 5] and [10, 8] (hi = 18),
+//         then mid = 17 fails with 3 subarrays (lo = 18), returning 18.
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 3, 4, 5], k = 2
+//     Output: 9
+//     Explanation:
+//       - Set search bounds to lo = 5 and hi = 15.
+//       - Check mid = 10: canSplit partitions into [1, 2, 3, 4] and [5] (2
+//         subarrays), setting hi = 10; then mid = 7 needs 3 subarrays ([1, 2, 3],
+//         [4], [5]), setting lo = 8.
+//       - Check mid = 9: canSplit forms [1, 2, 3] (sum 6) and [4, 5] (sum 9),
+//         setting hi = 9; then mid = 8 fails with 3 subarrays, converging lo = hi =
+//         9.
+//
+//   Example 3:
+//     Input:  nums = [0, 0, 0, 0], k = 2
+//     Output: 0
+//     Explanation:
+//       - Compute lo = max(nums) = 0 and hi = sum(nums) = 0.
+//       - Since lo < hi is false, the binary search loop terminates immediately and
+//         returns 0.
+//
 // Algorithm:
 //   Binary Search on the Answer Space + Greedy Feasibility Check:
 //   Because every element is non-negative, feasibility is monotonic in the

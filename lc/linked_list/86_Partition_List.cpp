@@ -9,6 +9,43 @@
 //   Constraints: 0 <= number of nodes <= 200, -100 <= Node.val <= 100,
 //   -200 <= x <= 200.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 4, 3, 2, 5, 2], x = 3
+//     Output: [1, 2, 2, 4, 3, 5]
+//     Explanation:
+//       - Initialize two sentinel nodes less_dummy(0) and ge_dummy(0) with tail
+//         pointers less_tail and ge_tail.
+//       - Traverse nodes in order: 1 (< 3) and 2 (< 3) and 2 (< 3) append to
+//         less_tail giving [1, 2, 2], while 4 (>= 3), 3 (>= 3), and 5 (>= 3) append
+//         to ge_tail giving [4, 3, 5].
+//       - Set ge_tail->next = nullptr on node 5 and splice less_tail->next =
+//         ge_dummy.next (node 2 -> node 4).
+//       - Return less_dummy.next, yielding [1, 2, 2, 4, 3, 5].
+//
+//   Example 2:
+//     Input:  head = [2, 1], x = 2
+//     Output: [1, 2]
+//     Explanation:
+//       - Initialize less_dummy and ge_dummy with tail pointers at their respective
+//         sentinels.
+//       - Visit node 2 (>= 2) and append it to ge_tail; visit node 1 (< 2) and
+//         append it to less_tail.
+//       - Set ge_tail->next = nullptr on node 2 to sever its stale next pointer to
+//         1 and avoid a cycle.
+//       - Splice less_tail->next = ge_dummy.next (1 -> 2) and return
+//         less_dummy.next as [1, 2].
+//
+//   Example 3:
+//     Input:  head = [], x = 0
+//     Output: []
+//     Explanation:
+//       - Initialize less_dummy(0) and ge_dummy(0) with less_tail = &less_dummy and
+//         ge_tail = &ge_dummy.
+//       - Skip the traversal loop immediately since cur = head is nullptr.
+//       - Set ge_tail->next = nullptr and less_tail->next = ge_dummy.next
+//         (nullptr), returning less_dummy.next ([]).
+//
 // Algorithm:
 //   Maintain two separate singly linked sublists anchored by stack-allocated
 //   dummy heads:

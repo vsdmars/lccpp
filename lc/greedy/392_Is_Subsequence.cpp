@@ -7,6 +7,35 @@
 //   more characters from `t` without disturbing the relative order of the
 //   remaining characters.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abc", t = "ahbgdc"
+//     Output: true
+//     Explanation:
+//       - Initialize search cursor pos = 0 in t.
+//       - For 'a', t.find('a', 0) matches at index 0 and advances pos to 1.
+//       - For 'b', t.find('b', 1) matches at index 2 and advances pos to 3.
+//       - For 'c', t.find('c', 3) matches at index 5 and advances pos to 6, after
+//         which the loop finishes and returns true.
+//
+//   Example 2:
+//     Input:  s = "axc", t = "ahbgdc"
+//     Output: false
+//     Explanation:
+//       - Initialize search cursor pos = 0 in t.
+//       - For 'a', t.find('a', 0) matches at index 0 and advances pos to 1.
+//       - For 'x', t.find('x', 1) scans "hbgdc" and returns std::string_view::npos,
+//         immediately returning false.
+//
+//   Example 3:
+//     Input:  s = "aec", t = "abcde"
+//     Output: false
+//     Explanation:
+//       - Initialize search cursor pos = 0 in t.
+//       - Match 'a' at index 0 (pos = 1) and 'e' at index 4 (pos = 5).
+//       - For 'c', t.find('c', 5) starts past the end of "abcde" and returns
+//         std::string_view::npos, so return false because 'c' precedes 'e' in t.
+//
 // Algorithm:
 //   Greedily match each character of `s` to its earliest remaining occurrence
 //   in `t`. Matching as early as possible leaves the longest possible suffix of

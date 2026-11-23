@@ -8,6 +8,43 @@
 //   Constraints: 1 <= s.size() <= 5 * 10^4, printable ASCII characters, words
 //   separated by single spaces with no leading or trailing spaces.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "Let's take LeetCode contest"
+//     Output: "s'teL ekat edoCteeL tsetnoc"
+//     Explanation:
+//       - At start = 0, end scans to the space at index 5 and reverses [0, 5)
+//         in-place, turning "Let's" into "s'teL" and setting start = 5.
+//       - Skipping the space at index 5 moves start to 6, where end scans to 10 and
+//         reverses [6, 10) ("take" becomes "ekat").
+//       - Skipping the space at index 10 moves start to 11, where end scans to 19
+//         and reverses [11, 19) ("LeetCode" becomes "edoCteeL").
+//       - Skipping the space at index 19 moves start to 20, where end scans to n =
+//         27 and reverses [20, 27) ("contest" becomes "tsetnoc"), returning "s'teL
+//         ekat edoCteeL tsetnoc".
+//
+//   Example 2:
+//     Input:  s = "Mr Ding"
+//     Output: "rM gniD"
+//     Explanation:
+//       - Starting at start = 0, end stops at the space at index 2 and
+//         std::ranges::reverse mutates [0, 2) from "Mr" to "rM".
+//       - Setting start = 2 skips s[2] == ' ' to start = 3, and end advances to n =
+//         7.
+//       - Reversing [3, 7) turns "Ding" into "gniD", then start becomes 7 == n and
+//         returns "rM gniD".
+//
+//   Example 3:
+//     Input:  s = "  ab   cd "
+//     Output: "  ba   dc "
+//     Explanation:
+//       - From start = 0, the space-skipping loop advances past indices 0 and 1 to
+//         start = 2, and end scans to 4 to reverse [2, 4) from "ab" to "ba".
+//       - From start = 4, three spaces at indices 4..6 are skipped to start = 7,
+//         and end scans to 9 to reverse [7, 9) from "cd" to "dc".
+//       - From start = 9, the trailing space is skipped to start = 10 == n, leaving
+//         an empty [10, 10) range and returning "  ba   dc ".
+//
 // Algorithm:
 //   Two-pointer in-place word scanning:
 //   1. Maintain a scanning index `start` moving left-to-right across `s`.

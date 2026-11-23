@@ -9,6 +9,42 @@
 //   parenthesizations must be preserved. Inputs have length at most 20 and all
 //   output values fit in a signed 32-bit integer.
 //
+// Examples:
+//   Example 1:
+//     Input:  expression = "2-1-1"
+//     Output: [0, 2]
+//     Explanation:
+//       - Splitting at operator index 1 ('-') evaluates dfs("2") = [2] and
+//         dfs("1-1") = [0], producing 2 - 0 = 2.
+//       - Splitting at operator index 3 ('-') evaluates dfs("2-1") = [1] and
+//         dfs("1") = [1], producing 1 - 1 = 0.
+//       - Collecting all split results yields [2, 0], which matches [0, 2] after
+//         order-independent sorting.
+//
+//   Example 2:
+//     Input:  expression = "2*3-4*5"
+//     Output: [-34, -14, -10, -10, 10]
+//     Explanation:
+//       - Splitting at index 1 ('*') pairs dfs("2") = [2] with dfs("3-4*5") = [-17,
+//         -5] (from 3-(4*5) and (3-4)*5), emitting -34 and -10.
+//       - Splitting at index 3 ('-') pairs dfs("2*3") = [6] with dfs("4*5") = [20],
+//         emitting 6 - 20 = -14.
+//       - Splitting at index 5 ('*') pairs dfs("2*3-4") = [-2, 2] (from 2*(3-4) and
+//         (2*3)-4) with dfs("5") = [5], emitting -10 and 10.
+//       - Combining all outcomes produces [-34, -10, -14, -10, 10], matching [-34,
+//         -14, -10, -10, 10] in sorted order.
+//
+//   Example 3:
+//     Input:  expression = "2+3+4"
+//     Output: [9, 9]
+//     Explanation:
+//       - Splitting at index 1 ('+') combines dfs("2") = [2] and dfs("3+4") = [7]
+//         to push 2 + 7 = 9 into results.
+//       - Splitting at index 3 ('+') combines dfs("2+3") = [5] and dfs("4") = [4]
+//         to push 5 + 4 = 9 into results.
+//       - Because distinct parenthesizations are not deduplicated, both evaluations
+//         are kept and [9, 9] is returned.
+//
 // Algorithm:
 //   Divide-and-conquer DFS with memoization over sub-expression slices. Every
 //   operator index `i` can serve as the root (last-evaluated operator) of an

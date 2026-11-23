@@ -5,6 +5,41 @@
 //   Given two binary strings `a` and `b` consisting of '0' and '1' characters,
 //   return their sum as a binary string without leading zeros (except "0").
 //
+// Examples:
+//   Example 1:
+//     Input:  a = "11", b = "1"
+//     Output: "100"
+//     Explanation:
+//       - Initialize reverse cursors i = 2, j = 1, carry = 0, and an empty result
+//         buffer.
+//       - Step 1 (--i -> 1, --j -> 0): sum = 0 + 1 + 1 = 2, append '0' (2 % 2) and
+//         set carry = 1 (2 / 2).
+//       - Step 2 (--i -> 0, j == 0): sum = 1 + 1 = 2, append '0' and keep carry =
+//         1.
+//       - Step 3 (i == 0, j == 0, carry = 1): sum = 1, append '1' and set carry =
+//         0, then reverse "001" to return "100".
+//
+//   Example 2:
+//     Input:  a = "1010", b = "1011"
+//     Output: "10101"
+//     Explanation:
+//       - Initialize i = 4, j = 4, carry = 0, and process LSBs (i = 3, j = 3): sum
+//         = 0 + 1 + 0 = 1, append '1', carry = 0.
+//       - Process (i = 2, j = 2): sum = 1 + 1 + 0 = 2, append '0', carry = 1; then
+//         (i = 1, j = 1): sum = 0 + 0 + 1 = 1, append '1', carry = 0.
+//       - Process (i = 0, j = 0): sum = 1 + 1 + 0 = 2, append '0', carry = 1.
+//       - Consume remaining carry = 1 by appending '1', then reverse "10101" to
+//         return "10101".
+//
+//   Example 3:
+//     Input:  a = "0", b = "0"
+//     Output: "0"
+//     Explanation:
+//       - Initialize i = 1, j = 1, carry = 0, and an empty result buffer.
+//       - Run one loop step (--i -> 0, --j -> 0): sum = 0 + 0 + 0 = 0, append '0',
+//         and set carry = 0.
+//       - Exit the loop and reverse "0" to return "0".
+//
 // Algorithm:
 //   Perform schoolbook right-to-left bit-by-bit addition using two reverse
 //   indices and an integer carry (a software ripple-carry full adder). At each

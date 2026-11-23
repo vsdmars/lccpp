@@ -7,6 +7,45 @@
 //   and ')', and spaces, evaluate the expression and return its integer value
 //   without calling a built-in expression evaluator.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "(1+(4+5+2)-3)+(6+8)"
+//     Output: 23
+//     Explanation:
+//       - The outer '(' pushes {prev_result: 0, prev_sign: 1} onto frames; parsing
+//         "1+" updates result = 1 and sign = 1 before the inner '(' pushes
+//         {prev_result: 1, prev_sign: 1}.
+//       - Inside "(4+5+2)", result accumulates 4 + 5 = 9 with cur = 2, and its ')'
+//         folds 1 + 1 * (9 + 2) = 12 back into the first parenthesized scope.
+//       - Parsing "-3)" applies -3 to get result = 12 - 3 = 9, then pops {0, 1} to
+//         fold result = 0 + 1 * 9 = 9 at the top level.
+//       - "+(6+8)" pushes {prev_result: 9, prev_sign: 1}, evaluates the inner scope
+//         to 6 + 8 = 14, and folds 9 + 1 * 14 = 23 on the final ')'.
+//
+//   Example 2:
+//     Input:  s = "- (3 + (4 + 5))"
+//     Output: -12
+//     Explanation:
+//       - Leading '-' commits 0 * 1 = 0 and sets sign = -1, then the outer '('
+//         saves {prev_result: 0, prev_sign: -1} on frames and resets result = 0,
+//         sign = 1.
+//       - "3 +" updates result = 3, and the nested '(' pushes {prev_result: 3,
+//         prev_sign: 1} before resetting the inner scope.
+//       - "4 + 5)" completes the inner sum 9 and pops {3, 1} to compute result = 3
+//         + 1 * 9 = 12.
+//       - The outer ')' pops {0, -1} and folds 0 + (-1) * 12 = -12, which is
+//         returned directly.
+//
+//   Example 3:
+//     Input:  s = "-2147483648"
+//     Output: -2147483648
+//     Explanation:
+//       - Leading '-' commits 0 * 1 = 0 and sets sign = -1 with empty frames.
+//       - Digits '2' through '8' accumulate cur = 2147483648 in 64-bit std::int64_t
+//         arithmetic, avoiding signed 32-bit overflow.
+//       - After the loop, result + (cur * sign) evaluates to 0 + 2147483648 * (-1)
+//         = -2147483648, which converts cleanly to int (-2147483648).
+//
 // Algorithm:
 //   Evaluate the expression in a single left-to-right pass using an explicit
 //   scope stack for parenthesized subexpressions. Maintain three scalars for

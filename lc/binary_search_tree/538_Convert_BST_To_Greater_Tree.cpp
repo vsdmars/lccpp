@@ -7,6 +7,46 @@
 //   key plus the sum of all keys in the BST that are strictly greater than it.
 //   Return the root of the modified tree.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [5, 2, 13]
+//     Output: [18, 20, 13] (in-order: [20, 18, 13])
+//     Explanation:
+//       - Seed the explicit stack with the rightmost spine from root 5, yielding st
+//         = [5, 13] and greater_sum = 0.
+//       - Pop 13, add greater_sum (0) so node 13 stays 13, update greater_sum = 13,
+//         and skip its null left child.
+//       - Pop 5, add greater_sum (13) so node 5 becomes 18, update greater_sum =
+//         18, and push 5->left (2) onto the stack.
+//       - Pop 2, add greater_sum (18) so node 2 becomes 20, update greater_sum =
+//         20, and finish with an empty stack.
+//
+//   Example 2:
+//     Input:  root = [-3, -5, 2]
+//     Output: [-1, -6, 2] (in-order: [-6, -1, 2])
+//     Explanation:
+//       - Seed the stack with the rightmost spine from -3, giving st = [-3, 2] and
+//         greater_sum = 0.
+//       - Pop 2, update 2 += 0 -> 2, set greater_sum = 2, and observe 2->left is
+//         null.
+//       - Pop -3, update -3 += 2 -> -1, set greater_sum = -1, and push -3->left
+//         (-5) onto the stack.
+//       - Pop -5, update -5 += -1 -> -6, set greater_sum = -6, and finish with
+//         in-order [-6, -1, 2].
+//
+//   Example 3:
+//     Input:  root = [10, 5, null, 1]
+//     Output: [10, 15, null, 16] (in-order: [16, 15, 10])
+//     Explanation:
+//       - Seed the rightmost spine from 10; because 10->right is null, st = [10]
+//         and greater_sum = 0.
+//       - Pop 10, keep 10 += 0 -> 10, set greater_sum = 10, and push 10->left (5)
+//         onto the stack.
+//       - Pop 5, update 5 += 10 -> 15, set greater_sum = 15, and push 5->left (1)
+//         onto the stack.
+//       - Pop 1, update 1 += 15 -> 16, set greater_sum = 16, and return root 10
+//         with in-order [16, 15, 10].
+//
 // Algorithm:
 //   Traverse the BST in reverse in-order (right -> node -> left), which visits
 //   keys in strictly descending order. Maintain a single running accumulator

@@ -8,6 +8,48 @@
 //   of four octets, each in [0, 255] with no leading zeros (except the single
 //   digit "0" itself).
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "25525511135"
+//     Output: ["255.255.11.135", "255.255.111.35"]
+//     Explanation:
+//       - Initial length check passes because s.size() = 11 is within [4, 12], so
+//         dfs starts at index 0 with 4 remaining octets.
+//       - At start = 0, len = 1 ("2") leaves 10 digits for 3 octets (10 > 9,
+//         pruned) and len = 2 ("25") reaches start = 2 where "525" > 255 breaks, so
+//         only len = 3 ("255") advances to start = 3.
+//       - At start = 3 with 8 digits and 3 octets left, len = 1 is pruned (7 > 6),
+//         len = 2 fails at start = 5 ("511" > 255), and len = 3 ("255") advances to
+//         start = 6.
+//       - At start = 6 ("11135") with 2 octets left, len = 2 ("11") pairs with
+//         start = 8 len = 3 ("135") to emit "255.255.11.135", and len = 3 ("111")
+//         pairs with start = 9 len = 2 ("35") to emit "255.255.111.35".
+//
+//   Example 2:
+//     Input:  s = "101023"
+//     Output: ["1.0.10.23", "1.0.102.3", "10.1.0.23", "10.10.2.3", "101.0.2.3"]
+//     Explanation:
+//       - Choosing "1" at start = 0 forces start = 1 to take only "0" (breaking the
+//         loop at len = 2 because s[1] == '0'), then "10"+"23" and "102"+"3" emit
+//         "1.0.10.23" and "1.0.102.3".
+//       - Choosing "10" at start = 0 explores start = 2 with "1" followed by "0"
+//         (again capped at len = 1 by s[3] == '0') and "23", emitting "10.1.0.23".
+//       - Still under "10" at start = 0, taking "10" at start = 2 followed by
+//         single digits "2" and "3" emits "10.10.2.3".
+//       - Choosing "101" at start = 0 hits s[3] == '0' so only "0" is valid at
+//         start = 3, followed by "2" and "3" to emit "101.0.2.3".
+//
+//   Example 3:
+//     Input:  s = "999999999999"
+//     Output: []
+//     Explanation:
+//       - Initial length check passes with s.size() = 12, entering dfs at start = 0
+//         with rem_octets = 4 and rem_digits = 12.
+//       - Branches with len = 1 (rem_digits = 11 > 9) and len = 2 (rem_digits = 10
+//         > 9) fail the remaining-digit feasibility check and return immediately.
+//       - Trying len = 3 parses "999" as 999 > 255, breaking out of the loop
+//         without recursing and returning an empty vector [].
+//
 // Algorithm:
 //   Depth-First Search (DFS) backtracking with remaining-length pruning.
 //   At each recursion level we choose the next octet (length 1, 2, or 3)

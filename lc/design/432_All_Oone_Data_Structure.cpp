@@ -13,6 +13,59 @@
 //     - getMinKey(): Return any key currently holding the minimum count, or ""
 //       if the structure is empty.
 //
+// Examples:
+//   Example 1:
+//     Input:  ops = ["AllOne", "inc", "inc", "getMaxKey", "getMinKey", "inc",
+//             "getMaxKey", "getMinKey"], args = [[], ["hello"], ["hello"], [], [],
+//             ["leet"], [], []]
+//     Output: [null, null, null, "hello", "hello", null, "hello", "leet"]
+//     Explanation:
+//       - inc("hello") creates count-1 bucket 1:{"hello"} at the front of buckets_,
+//         and the second inc("hello") moves "hello" into a newly created count-2
+//         bucket and erases the empty count-1 bucket, leaving buckets_ =
+//         [2:{"hello"}].
+//       - getMaxKey() reads buckets_.back() and getMinKey() reads buckets_.front(),
+//         both returning "hello".
+//       - inc("leet") sees buckets_.front().count != 1, prepends 1:{"leet"} to give
+//         buckets_ = [1:{"leet"}, 2:{"hello"}], and maps "leet" to it.
+//       - getMaxKey() returns "hello" from buckets_.back() (count 2) and
+//         getMinKey() returns "leet" from buckets_.front() (count 1).
+//
+//   Example 2:
+//     Input:  ops = ["AllOne", "inc", "inc", "inc", "dec", "inc", "inc",
+//             "getMaxKey", "getMinKey", "dec", "dec", "dec", "getMaxKey",
+//             "getMinKey"], args = [[], ["hello"], ["world"], ["hello"], ["world"],
+//             ["hello"], ["leet"], [], [], ["hello"], ["hello"], ["hello"], [], []]
+//     Output: [null, null, null, null, null, null, null, "hello", "leet", null,
+//             null, null, "leet", "leet"]
+//     Explanation:
+//       - After inc("hello"), inc("world"), and inc("hello"), buckets_ is
+//         [1:{"world"}, 2:{"hello"}].
+//       - dec("world") removes "world" at count 1 and deletes the empty count-1
+//         bucket; inc("hello") and inc("leet") then leave buckets_ = [1:{"leet"},
+//         3:{"hello"}], so getMaxKey() returns "hello" and getMinKey() returns
+//         "leet".
+//       - Three dec("hello") calls step "hello" down from count 3 to 2 to 1
+//         (joining 1:{"leet", "hello"}) and then delete it, pruning empty buckets
+//         to leave buckets_ = [1:{"leet"}].
+//       - With only 1:{"leet"} remaining in buckets_, both getMaxKey() and
+//         getMinKey() return "leet".
+//
+//   Example 3:
+//     Input:  ops = ["AllOne", "getMaxKey", "getMinKey", "dec", "getMaxKey", "inc",
+//             "dec", "getMaxKey", "getMinKey"], args = [[], [], [],
+//             ["nonexistent"], [], ["a"], ["a"], [], []]
+//     Output: [null, "", "", null, "", null, null, "", ""]
+//     Explanation:
+//       - Initially buckets_ is empty, so getMaxKey() and getMinKey() return "".
+//       - dec("nonexistent") misses in key_to_bucket_ and returns without modifying
+//         buckets_, so getMaxKey() still returns "".
+//       - inc("a") inserts 1:{"a"} into buckets_, and dec("a") sees curr->count ==
+//         1, erases "a" from key_to_bucket_, and deletes the now-empty count-1
+//         bucket.
+//       - Because buckets_ is empty again, both getMaxKey() and getMinKey() return
+//         "".
+//
 // Algorithm:
 //   Maintain a doubly linked list of non-empty frequency buckets ordered
 //   strictly by ascending count, paired with a hash map from each active key

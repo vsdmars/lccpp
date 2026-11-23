@@ -8,6 +8,41 @@
 //   independent sets A and B such that every edge connects a node in A to a
 //   node in B. Return `true` if the graph is bipartite and `false` otherwise.
 //
+// Examples:
+//   Example 1:
+//     Input:  graph = [[1, 3], [0, 2], [1, 3], [0, 2]]
+//     Output: true
+//     Explanation:
+//       - Initialize color = [-1, -1, -1, -1] and start dfs(0, 0), setting color[0]
+//         = 0.
+//       - Traverse 0 -> 1 -> 2 -> 3 with alternating expected colors, assigning
+//         color[1] = 1, color[2] = 0, and color[3] = 1.
+//       - Verify already-colored neighbor checks such as 3 -> 0 (color[0] == 0) and
+//         2 -> 1 (color[1] == 1), all matching without conflict.
+//       - Skip nodes 1, 2, and 3 in the outer loop since they are already colored,
+//         and return true.
+//
+//   Example 2:
+//     Input:  graph = [[1, 2, 3], [0, 2], [0, 1, 3], [0, 2]]
+//     Output: false
+//     Explanation:
+//       - Initialize color = [-1, -1, -1, -1] and start dfs(0, 0), assigning
+//         color[0] = 0.
+//       - Visit neighbor 1 with expected = 1 (color[1] = 1), then visit neighbor 2
+//         from node 1 with expected = 0 (color[2] = 0).
+//       - From node 2, check neighbor 0 with expected = 0 ^ 1 = 1, detect color[0]
+//         (0) != 1 along the odd cycle 0-1-2-0, and return false.
+//
+//   Example 3:
+//     Input:  graph = [[], [2], [1], [4], [3]]
+//     Output: true
+//     Explanation:
+//       - Initialize color = [-1, -1, -1, -1, -1] for the 5 vertices.
+//       - Run dfs(0, 0) to set color[0] = 0 on isolated node 0, then dfs(1, 0) to
+//         color component {1, 2} with color[1] = 0 and color[2] = 1.
+//       - Run dfs(3, 0) to color component {3, 4} with color[3] = 0 and color[4] =
+//         1, returning true with no conflicts across all three components.
+//
 // Algorithm:
 //   Recursive DFS 2-coloring across all connected components. A graph is
 //   bipartite if and only if it is 2-colorable (equivalently, contains no

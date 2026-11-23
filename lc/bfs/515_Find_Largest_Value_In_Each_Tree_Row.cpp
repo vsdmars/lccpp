@@ -6,6 +6,40 @@
 //   node value in each row (depth level) of the tree, ordered from top (depth
 //   0) to bottom. For an empty tree, return an empty array.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 3, 2, 5, 3, null, 9]
+//     Output: [1, 3, 9]
+//     Explanation:
+//       - Push root node 1 onto level_queue.
+//       - At level 0 (level_size = 1), pop 1, record row_max = 1, push children 3
+//         and 2, and append 1 to result.
+//       - At level 1 (level_size = 2), pop 3 (pushing 5 and 3) and 2 (pushing 9),
+//         compute row_max = max(3, 2) = 3, and append 3.
+//       - At level 2 (level_size = 3), pop 5, 3, and 9 with no further children,
+//         compute row_max = max(5, 3, 9) = 9, and return [1, 3, 9].
+//
+//   Example 2:
+//     Input:  root = [-10, -20, -5, -2147483648]
+//     Output: [-10, -5, -2147483648]
+//     Explanation:
+//       - Push root node -10 onto level_queue.
+//       - At level 0 (level_size = 1), pop -10, update row_max from INT_MIN to -10,
+//         push children -20 and -5, and append -10.
+//       - At level 1 (level_size = 2), pop -20 (pushing its left child -2147483648)
+//         and -5, compute row_max = max(-20, -5) = -5, and append -5.
+//       - At level 2 (level_size = 1), pop -2147483648, keep row_max = -2147483648,
+//         and return [-10, -5, -2147483648].
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: []
+//     Explanation:
+//       - Check root == nullptr at the start of largestValues, which is true for
+//         the empty tree.
+//       - Return an empty vector {} immediately without allocating or pushing onto
+//         level_queue.
+//
 // Algorithm:
 //   Perform level-order Breadth-First Search (BFS) using a FIFO queue:
 //     1. If `root` is null, return an empty vector.

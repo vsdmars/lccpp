@@ -7,6 +7,37 @@
 //   formed between the hour hand and the minute hand on a standard 12-hour
 //   analog clock. Answers within 10^-5 of the exact value are accepted.
 //
+// Examples:
+//   Example 1:
+//     Input:  hour = 12, minutes = 30
+//     Output: 165.0
+//     Explanation:
+//       - Normalize hour % 12 = 12 % 12 = 0, giving hour_angle = 0 * 30.0 + 30 *
+//         0.5 = 15.0 degrees.
+//       - Compute minute_angle = 30 * 6.0 = 180.0 degrees.
+//       - Compute diff = |15.0 - 180.0| = 165.0 and return min(165.0, 360.0 -
+//         165.0) = 165.0.
+//
+//   Example 2:
+//     Input:  hour = 3, minutes = 15
+//     Output: 7.5
+//     Explanation:
+//       - Compute hour_angle = (3 % 12) * 30.0 + 15 * 0.5 = 90.0 + 7.5 = 97.5
+//         degrees.
+//       - Compute minute_angle = 15 * 6.0 = 90.0 degrees.
+//       - Compute diff = |97.5 - 90.0| = 7.5 and return min(7.5, 360.0 - 7.5) =
+//         7.5.
+//
+//   Example 3:
+//     Input:  hour = 1, minutes = 57
+//     Output: 76.5
+//     Explanation:
+//       - Compute hour_angle = (1 % 12) * 30.0 + 57 * 0.5 = 30.0 + 28.5 = 58.5
+//         degrees.
+//       - Compute minute_angle = 57 * 6.0 = 342.0 degrees.
+//       - Compute diff = |58.5 - 342.0| = 283.5 and take the shorter arc min(283.5,
+//         360.0 - 283.5) = 76.5.
+//
 // Algorithm:
 //   Measure both hands' clockwise angular positions relative to 12 o'clock:
 //     - Minute hand speed: 360 / 60 = 6.0 degrees per minute, so

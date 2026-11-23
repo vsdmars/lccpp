@@ -9,6 +9,39 @@
 //     - answer[i - 1] == "Buzz" if i is divisible by 5,
 //     - answer[i - 1] == decimal string of i otherwise.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 5
+//     Output: ["1", "2", "Fizz", "4", "Buzz"]
+//     Explanation:
+//       - Verify n >= 1, reserve 5 entries in result, and iterate i from 1 to 5.
+//       - For i = 1, 2, and 4, neither i % 3 == 0 nor i % 5 == 0 holds, so
+//         std::to_string(i) pushes "1", "2", and "4".
+//       - For i = 3, div_by_3 is true and div_by_5 is false, pushing "Fizz".
+//       - For i = 5, div_by_5 is true and div_by_3 is false, pushing "Buzz" and
+//         returning ["1", "2", "Fizz", "4", "Buzz"].
+//
+//   Example 2:
+//     Input:  n = 15
+//     Output: ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz",
+//             "11", "Fizz", "13", "14", "FizzBuzz"]
+//     Explanation:
+//       - Reserve 15 entries in result and check div_by_3 and div_by_5 for each i
+//         from 1 through 15.
+//       - Indices divisible only by 3 (3, 6, 9, 12) append "Fizz", indices
+//         divisible only by 5 (5, 10) append "Buzz", and all other indices under 15
+//         append std::to_string(i).
+//       - At i = 15, both div_by_3 and div_by_5 are true, so the combined check
+//         runs first and appends "FizzBuzz".
+//
+//   Example 3:
+//     Input:  n = 0
+//     Output: []
+//     Explanation:
+//       - Check the early-return guard if (n < 1) at the entry of fizzBuzz(0).
+//       - Because 0 < 1 holds, skip vector allocation and the loop and return an
+//         empty vector [].
+//
 // Algorithm:
 //   Pre-allocate the output vector to size `n` and iterate i from 1 through n.
 //   Check divisibility by 3 and 5 (equivalently divisibility by lcm(3, 5) = 15)

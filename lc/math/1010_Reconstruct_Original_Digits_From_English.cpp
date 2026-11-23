@@ -8,6 +8,43 @@
 //   combined duration `(time[i] + time[j])` is divisible by 60.
 //   Constraints: 1 <= time.length <= 6 * 10^4, 1 <= time[i] <= 500.
 //
+// Examples:
+//   Example 1:
+//     Input:  time = [30, 20, 150, 100, 40]
+//     Output: 3
+//     Explanation:
+//       - Initialize remainder_counts (size 60) to zeros and pair_count = 0.
+//       - For 30 (rem 30, complement 30) and 20 (rem 20, complement 40), no
+//         matching remainders exist yet, so pair_count stays 0 and counts[30] = 1,
+//         counts[20] = 1.
+//       - For 150 (rem 30, complement 30), add counts[30] = 1 so pair_count = 1 and
+//         increment counts[30] to 2.
+//       - For 100 (rem 40, complement 20) and 40 (rem 40, complement 20), each adds
+//         counts[20] = 1, bringing pair_count to 3 before incrementing counts[40]
+//         to 2.
+//       - Return pair_count = 3.
+//
+//   Example 2:
+//     Input:  time = [60, 60, 60]
+//     Output: 3
+//     Explanation:
+//       - Initialize remainder_counts to zeros and pair_count = 0.
+//       - First 60: rem = 0, complement = (60 - 0) % 60 = 0; add counts[0] = 0 to
+//         pair_count and set counts[0] = 1.
+//       - Second 60: rem = 0, complement = 0; add counts[0] = 1 (pair_count = 1)
+//         and increment counts[0] to 2.
+//       - Third 60: rem = 0, complement = 0; add counts[0] = 2 (pair_count = 3) and
+//         increment counts[0] to 3, returning 3.
+//
+//   Example 3:
+//     Input:  time = [60]
+//     Output: 0
+//     Explanation:
+//       - Initialize remainder_counts to zeros and pair_count = 0.
+//       - Process 60: rem = 0, complement = 0; add counts[0] = 0 to pair_count and
+//         increment counts[0] to 1.
+//       - Finish the single-element loop and return pair_count = 0.
+//
 // Algorithm:
 //   Single-pass modular complement counting (a Two-Sum variant modulo 60).
 //   A pair (time[i], time[j]) sums to a multiple of 60 iff:

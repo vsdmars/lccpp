@@ -11,6 +11,39 @@
 //   Given a 7-character color string `color`, return the 7-character shorthand-
 //   representable color "#XXYYZZ" that maximizes similarity to `color`.
 //
+// Examples:
+//   Example 1:
+//     Input:  color = "#09f166"
+//     Output: "#11ee66"
+//     Explanation:
+//       - Initialize result = "#" and decode each two-hex-digit channel
+//         independently.
+//       - Convert red "09" to 9 and compute (9 + 8) / 17 = 1, appending hex digit
+//         '1' twice as "11".
+//       - Convert green "f1" to 241 and compute (241 + 8) / 17 = 14, appending hex
+//         digit 'e' twice as "ee".
+//       - Convert blue "66" to 102 and compute (102 + 8) / 17 = 6, appending "66"
+//         to return "#11ee66".
+//
+//   Example 2:
+//     Input:  color = "#4e3fe1"
+//     Output: "#5544dd"
+//     Explanation:
+//       - Decode red "4e" to 78 and compute (78 + 8) / 17 = 5, appending "55".
+//       - Decode green "3f" to 63 and compute (63 + 8) / 17 = 4, appending "44".
+//       - Decode blue "e1" to 225 and compute (225 + 8) / 17 = 13, appending hex
+//         digit 'd' twice as "dd" to return "#5544dd".
+//
+//   Example 3:
+//     Input:  color = "#080808"
+//     Output: "#000000"
+//     Explanation:
+//       - Decode each channel "08" to decimal 8, which is distance 8 from 0x00 and
+//         distance 9 from 0x11.
+//       - Compute (8 + 8) / 17 = 16 / 17 = 0 for all three channels, mapping each
+//         to kHexDigits[0] = '0'.
+//       - Emit two '0' characters per channel after '#' to return "#000000".
+//
 // Algorithm:
 //   Because the similarity objective is a sum of independent negative squared
 //   errors across the R, G, and B channels, maximizing total similarity reduces

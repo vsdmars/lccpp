@@ -7,6 +7,38 @@
 //   index 0 and are guaranteed to be able to reach index n - 1. Return the
 //   minimum number of jumps required to reach the last index.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 3, 1, 1, 4]
+//     Output: 2
+//     Explanation:
+//       - Initialize last = 4, jumps = 0, current_end = 0, and farthest = 0.
+//       - At i = 0 (nums[0] = 2), update farthest = 2; since i == current_end (0),
+//         increment jumps to 1 and set current_end = 2.
+//       - At i = 1 (nums[1] = 3), reach = 1 + 3 = 4 updates farthest to 4.
+//       - At i = 2 (nums[2] = 1), i == current_end (2) triggers jumps = 2 and
+//         current_end = 4 >= last, breaking early to return 2.
+//
+//   Example 2:
+//     Input:  nums = [2, 3, 0, 1, 4]
+//     Output: 2
+//     Explanation:
+//       - Initialize last = 4, jumps = 0, current_end = 0, and farthest = 0.
+//       - At i = 0 (nums[0] = 2), farthest becomes 2, and reaching current_end = 0
+//         advances jumps to 1 with current_end = 2.
+//       - At i = 1 (nums[1] = 3), farthest expands to 4, so scanning i = 2 (nums[2]
+//         = 0) keeps farthest = 4 instead of getting stuck at the zero.
+//       - At i = 2 == current_end, increment jumps to 2, set current_end = 4 >=
+//         last, and break early to return 2.
+//
+//   Example 3:
+//     Input:  nums = [0]
+//     Output: 0
+//     Explanation:
+//       - Check n = nums.size() = 1 against the guard n <= 1uz.
+//       - Because index 0 is already the last index, return 0 immediately without
+//         executing the frontier loop.
+//
 // Algorithm:
 //   1. Greedy implicit-BFS (`jump`): Treat each jump count as a BFS level over
 //      array indices. Maintain the inclusive upper bound `current_end` of the

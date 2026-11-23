@@ -8,6 +8,35 @@
 //   for every `0 <= i < nums.size()`.
 //   Constraints: 1 <= nums.length <= 1000, -10^6 <= nums[i] <= 10^6.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3, 4]
+//     Output: [1, 3, 6, 10]
+//     Explanation:
+//       - Copy nums into result = [1, 2, 3, 4], leaving result[0] = 1.
+//       - At i = 1, compute result[1] += result[0] to get 2 + 1 = 3.
+//       - At i = 2, compute result[2] += result[1] to get 3 + 3 = 6.
+//       - At i = 3, compute result[3] += result[2] to get 4 + 6 = 10 and return [1,
+//         3, 6, 10].
+//
+//   Example 2:
+//     Input:  nums = [-2, 5, -3, 0, -4]
+//     Output: [-2, 3, 0, 0, -4]
+//     Explanation:
+//       - Initialize result = [-2, 5, -3, 0, -4] with result[0] = -2.
+//       - Update i = 1 to result[1] = 5 + (-2) = 3 and i = 2 to result[2] = -3 + 3
+//         = 0.
+//       - Update i = 3 to result[3] = 0 + 0 = 0 and i = 4 to result[4] = -4 + 0 =
+//         -4, returning [-2, 3, 0, 0, -4].
+//
+//   Example 3:
+//     Input:  nums = []
+//     Output: []
+//     Explanation:
+//       - Copy the empty input vector into result = [].
+//       - Because result.size() == 0, the loop starting at i = 1 executes zero
+//         times and returns [].
+//
 // Algorithm:
 //   Copy `nums` into `result` and perform a single left-to-right scan starting
 //   at index `1`, applying the recurrence:

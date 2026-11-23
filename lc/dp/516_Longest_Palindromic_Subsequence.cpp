@@ -8,6 +8,44 @@
 //   Constraints: 1 <= s.size() <= 1000, `s` consists of lowercase English
 //   letters.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "bbbab"
+//     Output: 4
+//     Explanation:
+//       - Initialize dp = [1, 1, 1, 1, 1] since every single character is a
+//         length-1 palindrome.
+//       - At j = 1 ('b'), s[0] == s[1] with prev_diag = 0 updates dp[0] = 2 + 0 =
+//         2, giving dp = [2, 1, 1, 1, 1].
+//       - At j = 2 ('b'), sweeping i = 1 down to 0 matches 'b' at both indices and
+//         updates dp to [3, 2, 1, 1, 1].
+//       - At j = 3 ('a'), no left character matches 'a', so max(dp[i], dp[i + 1])
+//         leaves dp = [3, 2, 1, 1, 1].
+//       - At j = 4 ('b'), i = 3 gives dp[3] = 1 (setting prev_diag = 1), and then i
+//         = 2, 1, 0 match 'b' with prev_diag values 1, 1, 2 to yield dp = [4, 3, 3,
+//         1, 1]; return dp[0] = 4.
+//
+//   Example 2:
+//     Input:  s = "cbbd"
+//     Output: 2
+//     Explanation:
+//       - Initialize dp = [1, 1, 1, 1] for length n = 4.
+//       - At j = 1 ('b'), s[0] = 'c' != 'b' keeps dp[0] = max(1, 1) = 1.
+//       - At j = 2 ('b'), i = 1 matches 'b' to set dp[1] = 2 + 0 = 2 (prev_diag
+//         becomes 1), and i = 0 mismatches so dp[0] = max(1, 2) = 2.
+//       - At j = 3 ('d'), all i = 2, 1, 0 mismatch 'd', preserving dp = [2, 2, 1,
+//         1], and return dp[0] = 2.
+//
+//   Example 3:
+//     Input:  s = "abcdef"
+//     Output: 1
+//     Explanation:
+//       - Initialize dp = [1, 1, 1, 1, 1, 1] for the 6-character string.
+//       - Across every j from 1 to 5 and i from j - 1 down to 0, s[i] != s[j] holds
+//         because all characters are distinct.
+//       - Every update takes max(dp[i], dp[i + 1]) = 1, leaving dp[0] = 1 as the
+//         final answer.
+//
 // Algorithm:
 //   Use space-optimized bottom-up interval dynamic programming over expanding
 //   right endpoints `j` from `1` to `n - 1`.

@@ -8,6 +8,49 @@
 //   `primes`, return the n-th super ugly number (guaranteed to fit in a 32-bit
 //   signed integer).
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 12, primes = [2, 7, 13, 19]
+//     Output: 32
+//     Explanation:
+//       - Initialize uglies = [1] and seed min_heap with one cursor per prime: (2,
+//         2, 0), (7, 7, 0), (13, 13, 0), and (19, 19, 0).
+//       - Pop minimum 2 to append 2 and push (uglies[1] * 2 = 4, 2, 1), then pop 4
+//         to append 4 and push (8, 2, 2), and continue popping the global minimum
+//         in ascending order.
+//       - When next_ugly = 14, the inner while loop pops both tied entries (14, 2,
+//         3) and (14, 7, 1) and advances each to uglies[4] * 2 = 16 and uglies[2] *
+//         7 = 28 so 14 is never emitted twice.
+//       - After 11 iterations, uglies reaches size 12 with [1, 2, 4, 7, 8, 13, 14,
+//         16, 19, 26, 28, 32] and returns uglies.back() = 32.
+//
+//   Example 2:
+//     Input:  n = 10, primes = [2, 3, 5]
+//     Output: 12
+//     Explanation:
+//       - Initialize uglies = [1] and seed min_heap with (2, 2, 0), (3, 3, 0), and
+//         (5, 5, 0).
+//       - The first four iterations append 2, 3, 4, and 5 to uglies and advance
+//         cursors so both (6, 2, 2) and (6, 3, 1) sit at the top of min_heap.
+//       - At next_ugly = 6, the inner loop pops both (6, 2, 2) and (6, 3, 1),
+//         pushing (uglies[3] * 2 = 8, 2, 3) and (uglies[2] * 3 = 9, 3, 2) while
+//         recording 6 once.
+//       - Continuing through 8, 9, 10, and 12 produces uglies = [1, 2, 3, 4, 5, 6,
+//         8, 9, 10, 12], returning 12.
+//
+//   Example 3:
+//     Input:  n = 5, primes = [3]
+//     Output: 81
+//     Explanation:
+//       - Initialize uglies = [1] and seed min_heap with the single stream cursor
+//         (3, 3, 0).
+//       - Iteration 1 pops (3, 3, 0), appends 3 to uglies, and pushes (uglies[1] *
+//         3 = 9, 3, 1).
+//       - Iterations 2 and 3 pop (9, 3, 1) and (27, 3, 2) in sequence, extending
+//         uglies to [1, 3, 9, 27] and pushing (81, 3, 3).
+//       - Iteration 4 pops (81, 3, 3), appends 81 so uglies.size() reaches 5, and
+//         returns 81.
+//
 // Algorithm:
 //   K-way merge of self-referential sorted candidate streams using a min-heap
 //   (direct C++23 realization of the Python `heapq.merge` generator solution):

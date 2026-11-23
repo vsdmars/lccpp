@@ -12,6 +12,46 @@
 //   Constraints: 1 <= piles.length <= 10^4, piles.length <= h <= 10^9,
 //   1 <= piles[i] <= 10^9.
 //
+// Examples:
+//   Example 1:
+//     Input:  piles = [3, 6, 7, 11], h = 8
+//     Output: 4
+//     Explanation:
+//       - Sum total_bananas = 27 with max_pile = 11, setting left = (27 - 1) / 8 +
+//         1 = 4 and right = 11.
+//       - Iteration 1 tests mid = 7: hoursNeeded gives 1 + 1 + 1 + 2 = 5 <= 8,
+//         narrowing the range to [4, 7].
+//       - Iteration 2 tests mid = 5: hoursNeeded gives 1 + 2 + 2 + 3 = 8 <= 8,
+//         narrowing the range to [4, 5].
+//       - Iteration 3 tests mid = 4: hoursNeeded gives 1 + 2 + 2 + 3 = 8 <= 8,
+//         setting right = 4 so left == right == 4 is returned.
+//
+//   Example 2:
+//     Input:  piles = [30, 11, 23, 4, 20], h = 5
+//     Output: 30
+//     Explanation:
+//       - Compute total_bananas = 88 and max_pile = 30, initializing left = (88 -
+//         1) / 5 + 1 = 18 and right = 30.
+//       - On mid = 24, hoursNeeded is 2 + 1 + 1 + 1 + 1 = 6 > 5, raising left to
+//         25.
+//       - On mid = 27 and then mid = 29, pile 30 still takes 2 hours for a total of
+//         6 > 5, advancing left to 30.
+//       - At left == right == 30, every pile finishes in 1 hour (5 total hours <=
+//         5), returning 30.
+//
+//   Example 3:
+//     Input:  piles = [30, 11, 23, 4, 20], h = 6
+//     Output: 23
+//     Explanation:
+//       - With total_bananas = 88 and max_pile = 30, initialize left = (88 - 1) / 6
+//         + 1 = 15 and right = 30.
+//       - Iteration 1 tests mid = 22: hoursNeeded is 2 + 1 + 2 + 1 + 1 = 7 > 6,
+//         raising left to 23.
+//       - Iterations 2 and 3 test mid = 26 and mid = 24, both needing 2 + 1 + 1 + 1
+//         + 1 = 6 <= 6 hours and lowering right to 24.
+//       - Iteration 4 tests mid = 23 (6 <= 6 hours), setting right = 23 and
+//         returning left == right == 23.
+//
 // Algorithm:
 //   Binary search on the answer (eating speed `k`). The total hours required at
 //   speed `k` is `sum(ceil(pile / k))`, which is monotonically non-increasing

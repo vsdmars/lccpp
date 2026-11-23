@@ -9,6 +9,41 @@
 //   Constraints: 1 <= num.length <= 10^4, 0 <= num[i] <= 9, no leading zeros
 //   except for 0 itself, 1 <= k <= 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  num = [2, 7, 4], k = 181
+//     Output: [4, 5, 5]
+//     Explanation:
+//       - Initialize carry = 181 and an empty result vector.
+//       - Process i = 3 (num[2] = 4): carry = 181 + 4 = 185, push 185 % 10 = 5, and
+//         update carry = 185 / 10 = 18.
+//       - Process i = 2 (num[1] = 7): carry = 18 + 7 = 25, push 25 % 10 = 5, and
+//         update carry = 25 / 10 = 2.
+//       - Process i = 1 (num[0] = 2): carry = 2 + 2 = 4, push 4 % 10 = 4, and
+//         update carry = 4 / 10 = 0.
+//       - Reverse result = [5, 5, 4] to return [4, 5, 5].
+//
+//   Example 2:
+//     Input:  num = [2, 1, 5], k = 806
+//     Output: [1, 0, 2, 1]
+//     Explanation:
+//       - Initialize carry = 806 and iterate num right-to-left: at num[2] = 5,
+//         carry = 811, push 1, and set carry = 81.
+//       - At num[1] = 1, carry = 82, push 2, and set carry = 8; at num[0] = 2,
+//         carry = 10, push 0, and set carry = 1.
+//       - Drain leftover carry = 1 > 0 by pushing 1 % 10 = 1 and setting carry = 0.
+//       - Reverse result = [1, 2, 0, 1] to return [1, 0, 2, 1].
+//
+//   Example 3:
+//     Input:  num = [0], k = 10000
+//     Output: [1, 0, 0, 0, 0]
+//     Explanation:
+//       - Initialize carry = 10000 and add num[0] = 0: push 10000 % 10 = 0 and
+//         update carry = 1000.
+//       - Drain remaining carry > 0 over four iterations, pushing 0 (carry = 100),
+//         0 (carry = 10), 0 (carry = 1), and 1 (carry = 0).
+//       - Reverse result = [0, 0, 0, 0, 1] to return [1, 0, 0, 0, 0].
+//
 // Algorithm:
 //   Schoolbook right-to-left addition with carry propagation.
 //   Unlike Python's arbitrary-precision `int`, C++ fixed-width integers cannot

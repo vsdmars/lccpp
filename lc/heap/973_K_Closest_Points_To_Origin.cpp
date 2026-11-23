@@ -6,6 +6,43 @@
 //   and an integer `k`, return the `k` points closest to the origin `(0, 0)`
 //   under Euclidean distance. The output may be returned in any order.
 //
+// Examples:
+//   Example 1:
+//     Input:  points = [[1, 3], [-2, 2]], k = 1
+//     Output: [[-2, 2]]
+//     Explanation:
+//       - For index 0 ([1, 3]), compute squared_distance = 1^2 + 3^2 = 10 and push
+//         (10, 0) into max_heap.
+//       - For index 1 ([-2, 2]), compute squared_distance = (-2)^2 + 2^2 = 8 and
+//         push (8, 1) into max_heap.
+//       - Since max_heap.size() = 2 > limit (1), pop the root (10, 0), leaving only
+//         (8, 1).
+//       - Drain max_heap to return [[-2, 2]].
+//
+//   Example 2:
+//     Input:  points = [[3, 3], [5, -1], [-2, 4]], k = 2
+//     Output: [[-2, 4], [3, 3]]
+//     Explanation:
+//       - Push (18, 0) for [3, 3] and (26, 1) for [5, -1] into max_heap, keeping
+//         size 2 <= limit (2).
+//       - Compute squared_distance([-2, 4]) = (-2)^2 + 4^2 = 20 and push (20, 2)
+//         into max_heap, increasing size to 3 > 2.
+//       - Evict the farthest root (26, 1) ([5, -1]), leaving (20, 2) and (18, 0) in
+//         max_heap.
+//       - Pop the remaining entries from max_heap to return [[-2, 4], [3, 3]].
+//
+//   Example 3:
+//     Input:  points = [[0, 0], [1, 1], [-1, -1], [2, 2]], k = 3
+//     Output: [[-1, -1], [0, 0], [1, 1]]
+//     Explanation:
+//       - Compute squared distances 0 for [0, 0], 2 for [1, 1], 2 for [-1, -1], and
+//         8 for [2, 2].
+//       - Push (0, 0), (2, 1), and (2, 2) into max_heap, filling it to limit = 3.
+//       - Push (8, 3) for [2, 2], causing max_heap.size() = 4 > 3, and immediately
+//         pop the root (8, 3).
+//       - Drain the three remaining entries from max_heap, yielding [[-1, -1], [0,
+//         0], [1, 1]] in canonicalized order.
+//
 // Algorithm:
 //   Because square root is strictly increasing on non-negative values,
 //   comparing exact squared distances `x^2 + y^2` (in 64-bit integer

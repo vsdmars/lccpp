@@ -12,6 +12,45 @@
 //   Constraints: 1 <= sentence1.length, sentence2.length <= 1000,
 //   0 <= similarPairs.length <= 2000.
 //
+// Examples:
+//   Example 1:
+//     Input:  sentence1 = ["great", "acting", "skills"], sentence2 = ["fine",
+//             "drama", "talent"], similarPairs = [["great", "fine"], ["acting",
+//             "drama"], ["skills", "talent"]]
+//     Output: true
+//     Explanation:
+//       - Verify sentence1.size() == sentence2.size() (3 == 3) and populate the
+//         symmetric hash map similar with bidirectional entries for each pair.
+//       - At i = 0, "great" != "fine", so look up similar["great"] and confirm it
+//         contains "fine".
+//       - At i = 1 and i = 2, verify similar["acting"] contains "drama" and
+//         similar["skills"] contains "talent".
+//       - All three positions match, so return true.
+//
+//   Example 2:
+//     Input:  sentence1 = ["great"], sentence2 = ["good"], similarPairs =
+//             [["great", "fine"], ["fine", "good"]]
+//     Output: false
+//     Explanation:
+//       - Both sentences have size 1, so build similar with direct edges great <->
+//         fine and fine <-> good.
+//       - At i = 0, "great" != "good", so look up similar["great"], whose set is
+//         {"fine"}.
+//       - Because "good" is absent from similar["great"] (similarity is not
+//         transitive), immediately return false.
+//
+//   Example 3:
+//     Input:  sentence1 = ["fine"], sentence2 = ["great"], similarPairs =
+//             [["great", "fine"]]
+//     Output: true
+//     Explanation:
+//       - Verify sentence1.size() == sentence2.size() (1 == 1) and insert both
+//         directions of ["great", "fine"] into similar so similar["fine"] contains
+//         "great".
+//       - At i = 0, "fine" != "great", so look up similar["fine"] and find "great"
+//         present due to symmetric insertion.
+//       - Complete the loop with no mismatches and return true.
+//
 // Algorithm:
 //   1. Immediately reject if `sentence1.size() != sentence2.size()`.
 //   2. Build a symmetric adjacency hash map mapping each word to the hash set

@@ -8,6 +8,45 @@
 //   most one event can be attended per day. Return the maximum number of
 //   events you can attend.
 //
+// Examples:
+//   Example 1:
+//     Input:  events = [[1, 2], [2, 3], [3, 4], [1, 2]]
+//     Output: 4
+//     Explanation:
+//       - Sort the copied Event structs by start day ascending: [{1, 2}, {1, 2},
+//         {2, 3}, {3, 4}].
+//       - On current_day = 1, push both {1, 2} deadlines into active_ends = [2, 2],
+//         pop one 2 to attend on day 1 (attended = 1), and advance current_day to
+//         2.
+//       - On current_day = 2, push {2, 3} giving active_ends = [2, 3], pop 2
+//         (attended = 2), and advance current_day to 3.
+//       - On current_day = 3, push {3, 4} giving active_ends = [3, 4], pop 3
+//         (attended = 3), then on current_day = 4 pop the remaining 4 (attended =
+//         4) and return 4.
+//
+//   Example 2:
+//     Input:  events = [[1, 4], [4, 4], [2, 2], [3, 4], [1, 1]]
+//     Output: 4
+//     Explanation:
+//       - Sort events into [{1, 1}, {1, 4}, {2, 2}, {3, 4}, {4, 4}].
+//       - On day 1, enqueue end days 1 and 4, pop earliest deadline 1 (attended =
+//         1), and set current_day = 2; on day 2, enqueue 2 and pop 2 (attended =
+//         2).
+//       - On day 3, enqueue 4 giving active_ends = [4, 4], pop 4 (attended = 3),
+//         and on day 4 enqueue {4, 4} giving [4, 4] and pop 4 (attended = 4).
+//       - After advancing current_day to 5, purge the remaining heap entry 4 < 5
+//         and return attended = 4.
+//
+//   Example 3:
+//     Input:  events = [[1, 1], [1, 1], [1, 1]]
+//     Output: 1
+//     Explanation:
+//       - Sort the three identical events [{1, 1}, {1, 1}, {1, 1}] and jump
+//         current_day to 1 since active_ends is initially empty.
+//       - Enqueue all three end days with start <= 1 so active_ends = [1, 1, 1].
+//       - Pop one 1 to attend on day 1 (attended = 1), increment current_day to 2,
+//         purge both expired entries with end_day = 1 < 2, and return 1.
+//
 // Algorithm:
 //   Greedy Earliest-Deadline-First (EDF) with Min-Heap:
 //   1. Copy events into a compact struct array and sort ascending by start day.

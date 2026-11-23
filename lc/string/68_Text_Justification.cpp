@@ -11,6 +11,50 @@
 //   between words, padded on the right with trailing spaces to `maxWidth`).
 //   Also includes the explicit-newline paragraph variant from the source file.
 //
+// Examples:
+//   Example 1:
+//     Input:  words = ["This", "is", "an", "example", "of", "text",
+//             "justification."], maxWidth = 16
+//     Output: ["This    is    an", "example  of text", "justification.  "]
+//     Explanation:
+//       - Greedily pack words[0..3) ("This", "is", "an", words_len = 8, gaps = 2)
+//         since adding "example" would require 8 + 7 + 3 = 18 > 16; distribute 16 -
+//         8 = 8 spaces evenly across 2 gaps to form "This    is    an".
+//       - Pack words[3..6) ("example", "of", "text", words_len = 13, gaps = 2);
+//         distribute 16 - 13 = 3 spaces as base_spaces = 1 plus extra_spaces = 1 on
+//         the leftmost gap to form "example  of text".
+//       - Pack the final word words[6] ("justification.", length 14); since
+//         is_last_line is true, left-align and pad 16 - 14 = 2 trailing spaces to
+//         form "justification.  ".
+//
+//   Example 2:
+//     Input:  words = ["What", "must", "be", "acknowledgment", "shall", "be"],
+//             maxWidth = 16
+//     Output: ["What   must   be", "acknowledgment  ", "shall be        "]
+//     Explanation:
+//       - Pack words[0..3) ("What", "must", "be", words_len = 10, gaps = 2) and
+//         assign (16 - 10) / 2 = 3 spaces per gap to produce "What   must   be".
+//       - Pack only words[3] ("acknowledgment", length 14) because adding "shall"
+//         needs 14 + 5 + 1 = 20 > 16; since count == 1, left-align and pad 2
+//         trailing spaces to get "acknowledgment  ".
+//       - Pack the remaining words[4..6) ("shall", "be") on the last line; with
+//         left_align = true, join them with a single space and pad 8 trailing
+//         spaces for "shall be        ".
+//
+//   Example 3:
+//     Input:  text = "This is an\nexample of text justification.", maxWidth = 16
+//     Output: ["This    is    an", "example  of text", "justification.  "]
+//     Explanation:
+//       - Split text at the explicit '\n' into two paragraph segments: "This is an"
+//         (has_newline = true) and "example of text justification." (has_newline =
+//         false).
+//       - Tokenize segment 1 into ["This", "is", "an"] and invoke justifyWords with
+//         justify_last_line = true, full-justifying its single line to "This    is
+//         an".
+//       - Tokenize segment 2 into ["example", "of", "text", "justification."] with
+//         justify_last_line = false, full-justifying "example  of text" and
+//         left-justifying the final line "justification.  ".
+//
 // Algorithm:
 //   Use a greedy two-pointer line-packing pass:
 //   1. Starting at word index `i`, advance `j` while the sum of word lengths

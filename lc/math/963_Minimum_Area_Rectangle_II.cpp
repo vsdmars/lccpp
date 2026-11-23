@@ -11,6 +11,52 @@
 //   Constraints: 1 <= points.length <= 50, 0 <= x_i, y_i <= 40000, all points
 //   are distinct.
 //
+// Examples:
+//   Example 1:
+//     Input:  points = [[1, 2], [2, 1], [1, 0], [0, 1]]
+//     Output: 2.0
+//     Explanation:
+//       - Insert all four points into point_set and initialize min_area to
+//         +infinity.
+//       - Enumerate triples with i = 0 (P_0 = (1, 2)) and j = 1 (P_1 = (2, 1)),
+//         giving v1 = (1, -1) and len1_sq = 2.
+//       - For k = 2 (P_2 = (1, 0)), v2 = (0, -2) has dot product 1*0 + (-1)*(-2) =
+//         2 != 0, so skip.
+//       - For k = 3 (P_3 = (0, 1)), v2 = (-1, -1) has dot product 1*(-1) +
+//         (-1)*(-1) = 0, and inferred fourth corner P_4 = (1 + 1 - 1, 2 - 1 - 1) =
+//         (1, 0) exists in point_set.
+//       - Compute len2_sq = 2 and area = sqrt(2) * sqrt(2) = 2.0, updating min_area
+//         to 2.0, which remains the minimum across all remaining triples and is
+//         returned.
+//
+//   Example 2:
+//     Input:  points = [[0, 0], [2, 1], [0, 5], [-2, 4]]
+//     Output: 10.0
+//     Explanation:
+//       - Insert all four points into point_set and set min_area to +infinity.
+//       - At i = 0 (P_0 = (0, 0)) and j = 1 (P_1 = (2, 1)), compute v1 = (2, 1)
+//         with len1_sq = 5.
+//       - At k = 2 (P_2 = (0, 5)), v2 = (0, 5) gives dot product 2*0 + 1*5 = 5 !=
+//         0, so skip.
+//       - At k = 3 (P_3 = (-2, 4)), v2 = (-2, 4) gives dot product 2*(-2) + 1*4 =
+//         0, and fourth corner P_4 = (0 + 2 - 2, 0 + 1 + 4) = (0, 5) is found in
+//         point_set.
+//       - Compute len2_sq = 20 and area = sqrt(5) * sqrt(20) = 10.0, returning
+//         10.0.
+//
+//   Example 3:
+//     Input:  points = [[0, 3], [1, 2], [3, 1], [1, 3], [2, 1]]
+//     Output: 0.0
+//     Explanation:
+//       - Store all five points in point_set and initialize min_area to +infinity.
+//       - Enumerate all 10 index triples (i, j, k) with i < j < k, testing
+//         orthogonality of v1 = P_j - P_i and v2 = P_k - P_i.
+//       - Every triple produces a non-zero dot product (for example, i = 0, j = 1,
+//         k = 3 gives v1 = (1, -1) and v2 = (1, 0) with dot product 1), so no
+//         candidate right-angle corner passes.
+//       - Since min_area remains non-finite (+infinity), std::isfinite(min_area) is
+//         false and the function returns 0.0.
+//
 // Algorithm:
 //   Store every input point in a hash set for O(1) average-time membership
 //   queries. Enumerate all unordered triples of indices (i, j, k) with

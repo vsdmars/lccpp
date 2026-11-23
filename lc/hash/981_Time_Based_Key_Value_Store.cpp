@@ -11,6 +11,52 @@
 //   Constraints: 1 <= key.length, value.length <= 100, 1 <= timestamp <= 10^7,
 //   timestamps passed to `set` are strictly increasing, at most 2 * 10^5 calls.
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["TimeMap", "set", "get", "get", "set", "get", "get",
+//             "get"], args = [[], ["foo", "bar", 1], ["foo", 1], ["foo", 3],
+//             ["foo", "bar2", 4], ["foo", 4], ["foo", 5], ["foo", 2]]
+//     Output: [null, null, "bar", "bar", null, "bar2", "bar2", "bar"]
+//     Explanation:
+//       - set("foo", "bar", 1) appends {1, "bar"} to store_["foo"]; get("foo", 1)
+//         and get("foo", 3) both get upper_bound == end(), so std::prev(it) returns
+//         "bar".
+//       - set("foo", "bar2", 4) sees back().timestamp (1) < 4 and appends {4,
+//         "bar2"}, leaving store_["foo"] = [{1, "bar"}, {4, "bar2"}].
+//       - get("foo", 4) and get("foo", 5) return std::prev(end())->value ("bar2"),
+//         whereas get("foo", 2) gets upper_bound at {4, "bar2"} and steps back to
+//         "bar".
+//
+//   Example 2:
+//     Input:  operations = ["TimeMap", "set", "set", "get", "get", "get", "get",
+//             "get", "get"], args = [[], ["love", "high", 10], ["love", "low", 20],
+//             ["love", 5], ["love", 10], ["love", 15], ["love", 20], ["love", 25],
+//             ["missing", 100]]
+//     Output: [null, null, null, "", "high", "high", "low", "low", ""]
+//     Explanation:
+//       - set("love", "high", 10) and set("love", "low", 20) populate
+//         store_["love"] = [{10, "high"}, {20, "low"}].
+//       - get("love", 5) finds upper_bound at entries.begin() because 10 > 5,
+//         returning ""; get("love", 10) and get("love", 15) find upper_bound at
+//         {20, "low"} and step back to "high".
+//       - get("love", 20) and get("love", 25) land at end() and step back to "low",
+//         while get("missing", 100) misses in store_ and returns "".
+//
+//   Example 3:
+//     Input:  operations = ["TimeMap", "set", "set", "set", "get", "get", "get",
+//             "get"], args = [[], ["k", "late", 10], ["k", "early", 3], ["k",
+//             "mid", 7], ["k", 2], ["k", 3], ["k", 8], ["k", 12]]
+//     Output: [null, null, null, null, "", "early", "mid", "late"]
+//     Explanation:
+//       - set("k", "late", 10) appends {10, "late"}; set("k", "early", 3) takes the
+//         out-of-order upper_bound fallback to insert at index 0, and set("k",
+//         "mid", 7) inserts between 3 and 10.
+//       - With store_["k"] sorted as [{3, "early"}, {7, "mid"}, {10, "late"}],
+//         get("k", 2) hits entries.begin() and returns "".
+//       - get("k", 3), get("k", 8), and get("k", 12) find upper_bound at {7,
+//         "mid"}, {10, "late"}, and end() respectively, returning "early", "mid",
+//         and "late".
+//
 // Algorithm:
 //   Hash Map of Timestamp-Sorted Version Vectors + Binary Search:
 //   - Map each `key` to a contiguous vector of `(timestamp, value)` entries kept

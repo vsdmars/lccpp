@@ -7,6 +7,44 @@
 //   simple path starting at (0, 0) and ending at (R - 1, C - 1), where the
 //   score of a path is the minimum cell value visited along that path.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[5, 4, 5], [1, 2, 6], [7, 4, 6]]
+//     Output: 4
+//     Explanation:
+//       - Mark (0, 0) visited and push CellState{min_val=5, row=0, col=0} into the
+//         max-heap.
+//       - Pop (5, 0, 0); mark unvisited neighbors (0, 1) and (1, 0) visited and
+//         push (min(5, 4)=4, 0, 1) and (min(5, 1)=1, 1, 0).
+//       - Pop (4, 0, 1) and push (min(4, 5)=4, 0, 2) and (min(4, 2)=2, 1, 1); then
+//         pop (4, 0, 2) and push (min(4, 6)=4, 1, 2).
+//       - Pop (4, 1, 2) and push target cell (min(4, 6)=4, 2, 2), then pop (4, 2,
+//         2) and immediately return 4.
+//
+//   Example 2:
+//     Input:  grid = [[2, 2, 1, 2, 2, 2], [1, 2, 2, 2, 1, 2]]
+//     Output: 2
+//     Explanation:
+//       - Initialize visited[0] = 1 and push (2, 0, 0) into the max-heap.
+//       - Pop (2, 0, 0) to enqueue (2, 0, 1) and (1, 1, 0), then pop (2, 0, 1) to
+//         enqueue (2, 1, 1) and (1, 0, 2).
+//       - Because the max-heap expands higher bottleneck scores first, it advances
+//         along the score-2 path (1, 1) -> (1, 2) -> (1, 3) -> (0, 3) -> (0, 4) ->
+//         (0, 5) -> (1, 5).
+//       - Pop (2, 1, 5), which matches destination (target_r=1, target_c=5), and
+//         return 2.
+//
+//   Example 3:
+//     Input:  grid = [[5, 0], [0, 5]]
+//     Output: 0
+//     Explanation:
+//       - Mark (0, 0) visited and push (5, 0, 0) onto the max-heap.
+//       - Pop (5, 0, 0), mark (0, 1) and (1, 0) visited, and push (min(5, 0)=0, 0,
+//         1) and (min(5, 0)=0, 1, 0).
+//       - Pop (0, 1, 0) (ordered ahead of (0, 0, 1) by row), mark (1, 1) visited,
+//         and push (min(0, 5)=0, 1, 1).
+//       - Pop (0, 1, 1) at destination (1, 1) and return bottleneck score 0.
+//
 // Algorithm:
 //   Best-First Search / Modified Dijkstra (Max-Heap):
 //   1. Maintain a max-heap of frontier cells ordered by the best bottleneck

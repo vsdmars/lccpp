@@ -19,6 +19,58 @@
 //   - Return the arithmetic mean of those daily percentages rounded to 2
 //     decimal places (or `0.0` if no spam reports exist).
 //
+// Examples:
+//   Example 1:
+//     Input:  actions = [(1, 1, "2019-07-01", "view", ""), (1, 1, "2019-07-01",
+//             "like", ""), (1, 1, "2019-07-01", "share", ""), (2, 2, "2019-07-04",
+//             "view", ""), (2, 2, "2019-07-04", "report", "spam"), (3, 4,
+//             "2019-07-04", "view", ""), (3, 4, "2019-07-04", "report", "spam"),
+//             (4, 3, "2019-07-02", "view", ""), (4, 3, "2019-07-02", "report",
+//             "spam"), (5, 2, "2019-07-03", "view", ""), (5, 2, "2019-07-03",
+//             "report", "racism"), (5, 5, "2019-07-03", "view", ""), (5, 5,
+//             "2019-07-03", "report", "racism")], removals = [(2, "2019-07-20"),
+//             (3, "2019-07-18")]
+//     Output: 75.0
+//     Explanation:
+//       - Index removals into the hash set removed_posts = {2, 3}.
+//       - Scan actions and keep only rows with action == "report" and extra ==
+//         "spam", building daily_spam_posts["2019-07-04"] = {2, 4} and
+//         daily_spam_posts["2019-07-02"] = {3} while skipping "2019-07-01"
+//         non-reports and "2019-07-03" racism reports.
+//       - For "2019-07-04", 1 of 2 distinct spam posts (post 2) is in
+//         removed_posts, yielding daily_pct = 50.0; for "2019-07-02", 1 of 1 post
+//         (post 3) is in removed_posts, yielding daily_pct = 100.0.
+//       - Average total_daily_pct = 150.0 across 2 qualifying days to get 75.0, and
+//         round to 2 decimal places to return 75.0.
+//
+//   Example 2:
+//     Input:  actions = [(1, 2, "2019-07-04", "report", "spam"), (2, 2,
+//             "2019-07-04", "report", "spam"), (2, 2, "2019-07-04", "report",
+//             "spam"), (3, 4, "2019-07-04", "report", "spam")], removals = [(2,
+//             "2019-07-05")]
+//     Output: 50.0
+//     Explanation:
+//       - Populate removed_posts = {2} from removals.
+//       - Inserting each spam report's post_id into the std::unordered_set at
+//         daily_spam_posts["2019-07-04"] deduplicates the three reports for post 2,
+//         producing {2, 4}.
+//       - Counting membership in removed_posts finds removed_count = 1 out of 2
+//         distinct posts, giving daily_pct = 100.0 * 1 / 2 = 50.0.
+//       - With 1 qualifying day in daily_spam_posts, avg_pct is 50.0 and
+//         std::round(50.0 * 100.0) / 100.0 returns 50.0.
+//
+//   Example 3:
+//     Input:  actions = [(1, 1, "2019-07-01", "report", "racism"), (2, 2,
+//             "2019-07-01", "view", "spam")], removals = [(1, "2019-07-02")]
+//     Output: 0.0
+//     Explanation:
+//       - Populate removed_posts = {1} from removals.
+//       - Scan actions: row 1 has extra = "racism" instead of "spam", and row 2 has
+//         action = "view" instead of "report", so neither is inserted into
+//         daily_spam_posts.
+//       - Because daily_spam_posts is empty, the early-return guard triggers and
+//         returns 0.0.
+//
 // Algorithm:
 //   Hash-Join + Daily Distinct Aggregation (C++23 equivalent of the SQL query):
 //   1. Index all removed `post_id`s into a hash set `removed_posts` in O(R).

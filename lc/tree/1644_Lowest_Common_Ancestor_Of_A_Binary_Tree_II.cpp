@@ -9,6 +9,43 @@
 //   nullptr.
 //   Constraints: 1 to 10^4 nodes; -10^9 <= Node.val <= 10^9.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], p = 5, q = 1
+//     Output: 3 (TreeNode with val 3)
+//     Explanation:
+//       - Phase 1 DFS traverses all 9 nodes from root 3 and populates parent
+//         pointers such as parent[3] = nullptr, parent[5] = 3, and parent[1] = 3.
+//       - Phase 2 checks parent.contains(p) and parent.contains(q); both node 5 and
+//         node 1 are present in the map.
+//       - Phase 3 walks upward from p = 5 via parent pointers, inserting {5, 3}
+//         into the ancestors set.
+//       - Phase 4 climbs from q = 1: node 1 is not in ancestors, so it steps to
+//         parent[1] = 3, finds 3 in ancestors, and returns node 3.
+//
+//   Example 2:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], p = 5, q = 4
+//     Output: 5 (TreeNode with val 5)
+//     Explanation:
+//       - Phase 1 DFS populates parent for all 9 nodes, and Phase 2 confirms both
+//         node 5 and node 4 exist in parent.
+//       - Phase 3 collects ancestors of p = 5 (including p itself), storing {5, 3}
+//         in ancestors.
+//       - Phase 4 walks upward from q = 4: node 4 misses, parent[4] = 2 misses, and
+//         parent[2] = 5 matches ancestors, returning node 5.
+//
+//   Example 3:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], p = 5, q = 10
+//             (detached node)
+//     Output: nullptr
+//     Explanation:
+//       - Phase 1 DFS visits only the 9 nodes reachable from root 3, so parent
+//         holds {3, 5, 1, 6, 2, 0, 8, 7, 4}.
+//       - Phase 2 evaluates parent.contains(p) && parent.contains(q) and finds that
+//         detached node 10 is absent from parent.
+//       - Because both target nodes must belong to the tree, lowestCommonAncestor
+//         immediately returns nullptr.
+//
 // Algorithm:
 //   Traverse the entire tree once with DFS to populate a parent-pointer map
 //   `parent[node] = parent_node` (with `parent[root] = nullptr`). Because every

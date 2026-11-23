@@ -8,6 +8,46 @@
 //   nums2 such that the relative order of digits taken from the same array is
 //   preserved.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums1 = [3, 4, 6, 5], nums2 = [9, 1, 2, 5, 8, 3], k = 5
+//     Output: [9, 8, 6, 5, 3]
+//     Explanation:
+//       - Compute feasible take1 bounds for k = 5, m = 4, n = 6: min_take = max(0,
+//         5 - 6) = 0 to max_take = min(5, 4) = 4, enumerating splits (0, 5) through
+//         (4, 1).
+//       - For split (2, 3), max_subsequence([3, 4, 6, 5], 2) with drop = 2 pops 3
+//         then 4 to yield [6, 5], and max_subsequence([9, 1, 2, 5, 8, 3], 3) with
+//         drop = 3 pops 1, 2, and 5 to yield [9, 8, 3].
+//       - merge_subsequences interleaves [6, 5] and [9, 8, 3] by picking the larger
+//         leading suffix at each step (9, 8, 6, 5, 3) to produce [9, 8, 6, 5, 3].
+//       - Other splits yield [9, 2, 5, 8, 3], [9, 6, 5, 8, 3], [9, 8, 4, 6, 5], and
+//         [9, 3, 4, 6, 5], all lexicographically smaller than [9, 8, 6, 5, 3], so
+//         return [9, 8, 6, 5, 3].
+//
+//   Example 2:
+//     Input:  nums1 = [6, 7], nums2 = [6, 0, 4], k = 5
+//     Output: [6, 7, 6, 0, 4]
+//     Explanation:
+//       - Since m = 2, n = 3, and k = 5, only split (take1 = 2, take2 = 3) is
+//         feasible, yielding sub1 = [6, 7] and sub2 = [6, 0, 4].
+//       - At ia = 0 and ib = 0, both suffixes start with 6, so greater_suffix looks
+//         ahead to index 1 where 7 > 0 and selects 6 from sub1.
+//       - Next, comparing [7] against [6, 0, 4] picks 7 from sub1, then the
+//         remaining [6, 0, 4] from sub2 is appended in order to return [6, 7, 6, 0,
+//         4].
+//
+//   Example 3:
+//     Input:  nums1 = [], nums2 = [5, 4, 3], k = 2
+//     Output: [5, 4]
+//     Explanation:
+//       - With m = 0, n = 3, and target = 2, min_take = 0 and max_take = 0, so only
+//         split (0, 2) is evaluated.
+//       - max_subsequence([], 0) returns [], while max_subsequence([5, 4, 3], 2)
+//         keeps the non-increasing digits [5, 4, 3] on the stack and calls
+//         stack.resize(2) to trim 3, leaving [5, 4].
+//       - Merging [] and [5, 4] produces [5, 4].
+//
 // Algorithm:
 //   Enumerate every feasible split (i, k - i), where i digits are selected from
 //   nums1 and k - i digits from nums2, bounded by max(0, k - n) <= i <= min(k,

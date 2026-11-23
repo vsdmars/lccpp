@@ -7,6 +7,41 @@
 //   Only node links may be modified; node values themselves must not be
 //   altered.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3, 4]
+//     Output: head = [1, 4, 2, 3]
+//     Explanation:
+//       - Advance slow and fast from node 1: one iteration moves slow to node 2 and
+//         fast to node 3, then stops because fast->next->next is nullptr.
+//       - Detach slow->next (3 -> 4), set 2->next = nullptr so the first half is
+//         [1, 2], and reverse the second half into 4 -> 3.
+//       - Interleave first ([1, 2]) and second ([4, 3]): splice 4 between 1 and 2
+//         (1 -> 4 -> 2), then splice 3 after 2 (2 -> 3 -> nullptr) to yield [1, 4,
+//         2, 3].
+//
+//   Example 2:
+//     Input:  head = [1, 2, 3, 4, 5]
+//     Output: head = [1, 5, 2, 4, 3]
+//     Explanation:
+//       - Advance slow by 1 and fast by 2 from node 1 until fast reaches tail node
+//         5, placing slow at midpoint node 3.
+//       - Set 3->next = nullptr so the first half is [1, 2, 3], and reverse the
+//         detached suffix (4 -> 5) into 5 -> 4.
+//       - Interleave [1, 2, 3] and [5, 4] by splicing 5 after 1 and 4 after 2,
+//         leaving 3->next as nullptr and producing [1, 5, 2, 4, 3].
+//
+//   Example 3:
+//     Input:  head = [1, 2]
+//     Output: head = [1, 2]
+//     Explanation:
+//       - Initialize slow and fast at node 1; because fast->next->next is nullptr,
+//         the midpoint loop does not advance and slow stays at node 1.
+//       - Detach node 2 into second = 2 -> nullptr and set 1->next = nullptr so
+//         first is [1].
+//       - Interleave first ([1]) and second ([2]) by setting 1->next = 2 and
+//         2->next = nullptr, keeping [1, 2] unchanged.
+//
 // Algorithm:
 //   Primary approach (O(1)-space in-place split, reverse, and interleave):
 //   1. Split at middle: Advance `slow` by 1 and `fast` by 2 until `fast` reaches

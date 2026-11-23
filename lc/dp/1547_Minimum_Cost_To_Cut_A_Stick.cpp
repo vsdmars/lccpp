@@ -11,6 +11,45 @@
 //   Constraints: 2 <= n <= 10^6, 1 <= cuts.length <= min(n - 1, 100),
 //   1 <= cuts[i] <= n - 1, and all values in `cuts` are distinct.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 7, cuts = [1, 3, 4, 5]
+//     Output: 16
+//     Explanation:
+//       - Augment cuts with 0 and 7 and sort to obtain points = [0, 1, 3, 4, 5, 7]
+//         (m = 6), then call dfs(0, 5).
+//       - Base cases with right - left < 2 return 0, and single-cut sub-intervals
+//         compute dfs(0, 2) = 3, dfs(1, 3) = 3, dfs(2, 4) = 2, and dfs(3, 5) = 3.
+//       - Larger sub-intervals memoize optimal splits: dfs(2, 5) = (7 - 3) + min(0
+//         + 3, 2 + 0) = 6, dfs(0, 3) = 4 + 3 = 7, dfs(1, 4) = 4 + 2 = 6, dfs(1, 5)
+//         = 6 + 6 = 12, and dfs(0, 4) = 5 + 5 = 10.
+//       - At dfs(0, 5) (segment_cost = 7 - 0 = 7), trying mid = 1..4 gives
+//         sub-costs 0 + 12 = 12, 3 + 6 = 9, 7 + 3 = 10, and 10 + 0 = 10; mid = 2
+//         (cut at 3) minimizes the total to 7 + 9 = 16.
+//
+//   Example 2:
+//     Input:  n = 4, cuts = [1, 2, 3]
+//     Output: 8
+//     Explanation:
+//       - Construct sorted boundary array points = [0, 1, 2, 3, 4] (m = 5) and
+//         invoke dfs(0, 4).
+//       - Single-cut intervals evaluate to their segment lengths: dfs(0, 2) = 2,
+//         dfs(1, 3) = 2, and dfs(2, 4) = 2.
+//       - Two-cut intervals evaluate to dfs(0, 3) = (3 - 0) + min(0 + 2, 2 + 0) = 5
+//         and dfs(1, 4) = (4 - 1) + min(0 + 2, 2 + 0) = 5.
+//       - At dfs(0, 4) (segment_cost = 4 - 0 = 4), mid = 1, 2, 3 give sub-costs 0 +
+//         5 = 5, 2 + 2 = 4, and 5 + 0 = 5, so mid = 2 (cut at 2 first) yields 4 + 4
+//         = 8.
+//
+//   Example 3:
+//     Input:  n = 10, cuts = []
+//     Output: 0
+//     Explanation:
+//       - Augment empty cuts with endpoints 0 and 10 to form points = [0, 10] (m =
+//         2).
+//       - Call dfs(0, 1), where right - left = 1 < 2 triggers the base case
+//         immediately and returns 0.
+//
 // Algorithm:
 //   Interval Dynamic Programming (top-down memoized DFS):
 //   1. Augment `cuts` with the two stick endpoints `0` and `n`, then sort all

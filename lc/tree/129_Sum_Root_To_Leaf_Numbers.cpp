@@ -8,6 +8,41 @@
 //   Return the total sum of all root-to-leaf numbers. The test cases guarantee
 //   the answer fits within a 32-bit signed integer.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3]
+//     Output: 25
+//     Explanation:
+//       - dfs(1, 0) computes next_num = 0 * 10 + 1 = 1 and recurses on left child 2
+//         and right child 3.
+//       - dfs(2, 1) computes next_num = 1 * 10 + 2 = 12 and returns 12 because node
+//         2 is a leaf.
+//       - dfs(3, 1) computes next_num = 1 * 10 + 3 = 13 and returns 13 because node
+//         3 is a leaf.
+//       - Root 1 sums the returned subtree totals 12 + 13 = 25.
+//
+//   Example 2:
+//     Input:  root = [4, 9, 0, 5, 1]
+//     Output: 1026
+//     Explanation:
+//       - dfs(4, 0) sets next_num = 4 and recurses into left child 9 and right
+//         child 0.
+//       - dfs(9, 4) computes next_num = 4 * 10 + 9 = 49 and sums its two leaf calls
+//         dfs(5, 49) = 495 and dfs(1, 49) = 491 to return 986.
+//       - dfs(0, 4) reaches leaf 0 with next_num = 4 * 10 + 0 = 40 and returns 40.
+//       - Root 4 combines 986 + 40 = 1026.
+//
+//   Example 3:
+//     Input:  root = [0, 1, 3, 2]
+//     Output: 15
+//     Explanation:
+//       - dfs(0, 0) computes next_num = 0 * 10 + 0 = 0 and recurses on left child 1
+//         and right child 3.
+//       - dfs(1, 0) computes next_num = 1 and passes it to its left leaf 2, where
+//         dfs(2, 1) returns 1 * 10 + 2 = 12.
+//       - dfs(3, 0) hits leaf 3 with next_num = 0 * 10 + 3 = 3 and returns 3,
+//         giving total 12 + 3 = 15.
+//
 // Algorithm:
 //   Use a top-down depth-first search (DFS) that carries the accumulated
 //   base-10 prefix value down the recursion:

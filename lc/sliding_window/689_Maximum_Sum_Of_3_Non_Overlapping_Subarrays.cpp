@@ -8,6 +8,52 @@
 //   subarrays in ascending order. If multiple answers achieve the maximum sum,
 //   return the lexicographically smallest triple of indices.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 1, 2, 6, 7, 5, 1], k = 2
+//     Output: [0, 3, 5]
+//     Explanation:
+//       - Initialize the three adjacent length-2 windows at [0, 1], [2, 3], and [4,
+//         5] with sums 3, 3, and 13, setting best_sum1 = 3 (best_idx1 = 0),
+//         best_sum2 = 6 (best_idx2 = [0, 2]), and best_sum3 = 19 (best_idx3 = [0,
+//         2, 4]).
+//       - At (idx1, idx2, idx3) = (1, 3, 5), sum1 stays 3 (best_idx1 remains 0),
+//         sum2 rises to 8 so best_sum1 + sum2 = 11 updates best_sum2 = 11 and
+//         best_idx2 = [0, 3], and sum3 = 12 makes best_sum2 + sum3 = 23 update
+//         best_sum3 = 23 and best_idx3 = [0, 3, 5].
+//       - At (idx1, idx2, idx3) = (2, 4, 6), sum1 stays 3, sum2 rises to 13 so
+//         best_sum2 updates to 16 (best_idx2 = [0, 4]), and sum3 drops to 6,
+//         leaving best_sum2 + sum3 = 22 <= 23 so best_idx3 remains [0, 3, 5].
+//       - The loop ends when idx3 = 7 exceeds last_idx3 = 6 and returns [0, 3, 5].
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 1, 2, 1, 2, 1, 2, 1], k = 2
+//     Output: [0, 2, 4]
+//     Explanation:
+//       - Initial windows [0, 1], [2, 3], and [4, 5] each have sum 3, initializing
+//         best_sum1 = 3 (best_idx1 = 0), best_sum2 = 6 (best_idx2 = [0, 2]), and
+//         best_sum3 = 9 (best_idx3 = [0, 2, 4]).
+//       - Across iterations (1, 3, 5), (2, 4, 6), and (3, 5, 7), every window sum
+//         alternates between 3 and 3, never exceeding best_sum1 = 3, best_sum2 = 6,
+//         or best_sum3 = 9.
+//       - Because all updates use strict > comparisons, ties never overwrite
+//         earlier snapshots, preserving the lexicographically smallest triple [0,
+//         2, 4].
+//
+//   Example 3:
+//     Input:  nums = [4, 5, 10, 6, 11, 17, 4, 11, 1, 3], k = 1
+//     Output: [4, 5, 7]
+//     Explanation:
+//       - Initial length-1 windows at indices 0, 1, and 2 yield best_sum1 = 4 (0),
+//         best_sum2 = 9 ([0, 1]), and best_sum3 = 19 ([0, 1, 2]).
+//       - Sliding through (3, 4, 5) lifts best_sum1 to 10 (index 2), best_sum2 to
+//         21 ([2, 4]), and best_sum3 to 38 ([2, 4, 5]) via elements 10, 11, and 17.
+//       - At (4, 5, 6), sum1 = 11 updates best_sum1 = 11 (index 4) and sum2 = 17
+//         updates best_sum2 = 28 ([4, 5]), while sum3 = 4 gives 28 + 4 = 32 <= 38.
+//       - At (5, 6, 7), sum3 = 11 pairs with best_sum2 = 28 to reach best_sum3 = 39
+//         (> 38) and update best_idx3 = [4, 5, 7], which holds through the
+//         remaining positions 8 and 9.
+//
 // Algorithm:
 //   Single-pass three-window sliding greedy / DP. Slide three non-overlapping
 //   windows of length `k` in lockstep across `nums`:

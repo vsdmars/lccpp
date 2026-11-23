@@ -6,6 +6,43 @@
 //   all 0-based start indices of p's anagrams in s. An anagram is a substring
 //   of length p.size() containing the exact same character multiplicities as p.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "cbaebabacd", p = "abc"
+//     Output: [0, 6]
+//     Explanation:
+//       - p_freq records 'a': 1, 'b': 1, 'c': 1, and window_freq is seeded with the
+//         first window_len - 1 = 2 characters "cb" ('b': 1, 'c': 1).
+//       - At right = 2 ('a'), window_freq matches p_freq on "cba", so left = 0 is
+//         appended to result before decrementing s[0] = 'c'.
+//       - Sliding across right = 3..7 inspects "bae", "aeb", "eba", "bab", and
+//         "aba", none of which match p_freq.
+//       - At right = 8 ('c'), window_freq holds "bac" ('a': 1, 'b': 1, 'c': 1) ==
+//         p_freq and appends left = 6, while right = 9 ("acd") does not match,
+//         returning [0, 6].
+//
+//   Example 2:
+//     Input:  s = "ababb", p = "abb"
+//     Output: [1, 2]
+//     Explanation:
+//       - p_freq stores 'a': 1, 'b': 2, and window_freq is seeded with s[0..1] =
+//         "ab" ('a': 1, 'b': 1).
+//       - At right = 2 ('a'), window_freq becomes "aba" ('a': 2, 'b': 1 != p_freq),
+//         then evicts s[0] = 'a' leaving 'a': 1, 'b': 1.
+//       - At right = 3 ('b'), window_freq becomes "bab" ('a': 1, 'b': 2 == p_freq),
+//         recording left = 1 before evicting s[1] = 'b'.
+//       - At right = 4 ('b'), window_freq becomes "abb" ('a': 1, 'b': 2 == p_freq),
+//         appending left = 2 and returning [1, 2].
+//
+//   Example 3:
+//     Input:  s = "ab", p = "abc"
+//     Output: []
+//     Explanation:
+//       - The initial guard checks p.empty() || s.size() < p.size(), which holds
+//         because 2 < 3.
+//       - No anagram of length 3 can fit inside s, so the function returns {}
+//         immediately.
+//
 // Algorithm:
 //   Fixed-size sliding window with 26-letter frequency signatures:
 //   1. If p is empty or longer than s, no anagram can exist; return empty.

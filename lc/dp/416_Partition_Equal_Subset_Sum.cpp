@@ -5,6 +5,41 @@
 //   Given a non-empty array `nums` of positive integers, determine whether it
 //   can be partitioned into two subsets with equal sum.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 5, 11, 5]
+//     Output: true
+//     Explanation:
+//       - Total sum is 22 (even), giving target = 11; initialize reachable[0] = 1
+//         and reachable[1..11] = 0.
+//       - Processing 1 sets reachable[1] = 1 (reachable sums: {0, 1}), and
+//         processing 5 downward from 11 to 5 sets reachable[6] = 1 and reachable[5]
+//         = 1 ({0, 1, 5, 6}).
+//       - Processing 11 sets reachable[11] = reachable[0] = 1, triggering the early
+//         return of true.
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 3, 5]
+//     Output: false
+//     Explanation:
+//       - Sum all elements to get total = 11.
+//       - Because total % 2 != 0, two subsets cannot share an equal integer sum, so
+//         the function returns false immediately.
+//
+//   Example 3:
+//     Input:  nums = [2, 2, 3, 5]
+//     Output: false
+//     Explanation:
+//       - Total sum is 12 (even), so target = 6 and reachable starts with only
+//         index 0 set to 1.
+//       - Processing 2 and 2 sets reachable[2] = 1 and then reachable[4] = 1
+//         (reachable sums: {0, 2, 4}).
+//       - Processing 3 downward from 6 to 3 sets reachable[5] = 1 and reachable[3]
+//         = 1, while reachable[6] stays 0 because reachable[3] was 0 before the
+//         sweep.
+//       - Processing 5 downward from 6 to 5 checks reachable[1] == 0 and
+//         reachable[0] == 1, leaving reachable[6] = 0 and returning false.
+//
 // Algorithm:
 //   Space-Optimized 0/1 Knapsack (Subset Sum) Dynamic Programming. Let `total`
 //   be the sum of all elements in `nums`:

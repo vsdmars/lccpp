@@ -8,6 +8,43 @@
 //   their sum and return it as a new linked list in the same forward order.
 //   Follow-up constraint: do not modify or reverse the input linked lists.
 //
+// Examples:
+//   Example 1:
+//     Input:  l1 = [7, 2, 4, 3], l2 = [5, 6, 4]
+//     Output: [7, 8, 0, 7]
+//     Explanation:
+//       - Push digits onto immutable stacks stack_a = [7, 2, 4, 3] and stack_b =
+//         [5, 6, 4], starting with result_head = nullptr and carry = 0.
+//       - Pop 3 + 4 + 0 = 7 (carry = 0) and prepend 7, then pop 4 + 6 + 0 = 10
+//         (carry = 1) and prepend 0 to form [0, 7].
+//       - Pop 2 + 5 + 1 = 8 (carry = 0) and prepend 8, then pop remaining 7 from
+//         stack_a (sum = 7, carry = 0) and prepend 7.
+//       - Both stacks and carry are now empty, returning [7, 8, 0, 7] without
+//         mutating l1 or l2.
+//
+//   Example 2:
+//     Input:  l1 = [9, 9, 9, 9], l2 = [1]
+//     Output: [1, 0, 0, 0, 0]
+//     Explanation:
+//       - Populate stack_a = [9, 9, 9, 9] and stack_b = [1] with result_head =
+//         nullptr and carry = 0.
+//       - First pop computes 9 + 1 + 0 = 10 (carry = 1) and prepends 0; the next
+//         three pops each compute 9 + 1 = 10 from stack_a and carry, prepending 0
+//         to form [0, 0, 0, 0].
+//       - Both stacks are empty while carry == 1, so one final iteration computes
+//         sum = 1 (carry = 0) and prepends 1 to return [1, 0, 0, 0, 0].
+//
+//   Example 3:
+//     Input:  l1 = [0], l2 = [0]
+//     Output: [0]
+//     Explanation:
+//       - Push the single digit of each list so stack_a = [0] and stack_b = [0],
+//         with carry = 0.
+//       - Pop both tops to get sum = 0 + 0 + 0 = 0 (carry = 0) and prepend node 0
+//         to result_head.
+//       - Both stacks are empty and carry is 0, so the loop finishes and returns
+//         [0].
+//
 // Algorithm:
 //   Two-stack reverse-order digit addition with head insertion:
 //   1. Traverse `l1` and `l2` without mutating them, pushing their digit values

@@ -9,6 +9,40 @@
 //   follow-up requires O(1) extra memory without knowing the list length in
 //   advance or copying nodes into an array.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3], getRandom()
+//     Output: 2 (any of 1, 2, or 3 with equal 1/3 probability)
+//     Explanation:
+//       - Start traversal with chosen = 0 and seen = 0; at node 1 (val = 1, seen =
+//         1), dist(0, 0) always draws 0 so chosen becomes 1 with probability 1.
+//       - At node 2 (val = 2, seen = 2), dist(0, 1) draws 0 with probability 1/2,
+//         updating chosen = 2.
+//       - At node 3 (val = 3, seen = 3), dist(0, 2) keeps chosen = 2 whenever it
+//         draws 1 or 2 (probability 2/3), yielding an overall 1/3 probability for
+//         every node and returning 2.
+//
+//   Example 2:
+//     Input:  head = [42], getRandom()
+//     Output: 42
+//     Explanation:
+//       - Visit the single node with val = 42 and increment seen from 0 to 1.
+//       - Draw a uniform integer from dist(0, 0), which always equals 0 and sets
+//         chosen = 42.
+//       - Reach curr == nullptr and return 42.
+//
+//   Example 3:
+//     Input:  head = [-10, 0, 10], getRandom()
+//     Output: -10 (any of -10, 0, or 10 with equal 1/3 probability)
+//     Explanation:
+//       - At node 1 (val = -10, seen = 1), dist(0, 0) always equals 0 and sets
+//         chosen = -10.
+//       - At node 2 (val = 0, seen = 2), dist(0, 1) retains -10 when drawing 1
+//         (probability 1/2).
+//       - At node 3 (val = 10, seen = 3), dist(0, 2) retains -10 when drawing 1 or
+//         2 (probability 2/3), giving -10 a net survival probability of 1 * (1/2) *
+//         (2/3) = 1/3 and returning -10.
+//
 // Algorithm:
 //   Uses Reservoir Sampling with reservoir size k = 1 (Waterman's Algorithm R).
 //   The constructor stores only `head_` and seeds a Mersenne Twister PRNG.

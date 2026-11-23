@@ -9,6 +9,41 @@
 //   `guess` at a different position, where each unmatched digit instance can
 //   be paired at most once (duplicate digits are allowed in both strings).
 //
+// Examples:
+//   Example 1:
+//     Input:  secret = "1807", guess = "7810"
+//     Output: "1A3B"
+//     Explanation:
+//       - At i = 1, secret[1] == guess[1] == '8', so bulls increments to 1.
+//       - Unmatched indices i = 0, 2, 3 record secret_counts['1'] =
+//         secret_counts['0'] = secret_counts['7'] = 1 and guess_counts['7'] =
+//         guess_counts['1'] = guess_counts['0'] = 1.
+//       - Summing std::min(secret_counts[d], guess_counts[d]) over digits 0..9
+//         yields 1 each for '0', '1', and '7', giving cows = 3 and returning
+//         "1A3B".
+//
+//   Example 2:
+//     Input:  secret = "1123", guess = "0111"
+//     Output: "1A1B"
+//     Explanation:
+//       - At i = 1, secret[1] == guess[1] == '1' increments bulls to 1.
+//       - Unmatched positions i = 0, 2, 3 set secret_counts['1'] = 1,
+//         secret_counts['2'] = 1, secret_counts['3'] = 1 and guess_counts['0'] = 1,
+//         guess_counts['1'] = 2.
+//       - Across digits 0..9, only digit '1' overlaps, contributing min(1, 2) = 1
+//         to cows and returning "1A1B".
+//
+//   Example 3:
+//     Input:  secret = "1122", guess = "1222"
+//     Output: "3A0B"
+//     Explanation:
+//       - Indices i = 0 ('1'), i = 2 ('2'), and i = 3 ('2') match exactly, setting
+//         bulls = 3.
+//       - Only i = 1 is unmatched (secret[1] = '1', guess[1] = '2'), setting
+//         secret_counts[1] = 1 and guess_counts[2] = 1.
+//       - Because secret_counts and guess_counts share no non-zero digit index,
+//         cows stays 0 and getHint returns "3A0B".
+//
 // Algorithm:
 //   Scan `secret` and `guess` simultaneously in one pass:
 //     - Whenever `secret[i] == guess[i]`, increment `bulls`.

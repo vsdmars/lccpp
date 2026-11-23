@@ -8,6 +8,43 @@
 //   `')'` at any position. Return the minimum number of insertions needed to
 //   balance `s`.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "(()))"
+//     Output: 1
+//     Explanation:
+//       - Initialize insertions = 0 and needed_right = 0, then process the first
+//         two '(' characters to raise needed_right to 4.
+//       - Scan the three trailing ')' characters, decrementing needed_right from 4
+//         down to 1 without dropping below zero.
+//       - At the end of the string, return insertions + needed_right = 0 + 1 = 1 by
+//         appending one ')' to close the second '('.
+//
+//   Example 2:
+//     Input:  s = "))())("
+//     Output: 3
+//     Explanation:
+//       - At index 0 (')'), needed_right drops to -1, so insert a '(' (insertions =
+//         1) and add 2 to set needed_right = 1; at index 1 (')'), needed_right
+//         decrements to 0.
+//       - At index 2 ('('), needed_right is even (0), so add 2 to get needed_right
+//         = 2; indices 3 and 4 ("))") decrement it back to 0.
+//       - At index 5 ('('), needed_right is even (0), so add 2 to leave
+//         needed_right = 2 at the end of the scan.
+//       - Return insertions + needed_right = 1 + 2 = 3.
+//
+//   Example 3:
+//     Input:  s = "()()"
+//     Output: 2
+//     Explanation:
+//       - At index 0 ('('), needed_right becomes 2, and at index 1 (')'), it
+//         decrements to 1.
+//       - At index 2 ('('), needed_right is odd (1), so commit a ')' insertion
+//         (insertions = 1, needed_right = 0) before adding 2 for the new '(' to get
+//         needed_right = 2.
+//       - At index 3 (')'), needed_right decrements to 1, and returning insertions
+//         + needed_right yields 1 + 1 = 2.
+//
 // Algorithm:
 //   Single-Pass Greedy Balance Tracking (Implicit Stack):
 //     Maintain two integer counters while scanning `s` from left to right:

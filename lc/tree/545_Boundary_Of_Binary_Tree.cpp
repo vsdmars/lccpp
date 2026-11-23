@@ -15,6 +15,45 @@
 //      `root->right`, always stepping right when available and left otherwise,
 //      excluding leaf nodes (empty if `root->right == nullptr`).
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, null, 2, 3, 4]
+//     Output: [1, 3, 4, 2]
+//     Explanation:
+//       - Initialize boundary = [1] with root->val.
+//       - Phase 1 (addLeftBoundary(root->left)) returns immediately because
+//         root->left is nullptr.
+//       - Phase 2 (addLeaves) runs a left-to-right DFS and appends non-root leaf
+//         nodes 3 and 4, giving boundary = [1, 3, 4].
+//       - Phase 3 (addRightBoundary(2)) steps right to leaf 4 (stopping at
+//         isLeaf(4)) and appends 2 on post-order unwind, returning [1, 3, 4, 2].
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, 4, 5, 6, null, null, null, 7, 8, 9, 10]
+//     Output: [1, 2, 4, 7, 8, 9, 10, 6, 3]
+//     Explanation:
+//       - Initialize boundary = [1] with root->val.
+//       - Phase 1 (addLeftBoundary(2)) appends internal node 2, follows 2->left to
+//         4, and stops because 4 is a leaf, leaving boundary = [1, 2].
+//       - Phase 2 (addLeaves) visits all leaves from left to right and appends 4,
+//         7, 8, 9, and 10, giving boundary = [1, 2, 4, 7, 8, 9, 10].
+//       - Phase 3 (addRightBoundary(3)) falls back to 3->left = 6 (since 3->right
+//         is nullptr), stops at leaf 10 (6->right), and appends 6 then 3 on unwind,
+//         returning [1, 2, 4, 7, 8, 9, 10, 6, 3].
+//
+//   Example 3:
+//     Input:  root = [1, 2, null, null, 3, 4]
+//     Output: [1, 2, 3, 4]
+//     Explanation:
+//       - Initialize boundary = [1] with root->val.
+//       - Phase 1 (addLeftBoundary(2)) appends 2, falls back to 2->right = 3
+//         because 2->left is nullptr, appends 3, and stops at leaf 4 (3->left),
+//         leaving boundary = [1, 2, 3].
+//       - Phase 2 (addLeaves) collects the single leaf 4, giving boundary = [1, 2,
+//         3, 4].
+//       - Phase 3 (addRightBoundary(nullptr)) adds nothing since root->right is
+//         nullptr, returning [1, 2, 3, 4].
+//
 // Algorithm:
 //   Decompose the anti-clockwise perimeter into three disjoint traversals
 //   after recording `root->val`:

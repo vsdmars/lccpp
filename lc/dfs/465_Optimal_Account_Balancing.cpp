@@ -8,6 +8,42 @@
 //   number of money transfers required to settle all debts so that every
 //   person's net balance becomes zero.
 //
+// Examples:
+//   Example 1:
+//     Input:  transactions = [[0, 1, 10], [2, 0, 5]]
+//     Output: 2
+//     Explanation:
+//       - Aggregate net balances into balances[0] = -5, balances[1] = +10, and
+//         balances[2] = -5, producing three non-zero entries in debts.
+//       - In dfsSettle, settling a -5 balance against opposite-sign +10 transfers
+//         -5 onto +10 (leaving +5) in 1 transfer.
+//       - The remaining +5 and -5 balances sum to 0, canceling in 1 final transfer
+//         (and breaking early via exact-match pruning) for a minimum of 2
+//         transfers.
+//
+//   Example 2:
+//     Input:  transactions = [[0, 1, 10], [1, 0, 1], [1, 2, 5], [2, 0, 5]]
+//     Output: 1
+//     Explanation:
+//       - Compute net balances: person 0 has -10 + 1 + 5 = -4, person 1 has +10 - 1
+//         - 5 = +4, and person 2 has +5 - 5 = 0.
+//       - Discard person 2's zero balance so debts contains only -4 and +4.
+//       - dfsSettle pairs -4 with +4 in a single transfer (-4 + 4 == 0) and returns
+//         1.
+//
+//   Example 3:
+//     Input:  transactions = [[1, 0, 3], [2, 0, 7], [4, 3, 5]]
+//     Output: 3
+//     Explanation:
+//       - Aggregate net balances: person 0 has +10, person 1 has -3, person 2 has
+//         -7, person 3 has +5, and person 4 has -5 (five non-zero entries).
+//       - The +5 and -5 pair cancels exactly in 1 transfer, triggering the
+//         exact-cancellation break so no suboptimal splits are explored for that
+//         account.
+//       - The remaining three-person zero-sum group {+10, -3, -7} settles in 2
+//         transfers (e.g., transferring -3 onto +10 leaves +7 to cancel with -7),
+//         totaling 1 + 2 = 3 transfers.
+//
 // Algorithm:
 //   First aggregate every person's net balance across all transactions
 //   (`balance[from] -= amount`, `balance[to] += amount`) and discard anyone

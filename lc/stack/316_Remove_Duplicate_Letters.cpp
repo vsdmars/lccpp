@@ -7,6 +7,48 @@
 //   Among all valid deduplicated subsequences, return the one that is
 //   lexicographically smallest.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "bcabc"
+//     Output: "abc"
+//     Explanation:
+//       - Precompute last_occurrence['a'] = 2, last_occurrence['b'] = 3, and
+//         last_occurrence['c'] = 4.
+//       - At i = 0 ('b') and i = 1 ('c'), neither character is in the stack and 'c'
+//         > 'b', so stack becomes "bc".
+//       - At i = 2 ('a'), pop 'c' (last_occurrence 4 > 2) and pop 'b'
+//         (last_occurrence 3 > 2) because both appear later, then push 'a' leaving
+//         stack "a".
+//       - At i = 3 ('b') and i = 4 ('c'), neither is in_stack, so both are pushed
+//         onto stack in order to return "abc".
+//
+//   Example 2:
+//     Input:  s = "cbacdcbc"
+//     Output: "acdb"
+//     Explanation:
+//       - Precompute last_occurrence: 'a' -> 2, 'b' -> 6, 'c' -> 7, 'd' -> 4.
+//       - At i = 0 ('c'), push 'c'; at i = 1 ('b'), pop 'c' (last_occurrence 7 > 1)
+//         and push 'b'; at i = 2 ('a'), pop 'b' (last_occurrence 6 > 2) and push
+//         'a' (stack "a").
+//       - At i = 3 ('c') and i = 4 ('d'), push both in increasing order so stack
+//         becomes "acd", then skip i = 5 ('c') since in_stack['c'] is true.
+//       - At i = 6 ('b'), 'd' > 'b' but last_occurrence['d'] = 4 <= 6 so 'd' cannot
+//         be popped; push 'b' ("acdb") and skip i = 7 ('c') to return "acdb".
+//
+//   Example 3:
+//     Input:  s = "ecbacdcbc"
+//     Output: "eacdb"
+//     Explanation:
+//       - Precompute last_occurrence: 'e' -> 0, 'a' -> 3, 'd' -> 5, 'b' -> 7, 'c'
+//         -> 8.
+//       - At i = 0 push 'e'; at i = 1 ('c'), 'e' > 'c' but last_occurrence['e'] = 0
+//         <= 1, so 'e' cannot be popped and stack becomes "ec".
+//       - At i = 2 ('b') pop 'c' and push 'b' ("eb"), then at i = 3 ('a') pop 'b'
+//         (last_occurrence 7 > 3) while 'e' stays fixed, leaving stack "ea".
+//       - Push 'c' (i = 4) and 'd' (i = 5) to form "eacd", skip 'c' at i = 6, push
+//         'b' at i = 7 (stopping at 'd' since last_occurrence['d'] = 5 <= 7), and
+//         skip 'c' at i = 8 to return "eacdb".
+//
 // Algorithm:
 //   Greedy monotonic increasing stack with last-occurrence lookahead:
 //   1. Precompute the last index at which each letter `'a'..'z'` appears in `s`.

@@ -7,6 +7,43 @@
 //   shortest non-empty contiguous subarray of `nums` whose sum is at least
 //   `k`. If no such subarray exists, return `-1`.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, -1, 2], k = 3
+//     Output: 3
+//     Explanation:
+//       - Seed candidates with (sum = 0, index = 0); at i = 0 (2), running_sum = 2
+//         pushes (2, 1) to form [(0, 0), (2, 1)].
+//       - At i = 1 (-1), running_sum = 1 <= 2 pops (2, 1) from the back because
+//         starting at index 2 dominates index 1, leaving [(0, 0), (1, 2)].
+//       - At i = 2 (2), running_sum = 3 satisfies 3 - 0 >= 3, popping (0, 0) from
+//         the front to set best_len = 3 - 0 = 3 while 3 - 1 < 3 leaves (1, 2),
+//         returning 3.
+//
+//   Example 2:
+//     Input:  nums = [84, -37, 32, 40, 95], k = 167
+//     Output: 3
+//     Explanation:
+//       - After pushing (84, 1) at i = 0, i = 1 (-37) brings running_sum to 47 <=
+//         84, popping (84, 1) from the back and leaving [(0, 0), (47, 2)].
+//       - Indices i = 2 (32) and i = 3 (40) raise running_sum to 79 and 119 (<
+//         167), pushing (79, 3) and (119, 4) onto the increasing deque.
+//       - At i = 4 (95), running_sum = 214 at prefix_idx = 5 pops (0, 0) (214 - 0
+//         >= 167, best_len = 5) and (47, 2) (214 - 47 = 167 >= 167, best_len = 3)
+//         from the front, while 214 - 79 < 167 stops popping and returns 3.
+//
+//   Example 3:
+//     Input:  nums = [-5, -2, -8, -1], k = 1
+//     Output: -1
+//     Explanation:
+//       - Seed candidates with (0, 0) and best_len = kNotFound.
+//       - At each index i = 0..3, running_sum becomes -5, -7, -15, and -16, so
+//         running_sum - candidates.front().sum is always negative (< 1) and the
+//         front-pop loop never triggers.
+//       - Each step satisfies running_sum <= candidates.back().sum, popping the
+//         previous prefix and leaving only (-16, 4) at the end, so best_len remains
+//         kNotFound and returns -1.
+//
 // Algorithm:
 //   Prefix sums combined with a monotonically increasing deque. Because
 //   negative numbers break the monotonicity needed for a standard two-pointer

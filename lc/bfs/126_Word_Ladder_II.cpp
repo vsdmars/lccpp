@@ -10,6 +10,60 @@
 //        (`beginWord` need not be in `wordList`.)
 //   Return an empty list if no valid transformation exists.
 //
+// Examples:
+//   Example 1:
+//     Input:  beginWord = "hit", endWord = "cog", wordList = ["hot", "dot", "dog",
+//             "lot", "log", "cog"]
+//     Output: [["hit", "hot", "dot", "dog", "cog"], ["hit", "hot", "lot", "log",
+//             "cog"]]
+//     Explanation:
+//       - build_parent_dag inserts wordList into unvisited, verifies "cog" is
+//         present, and starts frontier = {"hit"} after erasing "hit".
+//       - Level 1 expands "hit" by mutating index 1 to 'o', recording
+//         parents["hot"] = ["hit"] and advancing frontier to {"hot"} once "hot" is
+//         erased from unvisited.
+//       - Level 2 mutates "hot" at index 0 to match "dot" and "lot", setting
+//         parents["dot"] = ["hot"] and parents["lot"] = ["hot"] before erasing both
+//         from unvisited.
+//       - Level 3 mutates "dot" to "dog" and "lot" to "log", recording
+//         parents["dog"] = ["dot"] and parents["log"] = ["lot"].
+//       - Level 4 mutates both "dog" and "log" to "cog", recording parents["cog"] =
+//         ["dog", "log"] and setting found_end = true to halt BFS after the level
+//         finishes.
+//       - collect_paths backtracks from "cog" to "hit" along parents and reverses
+//         each sequence to emit ["hit", "hot", "dot", "dog", "cog"] and ["hit",
+//         "hot", "lot", "log", "cog"].
+//
+//   Example 2:
+//     Input:  beginWord = "red", endWord = "tax", wordList = ["ted", "tex", "red",
+//             "tax", "tad", "den", "rex", "pee"]
+//     Output: [["red", "rex", "tex", "tax"], ["red", "ted", "tad", "tax"], ["red",
+//             "ted", "tex", "tax"]]
+//     Explanation:
+//       - build_parent_dag loads all 8 words into unvisited, confirms "tax" exists,
+//         and removes "red" so frontier starts as {"red"}.
+//       - Level 1 expands "red" to discover "ted" and "rex", setting parents["ted"]
+//         = ["red"] and parents["rex"] = ["red"] before erasing both from
+//         unvisited.
+//       - Level 2 expands "ted" (reaching "tad" and "tex") and "rex" (also reaching
+//         "tex"); deferring unvisited erasure until level end allows parents["tex"]
+//         to record both "ted" and "rex" alongside parents["tad"] = ["ted"].
+//       - Level 3 expands "tad" and "tex" to both reach "tax", recording both as
+//         parents of "tax" and setting found_end = true to stop BFS.
+//       - collect_paths traverses parents backward from "tax" to "red" and reverses
+//         each collected path to produce the three sorted shortest sequences.
+//
+//   Example 3:
+//     Input:  beginWord = "hit", endWord = "cog", wordList = ["hot", "dot", "dog",
+//             "lot", "log"]
+//     Output: []
+//     Explanation:
+//       - build_parent_dag inserts the 5 dictionary words into the unvisited hash
+//         set.
+//       - Checking unvisited.contains("cog") evaluates to false because "cog" is
+//         not in wordList, so build_parent_dag returns false immediately and
+//         findLadders returns [].
+//
 // Algorithm:
 //   Two-phase BFS + reverse-DAG DFS backtracking:
 //   1. Level-order BFS (`build_parent_dag`): Store all dictionary words in an

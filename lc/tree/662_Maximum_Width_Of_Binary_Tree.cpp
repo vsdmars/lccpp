@@ -8,6 +8,41 @@
 //   them as if the tree were embedded in a full binary tree. Tree size is in
 //   [1, 3000] and the answer is guaranteed to fit in a 32-bit signed integer.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 3, 2, 5, 3, null, 9]
+//     Output: 4
+//     Explanation:
+//       - Level 0 holds [(0, 1)] with width (0 - 0) + 1 = 1 and pushes children (0,
+//         3) and (1, 2).
+//       - Level 1 holds [(0, 3), (1, 2)] with width (1 - 0) + 1 = 2; node 3 (norm =
+//         0) pushes (0, 5) and (1, 3), while node 2 (norm = 1) pushes right child
+//         (3, 9).
+//       - Level 2 holds [(0, 5), (1, 3), (3, 9)], giving width (3 - 0) + 1 = 4, and
+//         with no further children returns max_width = 4.
+//
+//   Example 2:
+//     Input:  root = [1, 3, 2, 5, null, null, 9, 6, null, null, 7]
+//     Output: 8
+//     Explanation:
+//       - Levels 0 and 1 yield widths 1 and 2, placing node 3 at index 0 and node 2
+//         at index 1.
+//       - At level 2, node 3 pushes left child (0, 5) and node 2 pushes right child
+//         (3, 9) for a width of (3 - 0) + 1 = 4.
+//       - At level 3, node 5 (norm = 0) pushes left child (0, 6) and node 9 (norm =
+//         3) pushes right child (7, 7), giving max_width = (7 - 0) + 1 = 8.
+//
+//   Example 3:
+//     Input:  root = [1, 3, null, 5, 3]
+//     Output: 2
+//     Explanation:
+//       - Level 0 holds [(0, 1)] (width 1) and pushes only its non-null left child
+//         (0, 3) to level 1.
+//       - Level 1 holds [(0, 3)] (base = 0, last = 0, width 1) and pushes children
+//         (0, 5) and (1, 3) to level 2.
+//       - Level 2 holds [(0, 5), (1, 3)], updating max_width to (1 - 0) + 1 = 2
+//         before terminating.
+//
 // Algorithm:
 //   Perform level-order BFS where each node carries its 0-based complete binary
 //   tree position index `idx`: its left child sits at `2 * idx` and its right

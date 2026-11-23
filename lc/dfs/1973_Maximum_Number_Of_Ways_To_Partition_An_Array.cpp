@@ -9,6 +9,46 @@
 //   sum of the values of all of its descendants. A node with no descendants
 //   (a leaf) has a descendant sum of 0.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [10, 3, 4, 2, 1]
+//     Output: 2
+//     Explanation:
+//       - Post-order DFS visits leaf 2 and leaf 1 first; each sees left_sum = 0,
+//         right_sum = 0, descendants_sum = 0 != node->val, and returns its own
+//         value.
+//       - At node 3, left_sum = 2 and right_sum = 1 yield descendants_sum = 3 ==
+//         node->val, incrementing matches to 1 and returning subtree sum 6.
+//       - Leaf 4 has descendants_sum = 0 != 4 and returns 4 to the root.
+//       - At root 10, left_sum = 6 and right_sum = 4 yield descendants_sum = 10 ==
+//         10, incrementing matches to 2 and returning 2.
+//
+//   Example 2:
+//     Input:  root = [2, 3, null, 2, null]
+//     Output: 0
+//     Explanation:
+//       - Post-order DFS reaches leaf 2, where descendants_sum = 0 != 2, and
+//         returns subtree sum 2.
+//       - At node 3, left_sum = 2 and right_sum = 0 give descendants_sum = 2 != 3,
+//         returning subtree sum 5.
+//       - At root 2, left_sum = 5 and right_sum = 0 give descendants_sum = 5 != 2,
+//         leaving matches at 0.
+//
+//   Example 3:
+//     Input:  root = [0, 1000000000, 1000000000, 500000000, 500000000]
+//     Output: 1
+//     Explanation:
+//       - The two left-subtree leaves (500000000 each) have descendants_sum = 0 !=
+//         500000000 and each return 500000000.
+//       - Their parent (1000000000) computes descendants_sum = 500000000 +
+//         500000000 = 1000000000 == node->val, incrementing matches to 1 and
+//         returning 2000000000.
+//       - The right child leaf (1000000000) has descendants_sum = 0 != 1000000000
+//         and returns 1000000000.
+//       - At root 0, 64-bit arithmetic computes descendants_sum = 2000000000 +
+//         1000000000 = 3000000000 != 0 without 32-bit overflow, so matches remains
+//         1.
+//
 // Algorithm:
 //   Run a single post-order (bottom-up) DFS returning the total sum of values
 //   in each subtree as a 64-bit integer (`std::int64_t`), preventing 32-bit

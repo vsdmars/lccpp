@@ -11,6 +11,60 @@
 //   Constraints: 1 <= dictionary.length <= 100, 1 <= word.length <= 100,
 //   lowercase English letters only, at most 100 search calls.
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["MagicDictionary", "buildDict", "search", "search",
+//             "search", "search"], args = [[], [["hello", "leetcode"]], ["hello"],
+//             ["hhllo"], ["hell"], ["leetcoded"]]
+//     Output: [null, null, false, true, false, false]
+//     Explanation:
+//       - buildDict inserts "hello" and "leetcode" into nodes_ and sets max_len_ =
+//         8.
+//       - search("hello") walks h->e->l->l->o trying sibling child substitutions at
+//         indices 0..4, finds no 5-letter match, and returns false after consuming
+//         0 mismatches.
+//       - search("hhllo") advances along 'h' at i = 0, then at i = 1 ('h') tries
+//         sibling child 'e' via matchWithSubstitution and exactMatch("llo",
+//         child['e']) reaches "hello"'s is_end node to return true.
+//       - search("hell") checks substitutions at indices 0..3 (none terminate a
+//         4-letter word because "hello" needs 'o') and returns false when the loop
+//         ends.
+//       - search("leetcoded") has length 9 > max_len_ (8), so search immediately
+//         returns false.
+//
+//   Example 2:
+//     Input:  operations = ["MagicDictionary", "buildDict", "search", "search",
+//             "search"], args = [[], [["hello", "hallo", "leetcode", "judge"]],
+//             ["hello"], ["judgee"], ["zudge"]]
+//     Output: [null, null, true, false, true]
+//     Explanation:
+//       - buildDict inserts "hello", "hallo", "leetcode", and "judge" into the Trie
+//         with max_len_ = 8.
+//       - search("hello") advances to 'h' at i = 0, then at i = 1 ('e') tries
+//         existing sibling child 'a' and matches "hallo" via exactMatch("llo",
+//         child['a']), returning true.
+//       - search("judgee") walks j->u->d->g->e up to i = 4, then at i = 5 ('e') the
+//         node has no children at all, so matchWithSubstitution fails and the
+//         missing exact edge returns false.
+//       - search("zudge") substitutes 'z' at i = 0 with root child 'j', and
+//         exactMatch("udge", child['j']) matches "judge" to return true.
+//
+//   Example 3:
+//     Input:  operations = ["MagicDictionary", "buildDict", "search", "search",
+//             "buildDict", "search", "search"], args = [[], [["a", "b"]], ["a"],
+//             ["ab"], [["a"]], ["a"], ["z"]]
+//     Output: [null, null, true, false, null, false, true]
+//     Explanation:
+//       - First buildDict({"a", "b"}) creates root children 'a' and 'b' (both
+//         is_end = true) with max_len_ = 1.
+//       - search("a") substitutes 'a' with sibling child 'b' at i = 0 and returns
+//         true, whereas search("ab") has length 2 > max_len_ (1) and returns false.
+//       - Second buildDict({"a"}) clears nodes_, inserts only "a", and sets
+//         max_len_ = 1.
+//       - search("a") finds no sibling child at the root and returns false with 0
+//         mismatches, while search("z") tries root child 'a' at i = 0 and returns
+//         true.
+//
 // Algorithm:
 //   Insert every dictionary word into an arena-backed Trie and track the
 //   maximum word length `max_len_` for O(1) rejection of overlong queries.

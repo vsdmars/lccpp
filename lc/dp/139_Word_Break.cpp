@@ -8,6 +8,51 @@
 //   Constraints: 1 <= s.length <= 300; 1 <= wordDict.length <= 1000;
 //   1 <= wordDict[i].length <= 20; lowercase English letters only.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "leetcode", wordDict = ["leet", "code"]
+//     Output: true
+//     Explanation:
+//       - Insert "leet" and "code" into dict with max_word_len = 4, and initialize
+//         dp[0] = true and dp[1..8] = false.
+//       - For r = 1..3, no prefix s[0..r-1] matches dict, while at r = 4 (len = 4,
+//         l = 0), dp[0] is true and s.substr(0, 4) = "leet" is in dict, setting
+//         dp[4] = true.
+//       - For r = 5..7, only dp[0] and dp[4] are true among prior positions, and no
+//         candidate slice within max_word_len = 4 matches dict, leaving dp[5..7] =
+//         false.
+//       - At r = 8 with len = 4 (l = 4), dp[4] is true and s.substr(4, 4) = "code"
+//         is in dict, setting dp[8] = true and returning true.
+//
+//   Example 2:
+//     Input:  s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+//     Output: false
+//     Explanation:
+//       - Populate dict with the five words (max_word_len = 4), and initialize
+//         dp[0] = true and dp[1..9] = false.
+//       - At r = 3 and r = 4 with l = 0, s.substr(0, 3) = "cat" and s.substr(0, 4)
+//         = "cats" are in dict, setting dp[3] = true and dp[4] = true.
+//       - At r = 7, l = 3 checks s.substr(3, 4) = "sand" with dp[3] = true (and l =
+//         4 would also match "and"), setting dp[7] = true while dp[5], dp[6], and
+//         dp[8] stay false.
+//       - At r = 9, checking len = 1..4 probes l = 8, 7, 6, 5; only dp[7] is true
+//         and s.substr(7, 2) = "og" is absent from dict, so dp[9] remains false and
+//         wordBreak returns false.
+//
+//   Example 3:
+//     Input:  s = "aaaaaaa", wordDict = ["aaaa", "aaa"]
+//     Output: true
+//     Explanation:
+//       - Build dict = {"aaaa", "aaa"} with max_word_len = 4, and initialize dp[0]
+//         = true and dp[1..7] = false.
+//       - dp[1] and dp[2] stay false, while l = 0 matches "aaa" at r = 3 (dp[3] =
+//         true) and "aaaa" at r = 4 (dp[4] = true).
+//       - dp[5] stays false because no split of length 1..4 reaches a true prefix,
+//         and at r = 6 with l = 3, dp[3] = true and s.substr(3, 3) = "aaa" set
+//         dp[6] = true.
+//       - At r = 7, len = 3 (l = 4) finds dp[4] = true and s.substr(4, 3) = "aaa"
+//         in dict, setting dp[7] = true and returning true.
+//
 // Algorithm:
 //   Bottom-up 1D Dynamic Programming over string prefix lengths:
 //   - Insert all dictionary words into an unordered_set<std::string_view> for

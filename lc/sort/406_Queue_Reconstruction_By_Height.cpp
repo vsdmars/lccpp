@@ -9,6 +9,43 @@
 //   constraint is satisfied. The input is guaranteed to represent a valid queue
 //   with `1 <= people.length <= 2000`.
 //
+// Examples:
+//   Example 1:
+//     Input:  people = [[7, 0], [4, 4], [7, 1], [5, 0], [6, 1], [5, 2]]
+//     Output: [[5, 0], [7, 0], [5, 2], [6, 1], [4, 4], [7, 1]]
+//     Explanation:
+//       - Sort descending by height and ascending by k on ties to [[7, 0], [7, 1],
+//         [6, 1], [5, 0], [5, 2], [4, 4]].
+//       - Insert [7, 0] at index 0, [7, 1] at index 1, and [6, 1] at index 1,
+//         producing [[7, 0], [6, 1], [7, 1]].
+//       - Insert [5, 0] at index 0 and [5, 2] at index 2 to obtain [[5, 0], [7, 0],
+//         [5, 2], [6, 1], [7, 1]].
+//       - Insert [4, 4] at index 4 to produce [[5, 0], [7, 0], [5, 2], [6, 1], [4,
+//         4], [7, 1]].
+//
+//   Example 2:
+//     Input:  people = [[6, 0], [5, 0], [4, 0], [3, 2], [2, 2], [1, 4]]
+//     Output: [[4, 0], [5, 0], [2, 2], [3, 2], [1, 4], [6, 0]]
+//     Explanation:
+//       - Sorting keeps the height-descending order [[6, 0], [5, 0], [4, 0], [3,
+//         2], [2, 2], [1, 4]].
+//       - Insert [6, 0], [5, 0], and [4, 0] each at index 0, forming [[4, 0], [5,
+//         0], [6, 0]].
+//       - Insert [3, 2] at index 2 and then [2, 2] at index 2, giving [[4, 0], [5,
+//         0], [2, 2], [3, 2], [6, 0]].
+//       - Insert [1, 4] at index 4 to return [[4, 0], [5, 0], [2, 2], [3, 2], [1,
+//         4], [6, 0]].
+//
+//   Example 3:
+//     Input:  people = [[5, 2], [5, 0], [5, 1]]
+//     Output: [[5, 0], [5, 1], [5, 2]]
+//     Explanation:
+//       - Because all heights equal 5, the comparator orders ties by ascending k to
+//         [[5, 0], [5, 1], [5, 2]].
+//       - Insert [5, 0] at index 0, [5, 1] at index 1, and [5, 2] at index 2 into
+//         result.
+//       - Return [[5, 0], [5, 1], [5, 2]].
+//
 // Algorithm:
 //   Greedy tallest-first sorting with index insertion:
 //   1. Sort `people` in descending order of height `h`; break ties in ascending

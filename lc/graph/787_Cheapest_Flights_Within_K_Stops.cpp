@@ -7,6 +7,46 @@
 //   `dst` with at most `k` intermediate stops (meaning at most `k + 1` flight
 //   legs). Return `-1` if no valid route exists within the stop limit.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3, flights = [[0, 1, 100], [1, 2, 100], [0, 2, 500]], src = 0,
+//             dst = 2, k = 1
+//     Output: 200
+//     Explanation:
+//       - Push initial state (cost=0, stops=0, city=0) onto the min-heap with
+//         best_stops initialized to infinity.
+//       - Pop (0, 0, 0), record best_stops[0] = 0, and push neighbors (100, 1, 1)
+//         and (500, 1, 2).
+//       - Pop cheaper state (100, 1, 1), set best_stops[1] = 1, and push (200, 2,
+//         2) via edge 1 -> 2.
+//       - Pop (200, 2, 2) before (500, 1, 2) and immediately return 200 because
+//         cur.city == dst.
+//
+//   Example 2:
+//     Input:  n = 5, flights = [[0, 1, 5], [1, 2, 5], [0, 3, 2], [3, 1, 2], [1, 4,
+//             1], [4, 2, 1]], src = 0, dst = 2, k = 2
+//     Output: 7
+//     Explanation:
+//       - Start from (0, 0, 0), pop (2, 1, 3) with best_stops[3] = 1, and push (4,
+//         2, 1) ahead of direct edge (5, 1, 1).
+//       - Pop (4, 2, 1), set best_stops[1] = 2, and push (9, 3, 2) and (5, 3, 4).
+//       - Pop (5, 1, 1); because stops=1 < best_stops[1]=2, do not prune—update
+//         best_stops[1] = 1 and push (10, 2, 2) and (6, 2, 4).
+//       - Prune (5, 3, 4) because stops=3 > k=2, then pop (6, 2, 4) with
+//         best_stops[4] = 2 and push (7, 3, 2).
+//       - Pop (7, 3, 2) at dst=2 before (9, 3, 2) and return 7 along path 0 -> 1 ->
+//         4 -> 2.
+//
+//   Example 3:
+//     Input:  n = 3, flights = [[0, 1, 100]], src = 0, dst = 2, k = 1
+//     Output: -1
+//     Explanation:
+//       - Pop (0, 0, 0), set best_stops[0] = 0, and push (100, 1, 1).
+//       - Pop (100, 1, 1) and set best_stops[1] = 1; adj[1] is empty so the
+//         min-heap becomes empty without reaching dst=2, returning -1.
+//       - In dp(), dist updates from [0, inf, inf] to [0, 100, inf] across steps
+//         0..1, so dist[2] >= kInf returns -1.
+//
 // Algorithm:
 //   This file implements two classic shortest-path algorithms:
 //     1. `findCheapestPrice` (Modified Dijkstra with Stop-Count Pruning):

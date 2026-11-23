@@ -6,6 +6,41 @@
 //   frequent strings ordered from highest frequency to lowest frequency. Words
 //   with the same frequency must be ordered lexicographically (ascending).
 //
+// Examples:
+//   Example 1:
+//     Input:  words = ["i", "love", "leetcode", "i", "love", "coding"], k = 2
+//     Output: ["i", "love"]
+//     Explanation:
+//       - Count frequencies into counts: {"i": 2, "love": 2, "leetcode": 1,
+//         "coding": 1}.
+//       - Insert all four entries into the size-2 min-heap ordered by WorseAtTop
+//         (lowest count, then lexicographically largest word), evicting "leetcode"
+//         and "coding" (count 1).
+//       - Popping the remaining 2 entries yields ["love", "i"] because "love" > "i"
+//         places "love" at the top as worse on the count-2 tie.
+//       - Reverse result to best-to-worst order, returning ["i", "love"].
+//
+//   Example 2:
+//     Input:  words = ["the", "day", "is", "sunny", "the", "the", "the", "sunny",
+//             "is", "is"], k = 4
+//     Output: ["the", "is", "sunny", "day"]
+//     Explanation:
+//       - Count frequencies into counts: {"the": 4, "is": 3, "sunny": 2, "day": 1}.
+//       - Push all 4 unique entries into the heap with limit = 4; since heap.size()
+//         never exceeds 4, no entry is evicted.
+//       - Pop entries in worst-to-best order ["day", "sunny", "is", "the"] and
+//         reverse to return ["the", "is", "sunny", "day"].
+//
+//   Example 3:
+//     Input:  words = ["delta", "beta", "alpha", "gamma"], k = 2
+//     Output: ["alpha", "beta"]
+//     Explanation:
+//       - Count frequencies so all four words have count 1.
+//       - When pushing into the size-2 heap, equal-count ties evict the
+//         lexicographically larger words "gamma" and "delta".
+//       - Popping the surviving entries yields ["beta", "alpha"], which reverses to
+//         ["alpha", "beta"].
+//
 // Algorithm:
 //   1. Bounded Min-Heap of Size k (primary):
 //      Count each word's frequency in a hash map keyed by `std::string_view`

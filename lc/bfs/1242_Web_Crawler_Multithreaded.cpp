@@ -13,6 +13,71 @@
 //   - Never crawl any URL more than once.
 //   - Execute blocking `getUrls` calls concurrently across multiple threads.
 //
+// Examples:
+//   Example 1:
+//     Input:  startUrl = "http://news.yahoo.com/news/topics/", links =
+//             {"http://news.yahoo.com": ["http://news.yahoo.com/news",
+//             "http://news.google.com"], "http://news.yahoo.com/news":
+//             ["http://news.yahoo.com/news/topics/", "http://news.yahoo.com/us"],
+//             "http://news.yahoo.com/news/topics/": ["http://news.yahoo.com",
+//             "http://news.yahoo.com/news"], "http://news.google.com":
+//             ["http://news.yahoo.com/news/topics/", "http://news.yahoo.com/us"]}
+//     Output: ["http://news.yahoo.com", "http://news.yahoo.com/news",
+//             "http://news.yahoo.com/news/topics/", "http://news.yahoo.com/us"]
+//     Explanation:
+//       - Extract target_host = "news.yahoo.com", seed visited and pending with
+//         "http://news.yahoo.com/news/topics/", and launch 4 worker threads.
+//       - A worker fetches "http://news.yahoo.com/news/topics/" and enqueues unseen
+//         same-host neighbors "http://news.yahoo.com" and
+//         "http://news.yahoo.com/news".
+//       - Workers concurrently fetch both queued URLs, filtering out
+//         "http://news.google.com" (different host), skipping already-visited
+//         links, and enqueuing "http://news.yahoo.com/us".
+//       - After a worker fetches "http://news.yahoo.com/us" with no new links,
+//         pending is empty and active_workers reaches 0, setting done = true and
+//         returning the 4 visited URLs.
+//
+//   Example 2:
+//     Input:  startUrl = "http://news.google.com", links =
+//             {"http://news.google.com": ["http://news.yahoo.com",
+//             "http://news.yahoo.com/news"], "http://news.yahoo.com":
+//             ["http://news.google.com"]}
+//     Output: ["http://news.google.com"]
+//     Explanation:
+//       - Set target_host = "news.google.com" and initialize visited and pending
+//         with "http://news.google.com".
+//       - A worker pops "http://news.google.com" and calls getUrls, receiving
+//         "http://news.yahoo.com" and "http://news.yahoo.com/news".
+//       - Both returned URLs have hostname "news.yahoo.com" != "news.google.com",
+//         so neither is inserted into visited or pending.
+//       - With pending empty and active_workers back to 0, done is set to true,
+//         workers join, and only ["http://news.google.com"] is returned.
+//
+//   Example 3:
+//     Input:  startUrl = "http://example.org/a", links = {"http://example.org/a":
+//             ["http://example.org/b", "http://example.org/c",
+//             "http://example.com/external"], "http://example.org/b":
+//             ["http://example.org/d", "http://example.org/a"],
+//             "http://example.org/c": ["http://example.org/d",
+//             "http://example.org/e"], "http://example.org/d":
+//             ["http://example.org/a"], "http://example.org/e":
+//             ["http://example.org/b"], "http://example.org/isolated":
+//             ["http://example.org/a"]}
+//     Output: ["http://example.org/a", "http://example.org/b",
+//             "http://example.org/c", "http://example.org/d",
+//             "http://example.org/e"]
+//     Explanation:
+//       - Extract target_host = "example.org" and seed visited and pending with
+//         "http://example.org/a".
+//       - Fetching .../a inserts .../b and .../c into visited and pending while
+//         rejecting "http://example.com/external" for its "example.com" host.
+//       - Workers fetch .../b and .../c concurrently: .../d is added once to
+//         visited (the second thread skips it via visited.insert), and .../c also
+//         enqueues .../e.
+//       - Fetching .../d and .../e yields only already-visited back-edges;
+//         unreachable .../isolated is never queued, so crawling finishes and
+//         returns the 5 discovered URLs.
+//
 // Algorithm:
 //   Fixed-size Worker-Pool Concurrent BFS:
 //   1. Extract `target_host` from `startUrl` by slicing between `"://"` and the

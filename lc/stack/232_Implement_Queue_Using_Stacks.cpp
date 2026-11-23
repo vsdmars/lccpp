@@ -8,6 +8,52 @@
 //   and empty() to check whether the queue contains any elements. Only valid
 //   stack operations (push, top, pop, size, empty) are permitted.
 //
+// Examples:
+//   Example 1:
+//     Input:  ["MyQueue", "empty", "push", "push", "peek", "pop", "empty", "pop",
+//             "empty"], [[], [], [1], [2], [], [], [], [], []]
+//     Output: [null, true, null, null, 1, 1, false, 2, true]
+//     Explanation:
+//       - Initially both in_stack_ and out_stack_ are empty, so empty() returns
+//         true.
+//       - push(1) and push(2) push onto in_stack_, leaving in_stack_ = [1, 2] (top
+//         2) and out_stack_ = [].
+//       - peek() calls transfer_if_needed(), which pours in_stack_ into out_stack_
+//         = [2, 1] (top 1), and returns 1.
+//       - pop() pops 1 from out_stack_ (leaving out_stack_ = [2]), empty() returns
+//         false, and the second pop() removes and returns 2, leaving both stacks
+//         empty so empty() returns true.
+//
+//   Example 2:
+//     Input:  ["MyQueue", "push", "push", "pop", "push", "push", "peek", "pop",
+//             "pop", "pop", "empty"], [[], [10], [20], [], [30], [40], [], [], [],
+//             [], []]
+//     Output: [null, null, null, 10, null, null, 20, 20, 30, 40, true]
+//     Explanation:
+//       - push(10) and push(20) load in_stack_ = [10, 20]; pop() transfers both to
+//         out_stack_ = [20, 10] and pops 10, leaving out_stack_ = [20].
+//       - push(30) and push(40) append to in_stack_ = [30, 40] without disturbing
+//         out_stack_ = [20].
+//       - peek() and the next pop() see out_stack_ is non-empty, so
+//         transfer_if_needed() does nothing and they read then pop 20, leaving
+//         out_stack_ = [].
+//       - The next pop() finds out_stack_ empty and transfers in_stack_ = [30, 40]
+//         into out_stack_ = [40, 30], popping 30 then 40 before empty() returns
+//         true.
+//
+//   Example 3:
+//     Input:  ["MyQueue", "push", "peek", "pop", "empty", "push", "push", "push",
+//             "pop", "pop", "pop"], [[], [1], [], [], [], [-5], [0], [7], [], [],
+//             []]
+//     Output: [null, null, 1, 1, true, null, null, null, -5, 0, 7]
+//     Explanation:
+//       - push(1) puts 1 in in_stack_; peek() transfers it to out_stack_ and
+//         returns 1, then pop() removes it so empty() returns true.
+//       - After draining, push(-5), push(0), and push(7) push onto in_stack_ = [-5,
+//         0, 7].
+//       - The first subsequent pop() transfers all three into out_stack_ = [7, 0,
+//         -5], and the three pop() calls return -5, 0, and 7 in FIFO order.
+//
 // Algorithm:
 //   Use lazy two-stack transfer. Maintain an input stack (`in_stack_`) for
 //   incoming pushes and an output stack (`out_stack_`) for front reads/pops.

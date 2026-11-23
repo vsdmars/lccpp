@@ -9,6 +9,47 @@
 //   starting station index that allows completing one full clockwise circuit,
 //   or `-1` if no such starting station exists.
 //
+// Examples:
+//   Example 1:
+//     Input:  gas = [1, 2, 3, 4, 5], cost = [3, 4, 5, 1, 2]
+//     Output: 3
+//     Explanation:
+//       - Initialize total_surplus = 0, tank = 0, and candidate start = 0.
+//       - At i = 0, delta = 1 - 3 = -2 drops tank to -2 (< 0), so discard [0, 0]
+//         and reset start = 1, tank = 0 (total_surplus = -2).
+//       - At i = 1 (delta = -2) and i = 2 (delta = -2), tank again drops to -2 (<
+//         0) each time, advancing start to 2 and then to 3 with tank = 0
+//         (total_surplus = -6).
+//       - At i = 3 (delta = 4 - 1 = 3) and i = 4 (delta = 5 - 2 = 3), tank climbs
+//         to 3 and then 6 while total_surplus reaches 0.
+//       - Since total_surplus = 0 >= 0 after the pass, return start = 3.
+//
+//   Example 2:
+//     Input:  gas = [2, 3, 4], cost = [3, 4, 3]
+//     Output: -1
+//     Explanation:
+//       - Initialize total_surplus = 0, tank = 0, and candidate start = 0.
+//       - At i = 0 (delta = 2 - 3 = -1) and i = 1 (delta = 3 - 4 = -1), tank drops
+//         below 0 each time, advancing start to 1 and then 2 with tank reset to 0
+//         (total_surplus = -2).
+//       - At i = 2, delta = 4 - 3 = 1 leaves tank = 1 and total_surplus = -1.
+//       - Because total_surplus = -1 < 0 at the end of the loop, no starting
+//         station can complete the circuit, so return -1.
+//
+//   Example 3:
+//     Input:  gas = [5, 1, 2, 3, 4], cost = [4, 4, 1, 5, 1]
+//     Output: 4
+//     Explanation:
+//       - At i = 0 (delta = 1), tank = 1 and total_surplus = 1; at i = 1 (delta =
+//         -3), tank drops to -2 (< 0), resetting start = 2 and tank = 0
+//         (total_surplus = -2).
+//       - At i = 2 (delta = 1), tank = 1 and total_surplus = -1; at i = 3 (delta =
+//         -2), tank drops to -1 (< 0), resetting start = 4 and tank = 0
+//         (total_surplus = -3).
+//       - At i = 4 (delta = 4 - 1 = 3), tank becomes 3 and total_surplus reaches 0.
+//       - Since total_surplus = 0 >= 0, return start = 4, whose suffix surplus of 3
+//         exactly covers the -3 deficit of stations [0, 3].
+//
 // Algorithm:
 //   Single-pass greedy prefix-reset algorithm based on two observations:
 //   1. Global feasibility: A full circuit exists if and only if

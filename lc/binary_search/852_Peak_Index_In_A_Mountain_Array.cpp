@@ -8,6 +8,42 @@
 //   Given a guaranteed mountain array `arr`, return the peak index `i`.
 //   Constraints: 3 <= arr.length <= 10^5, 0 <= arr[i] <= 10^6.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [0, 1, 0]
+//     Output: 1
+//     Explanation:
+//       - Initialize closed bounds lhs = 0 and rhs = 2 since arr.size() is 3.
+//       - On iteration 1, mid = 0 + (2 - 0) / 2 = 1; arr[1] = 1 < arr[2] = 0 is
+//         false, so set rhs = 1.
+//       - On iteration 2, mid = 0 + (1 - 0) / 2 = 0; arr[0] = 0 < arr[1] = 1 is
+//         true, so set lhs = 1.
+//       - Loop terminates with lhs == rhs == 1 and returns peak index 1.
+//
+//   Example 2:
+//     Input:  arr = [1, 3, 5, 7, 9, 12, 4]
+//     Output: 5
+//     Explanation:
+//       - Initialize closed bounds lhs = 0 and rhs = 6.
+//       - On iteration 1, mid = 3 has arr[3] = 7 < arr[4] = 9, so move left bound
+//         to lhs = 4.
+//       - On iteration 2, mid = 5 has arr[5] = 12 < arr[6] = 4 false, so tighten
+//         right bound to rhs = 5.
+//       - On iteration 3, mid = 4 has arr[4] = 9 < arr[5] = 12, advancing lhs to 5
+//         so lhs == rhs == 5 is returned.
+//
+//   Example 3:
+//     Input:  arr = [1, 100, 90, 80, 70, 60, 50, 10]
+//     Output: 1
+//     Explanation:
+//       - Initialize closed bounds lhs = 0 and rhs = 7.
+//       - On iteration 1, mid = 3 has arr[3] = 80 < arr[4] = 70 false, shrinking
+//         the interval to [0, 3].
+//       - On iteration 2, mid = 1 has arr[1] = 100 < arr[2] = 90 false, shrinking
+//         the interval to [0, 1].
+//       - On iteration 3, mid = 0 has arr[0] = 1 < arr[1] = 100 true, setting lhs =
+//         1 and returning 1.
+//
 // Algorithm:
 //   The adjacent slope predicate `arr[j] > arr[j + 1]` is false along the
 //   strictly ascending prefix `[0, peak - 1]` and true along the descending

@@ -8,6 +8,40 @@
 //   `1 <= index1 < index2 <= numbers.size()`. Exactly one solution is
 //   guaranteed to exist, and the same element may not be used twice.
 //
+// Examples:
+//   Example 1:
+//     Input:  numbers = [2, 7, 11, 15], target = 9
+//     Output: [1, 2]
+//     Explanation:
+//       - Initialize left = 0 (numbers[0] = 2) and right = 3 (numbers[3] = 15) with
+//         target64 = 9.
+//       - Compute sum = 2 + 15 = 17 > 9, so decrement right to 2 (numbers[2] = 11).
+//       - Compute sum = 2 + 11 = 13 > 9, so decrement right to 1 (numbers[1] = 7).
+//       - Compute sum = 2 + 7 = 9 == 9 and return 1-based indices [0 + 1, 1 + 1] =
+//         [1, 2].
+//
+//   Example 2:
+//     Input:  numbers = [1, 3, 3, 8], target = 6
+//     Output: [2, 3]
+//     Explanation:
+//       - Initialize left = 0 (numbers[0] = 1) and right = 3 (numbers[3] = 8) with
+//         target64 = 6.
+//       - Compute sum = 1 + 8 = 9 > 6, so decrement right to 2 (numbers[2] = 3).
+//       - Compute sum = 1 + 3 = 4 < 6, so increment left to 1 (numbers[1] = 3).
+//       - Compute sum = 3 + 3 = 6 == 6 with left < right, returning 1-based indices
+//         [1 + 1, 2 + 1] = [2, 3].
+//
+//   Example 3:
+//     Input:  numbers = [-2147483648, -1, 0, 1, 2147483647], target = -1
+//     Output: [1, 5]
+//     Explanation:
+//       - Initialize left = 0 (numbers[0] = -2147483648) and right = 4 (numbers[4]
+//         = 2147483647) with target64 = -1.
+//       - Widen both operands to int64_t and compute sum = -2147483648 + 2147483647
+//         = -1 without 32-bit signed overflow.
+//       - Since sum == target64, immediately return 1-based indices [0 + 1, 4 + 1]
+//         = [1, 5].
+//
 // Algorithm:
 //   Converging Two Pointers:
 //     Place `left` at the first element (`0`) and `right` at the last element

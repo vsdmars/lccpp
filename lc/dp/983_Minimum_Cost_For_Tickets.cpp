@@ -7,6 +7,48 @@
 //   the prices of 1-day, 7-day, and 30-day consecutive travel passes. Return
 //   the minimum total cost required to cover every day in `days`.
 //
+// Examples:
+//   Example 1:
+//     Input:  days = [1, 4, 6, 7, 8, 20], costs = [2, 7, 15]
+//     Output: 11
+//     Explanation:
+//       - Allocate dp of size 21 with dp[0] = 0 and set day_idx = 0; at travel day
+//         d = 1, dp[1] = min(2 + dp[0], 7 + dp[0], 15 + dp[0]) = 2.
+//       - Non-travel days d = 2 and d = 3 carry forward dp[2] = dp[3] = 2, then
+//         travel days d = 4 and d = 6 extend via 1-day passes to dp[4] = 4 and
+//         dp[6] = 6 (with dp[5] = 4).
+//       - At d = 7, the 7-day pass beats a 1-day pass (7 + dp[0] = 7 vs 2 + dp[6] =
+//         8), so dp[7] = 7, and at d = 8, dp[8] = min(2 + dp[7], 7 + dp[1], 15 +
+//         dp[0]) = 9.
+//       - Carry dp[8] = 9 across non-travel days 9..19, then at d = 20 pick min(2 +
+//         dp[19], 7 + dp[13], 15 + dp[0]) = min(11, 16, 15) = 11 and return dp[20]
+//         = 11.
+//
+//   Example 2:
+//     Input:  days = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 30, 31], costs = [2, 7, 15]
+//     Output: 17
+//     Explanation:
+//       - For d = 1..3, 1-day passes are cheapest (dp[1] = 2, dp[2] = 4, dp[3] =
+//         6); for d = 4..7, buying a 7-day pass at dp[0] gives dp[4..7] = 7.
+//       - For d = 8..10, 1-day or shifted 7-day passes yield dp[8] = 9, dp[9] = 11,
+//         and dp[10] = 13, which carries unchanged through non-travel days d =
+//         11..29.
+//       - At d = 30, min(2 + dp[29], 7 + dp[23], 15 + dp[0]) = min(15, 20, 15) =
+//         15, covering days 1..30 with one 30-day pass.
+//       - At d = 31, min(2 + dp[30], 7 + dp[24], 15 + dp[1]) = min(17, 20, 17) =
+//         17, so the method returns dp[31] = 17.
+//
+//   Example 3:
+//     Input:  days = [1, 10, 25], costs = [10, 10, 5]
+//     Output: 5
+//     Explanation:
+//       - At d = 1, compare 1-day (10 + dp[0] = 10), 7-day (10 + dp[0] = 10), and
+//         30-day (5 + dp[0] = 5) passes, setting dp[1] = 5.
+//       - Carry dp[1] = 5 through non-travel days 2..9; at d = 10, 5 + dp[0] = 5
+//         still beats 10 + dp[9] = 15 and 10 + dp[3] = 15, giving dp[10] = 5.
+//       - Carry 5 through days 11..24 and at d = 25 select 5 + dp[0] = 5 over 15,
+//         returning dp[25] = 5.
+//
 // Algorithm:
 //   Bottom-up calendar dynamic programming. Let `dp[d]` be the minimum cost to
 //   cover all planned travel days in `[1, d]`, with `dp[0] = 0`. Iterate day

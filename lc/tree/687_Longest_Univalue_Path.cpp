@@ -7,6 +7,42 @@
 //   may not pass through the root, and its length is measured by the number of
 //   edges between the endpoints.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [5, 4, 5, 1, 1, null, 5]
+//     Output: 2
+//     Explanation:
+//       - In the left subtree, both leaf 1 nodes return 0, and parent 4 gets
+//         left_arrow = 0 and right_arrow = 0 since 1 != 4, returning 0.
+//       - In the right subtree, leaf 5 returns 0, and parent 5 matches its right
+//         child to set right_arrow = 0 + 1 = 1, updating max_edges = 1 and
+//         returning 1.
+//       - At root 5, left_arrow = 0 (4 != 5) and right_arrow = 1 + 1 = 2 (5 == 5),
+//         updating max_edges = std::max(1, 0 + 2) = 2.
+//
+//   Example 2:
+//     Input:  root = [1, 4, 5, 4, 4, null, 5]
+//     Output: 2
+//     Explanation:
+//       - Both left-subtree leaf 4 nodes return 0; at their parent 4, both children
+//         match its value, yielding left_arrow = 1 and right_arrow = 1.
+//       - Joining both downward branches at node 4 updates max_edges = 1 + 1 = 2,
+//         and dfs returns std::max(1, 1) = 1 to the root.
+//       - Right child 5 connects to leaf 5 for right_arrow = 1, while root 1
+//         matches neither child (left_arrow = 0, right_arrow = 0), keeping
+//         max_edges = 2.
+//
+//   Example 3:
+//     Input:  root = [-3, -3, -3, -3, null, null, -3]
+//     Output: 4
+//     Explanation:
+//       - Left leaf -3 returns 0, so its parent -3 computes left_arrow = 1 and
+//         right_arrow = 0 and returns 1 upward.
+//       - Symmetrically, right leaf -3 returns 0, so its parent -3 computes
+//         left_arrow = 0 and right_arrow = 1 and returns 1 upward.
+//       - At root -3, both children match -3, giving left_arrow = 1 + 1 = 2 and
+//         right_arrow = 1 + 1 = 2, updating max_edges = 2 + 2 = 4.
+//
 // Algorithm:
 //   Use post-order DFS where `dfs(node)` returns the length (in edges) of the
 //   longest downward univalue path starting at `node` and extending into at

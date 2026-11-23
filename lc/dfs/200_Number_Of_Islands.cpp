@@ -7,6 +7,43 @@
 //   adjacent land cells horizontally or vertically (diagonals do not connect)
 //   and is assumed to be surrounded by water outside all four edges.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid =
+//             [["1","1","1","1","0"],["1","1","0","1","0"],["1","1","0","0","0"],["0","0","0","0","0"]]
+//     Output: 1
+//     Explanation:
+//       - The row-major scan encounters '1' at (0, 0), increments count to 1, and
+//         invokes sinkIsland(grid, 0, 0, 4, 5).
+//       - sinkIsland traverses all 4-directionally connected land cells across rows
+//         0..2 and overwrites every visited '1' with '0' in place.
+//       - Because all nine land cells belong to this single component, the rest of
+//         the grid scan sees only '0' and returns 1.
+//
+//   Example 2:
+//     Input:  grid =
+//             [["1","1","0","0","0"],["1","1","0","0","0"],["0","0","1","0","0"],["0","0","0","1","1"]]
+//     Output: 3
+//     Explanation:
+//       - At (0, 0), count becomes 1 and sinkIsland flips the 2x2 land block at
+//         (0,0), (0,1), (1,0), (1,1) to '0'.
+//       - Continuing the scan reaches (2, 2), increments count to 2, and sinks that
+//         single cell since kDirs only checks orthogonal neighbors.
+//       - At (3, 3), count becomes 3 and sinkIsland sinks (3, 3) and (3, 4),
+//         completing the scan and returning 3.
+//
+//   Example 3:
+//     Input:  grid = [["1","0","1"],["0","1","0"],["1","0","1"]]
+//     Output: 5
+//     Explanation:
+//       - At (0, 0), count increments to 1 and sinkIsland flips (0, 0) to '0',
+//         stopping immediately because orthogonal neighbors (0, 1) and (1, 0) are
+//         '0'.
+//       - Each remaining '1' at (0, 2), (1, 1), (2, 0), and (2, 2) likewise has no
+//         4-directional '1' neighbors.
+//       - Each of those four cells triggers its own sinkIsland call, raising count
+//         to 5.
+//
 // Algorithm:
 //   Connected-component counting via in-place Depth-First Search (DFS) flood
 //   fill ("sink and count").

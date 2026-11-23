@@ -6,6 +6,40 @@
 //   subarray is called "nice" if it contains exactly `k` odd numbers. Return
 //   the total number of nice subarrays in `nums`.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 1, 2, 1, 1], k = 3
+//     Output: 2
+//     Explanation:
+//       - countAtMost(nums, 3) keeps left = 0 for right = 0..3 (adding 1 + 2 + 3 +
+//         4 = 10) and shifts left to 1 at right = 4 (adding 4), returning 14.
+//       - countAtMost(nums, 2) keeps left = 0 for right = 0..2 (adding 1 + 2 + 3 =
+//         6), shifts left to 1 at right = 3 (+3), and shifts left to 2 at right = 4
+//         (+3), returning 12.
+//       - Subtracting the two passes gives 14 - 12 = 2 nice subarrays ([1, 1, 2, 1]
+//         and [1, 2, 1, 1]).
+//
+//   Example 2:
+//     Input:  nums = [2, 2, 2, 1, 2, 2, 1, 2, 2, 2], k = 2
+//     Output: 16
+//     Explanation:
+//       - countAtMost(nums, 2) encounters only two odds (at indices 3 and 6), so
+//         left remains 0 across all 10 positions and accumulates 1 + 2 + ... + 10 =
+//         55.
+//       - countAtMost(nums, 1) keeps left = 0 for right = 0..5 (+21), advances left
+//         to 4 at right = 6 (+3), and keeps left = 4 for right = 7..9 (+4 + 5 + 6 =
+//         +15), returning 39.
+//       - Subtracting returns 55 - 39 = 16 nice subarrays.
+//
+//   Example 3:
+//     Input:  nums = [2, 4, 6], k = 0
+//     Output: 6
+//     Explanation:
+//       - countAtMost(nums, 0) sees only even numbers, so odd_budget stays 0 and
+//         left stays 0, accumulating 1 + 2 + 3 = 6 subarrays.
+//       - countAtMost(nums, -1) immediately returns 0 because max_odds < 0.
+//       - Returning countAtMost(nums, 0) - countAtMost(nums, -1) yields 6 - 0 = 6.
+//
 // Algorithm:
 //   Exact-K via At-Most-K inclusion-exclusion:
 //     exact(k) = atMost(k) - atMost(k - 1).

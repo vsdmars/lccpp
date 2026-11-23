@@ -9,6 +9,36 @@
 //   these operations, modulo 10^9 + 7. Maximize the true product first before
 //   applying the modulus.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [0, 4], k = 5
+//     Output: 20
+//     Explanation:
+//       - Build min_heap from [0, 4] so the minimum value at the top is 0.
+//       - Repeat k = 5 times popping the smallest element and pushing smallest + 1,
+//         advancing 0 -> 1 -> 2 -> 3 -> 4 -> 5 to leave [4, 5] in min_heap.
+//       - Drain min_heap and multiply all elements modulo 1000000007 to obtain 4 *
+//         5 = 20.
+//
+//   Example 2:
+//     Input:  nums = [6, 3, 3, 2], k = 2
+//     Output: 216
+//     Explanation:
+//       - Build min_heap from [6, 3, 3, 2] with 2 at the top.
+//       - Step 1 pops 2 and pushes 3, leaving [3, 3, 3, 6] in min_heap.
+//       - Step 2 pops 3 and pushes 4, leaving [3, 3, 4, 6] in min_heap.
+//       - Drain min_heap and compute (3 * 3 * 4 * 6) % 1000000007 = 216.
+//
+//   Example 3:
+//     Input:  nums = [0, 0, 5], k = 1
+//     Output: 0
+//     Explanation:
+//       - Build min_heap from [0, 0, 5] with two zeros and 0 at the top.
+//       - Apply k = 1 increment by popping one 0 and pushing 1, leaving [0, 1, 5]
+//         in min_heap.
+//       - When draining min_heap, the first popped element is 0, so the loop
+//         returns 0 immediately.
+//
 // Algorithm:
 //   Greedy Min-Heap Increment:
 //     Consider any two elements x > y >= 0 with remaining product P >= 0:

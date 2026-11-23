@@ -10,6 +10,55 @@
 //   cells traveled from `start` (excluded) to `destination` (included). Return
 //   -1 if the ball cannot stop at `destination`.
 //
+// Examples:
+//   Example 1:
+//     Input:  maze = [[0, 0, 1, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 1, 0], [1, 1, 0,
+//             1, 1], [0, 0, 0, 0, 0]], start = [0, 4], destination = [4, 4]
+//     Output: 12
+//     Explanation:
+//       - Initialize dist[0,4] = 0 and push {0, (0,4)} onto min_heap, while all
+//         other cells start at infinity.
+//       - Pop {0, (0,4)} and roll in all 4 directions, relaxing dist[0,3] = 1 (left
+//         1) and dist[2,4] = 2 (down 2); (2,4) later yields no shorter paths.
+//       - Pop {1, (0,3)} and roll down to relax dist[1,3] = 2, then from (1,3) roll
+//         left 3 cells to relax dist[1,0] = 5 and right 1 cell to relax dist[1,4] =
+//         3.
+//       - Pop {5, (1,0)} and roll down 1 cell to relax dist[2,0] = 6, then from
+//         (2,0) roll right 2 cells to relax dist[2,2] = 8.
+//       - Pop {8, (2,2)} and roll down 2 cells to relax dist[4,2] = 10, then pop
+//         {10, (4,2)} and roll right 2 cells to relax dist[4,4] = 12.
+//       - Pop {12, (4,4)} from min_heap; since it matches destination [4, 4],
+//         return 12 immediately.
+//
+//   Example 2:
+//     Input:  maze = [[0, 0, 0, 0, 0, 0], [0, 1, 1, 1, 1, 0], [0, 1, 0, 0, 0, 0],
+//             [0, 0, 0, 1, 1, 1]], start = [0, 1], destination = [2, 2]
+//     Output: 7
+//     Explanation:
+//       - Initialize dist[0,1] = 0; from (0,1), rolling left stops at (0,0) in 1
+//         step (dist[0,0] = 1) and rolling right stops at (0,5) in 4 steps
+//         (dist[0,5] = 4).
+//       - Pop {1, (0,0)} and roll down 3 cells to relax dist[3,0] = 4, then pop {4,
+//         (0,5)} and roll down 2 cells to relax dist[2,5] = 6.
+//       - Pop {4, (3,0)} and roll right 2 cells to relax dist[3,2] = 6, then pop
+//         {6, (2,5)} and roll left 3 cells to set dist[2,2] = 9.
+//       - Pop {6, (3,2)} and roll up 1 cell to reach (2,2) at distance 7,
+//         tightening dist[2,2] from 9 to 7 and pushing {7, (2,2)}.
+//       - Pop {7, (2,2)} before the stale {9, (2,2)} entry and return 7.
+//
+//   Example 3:
+//     Input:  maze = [[0, 0, 1, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 1, 0], [1, 1, 0,
+//             1, 1], [0, 0, 0, 0, 0]], start = [0, 4], destination = [3, 2]
+//     Output: -1
+//     Explanation:
+//       - Initialize dist[0,4] = 0 and explore reachable stopping cells via
+//         min_heap.
+//       - Vertical rolls through (3,2) continue past it because both (2,2) and
+//         (4,2) are 0, while horizontal entry is blocked by walls at (3,1) and
+//         (3,3).
+//       - After all reachable stopping cells are settled without popping (3,2),
+//         min_heap becomes empty and shortestDistance returns -1.
+//
 // Algorithm:
 //   Because each roll traverses a variable number of cells (edge weight >= 1),
 //   unweighted BFS minimizes the number of turns rather than total distance.

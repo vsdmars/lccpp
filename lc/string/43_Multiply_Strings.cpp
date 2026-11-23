@@ -12,6 +12,42 @@
 //   - num1 and num2 consist of digits `'0'`-`'9'` only
 //   - Neither input contains leading zeros, except the number `"0"` itself
 //
+// Examples:
+//   Example 1:
+//     Input:  num1 = "123", num2 = "456"
+//     Output: "56088"
+//     Explanation:
+//       - Allocate digits of length 3 + 3 = 6 initialized to [0, 0, 0, 0, 0, 0].
+//       - Process idx1 = 2 ('3') across idx2 = 2..0, accumulating 3*6=18, 3*5=15,
+//         and 3*4=12 with carries to produce [0, 0, 1, 3, 6, 8].
+//       - Process idx1 = 1 ('2') across idx2 = 2..0, updating positions 4..1 with
+//         carries to reach [0, 1, 0, 4, 8, 8].
+//       - Process idx1 = 0 ('1') across idx2 = 2..0, updating positions 3..0 to
+//         finalize digits = [0, 5, 6, 0, 8, 8].
+//       - Skip the leading zero at index 0 (first = 1) and convert digits[1..5] to
+//         "56088".
+//
+//   Example 2:
+//     Input:  num1 = "9999", num2 = "87"
+//     Output: "869913"
+//     Explanation:
+//       - Allocate digits of length 4 + 2 = 6 initialized to all zeros.
+//       - Multiply digit 9 at idx1 = 3 and idx1 = 2 against "87" (idx2 = 1, 0),
+//         updating digits to [0, 0, 0, 7, 8, 3] and then [0, 0, 8, 6, 1, 3].
+//       - Multiply digit 9 at idx1 = 1 and idx1 = 0 against "87", propagating
+//         carries into higher indices to reach [0, 8, 6, 9, 1, 3] and finally [8,
+//         6, 9, 9, 1, 3].
+//       - Observe digits[0] = 8 is non-zero so first stays 0, converting all six
+//         digits to "869913".
+//
+//   Example 3:
+//     Input:  num1 = "12345", num2 = "0"
+//     Output: "0"
+//     Explanation:
+//       - Check the early guard for empty inputs or "0" operands.
+//       - Match num2 == "0" immediately and return "0" without allocating the digit
+//         array.
+//
 // Algorithm:
 //   Grade-school long multiplication into a fixed-size positional digit array:
 //   1. Fast-path `"0"` operands to return `"0"` immediately.

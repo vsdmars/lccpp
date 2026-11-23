@@ -8,6 +8,46 @@
 //   pair differs by exactly one letter and every transformed word belongs to
 //   `wordList`. Return 0 if no valid sequence exists.
 //
+// Examples:
+//   Example 1:
+//     Input:  beginWord = "hit", endWord = "cog", wordList = ["hot", "dot", "dog",
+//             "lot", "log", "cog"]
+//     Output: 5
+//     Explanation:
+//       - ladderLength stores wordList in unvisited, confirms "cog" is present,
+//         initializes frontier with "hit", and sets length = 1.
+//       - At length = 1, mutating index 1 of "hit" to 'o' matches and erases "hot"
+//         from unvisited, pushing "hot" onto frontier and advancing length to 2.
+//       - At length = 2, "hot" mutates index 0 to 'd' and 'l', erasing and
+//         enqueuing "dot" and "lot", then advancing length to 3.
+//       - At length = 3, "dot" and "lot" mutate index 2 to 'g', erasing and
+//         enqueuing "dog" and "log", then advancing length to 4.
+//       - At length = 4, expanding "dog" (or "log") mutates index 0 to 'c' to erase
+//         "cog" == end_word, immediately returning length + 1 = 5.
+//
+//   Example 2:
+//     Input:  beginWord = "hit", endWord = "cog", wordList = ["hot", "dot", "dog",
+//             "lot", "log", "cog", "hog"]
+//     Output: 4
+//     Explanation:
+//       - ladderLength inserts all 7 words including "hog" into unvisited, starts
+//         frontier = ["hit"], and sets length = 1.
+//       - At length = 1, "hit" erases and enqueues "hot", incrementing length to 2.
+//       - At length = 2, "hot" mutates index 2 't' -> 'g' to discover and enqueue
+//         "hog" alongside "dot" and "lot", incrementing length to 3.
+//       - At length = 3, expanding "hog" mutates index 0 'h' -> 'c' to match
+//         end_word "cog" and immediately returns length + 1 = 4 before any 5-word
+//         sequence is reached.
+//
+//   Example 3:
+//     Input:  beginWord = "hit", endWord = "cog", wordList = ["hot", "dot", "dog",
+//             "lot", "log"]
+//     Output: 0
+//     Explanation:
+//       - ladderLength populates unvisited with the 5 words in wordList.
+//       - Because unvisited.contains("cog") is false, ladderLength returns 0
+//         immediately without starting the BFS loop.
+//
 // Algorithm:
 //   Because every transformation step has uniform weight 1, the shortest
 //   sequence length corresponds to the minimum hop count in an unweighted

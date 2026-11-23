@@ -6,6 +6,32 @@
 //   longest strictly increasing contiguous subarray (continuous increasing
 //   subsequence). Return 0 if `nums` is empty.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 3, 5, 4, 7]
+//     Output: 3
+//     Explanation:
+//       - Initialize best_len = 1 and cur_len = 1 for the first element 1.
+//       - At i = 1 (3 > 1) and i = 2 (5 > 3), increment cur_len to 2 and then 3,
+//         updating best_len = 3.
+//       - At i = 3 (4 <= 5), reset cur_len = 1; at i = 4 (7 > 4), increment cur_len
+//         = 2, and return best_len = 3.
+//
+//   Example 2:
+//     Input:  nums = [2, 2, 2, 2, 2]
+//     Output: 1
+//     Explanation:
+//       - Initialize best_len = 1 and cur_len = 1.
+//       - For each index i from 1 to 4, nums[i] > nums[i - 1] (2 > 2) is false, so
+//         cur_len resets to 1 on every step and best_len stays 1.
+//
+//   Example 3:
+//     Input:  nums = []
+//     Output: 0
+//     Explanation:
+//       - Check nums.empty(), which evaluates to true for the empty vector [].
+//       - Return 0 immediately without entering the scan loop.
+//
 // Algorithm:
 //   Single-Pass Sliding Run-Length Scan (O(n) time, O(1) space):
 //     - Unlike general Longest Increasing Subsequence (LC #300), contiguity

@@ -7,6 +7,45 @@
 //   (O(log n) for top-down merge sort, or O(1) for bottom-up iterative merge
 //   sort).
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [4, 2, 1, 3]
+//     Output: [1, 2, 3, 4]
+//     Explanation:
+//       - split_middle starts with slow at 4 and fast at 2, advances one step to
+//         slow = 2 and fast = 3, and severs 2->next into [4, 2] and [1, 3].
+//       - Recursively sort [4, 2] by splitting into [4] and [2] and merging into
+//         [2, 4], and sort [1, 3] by splitting into [1] and [3] and merging into
+//         [1, 3].
+//       - merge_sorted([2, 4], [1, 3]) selects 1, then 2, then 3, and appends 4 to
+//         return [1, 2, 3, 4].
+//
+//   Example 2:
+//     Input:  head = [-1, 5, 3, 4, 0]
+//     Output: [-1, 0, 3, 4, 5]
+//     Explanation:
+//       - split_middle starts with slow at -1 and fast at 5, advances to slow = 5
+//         and fast = 4, and cuts the list into [-1, 5] and [3, 4, 0].
+//       - Left half [-1, 5] splits into [-1] and [5] and merges into [-1, 5]; right
+//         half [3, 4, 0] splits into [3, 4] and [0], sorts [3, 4], and merges with
+//         [0] into [0, 3, 4].
+//       - merge_sorted([-1, 5], [0, 3, 4]) emits -1, then 0, 3, 4 from the right
+//         run, and finally appends 5 to return [-1, 0, 3, 4, 5].
+//
+//   Example 3:
+//     Input:  head = [5, 3, 3, 1, 5, -2, -2, 0]
+//     Output: [-2, -2, 0, 1, 3, 3, 5, 5]
+//     Explanation:
+//       - split_middle advances slow three steps from 5 to the first 1 (fast moves
+//         3 -> 1 -> -2 -> 0), splitting the list into [5, 3, 3, 1] and [5, -2, -2,
+//         0].
+//       - The left half splits into [5, 3] and [3, 1], sorts to [3, 5] and [1, 3],
+//         and merges stably via <= into [1, 3, 3, 5]; the right half sorts to [-2,
+//         5] and [-2, 0] and merges into [-2, -2, 0, 5].
+//       - merge_sorted([1, 3, 3, 5], [-2, -2, 0, 5]) selects -2, -2, 0 from the
+//         right list, then 1, 3, 3, 5 from the left list, and finally 5 from the
+//         right list.
+//
 // Algorithm:
 //   1. Top-Down Merge Sort (`sortList`):
 //      - Base case: an empty list or single-node list is already sorted.

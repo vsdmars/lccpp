@@ -9,6 +9,41 @@
 //   otherwise.
 //   Constraints: 1 <= nums.length <= 10^5, -10^5 <= nums[i] <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 2, 3]
+//     Output: true
+//     Explanation:
+//       - Initialize `non_decreasing = true` and `non_increasing = true` before
+//         scanning adjacent pairs.
+//       - At `i = 1`, `nums[1] = 2 > nums[0] = 1`, so set `non_increasing = false`
+//         while `non_decreasing` stays `true`.
+//       - At `i = 2`, `nums[2] = 2 == nums[1] = 2`, so neither flag changes.
+//       - At `i = 3`, `nums[3] = 3 > nums[2] = 2`, keeping `non_decreasing = true`,
+//         and return `true` after the loop finishes.
+//
+//   Example 2:
+//     Input:  nums = [1, 3, 2]
+//     Output: false
+//     Explanation:
+//       - Initialize `non_decreasing = true` and `non_increasing = true`.
+//       - At `i = 1`, `nums[1] = 3 > nums[0] = 1`, so set `non_increasing = false`.
+//       - At `i = 2`, `nums[2] = 2 < nums[1] = 3`, so set `non_decreasing = false`.
+//       - Since `!non_decreasing && !non_increasing` now holds, return `false`
+//         immediately.
+//
+//   Example 3:
+//     Input:  nums = [-10, -10, -5, 0]
+//     Output: true
+//     Explanation:
+//       - Initialize `non_decreasing = true` and `non_increasing = true`.
+//       - At `i = 1`, `nums[1] = -10 == nums[0] = -10`, so both flags remain
+//         `true`.
+//       - At `i = 2`, `nums[2] = -5 > nums[1] = -10`, so set `non_increasing =
+//         false`.
+//       - At `i = 3`, `nums[3] = 0 > nums[2] = -5`, keeping `non_decreasing =
+//         true`, and return `true` after completing the pass.
+//
 // Algorithm:
 //   Single-Pass Dual-Flag Scan (`isMonotonic`):
 //   Maintain two boolean invariants, `non_decreasing` and `non_increasing`,

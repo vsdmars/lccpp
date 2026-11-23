@@ -7,6 +7,40 @@
 //     `(d_0 * d_1 * ... * d_{k-1}) - (d_0 + d_1 + ... + d_{k-1})`.
 //   Constraints: 1 <= n <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 234
+//     Output: 15
+//     Explanation:
+//       - Initialize product = 1 and sum = 0 since n != 0.
+//       - Peel digit = 234 % 10 = 4: product becomes 4, sum becomes 4, and n
+//         becomes 23.
+//       - Peel digit = 3 (product = 12, sum = 7, n = 2) and then digit = 2 (product
+//         = 24, sum = 9, n = 0).
+//       - Exit the loop and return product - sum = 24 - 9 = 15.
+//
+//   Example 2:
+//     Input:  n = 4421
+//     Output: 21
+//     Explanation:
+//       - Initialize product = 1 and sum = 0.
+//       - Peel 1 (product = 1, sum = 1, n = 442) and 2 (product = 2, sum = 3, n =
+//         44).
+//       - Peel 4 (product = 8, sum = 7, n = 4) and the final 4 (product = 32, sum =
+//         11, n = 0).
+//       - Return product - sum = 32 - 11 = 21.
+//
+//   Example 3:
+//     Input:  n = 105
+//     Output: -6
+//     Explanation:
+//       - Initialize product = 1 and sum = 0, then peel digit = 5 to get product =
+//         5, sum = 5, and n = 10.
+//       - Peel digit = 0 from n = 10, zeroing product to 0 while keeping sum = 5
+//         and setting n = 1.
+//       - Peel digit = 1 (product = 0, sum = 6, n = 0) and return product - sum = 0
+//         - 6 = -6.
+//
 // Algorithm:
 //   Repeatedly peel off the least significant decimal digit using `n % 10` and
 //   advance `n /= 10` until `n` reaches `0`, updating a running product

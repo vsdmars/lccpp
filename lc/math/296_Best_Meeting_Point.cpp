@@ -8,6 +8,44 @@
 //   sum(|x_i - x| + |y_i - y|) across all friends, and return that minimal
 //   total distance.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[1, 0, 0, 0, 1], [0, 0, 0, 0, 0], [0, 0, 1, 0, 0]]
+//     Output: 6
+//     Explanation:
+//       - Scan `grid` in row-major order to collect sorted row coordinates `rows =
+//         [0, 0, 2]`.
+//       - Scan `grid` in column-major order to collect sorted column coordinates
+//         `cols = [0, 2, 4]`.
+//       - In `min_distance_1d(rows)`, pick `median = rows[3 / 2] = 0` and sum `|0 -
+//         0| + |0 - 0| + |2 - 0| = 2`.
+//       - In `min_distance_1d(cols)`, pick `median = cols[3 / 2] = 2` and sum `|0 -
+//         2| + |2 - 2| + |4 - 2| = 4`.
+//       - Return the combined Manhattan distance `2 + 4 = 6`.
+//
+//   Example 2:
+//     Input:  grid = [[1, 0, 1], [0, 0, 0], [1, 0, 1]]
+//     Output: 8
+//     Explanation:
+//       - Scan `grid` in row-major order to collect `rows = [0, 0, 2, 2]`.
+//       - Scan `grid` in column-major order to collect `cols = [0, 0, 2, 2]`.
+//       - In `min_distance_1d(rows)`, pick `median = rows[4 / 2] = 2` and sum `|0 -
+//         2| + |0 - 2| + |2 - 2| + |2 - 2| = 4`.
+//       - In `min_distance_1d(cols)`, pick `median = cols[4 / 2] = 2` and sum `|0 -
+//         2| + |0 - 2| + |2 - 2| + |2 - 2| = 4`.
+//       - Return `4 + 4 = 8`.
+//
+//   Example 3:
+//     Input:  grid = [[1, 1]]
+//     Output: 1
+//     Explanation:
+//       - Collect row coordinates `rows = [0, 0]` and column coordinates `cols =
+//         [0, 1]`.
+//       - Compute 1D median distances: `min_distance_1d(rows) = |0 - 0| + |0 - 0| =
+//         0` (with `median = rows[1] = 0`) and `min_distance_1d(cols) = |0 - 1| +
+//         |1 - 1| = 1` (with `median = cols[1] = 1`).
+//       - Return `0 + 1 = 1`.
+//
 // Algorithm:
 //   Manhattan distance separates cleanly into two independent 1D problems:
 //     min_{x, y} sum(|x_i - x| + |y_i - y|)

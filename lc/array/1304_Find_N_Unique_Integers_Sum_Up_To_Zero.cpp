@@ -6,6 +6,34 @@
 //   integers whose sum equals 0.
 //   Constraints: 1 <= n <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 5
+//     Output: [0, 1, -1, 2, -2]
+//     Explanation:
+//       - Reserve result with capacity 5 and check parity: since 5 % 2 != 0, push 0
+//         so result = [0].
+//       - Compute half = 5 / 2 = 2 and iterate i = 1..2, appending (+1, -1) and
+//         (+2, -2).
+//       - Return [0, 1, -1, 2, -2], containing 5 distinct integers that sum to 0.
+//
+//   Example 2:
+//     Input:  n = 4
+//     Output: [1, -1, 2, -2]
+//     Explanation:
+//       - Reserve result with capacity 4; since 4 % 2 == 0, skip pushing 0.
+//       - Compute half = 4 / 2 = 2 and iterate i = 1..2, appending (1, -1) and (2,
+//         -2).
+//       - Return [1, -1, 2, -2], containing 4 unique integers summing to 0.
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: [0]
+//     Explanation:
+//       - Reserve result with capacity 1; since 1 % 2 != 0, push 0 so result = [0].
+//       - Compute half = 1 / 2 = 0, so the pair-generation loop runs zero times and
+//         returns [0].
+//
 // Algorithm:
 //   Symmetric Opposite-Pair Construction:
 //   - Reserve an output vector of size `n`.

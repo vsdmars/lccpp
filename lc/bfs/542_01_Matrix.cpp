@@ -7,6 +7,43 @@
 //   shortest Manhattan distance to a cell with value 0. Adjacent cells are
 //   connected 4-directionally (up, down, left, right) at distance 1.
 //
+// Examples:
+//   Example 1:
+//     Input:  mat = [[0, 0, 0], [0, 1, 0], [0, 0, 0]]
+//     Output: [[0, 0, 0], [0, 1, 0], [0, 0, 0]]
+//     Explanation:
+//       - Initialize dist with -1 everywhere, then set dist[r][c] = 0 and enqueue
+//         all eight 0-cells into frontier.
+//       - Only cell (1,1) remains at -1; popping its adjacent 0-neighbors relaxes
+//         dist[1][1] = 0 + 1 = 1 and enqueues (1,1).
+//       - Pop (1,1) with no unvisited -1 neighbors remaining, drain frontier, and
+//         return [[0, 0, 0], [0, 1, 0], [0, 0, 0]].
+//
+//   Example 2:
+//     Input:  mat = [[0, 0, 0], [0, 1, 0], [1, 1, 1]]
+//     Output: [[0, 0, 0], [0, 1, 0], [1, 2, 1]]
+//     Explanation:
+//       - Initialize dist to -1 and seed frontier at distance 0 with all five
+//         0-cells: (0,0), (0,1), (0,2), (1,0), and (1,2).
+//       - Expanding the distance-0 wave visits unvisited 4-neighbors (1,1), (2,0),
+//         and (2,2), setting their distances to 1 and enqueuing them.
+//       - Expanding the distance-1 wave from (1,1), (2,0), and (2,2) reaches the
+//         sole remaining -1 cell (2,1) and sets dist[2][1] = 2.
+//       - Drain the remaining queue entries with no -1 neighbors left and return
+//         [[0, 0, 0], [0, 1, 0], [1, 2, 1]].
+//
+//   Example 3:
+//     Input:  mat = [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 0]]
+//     Output: [[5, 4, 3, 2], [4, 3, 2, 1], [3, 2, 1, 0]]
+//     Explanation:
+//       - Seed frontier with the single 0-cell (2,3) at dist[2][3] = 0 while all
+//         other 11 cells start at -1.
+//       - Wave 1 from (2,3) assigns distance 1 to (1,3) and (2,2); wave 2 assigns
+//         distance 2 to (0,3), (1,2), and (2,1).
+//       - Successive BFS layers assign distance 3 to (0,2), (1,1), and (2,0),
+//         distance 4 to (0,1) and (1,0), and distance 5 to (0,0).
+//       - Return [[5, 4, 3, 2], [4, 3, 2, 1], [3, 2, 1, 0]].
+//
 // Algorithm:
 //   Two clean O(m * n) approaches (both noted in the original solution):
 //   1. Multi-Source BFS (`updateMatrix`, primary):

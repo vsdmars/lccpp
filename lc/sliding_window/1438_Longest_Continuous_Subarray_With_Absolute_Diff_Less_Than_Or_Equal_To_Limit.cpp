@@ -12,6 +12,48 @@
 //   Constraints: 1 <= nums.length <= 10^5, 1 <= nums[i] <= 10^9,
 //   0 <= limit <= 10^9.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [8, 2, 4, 7], limit = 4
+//     Output: 2
+//     Explanation:
+//       - At right = 0 (8), max_dq = [0] and min_dq = [0], spread = 0 <= 4, so
+//         best_len becomes 1.
+//       - At right = 1 (2), max_dq = [0, 1] and min_dq = [1] give spread = 8 - 2 =
+//         6 > 4, so left shifts to 1 and index 0 is evicted from max_dq while
+//         best_len stays 1.
+//       - At right = 2 (4), max_dq = [2] and min_dq = [1, 2] give spread = 4 - 2 =
+//         2 <= 4, expanding best_len to (2 - 1) + 1 = 2.
+//       - At right = 3 (7), max_dq = [3] and min_dq = [1, 2, 3] give spread = 7 - 2
+//         = 5 > 4, shifting left to 2 and evicting index 1 from min_dq; best_len
+//         remains 2 and is returned.
+//
+//   Example 2:
+//     Input:  nums = [10, 1, 2, 4, 7, 2], limit = 5
+//     Output: 4
+//     Explanation:
+//       - At right = 0 (10) and right = 1 (1), spread = 10 - 1 = 9 > 5 shifts left
+//         to 1 and evicts index 0 from max_dq, keeping best_len = 1.
+//       - For right = 2 (2) and right = 3 (4), max_dq holds [3] and min_dq holds
+//         [1, 2, 3], keeping spread <= 3 <= 5 and growing best_len to 3.
+//       - At right = 4 (7), spread = 7 - 1 = 6 > 5 advances left to 2 and evicts
+//         index 1 from min_dq, keeping best_len = 3.
+//       - At right = 5 (2), max_dq = [4, 5] and min_dq = [2, 5] (popping 3 and 4
+//         since 2 < 4, 7) yield spread = 7 - 2 = 5 <= 5, updating best_len to (5 -
+//         2) + 1 = 4 for [2, 4, 7, 2].
+//
+//   Example 3:
+//     Input:  nums = [4, 2, 2, 2, 4, 4, 2, 2], limit = 0
+//     Output: 3
+//     Explanation:
+//       - At right = 0 (4) and right = 1 (2), spread = 4 - 2 = 2 > 0 shifts left to
+//         1 and evicts index 0 from max_dq, leaving best_len = 1.
+//       - At right = 2 and right = 3 (both 2), spread = 2 - 2 = 0 <= 0 expands the
+//         window [1..3] = [2, 2, 2] and updates best_len to 3.
+//       - At right = 4 (4) through right = 7 (2), every candidate window retains
+//         both a 4 (in max_dq) and a 2 (in min_dq) with spread = 2 > 0, advancing
+//         left once per step up to 5 and returning best_len = 3.
+//
 // Algorithm:
 //   Use a non-shrinking sliding window `[left, right]` backed by two monotonic
 //   deques storing indices:

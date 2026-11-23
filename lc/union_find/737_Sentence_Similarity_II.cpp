@@ -9,6 +9,45 @@
 //   `sentence2[i]` is similar. Word similarity is reflexive, symmetric, and
 //   transitive (i.e., an equivalence relation).
 //
+// Examples:
+//   Example 1:
+//     Input:  sentence1 = ["great", "acting", "skills"], sentence2 = ["fine",
+//             "drama", "talent"], similarPairs = [["great", "good"], ["fine",
+//             "good"], ["acting", "drama"], ["skills", "talent"]]
+//     Output: true
+//     Explanation:
+//       - Verify sentence1.size() == sentence2.size() (3 == 3), then insert all
+//         four pairs into WordDisjointSet via dsu.unite.
+//       - Uniting ["great", "good"] and ["fine", "good"] places "great", "good",
+//         and "fine" in one connected component, while ["acting", "drama"] and
+//         ["skills", "talent"] form two more components.
+//       - Check each index i from 0 to 2: dsu.connected returns true for ("great",
+//         "fine"), ("acting", "drama"), and ("skills", "talent") because each pair
+//         shares a DSU root, so return true.
+//
+//   Example 2:
+//     Input:  sentence1 = ["great", "acting", "skills"], sentence2 = ["fine",
+//             "drama", "talent"], similarPairs = [["great", "good"], ["it",
+//             "good"], ["acting", "drama"], ["skills", "talent"]]
+//     Output: false
+//     Explanation:
+//       - Verify both sentences have length 3 and populate WordDisjointSet with
+//         components {"great", "good", "it"}, {"acting", "drama"}, and {"skills",
+//         "talent"}.
+//       - At i = 0, dsu.connected("great", "fine") sees "great" != "fine" and looks
+//         up both words in word_to_id_.
+//       - Because "fine" is absent from word_to_id_, connected returns false and
+//         areSentencesSimilarTwo immediately returns false.
+//
+//   Example 3:
+//     Input:  sentence1 = ["great"], sentence2 = ["great"], similarPairs = []
+//     Output: true
+//     Explanation:
+//       - Both sentences have size 1, and iterating over the empty similarPairs
+//         list leaves WordDisjointSet empty.
+//       - At i = 0, dsu.connected("great", "great") hits the lhs == rhs check first
+//         and returns true by reflexivity, yielding true.
+//
 // Algorithm:
 //   1. Return `false` immediately if `sentence1.size() != sentence2.size()`.
 //   2. Insert every pair `(u, v)` from `similar_pairs` into a Union-Find

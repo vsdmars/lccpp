@@ -10,6 +10,43 @@
 //   values in its right subtree. Return the node count of that largest BST
 //   subtree (0 for an empty tree).
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [10, 5, 15, 1, 8, null, 7]
+//     Output: 3
+//     Explanation:
+//       - Post-order DFS evaluates leaves 1 and 8, each returning a valid BST
+//         summary of size 1 with min_val = max_val = val.
+//       - At node 5, 1 < 5 < 8 holds, so subtree [5, 1, 8] is a valid BST returning
+//         {is_bst = true, min_val = 1, max_val = 8, largest_size = 3}.
+//       - At node 15, right child 7 violates 15 < right.min_val (7), so node 15
+//         returns {is_bst = false, largest_size = 1}.
+//       - At root 10, right.is_bst is false, so it returns {is_bst = false,
+//         largest_size = max(3, 1) = 3}.
+//
+//   Example 2:
+//     Input:  root = [4, 1, 6, null, null, 5, null, 2]
+//     Output: 3
+//     Explanation:
+//       - Post-order DFS evaluates leaf 2 with size 1, and node 5 validates 2 < 5
+//         to return {is_bst = true, min_val = 2, max_val = 5, largest_size = 2}.
+//       - At node 6, left.max_val (5) < 6 holds, so subtree [6, 5, 2] returns
+//         {is_bst = true, min_val = 2, max_val = 6, largest_size = 3}.
+//       - At root 4, left child 1 returns size 1, while right child 6 has
+//         right.min_val = 2, violating 4 < 2.
+//       - Root 4 therefore marks is_bst = false and propagates largest_size =
+//         max(1, 3) = 3.
+//
+//   Example 3:
+//     Input:  root = [2, 2, 2]
+//     Output: 1
+//     Explanation:
+//       - Both leaves with value 2 return {is_bst = true, min_val = 2, max_val = 2,
+//         largest_size = 1}.
+//       - At root 2, strict BST checks left.max_val (2) < 2 and 2 < right.min_val
+//         (2) both fail.
+//       - Root 2 marks is_bst = false and returns largest_size = max(1, 1) = 1.
+//
 // Algorithm:
 //   Use a single bottom-up post-order DFS. Each recursive call evaluates the
 //   left and right subtrees first and returns a compact summary record:

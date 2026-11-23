@@ -9,6 +9,37 @@
 //   such index exists.
 //   Constraints: 0 <= nums.size() <= 10,000; -1000 <= nums[i] <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 7, 3, 6, 5, 6]
+//     Output: 3
+//     Explanation:
+//       - Compute total = 1 + 7 + 3 + 6 + 5 + 6 = 28 with std::accumulate and
+//         initialize left_sum = 0.
+//       - Check idx = 0 (left_sum = 0, right_sum = 27), idx = 1 (left_sum = 1,
+//         right_sum = 20), and idx = 2 (left_sum = 8, right_sum = 17); none match,
+//         updating left_sum to 11.
+//       - At idx = 3 (nums[3] = 6), compute right_sum = 28 - 11 - 6 = 11, which
+//         equals left_sum = 11, so return 3.
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 3]
+//     Output: -1
+//     Explanation:
+//       - Compute total = 1 + 2 + 3 = 6 and start with left_sum = 0.
+//       - Check idx = 0 (right_sum = 6 - 0 - 1 = 5 != 0), idx = 1 (right_sum = 6 -
+//         1 - 2 = 3 != 1), and idx = 2 (right_sum = 6 - 3 - 3 = 0 != 3).
+//       - Reach the end of nums without finding left_sum == right_sum and return
+//         -1.
+//
+//   Example 3:
+//     Input:  nums = [2, 1, -1]
+//     Output: 0
+//     Explanation:
+//       - Compute total = 2 + 1 + (-1) = 2 and initialize left_sum = 0.
+//       - At idx = 0 (nums[0] = 2), compute right_sum = 2 - 0 - 2 = 0, which
+//         matches left_sum = 0 and immediately returns 0.
+//
 // Algorithm:
 //   First compute the total sum `total` of all elements in `nums`. Then scan
 //   left to right while maintaining the running prefix sum `left_sum` of

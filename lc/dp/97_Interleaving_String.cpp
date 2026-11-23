@@ -9,6 +9,48 @@
 //   Constraints: 0 <= s1.length, s2.length <= 100; 0 <= s3.length <= 200;
 //   lowercase English letters only.
 //
+// Examples:
+//   Example 1:
+//     Input:  s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac"
+//     Output: true
+//     Explanation:
+//       - Verify s1.size() + s2.size() == 5 + 5 == 10 == s3.size(), allocate the
+//         6x6 dp table initialized to false, and set base case dp[5][5] = true.
+//       - Fill backwards from (5, 5): at (4, 5), s1[4] == 'c' == s3[9] and dp[5][5]
+//         is true, setting dp[4][5] = true; then at (4, 4), s2[4] == 'a' == s3[8]
+//         sets dp[4][4] = true.
+//       - Continue along valid suffix transitions: (3, 4) matches s1[3] == 'c' ==
+//         s3[7], (2, 4) matches s1[2] == 'b' == s3[6], and (2, 3) through (2, 0)
+//         match s2[3..0] == "cbbc" reversed against s3[5..2] == "dbbc".
+//       - Finally at (1, 0) and (0, 0), s1[1] == 'a' == s3[1] and s1[0] == 'a' ==
+//         s3[0] propagate dp[2][0] == true up to dp[0][0] = true, so the method
+//         returns true.
+//
+//   Example 2:
+//     Input:  s1 = "aabcc", s2 = "dbbca", s3 = "aadbbbaccc"
+//     Output: false
+//     Explanation:
+//       - Pass the length check (5 + 5 == 10 == s3.size()) and initialize dp[5][5]
+//         = true.
+//       - Compute states backwards: at i + j = 9 (s3[9] = 'c'), dp[4][5] becomes
+//         true via s1[4] == 'c', and at i + j = 8 (s3[8] = 'c'), dp[3][5] becomes
+//         true via s1[3] == 'c'.
+//       - Check all states with i + j = 7 where s3[7] = 'c': (2, 5) fails because
+//         s1[2] = 'b', (5, 2) fails because s2[2] = 'b', and (3, 4) and (4, 3) fail
+//         because dp[4][4] and dp[5][3] are false (since s2[4] = 'a' cannot match
+//         'c' in s3[7..9]).
+//       - Because every cell with i + j = 7 is false, no earlier state can reach a
+//         true cell, leaving dp[0][0] = false and returning false.
+//
+//   Example 3:
+//     Input:  s1 = "ab", s2 = "cd", s3 = "abc"
+//     Output: false
+//     Explanation:
+//       - Compute string sizes m = s1.size() = 2 and n = s2.size() = 2, while
+//         s3.size() = 3.
+//       - The early length guard m + n != s3.size() (4 != 3) triggers immediately
+//         and returns false without allocating the DP table.
+//
 // Algorithm:
 //   Bottom-up 2D Dynamic Programming over suffix indices (i, j):
 //   - First guard: if s1.size() + s2.size() != s3.size(), return false.

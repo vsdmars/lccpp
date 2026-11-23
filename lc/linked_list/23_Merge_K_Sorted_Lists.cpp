@@ -6,6 +6,41 @@
 //   lists into one sorted singly-linked list by splicing their nodes together
 //   and return its head.
 //
+// Examples:
+//   Example 1:
+//     Input:  lists = [[1, 4, 5], [1, 3, 4], [2, 6]]
+//     Output: [1, 1, 2, 3, 4, 4, 5, 6]
+//     Explanation:
+//       - Seed min_heap with the three non-null list heads: [1 (list 0), 1 (list
+//         1), 2 (list 2)].
+//       - Pop 1 (list 0) and push its successor 4, then pop 1 (list 1) and push 3,
+//         producing merged prefix [1, 1] and heap [2, 3, 4].
+//       - Pop 2 (list 2) and push 6, then pop 3 (list 1) and push 4, then pop 4
+//         (list 0) and push 5, extending merged output to [1, 1, 2, 3, 4] with heap
+//         [4, 5, 6].
+//       - Pop remaining nodes 4 (list 1), 5 (list 0), and 6 (list 2) in order (none
+//         have successors), set tail->next = nullptr, and return [1, 1, 2, 3, 4, 4,
+//         5, 6].
+//
+//   Example 2:
+//     Input:  lists = [[], [2, 5], [], [-1, 3]]
+//     Output: [-1, 2, 3, 5]
+//     Explanation:
+//       - Skip the two nullptr entries and seed min_heap with non-empty heads [-1
+//         (list 3), 2 (list 1)].
+//       - Pop -1 and push 3 (merged: [-1], heap: [2, 3]), then pop 2 and push 5
+//         (merged: [-1, 2], heap: [3, 5]).
+//       - Pop 3 then 5 (no successors left), terminate with tail->next = nullptr,
+//         and return [-1, 2, 3, 5].
+//
+//   Example 3:
+//     Input:  lists = [[], []]
+//     Output: []
+//     Explanation:
+//       - Iterate over lists and skip both nullptr heads, leaving min_heap empty.
+//       - Skip the while (!min_heap.empty()) loop, set tail->next = nullptr on
+//         dummy, and return dummy.next (nullptr), representing [].
+//
 // Algorithm:
 //   K-way merge using a binary min-heap (`std::priority_queue`):
 //   1. Seed the min-heap with the head pointer of every non-empty input list.

@@ -8,6 +8,36 @@
 //   Constraints: 0 <= s.length <= 1000, t.length == s.length + 1, both strings
 //   consist solely of lowercase English letters ('a'..'z').
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abcd", t = "abcde"
+//     Output: 'e'
+//     Explanation:
+//       - Initialize `acc = 0` and XOR all bytes of `s`, giving `acc = 'a' ^ 'b' ^
+//         'c' ^ 'd'`.
+//       - XOR all bytes of `t` into `acc` so `'a'`, `'b'`, `'c'`, and `'d'` pair
+//         with their copies from `s` and cancel to `0`.
+//       - Only `'e'` remains unpaired in `acc`, so returning
+//         `static_cast<char>(acc)` yields `'e'`.
+//
+//   Example 2:
+//     Input:  s = "hello", t = "olxleh"
+//     Output: 'x'
+//     Explanation:
+//       - Fold every byte of `s = "hello"` into `acc`, leaving `'h' ^ 'e' ^ 'o'`
+//         after the two `'l'` characters cancel.
+//       - Fold every byte of `t = "olxleh"` into `acc`; `'o'`, `'l'`, `'l'`, `'e'`,
+//         and `'h'` cancel all remaining characters from `s` regardless of order.
+//       - The accumulator holds only `'x'`, so the function returns `'x'`.
+//
+//   Example 3:
+//     Input:  s = "", t = "y"
+//     Output: 'y'
+//     Explanation:
+//       - Initialize `acc = 0`; the loop over empty `s = ""` performs zero
+//         iterations.
+//       - The loop over `t = "y"` sets `acc = 0 ^ 'y' = 'y'` and returns `'y'`.
+//
 // Algorithm:
 //   Primary (XOR Cancellation): XOR every character code in `s` and `t` into a
 //   single accumulator. Because XOR is commutative, associative, and

@@ -8,6 +8,38 @@
 //   return 0.
 //   Constraints: 1 <= prices.length <= 10^5; 0 <= prices[i] <= 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  prices = [7, 1, 5, 3, 6, 4]
+//     Output: 5
+//     Explanation:
+//       - Initialize min_price = 7 (day 0) and max_profit = 0.
+//       - At i = 1 (price 1), max_profit stays 0 and min_price updates to 1.
+//       - At i = 2 (price 5) and i = 3 (price 3), max_profit updates to 4 and
+//         min_price remains 1.
+//       - At i = 4 (price 6), max_profit updates to max(4, 6 - 1) = 5.
+//       - At i = 5 (price 4), 4 - 1 = 3 does not beat 5, so maxProfit returns 5.
+//
+//   Example 2:
+//     Input:  prices = [7, 6, 4, 3, 1]
+//     Output: 0
+//     Explanation:
+//       - Initialize min_price = 7 and max_profit = 0.
+//       - Across i = 1..4 (prices 6, 4, 3, 1), each prices[i] - min_price is
+//         negative so max_profit remains 0.
+//       - Meanwhile min_price decreases at each step from 7 down to 6, 4, 3, and 1,
+//         returning 0.
+//
+//   Example 3:
+//     Input:  prices = [2, 4, 1]
+//     Output: 2
+//     Explanation:
+//       - Initialize min_price = 2 and max_profit = 0.
+//       - At i = 1 (price 4), max_profit updates to 4 - 2 = 2 while min_price stays
+//         2.
+//       - At i = 2 (price 1), min_price updates to 1 without overwriting the
+//         previously recorded max_profit of 2, so the function returns 2.
+//
 // Algorithm:
 //   Two equivalent O(n)-time, O(1)-space single-pass DP approaches are provided:
 //   1. Prefix Minimum Tracking (`maxProfit`):

@@ -9,6 +9,41 @@
 //   Constraints: 1 <= nums.size() <= 10^4, -10^7 <= nums[i] <= 10^7,
 //   0 <= k <= 10^7.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 1, 4, 1, 5], k = 2
+//     Output: 2
+//     Explanation:
+//       - Since k = 2 >= 0, the first pass counts frequencies into freq = {3: 1, 1:
+//         2, 4: 1, 5: 1}.
+//       - Iterating over each unique key val checks only the upward partner val +
+//         2: key 1 finds 3 (unique_pairs = 1) and key 3 finds 5 (unique_pairs = 2),
+//         while 4 (6) and 5 (7) have no partner.
+//       - Checking only val + k on distinct map keys deduplicates the repeated 1
+//         and avoids double-counting pairs, returning 2.
+//
+//   Example 2:
+//     Input:  nums = [1, 3, 1, 5, 4], k = 0
+//     Output: 1
+//     Explanation:
+//       - The first pass builds the frequency map freq = {1: 2, 3: 1, 5: 1, 4: 1}.
+//       - Because k == 0, the loop increments unique_pairs for each distinct key
+//         with count >= 2: only key 1 qualifies (count = 2), whereas 3, 5, and 4
+//         each have count = 1.
+//       - After inspecting all keys in freq, the function returns unique_pairs = 1.
+//
+//   Example 3:
+//     Input:  nums = [-1, -2, -3, -2], k = 1
+//     Output: 2
+//     Explanation:
+//       - After passing the k < 0 check, the frequency pass records freq = {-1: 1,
+//         -2: 2, -3: 1}.
+//       - For each unique key val, the loop probes partner = val + 1: key -3 finds
+//         -2 (unique_pairs = 1), key -2 finds -1 (unique_pairs = 2), and key -1
+//         finds no 0.
+//       - Duplicate occurrences of -2 are collapsed by iterating over unique keys
+//         in freq, returning 2.
+//
 // Algorithm:
 //   Frequency hash-map lookup with canonical one-directional pairing.
 //   If k < 0, no absolute difference can equal k, so return 0 immediately.

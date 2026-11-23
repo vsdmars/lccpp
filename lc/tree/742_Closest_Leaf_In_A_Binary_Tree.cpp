@@ -9,6 +9,40 @@
 //   leaf is a node with no children. If multiple leaves tie for minimum
 //   distance, any of them may be returned.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 3, 2], k = 1
+//     Output: 3
+//     Explanation:
+//       - build_graph links root 1 bidirectionally to left child 3 then right child
+//         2 (adj[1] = [3, 2]) and records target = node 1.
+//       - BFS starts at node 1 (not a leaf), pops it, and enqueues neighbors 3 and
+//         2 at edge distance 1.
+//       - BFS next pops leaf 3 (left == nullptr && right == nullptr) and returns 3
+//         (2 is equally valid at distance 1).
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, 4, null, null, null, 5, null, 6], k = 2
+//     Output: 3
+//     Explanation:
+//       - build_graph records undirected edges (1-2, 1-3, 2-4, 4-5, 5-6) and
+//         locates target = node 2.
+//       - BFS pops node 2 at distance 0 (not a leaf) and enqueues its parent 1 and
+//         child 4.
+//       - At distance 1, BFS pops 1 (enqueues leaf 3) and 4 (enqueues 5), neither
+//         of which is a leaf.
+//       - At distance 2, BFS pops leaf 3 and returns 3 before ever reaching leaf 6
+//         at distance 3.
+//
+//   Example 3:
+//     Input:  root = [1], k = 99
+//     Output: -1
+//     Explanation:
+//       - build_graph visits the single node 1, leaving target == nullptr because
+//         no node matches k = 99.
+//       - Seeing target == nullptr, findClosestLeaf immediately returns -1 without
+//         running BFS.
+//
 // Algorithm:
 //   Because the shortest path to a leaf may climb upward through parent links
 //   before descending into another branch, we treat the tree as an undirected

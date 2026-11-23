@@ -9,6 +9,38 @@
 //   opened, and every closing bracket has a corresponding preceding open
 //   bracket.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "()[]{}"
+//     Output: true
+//     Explanation:
+//       - s.size() is 6 (even), so the odd-length early-exit check passes and
+//         open_brackets starts empty.
+//       - Each opening bracket '(', '[', '{' is pushed onto open_brackets and
+//         immediately matched and popped by its adjacent closing bracket ')', ']',
+//         '}'.
+//       - After scanning all 6 characters, open_brackets is empty, so isValid
+//         returns true.
+//
+//   Example 2:
+//     Input:  s = "([)]"
+//     Output: false
+//     Explanation:
+//       - s.size() is 4 (even); scanning '(' and '[' pushes both onto
+//         open_brackets, leaving open_brackets = ['(', '['].
+//       - At ')', matching_open(')') is '(', which does not match
+//         open_brackets.back() == '['.
+//       - isValid immediately returns false without scanning the remaining
+//         character.
+//
+//   Example 3:
+//     Input:  s = "((({{{[[[]]]}}}))"
+//     Output: false
+//     Explanation:
+//       - s.size() is 17, which fails the parity check (s.size() % 2uz) != 0uz.
+//       - Because balanced pairs always have even total length, isValid returns
+//         false in O(1) before inspecting any character.
+//
 // Algorithm:
 //   Scan the string left to right while maintaining a stack of unmatched open
 //   brackets. Whenever an open bracket ('(', '[', '{') is encountered, push it

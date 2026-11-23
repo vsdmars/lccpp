@@ -9,6 +9,45 @@
 //   counts as a subtree, and partial truncations of a node's descendants do
 //   not).
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 4, 5, 1, 2], subRoot = [4, 1, 2]
+//     Output: true
+//     Explanation:
+//       - Initialize BFS frontier = [3] and dequeue 3; since 3 != sub_root->val
+//         (4), skip isSameTree and enqueue children 4 and 5.
+//       - Dequeue node 4, which matches sub_root->val (4), and call isSameTree(4,
+//         4).
+//       - isSameTree recursively verifies left child 1 == 1 and right child 2 == 2
+//         with matching nullptr grandchildren, returning true.
+//       - isSubtree immediately returns true without needing to visit node 5.
+//
+//   Example 2:
+//     Input:  root = [3, 4, 5, 1, 2, null, null, null, null, 0], subRoot = [4, 1,
+//             2]
+//     Output: false
+//     Explanation:
+//       - Dequeue root 3 (3 != 4) and enqueue its children 4 and 5.
+//       - Dequeue node 4 (4 == 4) and call isSameTree(4, 4): left child 1 matches,
+//         but at right child 2, a->left is node 0 while b->left is nullptr, so
+//         isSameTree returns false.
+//       - Enqueue 4's children 1 and 2, then dequeue 5, 1, 2, and 0 in BFS order;
+//         none has value 4.
+//       - When frontier empties without a matching subtree, return false.
+//
+//   Example 3:
+//     Input:  root = [1, 1], subRoot = [1]
+//     Output: true
+//     Explanation:
+//       - Initialize frontier = [1 (root)] and dequeue root 1, whose value matches
+//         sub_root->val (1).
+//       - Call isSameTree(root, sub_root): root->left is non-null (node 1) while
+//         sub_root->left is nullptr, so isSameTree returns false.
+//       - Enqueue root->left (leaf 1), dequeue it, and call isSameTree(leaf,
+//         sub_root) since 1 == 1.
+//       - Both children of leaf 1 and sub_root are nullptr, so isSameTree returns
+//         true and isSubtree returns true.
+//
 // Algorithm:
 //   Traverse every candidate node in `root` via level-order Breadth-First
 //   Search (BFS). Whenever a visited node's value matches `subRoot->val`,

@@ -8,6 +8,37 @@
 //   Note: A node with only one child is NOT a leaf, so paths must continue
 //   down the existing subtree.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 9, 20, null, null, 15, 7]
+//     Output: 2
+//     Explanation:
+//       - Start with frontier = [3] and depth = 0.
+//       - At level 1 (depth = 1, level_size = 1), pop 3 and push its children 9 and
+//         20 into frontier = [9, 20].
+//       - At level 2 (depth = 2, level_size = 2), pop 9 first and observe both
+//         9->left and 9->right are nullptr.
+//       - Return depth = 2 immediately without expanding 20 or visiting level 3
+//         nodes 15 and 7.
+//
+//   Example 2:
+//     Input:  root = [2, null, 3, null, 4, null, 5, null, 6]
+//     Output: 5
+//     Explanation:
+//       - Start with frontier = [2] and depth = 0.
+//       - At depth = 1, pop 2; because 2->right = 3 is non-null, it is not a leaf,
+//         so push 3.
+//       - Repeat across depth = 2, 3, and 4, popping 3, 4, and 5 and pushing their
+//         sole right children 4, 5, and 6.
+//       - At depth = 5, pop 6, find both children are nullptr, and return 5.
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: 0
+//     Explanation:
+//       - Check root == nullptr at the start of minDepth.
+//       - Return 0 immediately without allocating or pushing to the BFS queue.
+//
 // Algorithm:
 //   Level-by-level Breadth-First Search (BFS) with early termination.
 //   Unlike DFS (which must explore the entire tree in the worst case before

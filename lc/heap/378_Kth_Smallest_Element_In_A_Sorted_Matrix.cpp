@@ -7,6 +7,40 @@
 //   (1-indexed in sorted order, counting duplicates rather than distinct
 //   values).
 //
+// Examples:
+//   Example 1:
+//     Input:  matrix = [[1, 5, 9], [10, 11, 13], [12, 13, 15]], k = 8
+//     Output: 13
+//     Explanation:
+//       - Initialize the value-space binary search bounds to lo = 1 and hi = 15
+//         with target = 8.
+//       - At mid = 8, count_less_or_equal sums upper_bound per row to get 2 + 0 + 0
+//         = 2 < 8, so advance lo = 9.
+//       - At mid = 12, count_less_or_equal sums 3 + 2 + 1 = 6 < 8, so advance lo =
+//         13.
+//       - At mid = 14 (count 3 + 3 + 2 = 8 >= 8) and then mid = 13 (count 3 + 3 + 2
+//         = 8 >= 8), shrink hi to 14 and then 13.
+//       - The loop terminates with lo == hi == 13 and returns 13.
+//
+//   Example 2:
+//     Input:  matrix = [[1, 5, 9], [10, 11, 11], [11, 13, 15]], k = 6
+//     Output: 11
+//     Explanation:
+//       - Initialize value-space bounds to lo = 1 and hi = 15 with target = 6.
+//       - At mid = 8, row counts sum to 2 + 0 + 0 = 2 < 6, advancing lo = 9; at mid
+//         = 12, row counts sum to 3 + 3 + 1 = 7 >= 6, shrinking hi = 12.
+//       - At mid = 10, row counts sum to 3 + 1 + 0 = 4 < 6, advancing lo = 11.
+//       - At mid = 11, row counts sum to 3 + 3 + 1 = 7 >= 6, shrinking hi = 11 so
+//         lo == hi == 11 and returning 11.
+//
+//   Example 3:
+//     Input:  matrix = [[-5]], k = 1
+//     Output: -5
+//     Explanation:
+//       - Initialize lo = matrix[0][0] = -5 and hi = matrix[0][0] = -5.
+//       - Because lo < hi is false, the binary search loop executes zero iterations
+//         and returns lo = -5.
+//
 // Algorithm:
 //   1. Binary Search on Value Space (primary):
 //      The answer lies in the closed value interval [matrix[0][0],

@@ -7,6 +7,44 @@
 //   return that single unique element. The solution must run in O(n) linear
 //   time and O(1) constant extra space.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 2, 3, 2]
+//     Output: 3
+//     Explanation:
+//       - Initialize ones = 0 and twos = 0 to track each bit count modulo 3.
+//       - After the first 2 (0b10), ones = 2 and twos = 0 (state 01 for bit 1);
+//         after the second 2, ones = 0 and twos = 2 (state 10 for bit 1).
+//       - Processing 3 (0b11) sets ones = (0 ^ 3) & ~2 = 1 and twos = (2 ^ 3) & ~1
+//         = 0, resetting bit 1 to 00 and moving bit 0 to 01.
+//       - Processing the third 2 updates ones = (1 ^ 2) & ~0 = 3 and twos = (0 ^ 2)
+//         & ~3 = 0, returning ones = 3.
+//
+//   Example 2:
+//     Input:  nums = [0, 1, 0, 1, 0, 1, 99]
+//     Output: 99
+//     Explanation:
+//       - The three 0 elements leave ones = 0 and twos = 0 unchanged because no
+//         bits are set.
+//       - The three 1 elements cycle bit 0 through states (twos=0, ones=1),
+//         (twos=1, ones=0), and back to (twos=0, ones=0).
+//       - Processing 99 updates ones = (0 ^ 99) & ~0 = 99 and twos = (0 ^ 99) & ~99
+//         = 0, returning 99.
+//
+//   Example 3:
+//     Input:  nums = [-2, -2, 1, 1, 4, 1, 4, 4, -4, -2]
+//     Output: -4
+//     Explanation:
+//       - Process two -2s (0xFFFFFFFE in uint32_t) to reach ones = 0 and twos =
+//         0xFFFFFFFE.
+//       - Process 1, 1, 4, 1, 4, 4 to cycle bits 0 and 2 three times each, leaving
+//         ones = 0 and twos = 0xFFFFFFFE.
+//       - Process -4 (0xFFFFFFFC): ones = (0 ^ 0xFFFFFFFC) & ~0xFFFFFFFE = 0 and
+//         twos = (0xFFFFFFFE ^ 0xFFFFFFFC) & ~0 = 0x2.
+//       - Process the final -2 (0xFFFFFFFE): ones = (0 ^ 0xFFFFFFFE) & ~0x2 =
+//         0xFFFFFFFC and twos = (0x2 ^ 0xFFFFFFFE) & ~0xFFFFFFFC = 0.
+//       - Cast ones (0xFFFFFFFC) back to signed int to return -4.
+//
 // Algorithm:
 //   Bitwise Modulo-3 Finite State Machine:
 //   For every bit position b in [0, 31], summing bit b across all elements

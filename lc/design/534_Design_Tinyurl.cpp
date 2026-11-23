@@ -9,6 +9,54 @@
 //   distinct long URLs may collide on the same short URL, and encoding the
 //   same long URL repeatedly should be idempotent.
 //
+// Examples:
+//   Example 1:
+//     Input:  TinyUrlService();
+//             encode("https://leetcode.com/problems/design-tinyurl");
+//             decode("http://tinyurl.com/000001")
+//     Output: ["http://tinyurl.com/000001",
+//             "https://leetcode.com/problems/design-tinyurl"]
+//     Explanation:
+//       - encode checks long_to_code_ for the URL, misses, and calls encode_id(1)
+//         using next_id_ = 1.
+//       - encode_id(1) computes Base62 digits right to left into a 6-character
+//         string ("000001") and increments next_id_ to 2.
+//       - encode stores both directions in code_to_long_ and long_to_code_ and
+//         returns "http://tinyurl.com/000001".
+//       - decode verifies the "http://tinyurl.com/" prefix, looks up "000001" in
+//         code_to_long_, and returns the original URL.
+//
+//   Example 2:
+//     Input:  TinyUrlService(); s1 =
+//             encode("https://example.com/articles/system-design"); s1_dup =
+//             encode("https://example.com/articles/system-design"); s2 =
+//             encode("https://example.com/articles/distributed-cache"); decode(s1);
+//             decode(s2); size()
+//     Output: [s1 = "http://tinyurl.com/000001", s1_dup =
+//             "http://tinyurl.com/000001", s2 = "http://tinyurl.com/000002",
+//             "https://example.com/articles/system-design",
+//             "https://example.com/articles/distributed-cache", 2]
+//     Explanation:
+//       - First encode inserts the system-design URL with next_id_ = 1, mapping
+//         code "000001" in both maps and bumping next_id_ to 2.
+//       - Second encode with the same URL hits long_to_code_ and idempotently
+//         returns "http://tinyurl.com/000001" without incrementing next_id_.
+//       - encode on the distributed-cache URL misses long_to_code_, assigns
+//         next_id_ = 2 to code "000002", and brings size() to 2.
+//       - decode on both short URLs strips the base prefix and retrieves the two
+//         distinct original URLs from code_to_long_.
+//
+//   Example 3:
+//     Input:  TinyUrlService(); decode("http://tinyurl.com/ffffff");
+//             decode("https://other.domain/000001"); decode("")
+//     Output: ["", "", ""]
+//     Explanation:
+//       - decode("http://tinyurl.com/ffffff") matches kBaseUrl, extracts code
+//         "ffffff", misses in code_to_long_, and returns an empty string.
+//       - decode("https://other.domain/000001") and decode("") fail
+//         short_url.starts_with("http://tinyurl.com/") and return an empty string
+//         immediately.
+//
 // Algorithm:
 //   Assign each newly seen long URL a strictly increasing 64-bit sequence ID
 //   and bijectively encode that ID into a fixed-width 6-character Base62 code

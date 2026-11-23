@@ -6,6 +6,45 @@
 //   integers, return the minimal length of a contiguous subarray whose sum is
 //   greater than or equal to `target`. If no such subarray exists, return 0.
 //
+// Examples:
+//   Example 1:
+//     Input:  target = 7, nums = [2, 3, 1, 2, 4, 3]
+//     Output: 2
+//     Explanation:
+//       - Initialize left = 0, window_sum = 0, and min_len = kInf, then expand
+//         right from 0 to 3 so window_sum reaches 2 + 3 + 1 + 2 = 8 >= 7.
+//       - At right = 3, record min_len = 3 - 0 + 1 = 4, subtract nums[0] = 2, and
+//         advance left to 1 leaving window_sum = 6 < 7.
+//       - At right = 4 (nums[4] = 4), window_sum becomes 10 >= 7; shrink left from
+//         1 to 2 (window_sum = 7, min_len = 3) and then to 3 (window_sum = 6).
+//       - At right = 5 (nums[5] = 3), window_sum becomes 9 >= 7; shrink left from 3
+//         to 4 (window_sum = 7, min_len = 5 - 4 + 1 = 2) and then to 5 (window_sum
+//         = 3).
+//       - Return min_len = 2, corresponding to the shortest valid subarray [4, 3].
+//
+//   Example 2:
+//     Input:  target = 4, nums = [1, 4, 4]
+//     Output: 1
+//     Explanation:
+//       - Initialize left = 0 and window_sum = 0; at right = 0 (nums[0] = 1),
+//         window_sum = 1 < 4 so no shrinking occurs.
+//       - At right = 1 (nums[1] = 4), window_sum reaches 5 >= 4, setting min_len =
+//         2 and shrinking left to 1 (window_sum = 4 >= 4), which tightens min_len
+//         to 1 before advancing left to 2 (window_sum = 0).
+//       - At right = 2 (nums[2] = 4), window_sum = 4 >= 4 reconfirms min_len = 1
+//         and advances left to 3, returning 1.
+//
+//   Example 3:
+//     Input:  target = 11, nums = [1, 1, 1, 1, 1, 1, 1, 1]
+//     Output: 0
+//     Explanation:
+//       - As right sweeps from 0 to 7, adding each nums[right] = 1 increases
+//         window_sum monotonically up to 8.
+//       - Because window_sum never reaches target = 11, the inner shrinking
+//         while-loop never executes and min_len remains kInf.
+//       - After the loop ends, min_len == kInf returns 0 to indicate no valid
+//         subarray exists.
+//
 // Algorithm:
 //   Variable-size sliding window (`[left, right]`) relying critically on the
 //   fact that every element of `nums` is strictly positive (`nums[i] > 0`).

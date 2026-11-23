@@ -8,6 +8,42 @@
 //   Constraints: 0 <= number of nodes <= 500, -100 <= Node.val <= 100,
 //   0 <= k <= 2 * 10^9.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3, 4, 5], k = 2
+//     Output: [4, 5, 1, 2, 3]
+//     Explanation:
+//       - Pass 1 walks the list to count length = 5 and reduces the shift via 2 % 5
+//         = 2.
+//       - Attach dummy(0, head) with slow = &dummy and fast = &dummy, then advance
+//         fast 2 steps to node 2.
+//       - Advance slow and fast in lockstep 3 times until fast->next == nullptr,
+//         landing fast on tail node 5 and slow on node 3.
+//       - Save new_head = slow->next (node 4), cut the list with slow->next =
+//         nullptr after node 3, and splice fast->next = head (5 -> 1) to return [4,
+//         5, 1, 2, 3].
+//
+//   Example 2:
+//     Input:  head = [0, 1, 2], k = 4
+//     Output: [2, 0, 1]
+//     Explanation:
+//       - Pass 1 counts length = 3 and computes shift = 4 % 3 = 1.
+//       - Attach dummy(0, head) with slow = &dummy and fast = &dummy, then advance
+//         fast by 1 step to node 0.
+//       - Advance both pointers twice until fast->next == nullptr, leaving fast on
+//         node 2 and slow on node 1.
+//       - Set new_head = slow->next (node 2), sever 1 -> nullptr via slow->next =
+//         nullptr, and connect 2 -> 0 via fast->next = head to produce [2, 0, 1].
+//
+//   Example 3:
+//     Input:  head = [1, 2, 3], k = 198
+//     Output: [1, 2, 3]
+//     Explanation:
+//       - Pass 1 traverses all 3 nodes to compute length = 3.
+//       - Reducing k modulo length yields shift = 198 % 3 = 0.
+//       - Because shift == 0, rotateRight returns head immediately without
+//         modifying any links, leaving [1, 2, 3] unchanged.
+//
 // Algorithm:
 //   1. Handle trivial lists (empty or single-node) or k == 0 immediately.
 //   2. Compute the list length `n` in one linear pass and reduce `k %= n`,

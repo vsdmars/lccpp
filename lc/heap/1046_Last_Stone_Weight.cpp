@@ -11,6 +11,39 @@
 //   Repeat until at most one stone remains and return its weight (or 0 if no
 //   stones remain).
 //
+// Examples:
+//   Example 1:
+//     Input:  stones = [2, 7, 4, 1, 8, 1]
+//     Output: 1
+//     Explanation:
+//       - Heapify builds max_heap with elements [8, 7, 4, 2, 1, 1].
+//       - Round 1 pops 8 and 7 and pushes 8 - 7 = 1 (leaving [4, 2, 1, 1, 1]);
+//         Round 2 pops 4 and 2 and pushes 4 - 2 = 2 (leaving [2, 1, 1, 1]).
+//       - Round 3 pops 2 and 1 and pushes 2 - 1 = 1 (leaving [1, 1, 1]); Round 4
+//         pops 1 and 1 and pushes nothing because heaviest == second.
+//       - With one stone remaining ([1]), max_heap.size() > 1 becomes false and
+//         lastStoneWeight returns max_heap.top() = 1.
+//
+//   Example 2:
+//     Input:  stones = [3, 7, 2, 2]
+//     Output: 0
+//     Explanation:
+//       - Heapify initializes max_heap with [7, 3, 2, 2].
+//       - Round 1 pops 7 and 3 and pushes 7 - 3 = 4 (leaving [4, 2, 2]); Round 2
+//         pops 4 and 2 and pushes 4 - 2 = 2 (leaving [2, 2]).
+//       - Round 3 pops 2 and 2 without pushing a remainder, leaving max_heap empty
+//         so lastStoneWeight returns 0.
+//
+//   Example 3:
+//     Input:  stones = [4, 4, 4]
+//     Output: 4
+//     Explanation:
+//       - Heapify initializes max_heap with [4, 4, 4].
+//       - Round 1 pops heaviest = 4 and second = 4 and pushes nothing because they
+//         are equal, leaving [4] in max_heap.
+//       - Because max_heap.size() == 1, the while loop terminates and returns
+//         max_heap.top() = 4.
+//
 // Algorithm:
 //   Greedy Simulation with a Max-Heap:
 //   1. Build a max-heap from all initial stone weights in O(n) time.

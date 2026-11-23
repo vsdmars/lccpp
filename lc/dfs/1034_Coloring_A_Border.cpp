@@ -10,6 +10,49 @@
 //   of `grid` or is 4-directionally adjacent to at least one cell not in the
 //   component—and return the modified grid.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[1, 1], [1, 2]], row = 0, col = 0, color = 3
+//     Output: [[3, 3], [3, 2]]
+//     Explanation:
+//       - Record orig_color = grid[0][0] = 1 and start DFS at (0, 0), marking it
+//         visited.
+//       - Visit right neighbor (0, 1) (val 1): mark visited, then check its 4
+//         neighbors—(0, 2) and (-1, 1) are out of bounds (0), (0, 0) is already
+//         visited (1), and (1, 1) has val 2 != 1 (0)—giving same_neighbors = 1 < 4,
+//         so set grid[0][1] = 3 and return 1.
+//       - Visit down neighbor (1, 0) (val 1): mark visited, find only (0, 0)
+//         in-component (same_neighbors = 1 < 4), set grid[1][0] = 3, and return 1.
+//       - Back at (0, 0), sum the 4 neighbor results (1 + 0 + 1 + 0 = 2 < 4) and
+//         recolor grid[0][0] = 3, leaving grid[1][1] = 2 untouched.
+//
+//   Example 2:
+//     Input:  grid = [[1, 1, 1], [1, 1, 1], [1, 1, 1]], row = 1, col = 1, color = 2
+//     Output: [[2, 2, 2], [2, 1, 2], [2, 2, 2]]
+//     Explanation:
+//       - Record orig_color = 1 at center (1, 1) and mark all 9 cells of the
+//         uniform 3x3 component visited during DFS.
+//       - All 8 outer-ring cells have at least one out-of-bounds neighbor
+//         (same_neighbors = 2 at corners and 3 at edge midpoints, all < 4), so each
+//         is recolored to 2 in post-order.
+//       - Back at center (1, 1), all 4 neighbors returned 1 (same_neighbors = 4),
+//         so same_neighbors < 4 is false and grid[1][1] stays 1.
+//
+//   Example 3:
+//     Input:  grid = [[1, 2, 1, 2, 1, 2], [2, 2, 2, 2, 1, 2], [1, 2, 2, 2, 1, 2]],
+//             row = 1, col = 3, color = 1
+//     Output: [[1, 1, 1, 1, 1, 2], [1, 2, 1, 1, 1, 2], [1, 1, 1, 1, 1, 2]]
+//     Explanation:
+//       - Record orig_color = grid[1][3] = 2 and explore the 9-cell connected
+//         component of 2s across columns 0..3; column 4 of 1s blocks DFS from
+//         reaching the 2s in column 5.
+//       - Mark each component cell in visited before checking neighbors so
+//         already-recolored border cells (now 1) still return 1 when revisited,
+//         preventing false boundary counts or leaks into adjacent 1s.
+//       - Among the 9 visited cells, only (1, 1) has all 4 cardinal neighbors—(1,
+//         2), (1, 0), (2, 1), and (0, 1)—in the component (same_neighbors = 4), so
+//         (1, 1) remains 2 while the other 8 cells are recolored to 1.
+//
 // Algorithm:
 //   Record `orig_color = grid[row][col]` and run a DFS from `(row, col)` using
 //   a 2D `visited` table. Each DFS call returns 1 if `(r, c)` belongs to the

@@ -7,6 +7,44 @@
 //   nums[i] < nums[j] < nums[k]; otherwise return false.
 //   Required complexity: O(n) time and O(1) auxiliary space.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 1, 5, 0, 4, 6]
+//     Output: true
+//     Explanation:
+//       - Initialize first = INT_MAX and second = INT_MAX.
+//       - Process 2 (<= first) to set first = 2, then 1 (<= first) to lower first =
+//         1.
+//       - Process 5 (> first, <= second) to set second = 5.
+//       - Process 0 (<= first) to lower first = 0, then 4 (> first, <= second) to
+//         tighten second = 4.
+//       - Process 6 (> second = 4), confirming a valid increasing triplet such as
+//         (1, 4, 6) and returning true.
+//
+//   Example 2:
+//     Input:  nums = [20, 100, 10, 120]
+//     Output: true
+//     Explanation:
+//       - Initialize first = INT_MAX and second = INT_MAX, then process 20 to set
+//         first = 20.
+//       - Process 100 (> 20, <= INT_MAX) to set second = 100, locking in the
+//         invariant that an earlier value 20 < 100 exists.
+//       - Process 10 (<= 20) to lower first = 10 while leaving second = 100
+//         unchanged.
+//       - Process 120 (> second = 100), completing the increasing triplet (20, 100,
+//         120) and returning true.
+//
+//   Example 3:
+//     Input:  nums = [6, 7, 1, 2]
+//     Output: false
+//     Explanation:
+//       - Initialize first = INT_MAX and second = INT_MAX, then process 6 to set
+//         first = 6 and 7 to set second = 7.
+//       - Process 1 (<= 6) to lower first = 1 while keeping second = 7.
+//       - Process 2 (> 1, <= 7) to tighten second = 2.
+//       - Reach the end of nums without encountering any element greater than
+//         second, returning false.
+//
 // Algorithm:
 //   Two equivalent O(n) time, O(1) space approaches are provided:
 //   1. Greedy Two-Threshold Scan (primary):

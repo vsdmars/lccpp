@@ -10,6 +10,43 @@
 //   Constraints: 1 <= s.length <= 1000, 1 <= dictionary.length <= 1000,
 //   1 <= dictionary[i].length <= 1000, all lowercase English letters.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abpcplea", dictionary = ["ale", "apple", "monkey", "plea"]
+//     Output: "apple"
+//     Explanation:
+//       - Keep all four words whose length is at most s.size() (8) and heapify them
+//         into max_heap ordered by descending length then ascending lexicographical
+//         order.
+//       - Pop "monkey" (length 6) first; isSubsequence("monkey", "abpcplea")
+//         returns false because 'm' never appears in s.
+//       - Pop "apple" (length 5) next; isSubsequence matches 'a' (si=0), 'p'
+//         (si=2), 'p' (si=4), 'l' (si=5), and 'e' (si=6), reaching wi == 5.
+//       - Return "apple" immediately on the first match since remaining heap
+//         entries ("plea", "ale") are strictly shorter.
+//
+//   Example 2:
+//     Input:  s = "abpcplea", dictionary = ["plea", "bpea", "able", "aple"]
+//     Output: "able"
+//     Explanation:
+//       - All four dictionary words have length 4 (<= 8), so CandidateOrder places
+//         the lexicographically smallest candidate at the top of max_heap: "able",
+//         then "aple", "bpea", and "plea".
+//       - Pop "able" first and run isSubsequence("able", "abpcplea"), matching 'a'
+//         (si=0), 'b' (si=1), 'l' (si=5), and 'e' (si=6) with wi == 4.
+//       - Return "able" immediately without inspecting the lexicographically larger
+//         length-4 matches.
+//
+//   Example 3:
+//     Input:  s = "abpcplea", dictionary = ["xyz", "mnop", "abpcpleax"]
+//     Output: ""
+//     Explanation:
+//       - Skip "abpcpleax" during filtering because its length (9) exceeds s.size()
+//         (8), leaving "mnop" and "xyz" in max_heap.
+//       - Pop "mnop" (length 4) and "xyz" (length 3) in order; isSubsequence fails
+//         for both at wi = 0 because neither 'm' nor 'x' occurs in "abpcplea".
+//       - Exhaust max_heap with no subsequence match and return "".
+//
 // Algorithm:
 //   Use a best-first max-heap (priority queue) ordered by descending string
 //   length with ties broken by ascending lexicographical order, paired with a

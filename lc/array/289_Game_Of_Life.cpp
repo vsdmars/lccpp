@@ -12,6 +12,42 @@
 //     4. Dead cell with exactly 3 live neighbors becomes live (reproduction).
 //   Follow-up: update `board` in-place using O(1) extra memory.
 //
+// Examples:
+//   Example 1:
+//     Input:  board = [[0, 1, 0], [0, 0, 1], [1, 1, 1], [0, 0, 0]]
+//     Output: board = [[0, 0, 0], [1, 0, 1], [0, 1, 1], [0, 1, 0]]
+//     Explanation:
+//       - In Pass 1, count original live neighbors for every cell using neighbor %
+//         2 == 1 so earlier updates do not corrupt later counts.
+//       - Live cells (0, 1) and (2, 0) each have 1 original live neighbor (< 2), so
+//         both are marked kLiveToDead (3), while live cells (1, 2), (2, 1), and (2,
+//         2) have 2 or 3 live neighbors and stay 1.
+//       - Dead cells (1, 0) and (3, 1) each have exactly 3 original live neighbors,
+//         so both are marked kDeadToLive (2), yielding intermediate grid [[0, 3,
+//         0], [2, 0, 1], [3, 1, 1], [0, 2, 0]].
+//       - In Pass 2, convert every 3 (kLiveToDead) to 0 and every 2 (kDeadToLive)
+//         to 1 to produce [[0, 0, 0], [1, 0, 1], [0, 1, 1], [0, 1, 0]].
+//
+//   Example 2:
+//     Input:  board = [[1, 1], [1, 0]]
+//     Output: board = [[1, 1], [1, 1]]
+//     Explanation:
+//       - In Pass 1, live cells (0, 0), (0, 1), and (1, 0) each have 2 original
+//         live neighbors (checked via neighbor % 2 == 1), so all three remain 1.
+//       - Dead cell (1, 1) has 3 original live neighbors, so Pass 1 encodes it as
+//         kDeadToLive (2), giving intermediate board [[1, 1], [1, 2]].
+//       - Pass 2 decodes 2 to 1, yielding [[1, 1], [1, 1]].
+//
+//   Example 3:
+//     Input:  board = [[1]]
+//     Output: board = [[0]]
+//     Explanation:
+//       - countLiveNeighbors(board, 0, 0) finds all 8 neighbor coordinates out of
+//         bounds and returns 0 live neighbors.
+//       - Because board[0][0] is kLive (1) with 0 < 2 live neighbors, Pass 1 sets
+//         board[0][0] = kLiveToDead (3).
+//       - Pass 2 converts 3 to kDead (0), leaving [[0]].
+//
 // Algorithm:
 //   Two-pass in-place state encoding:
 //   Because every cell update depends on its neighbors' *original* states, we

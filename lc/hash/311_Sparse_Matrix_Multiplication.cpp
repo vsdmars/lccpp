@@ -6,6 +6,42 @@
 //   `mat2` of dimensions `k x n`, return their matrix product `mat1 * mat2` of
 //   dimensions `m x n`. Most entries in both input matrices are zero.
 //
+// Examples:
+//   Example 1:
+//     Input:  mat1 = [[1, 0, 0], [-1, 0, 3]], mat2 = [[7, 0, 0], [0, 0, 0], [0, 0,
+//             1]]
+//     Output: [[7, 0, 0], [-7, 0, 3]]
+//     Explanation:
+//       - compressRows builds sparse_a = [[{col: 0, val: 1}], [{col: 0, val: -1},
+//         {col: 2, val: 3}]] and sparse_b = [[{col: 0, val: 7}], [], [{col: 2, val:
+//         1}]].
+//       - For row i = 0, {0, 1} pairs with sparse_b[0] ({0, 7}), setting
+//         result[0][0] = 1 * 7 = 7.
+//       - For row i = 1, {0, -1} pairs with sparse_b[0] ({0, 7}) to add -7 to
+//         result[1][0], and {2, 3} pairs with sparse_b[2] ({2, 1}) to add 3 to
+//         result[1][2], skipping empty sparse_b[1] and returning [[7, 0, 0], [-7,
+//         0, 3]].
+//
+//   Example 2:
+//     Input:  mat1 = [[1, -5], [0, 2], [4, 0]], mat2 = [[12, 0, -1], [-1, 3, 0]]
+//     Output: [[17, -15, -1], [-2, 6, 0], [48, 0, -4]]
+//     Explanation:
+//       - compressRows extracts sparse_a = [[{0, 1}, {1, -5}], [{1, 2}], [{0, 4}]]
+//         and sparse_b = [[{0, 12}, {2, -1}], [{0, -1}, {1, 3}]] into a 3x3
+//         zero-initialized result.
+//       - For i = 0, {0, 1} adds [12, 0, -1] and {1, -5} adds [5, -15, 0] into
+//         result[0], accumulating to [17, -15, -1].
+//       - For i = 1, {1, 2} scales sparse_b[1] to produce [-2, 6, 0], and for i =
+//         2, {0, 4} scales sparse_b[0] to produce [48, 0, -4].
+//
+//   Example 3:
+//     Input:  mat1 = [[0]], mat2 = [[0]]
+//     Output: [[0]]
+//     Explanation:
+//       - compressRows produces empty entry lists [[]] for both mat1 and mat2.
+//       - With sparse_a[0] empty, no multiplications occur and the zero-initialized
+//         1x1 matrix [[0]] is returned.
+//
 // Algorithm:
 //   Compress both matrices into row-wise lists of non-zero `(column, value)`
 //   entries (Compressed Sparse Row / list-of-lists format). Then compute the

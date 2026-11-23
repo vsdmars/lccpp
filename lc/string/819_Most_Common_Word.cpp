@@ -8,6 +8,44 @@
 //   the returned word must be lowercase. It is guaranteed that at least one
 //   non-banned word exists and the answer is unique.
 //
+// Examples:
+//   Example 1:
+//     Input:  paragraph = "Bob hit a ball, the hit BALL flew far after it was
+//             hit.", banned = ["hit"]
+//     Output: "ball"
+//     Explanation:
+//       - Insert lowercased banned word "hit" into banned_set, then scan paragraph
+//         character by character.
+//       - Flush lowercase alphabetic tokens at each delimiter: "bob" (count 1, best
+//         = "bob"), "hit" (skipped as banned), "a" (count 1), "ball" (count 1), and
+//         "the" (count 1).
+//       - Skipping the second "hit", flushing "BALL" yields "ball" with count 2,
+//         beating best_count = 1 and setting best_word = "ball".
+//       - Remaining words ("flew", "far", "after", "it", "was") each reach count 1
+//         and the trailing "hit" is banned, so return "ball".
+//
+//   Example 2:
+//     Input:  paragraph = "a, a, a, a, b,b,b,c, c", banned = ["a"]
+//     Output: "b"
+//     Explanation:
+//       - Store "a" in banned_set and scan the paragraph, treating commas and
+//         spaces alike as non-alphabetic delimiters.
+//       - All four occurrences of "a" are skipped because banned_set.contains("a")
+//         is true.
+//       - Adjacent comma-separated tokens "b", "b", "b" flush cleanly into
+//         counts["b"] = 3 (best_word = "b"), while "c" reaches count 2, returning
+//         "b".
+//
+//   Example 3:
+//     Input:  paragraph = "Bob. hIt, baLl", banned = ["bob", "hit"]
+//     Output: "ball"
+//     Explanation:
+//       - Populate banned_set with "bob" and "hit".
+//       - Token "bob" flushes at '.' and "hit" (from "hIt") flushes at ',', both
+//         ignored because they appear in banned_set.
+//       - After the loop ends on the letter 'l', the post-loop record_token call
+//         flushes "ball" with count 1 and returns "ball".
+//
 // Algorithm:
 //   Normalize every banned word to lowercase and store them in an unordered
 //   set for O(1) expected membership checks. Then perform a single linear scan

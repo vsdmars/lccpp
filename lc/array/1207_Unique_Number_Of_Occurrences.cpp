@@ -7,6 +7,37 @@
 //   otherwise.
 //   Constraints: 1 <= arr.length <= 1000, -1000 <= arr[i] <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [1, 2, 2, 1, 1, 3]
+//     Output: true
+//     Explanation:
+//       - Phase 1 counts every element into the hash map counts: {1: 3, 2: 2, 3:
+//         1}.
+//       - Phase 2 inserts frequencies 3, 2, and 1 into seen_frequencies, and all
+//         three insertions succeed without duplicates.
+//       - Since all occurrence counts are pairwise distinct, the function returns
+//         true.
+//
+//   Example 2:
+//     Input:  arr = [1, 2]
+//     Output: false
+//     Explanation:
+//       - Phase 1 records counts = {1: 1, 2: 1}.
+//       - Phase 2 inserts the first frequency 1 into seen_frequencies, then
+//         attempts to insert 1 again for the second entry and sees .second ==
+//         false.
+//       - The duplicate frequency causes an immediate return of false.
+//
+//   Example 3:
+//     Input:  arr = [-3, 0, 1, -3, 1, 1, 1, -3, 10, 0]
+//     Output: true
+//     Explanation:
+//       - Phase 1 tallies each distinct integer, including negative values and
+//         zero, into counts = {-3: 3, 0: 2, 1: 4, 10: 1}.
+//       - Phase 2 inserts the four frequencies 3, 2, 4, and 1 into seen_frequencies
+//         with no collision, returning true.
+//
 // Algorithm:
 //   Two-Stage Frequency Counting & Uniqueness Check:
 //   1. Traverse `arr` and tally each integer's occurrence count in a hash map

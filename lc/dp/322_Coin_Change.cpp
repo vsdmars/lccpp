@@ -8,6 +8,39 @@
 //   `amount`. If `amount` cannot be formed by any combination of the coins,
 //   return -1.
 //
+// Examples:
+//   Example 1:
+//     Input:  coins = [1, 2, 5], amount = 11
+//     Output: 3
+//     Explanation:
+//       - Allocate dp of size 12 initialized to kUnreachable = 12 with dp[0] = 0.
+//       - Fill cur = 1..5 to obtain dp[1] = 1, dp[2] = 1, dp[3] = 2, dp[4] = 2, and
+//         dp[5] = dp[0] + 1 = 1.
+//       - Fill cur = 6..10 to obtain dp[6] = 2, dp[7] = 2, dp[8] = 3, dp[9] = 3,
+//         and dp[10] = dp[5] + 1 = 2.
+//       - At cur = 11, relaxing across coins 1, 2, and 5 takes min(dp[10] + 1,
+//         dp[9] + 1, dp[6] + 1) = min(3, 4, 3) = 3, which is <= 11 and returned.
+//
+//   Example 2:
+//     Input:  coins = [3, 4], amount = 6
+//     Output: 2
+//     Explanation:
+//       - Allocate dp of size 7 initialized to kUnreachable = 7 with dp[0] = 0.
+//       - Values cur = 1, 2, and 5 remain unreachable at 7, while cur = 3 and cur =
+//         4 relax to dp[3] = 1 and dp[4] = 1.
+//       - At cur = 6, coin 3 yields dp[3] + 1 = 2 whereas coin 4 yields dp[2] + 1 =
+//         8, so dp[6] = 2 is returned rather than failing greedily.
+//
+//   Example 3:
+//     Input:  coins = [2], amount = 3
+//     Output: -1
+//     Explanation:
+//       - Initialize dp of size 4 with kUnreachable = 4 and dp[0] = 0.
+//       - At cur = 1, coin 2 exceeds cur so dp[1] stays 4; at cur = 2, coin 2
+//         updates dp[2] = dp[0] + 1 = 1.
+//       - At cur = 3, coin 2 tests dp[1] + 1 = 5 so dp[3] stays 4, and because
+//         dp[3] > 3 the function returns -1.
+//
 // Algorithm:
 //   Bottom-Up Unbounded Knapsack Dynamic Programming. Define `dp[a]` as the
 //   minimum number of coins needed to sum exactly to `a`. Initialize `dp[0] = 0`

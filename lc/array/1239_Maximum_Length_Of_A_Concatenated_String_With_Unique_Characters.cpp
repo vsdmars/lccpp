@@ -8,6 +8,40 @@
 //   Constraints: 1 <= arr.length <= 16, 1 <= arr[i].length <= 26,
 //   arr[i] consists only of lowercase English letters `'a'..'z'`.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = ["un", "iq", "ue"]
+//     Output: 4
+//     Explanation:
+//       - Start with reachable_masks = [0] and best_len = 0; "un" has mask {u, n},
+//         which combines with 0 to add {u, n} (best_len = 2).
+//       - "iq" has mask {i, q}, disjoint from both 0 and {u, n}, adding {i, q}
+//         (length 2) and {u, n, i, q} (std::popcount = 4, best_len = 4).
+//       - "ue" has mask {u, e}, which overlaps {u, n} and {u, n, i, q} on 'u', so
+//         it only combines with 0 and {i, q} (lengths 2 and 4), returning best_len
+//         = 4.
+//
+//   Example 2:
+//     Input:  arr = ["cha", "r", "act", "ers"]
+//     Output: 6
+//     Explanation:
+//       - "cha" and "r" are disjoint, expanding reachable_masks to [0, {c, h, a},
+//         {r}, {c, h, a, r}] with best_len = 4.
+//       - "act" shares 'c' and 'a' with {c, h, a} and {c, h, a, r}, so it only
+//         combines with 0 and {r} to add {a, c, t} and {r, a, c, t} (max length 4).
+//       - "ers" shares 'r' with {r}, {c, h, a, r}, and {r, a, c, t}, so it combines
+//         with {c, h, a} and {a, c, t} to form {c, h, a, e, r, s} and {a, c, t, e,
+//         r, s} (popcount 6), updating best_len = 6.
+//
+//   Example 3:
+//     Input:  arr = ["aa", "bb"]
+//     Output: 0
+//     Explanation:
+//       - toUniqueMask("aa") sets the bit for 'a' on the first character and
+//         returns 0U on the second 'a', skipping the word.
+//       - toUniqueMask("bb") likewise detects the repeated 'b' and returns 0U,
+//         leaving reachable_masks as [0] and returning best_len = 0.
+//
 // Algorithm:
 //   Iterative Subset Bitmask Enumeration (Bitset DP):
 //   Since the alphabet has only 26 lowercase letters, any string with unique

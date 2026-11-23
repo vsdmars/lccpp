@@ -7,6 +7,44 @@
 //   distinct even if they contain identical characters.
 //   Constraints: 1 <= s.size() <= 1000, lowercase English letters.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abc"
+//     Output: 3
+//     Explanation:
+//       - countSubstrings iterates over 2 * 3 - 1 = 5 centers (pivot = 0..4).
+//       - Single-character centers (0, 0), (1, 1), and (2, 2) each match once ("a",
+//         "b", "c") before hitting an inequality or boundary, contributing 1 + 1 +
+//         1 = 3.
+//       - Between-character centers (0, 1) ('a' != 'b') and (1, 2) ('b' != 'c')
+//         fail on the first comparison and add 0, returning 3.
+//
+//   Example 2:
+//     Input:  s = "aaa"
+//     Output: 6
+//     Explanation:
+//       - Across 2 * 3 - 1 = 5 centers, single-character centers (0, 0) and (2, 2)
+//         each match once ("a") while (1, 1) expands twice ("a" and "aaa"),
+//         contributing 1 + 2 + 1 = 4.
+//       - Between-character centers (0, 1) and (1, 2) each match "aa" once before
+//         hitting an endpoint, contributing 1 + 1 = 2.
+//       - Summing all valid expansions yields 4 + 2 = 6 ("a", "a", "a", "aa", "aa",
+//         "aaa").
+//
+//   Example 3:
+//     Input:  s = "abba"
+//     Output: 6
+//     Explanation:
+//       - Across 2 * 4 - 1 = 7 centers, the four single-character centers (0, 0)
+//         through (3, 3) each contribute 1 ("a", "b", "b", "a") before mismatching
+//         neighbors or hitting bounds, totaling 4.
+//       - Between-character centers (0, 1) ('a' != 'b') and (2, 3) ('b' != 'a')
+//         contribute 0, while center (1, 2) matches "bb" and expands to "abba" for
+//         2.
+//       - Adding both counts gives 6 (equivalently in Manacher's transformed string
+//         "#a#b#b#a#", radius = [0, 1, 0, 1, 4, 1, 0, 1, 0] sums (radius[i] + 1) /
+//         2 to 6).
+//
 // Algorithm:
 //   1. Expand-Around-Center (`countSubstrings`, primary):
 //      Every palindrome expands symmetrically from one of `2 * N - 1` possible

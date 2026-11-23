@@ -10,6 +10,46 @@
 //   equal length m; strings are unique and lowercase English letters.
 //   Follow-up: Achieve O(n * m) time complexity.
 //
+// Examples:
+//   Example 1:
+//     Input:  dict = ["abcd", "acbd", "aacd"]
+//     Output: true
+//     Explanation:
+//       - compute_hashes encodes each 4-letter word with base 131 mod 1000000007
+//         (char_weight(c) = c - 'a' + 1), producing hashes [2282810, 2299840,
+//         2265649].
+//       - At col = 3 (power = 1) and col = 2 (power = 131), subtracting
+//         char_weight(dict[i][col]) * power yields distinct masked hashes across
+//         all three strings.
+//       - At col = 1 (power = 17161), removing 'b' (2 * 17161 = 34322) from "abcd"
+//         gives masked hash 2248488 and removing 'a' (1 * 17161 = 17161) from
+//         "aacd" also gives 2248488.
+//       - differs_only_at("abcd", "aacd", 1) confirms 'b' != 'a' with matching
+//         prefix "a" and suffix "cd", returning true.
+//
+//   Example 2:
+//     Input:  dict = ["ab", "cd", "yz"]
+//     Output: false
+//     Explanation:
+//       - compute_hashes computes the full polynomial hashes 133 for "ab", 397 for
+//         "cd", and 3301 for "yz".
+//       - At col = 1 (power = 1), masking out the last character produces distinct
+//         hashes 131, 393, and 3275 in seen.
+//       - At col = 0 (power = 131), masking out the first character produces
+//         distinct hashes 2, 4, and 26, so no column finds a match and differByOne
+//         returns false.
+//
+//   Example 3:
+//     Input:  dict = ["abcd", "abcd"]
+//     Output: false
+//     Explanation:
+//       - Both strings produce the identical full hash 2282810 in hashes[0] and
+//         hashes[1].
+//       - At every column col from 3 down to 0, masking out dict[i][col] produces
+//         equal masked hashes for both indices and enters the bucket check.
+//       - differs_only_at("abcd", "abcd", col) sees a[col] == b[col] at every
+//         column and rejects the pair, returning false.
+//
 // Algorithm:
 //   Polynomial rolling hash (Rabin-Karp) with column-wise wildcard masking and
 //   exact collision verification:

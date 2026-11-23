@@ -8,6 +8,45 @@
 //   return the minimum number of moves required to solve the board, or -1 if
 //   the board is unsolvable.
 //
+// Examples:
+//   Example 1:
+//     Input:  board = [[1, 2, 3], [4, 0, 5]]
+//     Output: 1
+//     Explanation:
+//       - Serialize `board` row-by-row into `start = "123405"`, which does not
+//         match `kTarget = "123450"`, and insert it into `visited` and `frontier`.
+//       - At BFS level `moves = 1`, dequeue `"123405"` where `'0'` sits at index 4
+//         (`kNeighbors[4] = {1, 3, 5}`).
+//       - Swapping index 4 with adjacent index 5 produces `"123450" == kTarget`, so
+//         `expand_state` returns `true` and `slidingPuzzle` returns `1`.
+//
+//   Example 2:
+//     Input:  board = [[4, 1, 2], [5, 0, 3]]
+//     Output: 5
+//     Explanation:
+//       - Serialize `board` to `start = "412503"` (`'0'` at index 4) and enqueue it
+//         into `frontier`.
+//       - At `moves = 1`, swap `'0'` at index 4 with index 3 to reach `"412053"`
+//         (while also enqueuing `"402513"` and `"412530"`).
+//       - Through `moves = 2` and `moves = 3`, `"412053"` transitions via index 3
+//         -> 0 to `"012453"` and via index 0 -> 1 to `"102453"`.
+//       - At `moves = 4`, swapping index 1 with 2 yields `"120453"`, and at `moves
+//         = 5`, swapping index 2 with 5 yields `"123450" == kTarget`, returning
+//         `5`.
+//
+//   Example 3:
+//     Input:  board = [[1, 2, 3], [5, 4, 0]]
+//     Output: -1
+//     Explanation:
+//       - Serialize `board` to `start = "123540"`, mark it in `visited`, and push
+//         it onto `frontier`.
+//       - Level-order BFS expands all reachable board states via `kNeighbors`,
+//         generating `"120543"` and `"123504"` at `moves = 1` and deduplicating
+//         previously seen states in `visited`.
+//       - After exhausting every state reachable from `"123540"` without ever
+//         producing `"123450"`, `frontier` becomes empty and `slidingPuzzle`
+//         returns `-1`.
+//
 // Algorithm:
 //   Serialize the 2 x 3 grid row-by-row into a 6-character string (target
 //   "123450") and run level-order Breadth-First Search (BFS) over the state

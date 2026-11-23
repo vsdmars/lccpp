@@ -10,6 +10,44 @@
 //   number of valid pivot indices achievable.
 //   Constraints: 2 <= n <= 10^5; -10^5 <= nums[i], k <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, -1, 2], k = 3
+//     Output: 1
+//     Explanation:
+//       - Total sum is 3, and Phase 1 computes diffs = [1, -1] (2*2 - 3 and 2*1 -
+//         3), initializing right_diffs = {1: 1, -1: 1}, left_diffs = {}, and
+//         baseline best = 0.
+//       - At i = 0 (nums[0] = 2), delta = 3 - 2 = 1 gives ways = left_diffs[1] +
+//         right_diffs[-1] = 0 + 1 = 1, updating best = 1 before moving diff[0] = 1
+//         into left_diffs.
+//       - At i = 1 (delta = 4), ways = 0 and diff[1] = -1 moves to left_diffs; at i
+//         = 2 (delta = 1), ways = left_diffs[1] + right_diffs[-1] = 1 + 0 = 1, so
+//         best remains 1.
+//
+//   Example 2:
+//     Input:  nums = [0, 0, 0], k = 1
+//     Output: 2
+//     Explanation:
+//       - Total sum is 0 and diffs = [0, 0], so right_diffs = {0: 2} sets the
+//         unchanged baseline best = right_diffs[0] = 2.
+//       - Across i = 0, 1, 2, delta = 1 - 0 = 1 queries left_diffs[1] +
+//         right_diffs[-1] = 0 while transferring 0 entries from right_diffs to
+//         left_diffs.
+//       - No single-element replacement beats the unchanged partition count, so
+//         best = 2 is returned.
+//
+//   Example 3:
+//     Input:  nums = [1, 5], k = 9
+//     Output: 0
+//     Explanation:
+//       - Total sum is 6 and diff[0] = 2*1 - 6 = -4, giving right_diffs = {-4: 1}
+//         and unchanged baseline best = 0.
+//       - At i = 0 (delta = 8), left_diffs[8] + right_diffs[-8] = 0, and -4 moves
+//         from right_diffs to left_diffs.
+//       - At i = 1 (delta = 4), left_diffs[4] + right_diffs[-4] = 0 because
+//         right_diffs[-4] was decremented to 0, returning 0.
+//
 // Algorithm:
 //   Prefix/suffix difference decomposition with sliding left/right hash maps:
 //   For each split point `p` in [0, n - 2] (corresponding to `pivot = p + 1`),

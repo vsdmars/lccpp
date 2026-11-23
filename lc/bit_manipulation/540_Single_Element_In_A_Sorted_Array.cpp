@@ -8,6 +8,44 @@
 //   Constraints: 1 <= nums.length <= 10^5 (always odd), 0 <= nums[i] <= 10^5.
 //   Target complexity: O(log n) time and O(1) space.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 1, 2, 3, 3, 4, 4, 8, 8]
+//     Output: 2
+//     Explanation:
+//       - Initialize low = 0 and high = 8.
+//       - At mid = 4 (mid ^ 1 = 5), nums[4] = 3 != nums[5] = 4, so pair alignment
+//         has already shifted and high narrows to 4.
+//       - At mid = 2 (mid ^ 1 = 3), nums[2] = 2 != nums[3] = 3, so high narrows
+//         further to 2.
+//       - At mid = 1 (mid ^ 1 = 0), nums[1] = 1 == nums[0] = 1, so pair alignment
+//         holds through index 1 and low advances to 2; low == high == 2 ends the
+//         loop and returns nums[2] = 2.
+//
+//   Example 2:
+//     Input:  nums = [3, 3, 7, 7, 10, 11, 11]
+//     Output: 10
+//     Explanation:
+//       - Initialize low = 0 and high = 6.
+//       - At mid = 3 (mid ^ 1 = 2), nums[3] = 7 == nums[2] = 7, so pair alignment
+//         holds and low advances to 4.
+//       - At mid = 5 (mid ^ 1 = 4), nums[5] = 11 != nums[4] = 10, narrowing high to
+//         5; then at mid = 4 (mid ^ 1 = 5), nums[4] = 10 != nums[5] = 11 narrows
+//         high to 4.
+//       - With low == high == 4, the loop terminates and returns nums[4] = 10.
+//
+//   Example 3:
+//     Input:  nums = [-5, -5, -3, -1, -1, 0, 0]
+//     Output: -3
+//     Explanation:
+//       - Initialize low = 0 and high = 6.
+//       - At mid = 3 (mid ^ 1 = 2), nums[3] = -1 != nums[2] = -3, so high becomes
+//         3.
+//       - At mid = 1 (mid ^ 1 = 0), nums[1] = -5 == nums[0] = -5, so low advances
+//         to 2.
+//       - At mid = 2 (mid ^ 1 = 3), nums[2] = -3 != nums[3] = -1 sets high = 2,
+//         exiting with low == high == 2 and returning nums[2] = -3.
+//
 // Algorithm:
 //   Primary (Binary Search with Bitwise Parity Flip `mid ^ 1uz`):
 //   Before the unique element, every duplicate pair occupies indices

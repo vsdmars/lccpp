@@ -6,6 +6,36 @@
 //   (that is, there exists an integer `x >= 0` such that `n == 2^x`); otherwise
 //   return `false`. Negative numbers and zero are never powers of two.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 16
+//     Output: true
+//     Explanation:
+//       - Check the guard n <= 0; since 16 > 0, execution continues.
+//       - Compute n - 1 = 15 (0b01111), which clears bit 4 of 16 (0b10000) and sets
+//         bits 0 through 3 to 1.
+//       - Evaluate (16 & 15) == 0 (0b10000 & 0b01111 == 0), confirming 16 has
+//         exactly one set bit and returning true.
+//
+//   Example 2:
+//     Input:  n = 18
+//     Output: false
+//     Explanation:
+//       - Check the guard n <= 0; since 18 > 0, execution continues.
+//       - Compute n - 1 = 17 (0b10001), which clears only the lowest set bit (bit
+//         1) of 18 (0b10010) while leaving bit 4 intact.
+//       - Evaluate 18 & 17 = 16 (0b10000), which is nonzero, so isPowerOfTwo
+//         returns false.
+//
+//   Example 3:
+//     Input:  n = -2147483648 (INT_MIN)
+//     Output: false
+//     Explanation:
+//       - Although INT_MIN has a single 1-bit in two's complement (0x80000000), it
+//         is negative and not a power of two.
+//       - The entry guard if (n <= 0) immediately returns false, preventing signed
+//         underflow on n - 1.
+//
 // Algorithm:
 //   Single-Bit Clearing Check:
 //   A positive integer `n` is a power of two if and only if its binary

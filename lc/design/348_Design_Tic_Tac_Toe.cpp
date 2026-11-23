@@ -11,6 +11,45 @@
 //   A player wins by completing any full row, column, main diagonal, or
 //   anti-diagonal of length n. Follow-up: do better than O(n^2) per move.
 //
+// Examples:
+//   Example 1:
+//     Input:  TicTacToe(3); moves: (0,0,1), (0,2,2), (2,2,1), (1,1,2), (2,0,1),
+//             (1,0,2), (2,1,1)
+//     Output: [0, 0, 0, 0, 0, 0, 1]
+//     Explanation:
+//       - TicTacToe(3) zero-initializes rows_ = [0, 0, 0], cols_ = [0, 0, 0], diag_
+//         = 0, and anti_diag_ = 0.
+//       - Moves (0,0,1) and (0,2,2) cancel in row 0 (rows_[0] = 0) while setting
+//         diag_ = 1 and anti_diag_ = -1; moves (2,2,1), (1,1,2), (2,0,1), and
+//         (1,0,2) leave rows_ = [0, -2, 2], cols_ = [1, -1, 0], diag_ = 1, and
+//         anti_diag_ = -1, all with absolute value < 3 so each returns 0.
+//       - Final move (2,1,1) adds +1 to rows_[2] (reaching 3) and cols_[1]
+//         (reaching 0); std::abs(rows_[2]) == 3 triggers and returns player 1.
+//
+//   Example 2:
+//     Input:  TicTacToe(3); moves: (0,0,1), (0,2,2), (1,0,1), (1,1,2), (2,2,1),
+//             (2,0,2)
+//     Output: [0, 0, 0, 0, 0, 2]
+//     Explanation:
+//       - Player 1 adds +1 at (0,0), (1,0), and (2,2), while player 2 adds -1 at
+//         (0,2) and (1,1) (both on row + col == 2), bringing anti_diag_ to -2 after
+//         five moves with all outputs 0.
+//       - Move (2,0,2) satisfies 2 + 0 == 2, updating rows_[2] to 0, cols_[0] to 1,
+//         and anti_diag_ to -3.
+//       - Because std::abs(anti_diag_) == 3, the move returns winning player 2.
+//
+//   Example 3:
+//     Input:  TicTacToe(3); moves: (0,0,1), (0,1,2), (0,2,1), (1,1,2), (1,0,1),
+//             (1,2,2), (2,1,1), (2,0,2), (2,2,1)
+//     Output: [0, 0, 0, 0, 0, 0, 0, 0, 0]
+//     Explanation:
+//       - Each move adds +1 for player 1 or -1 for player 2 to its row, column, and
+//         any matching diagonal (row == col or row + col == 2).
+//       - After all nine cells are filled, the final counters are rows_ = [1, -1,
+//         1], cols_ = [1, -1, 1], diag_ = 1, and anti_diag_ = -1.
+//       - No counter ever reaches absolute value 3, so every move returns 0 for a
+//         draw.
+//
 // Algorithm:
 //   Two implementations are provided:
 //   1. `TicTacToe` (Optimal O(1) time per move, O(n) space):

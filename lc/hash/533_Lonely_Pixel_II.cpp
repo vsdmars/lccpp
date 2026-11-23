@@ -8,6 +8,49 @@
 //     1. Row R and column C each contain exactly `target` black pixels.
 //     2. Every row that has a black pixel at column C is identical to row R.
 //
+// Examples:
+//   Example 1:
+//     Input:  picture = [['W', 'B', 'W', 'B', 'B', 'W'], ['W', 'B', 'W', 'B', 'B',
+//             'W'], ['W', 'B', 'W', 'B', 'B', 'W'], ['W', 'W', 'B', 'W', 'B',
+//             'W']], target = 3
+//     Output: 6
+//     Explanation:
+//       - In Phase 1, count black pixels per column across all 4 rows to get
+//         col_black = [0, 3, 1, 3, 4, 0].
+//       - Rows 0, 1, and 2 each have row_black = 3 == target, recording
+//         row_pattern_count["WBWBBW"] = 3, while row 3 has row_black = 2 and is
+//         skipped.
+//       - In Phase 2, inspect pattern "WBWBBW" because its multiplicity 3 equals
+//         target = 3.
+//       - Check columns where "WBWBBW" has 'B' (columns 1, 3, and 4): col_black[1]
+//         == 3 and col_black[3] == 3 match target and each add 3 to total, whereas
+//         col_black[4] == 4 != 3 is excluded.
+//       - Return total = 6.
+//
+//   Example 2:
+//     Input:  picture = [['W', 'B', 'W', 'B', 'B', 'W'], ['W', 'B', 'B', 'W', 'B',
+//             'W'], ['W', 'B', 'B', 'W', 'B', 'W'], ['W', 'W', 'B', 'W', 'B',
+//             'W']], target = 3
+//     Output: 0
+//     Explanation:
+//       - In Phase 1, scan the grid to compute col_black = [0, 3, 3, 1, 4, 0].
+//       - Rows 0, 1, and 2 each have row_black = 3 == target, giving
+//         row_pattern_count["WBWBBW"] = 1 and row_pattern_count["WBBWBW"] = 2,
+//         while row 3 has only 2 black pixels and is ignored.
+//       - In Phase 2, neither recorded pattern has multiplicity equal to target =
+//         3, so no column adds to total and the function returns 0.
+//
+//   Example 3:
+//     Input:  picture = [['B', 'B', 'W'], ['B', 'B', 'W'], ['B', 'B', 'W']], target
+//             = 2
+//     Output: 0
+//     Explanation:
+//       - In Phase 1, all 3 rows have 2 black pixels, producing col_black = [3, 3,
+//         0] and row_pattern_count["BBW"] = 3.
+//       - In Phase 2, skip "BBW" because its multiplicity 3 != target = 2 (the
+//         extra identical row makes col_black[0] = col_black[1] = 3 > 2), and
+//         return 0.
+//
 // Algorithm:
 //   Key structural invariant:
 //     Suppose pixel (R, C) is valid. By Rule 1, column C contains exactly

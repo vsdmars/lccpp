@@ -11,6 +11,48 @@
 //   0 <= values[i] <= 10^8, 10 <= time_j, maxTime <= 100, and every node has
 //   degree at most 4.
 //
+// Examples:
+//   Example 1:
+//     Input:  values = [0, 32, 10, 43], edges = [[0, 1, 10], [1, 2, 15], [0, 3,
+//             10]], maxTime = 49
+//     Output: 75
+//     Explanation:
+//       - Start dfs(0, 49, 0) with visit_count = [1, 0, 0, 0] and best = 0.
+//       - Explore 0 -> 1 (time 10, cur_quality = 32, remaining_time = 39) and
+//         return 1 -> 0 (time 10, remaining_time = 29), updating best = 32 at node
+//         0 with visit_count = [2, 1, 0, 0].
+//       - From node 0 at remaining_time = 29, take 0 -> 3 (time 10, visit_count[3]
+//         = 1, cur_quality = 32 + 43 = 75) and return 3 -> 0 (time 10,
+//         remaining_time = 9).
+//       - Update best = 75 upon returning to node 0; shorter/dead-end branches
+//         (such as visiting node 2) cannot return to 0 with higher quality, so 75
+//         is returned.
+//
+//   Example 2:
+//     Input:  values = [5, 10, 15, 20], edges = [[0, 1, 10], [1, 2, 10], [0, 3,
+//             10]], maxTime = 30
+//     Output: 25
+//     Explanation:
+//       - Start dfs(0, 30, 5) with visit_count = [1, 0, 0, 0] and best = 5.
+//       - The walk 0 -> 1 -> 0 spends 20 time to reach node 0 with cur_quality =
+//         15, leaving 10 time which is insufficient for the 20-time round trip to
+//         node 3.
+//       - Taking 0 -> 3 -> 0 spends 10 + 10 = 20 <= 30 time, collecting values[3] =
+//         20 once for cur_quality = 25 and updating best = 25.
+//
+//   Example 3:
+//     Input:  values = [1, 2, 3, 4], edges = [[0, 1, 10], [1, 2, 11], [2, 3, 12],
+//             [1, 3, 13]], maxTime = 50
+//     Output: 7
+//     Explanation:
+//       - Start dfs(0, 50, 1) with visit_count = [1, 0, 0, 0] and best = 1.
+//       - Exploring 0 -> 1 -> 2 -> 3 spends 10 + 11 + 12 = 33 time and leaves only
+//         17 time at node 3, which cannot return to node 0 via 1 (needs 13 + 10 =
+//         23).
+//       - Taking 0 -> 1 -> 3 spends 10 + 13 = 23 time (cur_quality = 1 + 2 + 4 = 7,
+//         visit_count = [1, 1, 0, 1]), then returns 3 -> 1 (visit_count[1] becomes
+//         2 so gain = 0) -> 0 (total time 46 <= 50), updating best = 7.
+//
 // Algorithm:
 //   Time-bounded backtracking Depth-First Search (DFS) rooted at node `0`. Key
 //   constraint insight: because `time_j >= 10` and `maxTime <= 100`, every

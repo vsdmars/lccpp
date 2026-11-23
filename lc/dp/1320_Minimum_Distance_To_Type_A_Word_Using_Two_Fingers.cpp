@@ -8,6 +8,49 @@
 //   needed to type `word` using two fingers. The initial placement of both
 //   fingers is free (distance 0).
 //
+// Examples:
+//   Example 1:
+//     Input:  word = "CAKE"
+//     Output: 3
+//     Explanation:
+//       - Start with finger 1 free on word[0] = 'C' at (0, 2) and finger 2 hovering
+//         at kHover = 26, calling dfs(1, 26).
+//       - At idx = 1 ('A' at (0, 0)), move finger 1 from 'C' to 'A' at Manhattan
+//         cost |0 - 0| + |2 - 0| = 2 and call dfs(2, 26).
+//       - At idx = 2 ('K' at (1, 4)), place the hovering finger (other = 26) on 'K'
+//         at cost 0, leaving 'A' as the idle finger in dfs(3, 'A').
+//       - At idx = 3 ('E' at (0, 4)), move the active finger from 'K' (1, 4) to 'E'
+//         (0, 4) at cost |1 - 0| + |4 - 4| = 1, giving minimum total distance 2 + 0
+//         + 1 = 3.
+//
+//   Example 2:
+//     Input:  word = "HAPPY"
+//     Output: 6
+//     Explanation:
+//       - Start with finger 1 free on word[0] = 'H' at (1, 1) and finger 2 hovering
+//         (other = 26), calling dfs(1, 26).
+//       - At idx = 1 ('A' at (0, 0)), moving finger 1 from 'H' to 'A' costs |1 - 0|
+//         + |1 - 0| = 2 and reaches dfs(2, 26).
+//       - At idx = 2 ('P' at (2, 3)), placing the hovering finger on 'P' costs 0
+//         and transitions to dfs(3, 'A').
+//       - At idx = 3 ('P' at (2, 3)), keeping the active finger on 'P' costs 0 and
+//         transitions to dfs(4, 'A').
+//       - At idx = 4 ('Y' at (4, 0)), moving the idle finger from 'A' (0, 0) to 'Y'
+//         (4, 0) costs |0 - 4| + |0 - 0| = 4, yielding minimum total distance 2 + 0
+//         + 0 + 4 = 6.
+//
+//   Example 3:
+//     Input:  word = "ABABAB"
+//     Output: 0
+//     Explanation:
+//       - Start with finger 1 free on word[0] = 'A' at (0, 0) and finger 2 hovering
+//         (other = 26).
+//       - At idx = 1 ('B' at (0, 1)), placing the hovering finger on 'B' costs
+//         dist(26, 'B') = 0 and enters dfs(2, 'A').
+//       - For idx = 2..5 ('A', 'B', 'A', 'B'), each target character already
+//         matches the idle finger position, so moving the idle finger to curr costs
+//         0 at every step and returns 0.
+//
 // Algorithm:
 //   Top-down memoized DFS with state compression. Right before typing
 //   `word[idx]` (`idx >= 1`), one finger is guaranteed to rest on the previous

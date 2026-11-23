@@ -8,6 +8,42 @@
 //   same characters with the exact same multiplicities.
 //   Constraints: 1 <= strs.length <= 10^4, 0 <= strs[i].length <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+//     Output: [["ate", "eat", "tea"], ["bat"], ["nat", "tan"]]
+//     Explanation:
+//       - For "eat", "tea", and "ate", counting letters 'a'..'z' yields the
+//         identical 26-element FreqKey with 1 at indices 0 ('a'), 4 ('e'), and 19
+//         ('t'), grouping all three into one bucket.
+//       - For "tan" and "nat", the FreqKey has 1 at indices 0 ('a'), 13 ('n'), and
+//         19 ('t'), placing both into a second bucket.
+//       - For "bat", the FreqKey has 1 at indices 0 ('a'), 1 ('b'), and 19 ('t'),
+//         creating a third bucket containing ["bat"].
+//       - Move all buckets from the hash map into result, producing groups
+//         equivalent (up to group and element ordering) to [["ate", "eat", "tea"],
+//         ["bat"], ["nat", "tan"]].
+//
+//   Example 2:
+//     Input:  strs = ["boo", "bob"]
+//     Output: [["bob"], ["boo"]]
+//     Explanation:
+//       - Build FreqKey for "boo" with 1 at index 1 ('b') and 2 at index 14 ('o'),
+//         inserting "boo" into its bucket.
+//       - Build FreqKey for "bob" with 2 at index 1 ('b') and 1 at index 14 ('o'),
+//         which produces a different key and creates a separate bucket for "bob".
+//       - Move both singleton buckets into result, yielding [["bob"], ["boo"]]
+//         after canonical sorting.
+//
+//   Example 3:
+//     Input:  strs = ["", ""]
+//     Output: [["", ""]]
+//     Explanation:
+//       - For the first "", the character loop performs zero iterations and inserts
+//         "" under the all-zero 26-element FreqKey.
+//       - For the second "", the same all-zero FreqKey matches the existing bucket,
+//         appending "" and returning [["", ""]].
+//
 // Algorithm:
 //   Two strings belong to the same anagram group if and only if they share the
 //   same canonical signature.

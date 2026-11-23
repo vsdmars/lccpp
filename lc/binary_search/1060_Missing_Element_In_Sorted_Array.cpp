@@ -8,6 +8,40 @@
 //   Constraints: 1 <= nums.length <= 50,000, 1 <= nums[i] <= 10^7,
 //   1 <= k <= 10^8.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [4, 7, 9, 10], k = 1
+//     Output: 5
+//     Explanation:
+//       - Compute total_missing = missingBefore(3) = (10 - 4) - 3 = 3; since k = 1
+//         <= 3, binary search over [left = 0, right = 3].
+//       - At mid = 1, missingBefore(1) = (7 - 4) - 1 = 2 >= 1, so narrow the window
+//         by setting right = 1.
+//       - At mid = 0, missingBefore(0) = (4 - 4) - 0 = 0 < 1, so set left = 1 and
+//         exit the loop with left == right == 1.
+//       - Return nums[0] + (k - missingBefore(0)) = 4 + (1 - 0) = 5.
+//
+//   Example 2:
+//     Input:  nums = [4, 7, 9, 10], k = 3
+//     Output: 8
+//     Explanation:
+//       - Compute total_missing = missingBefore(3) = 3; since k = 3 <= 3, binary
+//         search over [left = 0, right = 3].
+//       - At mid = 1, missingBefore(1) = (7 - 4) - 1 = 2 < 3, so advance left = 2.
+//       - At mid = 2, missingBefore(2) = (9 - 4) - 2 = 3 >= 3, so set right = 2 and
+//         exit with left == 2.
+//       - Return nums[1] + (k - missingBefore(1)) = 7 + (3 - 2) = 8.
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 4], k = 3
+//     Output: 6
+//     Explanation:
+//       - Compute total_missing = missingBefore(2) = (4 - 1) - 2 = 1 for the single
+//         missing integer 3 inside [1, 4].
+//       - Since k = 3 > total_missing = 1, skip binary search because the 3rd
+//         missing number lies past nums.back() = 4.
+//       - Return nums[2] + (k - total_missing) = 4 + (3 - 1) = 6.
+//
 // Algorithm:
 //   Define `missingBefore(i) = (nums[i] - nums[0]) - i`, which counts how many
 //   integers are missing strictly inside `[nums[0], nums[i]]`. Because `nums`

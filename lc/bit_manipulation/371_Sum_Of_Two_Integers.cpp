@@ -7,6 +7,45 @@
 //   Constraints: -1000 <= a, b <= 1000 (the algorithm generalizes to any
 //   32-bit two's-complement sum that does not overflow signed 32-bit int).
 //
+// Examples:
+//   Example 1:
+//     Input:  a = 1, b = 2
+//     Output: 3
+//     Explanation:
+//       - Convert operands to 32-bit unsigned integers `ua = 1` (`0001_2`) and `ub
+//         = 2` (`0010_2`).
+//       - Iteration 1 (`ub != 0`): compute `carry = (1 & 2) << 1 = 0`, update `ua =
+//         1 ^ 2 = 3` (`0011_2`), and set `ub = 0`.
+//       - The loop exits with `ub == 0` and casts `ua = 3` back to `int`, returning
+//         `3`.
+//
+//   Example 2:
+//     Input:  a = -2, b = 3
+//     Output: 1
+//     Explanation:
+//       - Reinterpret both signed inputs as 32-bit unsigned values: `ua =
+//         0xFFFFFFFE` (`-2`) and `ub = 0x00000003` (`3`).
+//       - Iteration 1 computes `carry = (0xFFFFFFFE & 0x00000003) << 1 = 4`,
+//         updates `ua = 0xFFFFFFFE ^ 0x00000003 = 0xFFFFFFFD` (`-3`), and sets `ub
+//         = 4`.
+//       - Iteration 2 computes `carry = (0xFFFFFFFD & 4) << 1 = 8`, updates `ua =
+//         0xFFFFFFF9` (`-7`), and sets `ub = 8`.
+//       - Subsequent iterations shift the carry bit left (`8 -> 16 -> ... ->
+//         0x80000000 -> 0` modulo 2^32) while `ua` updates to `1` (`0x00000001`),
+//         terminating when `ub == 0` and returning `1`.
+//
+//   Example 3:
+//     Input:  a = 1023, b = 1
+//     Output: 1024
+//     Explanation:
+//       - Initialize `ua = 1023` (`0011_1111_1111_2`) and `ub = 1` (`0001_2`).
+//       - Iteration 1 computes `carry = (1023 & 1) << 1 = 2`, `ua = 1023 ^ 1 =
+//         1022`, and `ub = 2`.
+//       - Iterations 2 through 10 ripple the single carry bit across the remaining
+//         nine 1-bits (`ub` becomes `4, 8, ..., 1024` as `ua` clears down to `0`).
+//       - Iteration 11 sees `ua = 0` and `ub = 1024`, yielding `carry = 0`, `ua = 0
+//         ^ 1024 = 1024`, and `ub = 0`, so the loop stops and returns `1024`.
+//
 // Algorithm:
 //   Simulate binary ripple-carry addition using bitwise operations on unsigned
 //   32-bit integers (`std::uint32_t`). At each step:

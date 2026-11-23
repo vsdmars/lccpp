@@ -7,6 +7,43 @@
 //   element equal to `x - 1` or `x + 1`. Return the maximum total points you
 //   can earn.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 4, 2]
+//     Output: 6
+//     Explanation:
+//       - Find max_val = 4 and accumulate value buckets into points = [0, 0, 2, 3,
+//         4] for values 0..4.
+//       - Process buckets 0 and 1 (gain = 0), keeping rolling state (prev, curr) =
+//         (0, 0).
+//       - Process bucket 2 (gain = 2): next = max(0, 0 + 2) = 2, updating (prev,
+//         curr) to (0, 2).
+//       - Process bucket 3 (gain = 3): next = max(2, 0 + 3) = 3, updating (prev,
+//         curr) to (2, 3).
+//       - Process bucket 4 (gain = 4): next = max(3, 2 + 4) = 6, updating curr = 6
+//         and returning 6.
+//
+//   Example 2:
+//     Input:  nums = [2, 2, 3, 3, 3, 4]
+//     Output: 9
+//     Explanation:
+//       - Aggregate identical values into points = [0, 0, 4, 9, 4] up to max_val =
+//         4.
+//       - Keep (prev, curr) = (0, 0) through buckets 0 and 1, then at bucket 2
+//         (gain = 4) set next = max(0, 0 + 4) = 4 so (prev, curr) = (0, 4).
+//       - At bucket 3 (gain = 9), compute next = max(4, 0 + 9) = 9, updating (prev,
+//         curr) to (4, 9).
+//       - At bucket 4 (gain = 4), compute next = max(9, 4 + 4) = 9, keeping curr =
+//         9 and returning 9.
+//
+//   Example 3:
+//     Input:  nums = []
+//     Output: 0
+//     Explanation:
+//       - Check nums.empty(), which evaluates to true for the empty input vector.
+//       - Return 0 immediately without allocating the value-bucket vector or
+//         executing the DP loop.
+//
 // Algorithm:
 //   Observe that once you choose one copy of value `v`, all copies of `v - 1`
 //   and `v + 1` are already eliminated, so it is always optimal to take every

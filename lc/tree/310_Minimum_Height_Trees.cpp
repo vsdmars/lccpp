@@ -8,6 +8,37 @@
 //   all root labels that produce a Minimum Height Tree (MHT). The answer may
 //   be returned in any order.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 4, edges = [[1, 0], [1, 2], [1, 3]]
+//     Output: [1]
+//     Explanation:
+//       - Build initial degrees [1, 3, 1, 1], seeding leaves = [0, 2, 3] with
+//         remaining = 4.
+//       - Since remaining > 2, peel leaves [0, 2, 3] (remaining becomes 4 - 3 = 1)
+//         and decrement neighbor 1's degree three times: 3 -> 2 -> 1 -> 0.
+//       - Node 1 is pushed to next_leaves exactly when degree[1] hits 1, leaving
+//         leaves = [1] and remaining = 1 <= 2 to return [1].
+//
+//   Example 2:
+//     Input:  n = 6, edges = [[0, 3], [1, 3], [2, 3], [4, 3], [5, 4]]
+//     Output: [3, 4]
+//     Explanation:
+//       - Build initial degrees [1, 1, 1, 4, 2, 1], seeding leaves = [0, 1, 2, 5]
+//         with remaining = 6.
+//       - Peel the 4 leaves (remaining becomes 6 - 4 = 2): decrementing degrees
+//         drops degree[3] from 4 down to 1 and degree[4] from 2 down to 1.
+//       - Both 3 and 4 enter next_leaves, so leaves = [3, 4] with remaining = 2
+//         terminates the loop and returns [3, 4].
+//
+//   Example 3:
+//     Input:  n = 1, edges = []
+//     Output: [0]
+//     Explanation:
+//       - Detect n <= 2 at the top of findMinHeightTrees and skip building the
+//         adjacency list.
+//       - Populate and return all node indices from 0 to n - 1, yielding [0].
+//
 // Algorithm:
 //   Any tree has at most two centers (midpoints of every longest path / tree
 //   diameter), and those centers are precisely the roots of its MHTs. We find

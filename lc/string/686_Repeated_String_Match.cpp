@@ -7,6 +7,39 @@
 //   substring of the repeated string. If no number of repetitions can contain
 //   `b`, return -1.
 //
+// Examples:
+//   Example 1:
+//     Input:  a = "abcd", b = "cdabcdab"
+//     Output: 3
+//     Explanation:
+//       - Compute min_reps = (8 + 4 - 1) / 4 = 2 and build repeated with 2 copies
+//         of a, yielding "abcdabcd".
+//       - Check repeated.contains("cdabcdab"), which is false because "cdabcdab"
+//         spans across 3 copies of "abcd".
+//       - Append one additional copy of a to form "abcdabcdabcd" (3 copies);
+//         repeated.contains("cdabcdab") now succeeds at index 2, returning min_reps
+//         + 1 = 3.
+//
+//   Example 2:
+//     Input:  a = "abababaaba", b = "aabaaba"
+//     Output: 2
+//     Explanation:
+//       - Compute min_reps = (7 + 10 - 1) / 10 = 1 and initialize repeated to 1
+//         copy of a, "abababaaba".
+//       - Check repeated.contains("aabaaba"), which is false in the single copy.
+//       - Append a second copy of a to get "abababaabaabababaaba", where "aabaaba"
+//         matches across the boundary starting at index 6, returning 2.
+//
+//   Example 3:
+//     Input:  a = "abc", b = "wxyz"
+//     Output: -1
+//     Explanation:
+//       - Compute min_reps = (4 + 3 - 1) / 3 = 2 and construct repeated as
+//         "abcabc".
+//       - Check repeated.contains("wxyz") on 2 copies ("abcabc") and after
+//         appending a 3rd copy ("abcabcabc"), both returning false.
+//       - Since neither min_reps nor min_reps + 1 copies contain b, return -1.
+//
 // Algorithm:
 //   To contain `b`, the repeated string must be at least as long as `b`, so the
 //   minimum candidate repetition count is `min_reps = ceil(|b| / |a|)`.

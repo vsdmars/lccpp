@@ -8,6 +8,36 @@
 //   Matching is case-sensitive ('a' and 'A' are distinct types).
 //   Constraints: 1 <= jewels.length, stones.length <= 50, English letters only.
 //
+// Examples:
+//   Example 1:
+//     Input:  jewels = "aA", stones = "aAAbbbb"
+//     Output: 3
+//     Explanation:
+//       - Mark is_jewel[97] ('a') and is_jewel[65] ('A') as true in the 128-entry
+//         ASCII lookup table while leaving all other entries false.
+//       - Scan stones = "aAAbbbb": indices 0, 1, and 2 ('a', 'A', 'A') have
+//         is_jewel[code] == true, incrementing count from 0 to 3.
+//       - Indices 3 through 6 are 'b' (ASCII 98), where is_jewel[98] is false, so
+//         count remains 3 and is returned.
+//
+//   Example 2:
+//     Input:  jewels = "z", stones = "ZZ"
+//     Output: 0
+//     Explanation:
+//       - Set is_jewel[122] ('z') to true while is_jewel[90] ('Z') stays false
+//         because matching is case-sensitive.
+//       - Check both characters of stones = "ZZ" against is_jewel[90], finding
+//         false each time and returning count = 0.
+//
+//   Example 3:
+//     Input:  jewels = "xyz", stones = ""
+//     Output: 0
+//     Explanation:
+//       - Populate is_jewel[120], is_jewel[121], and is_jewel[122] ('x', 'y', 'z')
+//         as true in the lookup table.
+//       - Iterate over the empty string stones = "" in zero iterations and
+//         immediately return count = 0.
+//
 // Algorithm:
 //   Use a fixed 128-entry direct-address ASCII membership table (`is_jewel`):
 //     1. Mark `is_jewel[c] = true` for every character `c` in `jewels`.

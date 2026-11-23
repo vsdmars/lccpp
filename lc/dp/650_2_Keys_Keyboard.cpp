@@ -9,6 +9,36 @@
 //   Given an integer n (1 <= n <= 1000), return the minimum number of steps
 //   required to have exactly n 'A's on the notepad.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3
+//     Output: 3
+//     Explanation:
+//       - Initialize dp[1] = 0 because the notepad starts with one 'A'.
+//       - For cur = 2, best starts at 2 and the divisor loop (d * d <= 2) does not
+//         run, giving dp[2] = 2.
+//       - For cur = 3, best starts at 3 and the divisor loop (d * d <= 3) does not
+//         run, setting dp[3] = 3 (Copy All once, Paste twice).
+//
+//   Example 2:
+//     Input:  n = 6
+//     Output: 5
+//     Explanation:
+//       - Compute earlier DP values dp[1] = 0, dp[2] = 2, dp[3] = 3, dp[4] = 4, and
+//         dp[5] = 5.
+//       - At cur = 6, initialize best = 6 and test divisor d = 2 with complementary
+//         quotient q = 3.
+//       - Evaluate both transitions dp[2] + 3 = 5 and dp[3] + 2 = 5, updating dp[6]
+//         to 5.
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: 0
+//     Explanation:
+//       - Check the base condition n <= 1 at the start of minSteps(1).
+//       - Return 0 immediately because one 'A' is already on the notepad without
+//         any Copy All or Paste steps.
+//
 // Algorithm:
 //   Bottom-up dynamic programming over divisor transitions (plus an equivalent
 //   O(sqrt(n)) prime-factorization verification method).

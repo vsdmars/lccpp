@@ -7,6 +7,38 @@
 //   Constraints: 1 <= nums.length <= 6, -10 <= nums[i] <= 10, all integers
 //   of `nums` are unique.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3]
+//     Output: [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+//     Explanation:
+//       - Initialize used = [0, 0, 0] and current = [], then at depth 0 pick index
+//         0 (1), setting used = [1, 0, 0].
+//       - Extend with unused indices 1 then 2 to hit current.size() == 3 and emit
+//         [1, 2, 3], then backtrack to [1] and pick 2 then 1 to emit [1, 3, 2].
+//       - Backtrack to depth 0, clear used[0] = 0, and repeat with starting choices
+//         2 and 3 to append [2, 1, 3], [2, 3, 1], [3, 1, 2], and [3, 2, 1].
+//
+//   Example 2:
+//     Input:  nums = [-1, 0, 1]
+//     Output: [[-1, 0, 1], [-1, 1, 0], [0, -1, 1], [0, 1, -1], [1, -1, 0], [1, 0,
+//             -1]]
+//     Explanation:
+//       - DFS tracks occupancy via used = [0, 0, 0] by index, so negative values
+//         work identically to positive integers.
+//       - Choosing index 0 (-1) first explores the two remaining indices in order
+//         to emit [-1, 0, 1] and [-1, 1, 0].
+//       - Advancing the root loop to index 1 (0) and index 2 (1) produces [0, -1,
+//         1], [0, 1, -1], [1, -1, 0], and [1, 0, -1].
+//
+//   Example 3:
+//     Input:  nums = []
+//     Output: [[]]
+//     Explanation:
+//       - With n = 0, allocate empty current and used vectors and invoke dfs().
+//       - At entry, current.size() == n (0 == 0) holds immediately, so
+//         results.push_back(current) appends [] and returns [[]].
+//
 // Algorithm:
 //   Backtracking DFS with an occupancy array (`used`):
 //     - Maintain `current` (the partially built permutation) and `used[i]`

@@ -6,6 +6,36 @@
 //   number of nodes along the longest downward path from the root node to any
 //   leaf node (0 for an empty tree).
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 9, 20, null, null, 15, 7]
+//     Output: 3
+//     Explanation:
+//       - At leaf 9, both null children return 0, so maxDepth(9) = 1 + max(0, 0) =
+//         1.
+//       - At leaves 15 and 7, both return depth 1, so node 20 computes 1 + max(1,
+//         1) = 2.
+//       - At root 3, combine left depth 1 and right depth 2 to return 1 + max(1, 2)
+//         = 3.
+//
+//   Example 2:
+//     Input:  root = [1, null, 2, null, 3, null, 4]
+//     Output: 4
+//     Explanation:
+//       - Recurse down the right-skewed chain 1 -> 2 -> 3 -> 4 until hitting
+//         nullptr at depth 0; every left child is nullptr and returns 0.
+//       - Unwind post-order from leaf 4 to root 1: node 4 returns 1 + max(0, 0) =
+//         1, node 3 returns 1 + max(0, 1) = 2, node 2 returns 3, and root 1 returns
+//         4.
+//
+//   Example 3:
+//     Input:  root = [1]
+//     Output: 1
+//     Explanation:
+//       - Visit single node 1 and recurse into its null left and right children,
+//         each hitting root == nullptr and returning 0.
+//       - Combine both child depths at node 1 via 1 + std::max(0, 0) to return 1.
+//
 // Algorithm:
 //   Post-order Depth-First Search (DFS) using the recursive height recurrence:
 //     depth(null) = 0

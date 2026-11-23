@@ -8,6 +8,37 @@
 //   six subtractive pairs (IV, IX, XL, XC, CD, CM) where a smaller symbol
 //   precedes a larger one.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "LVIII"
+//     Output: 58
+//     Explanation:
+//       - At i = 0 ('L'=50, 'V'=5), curr >= next adds 50 to total (total = 50).
+//       - At i = 1 ('V'=5, 'I'=1), curr >= next adds 5 to total (total = 55).
+//       - At i = 2 and i = 3 ('I'=1, 'I'=1), curr >= next adds 1 twice (total =
+//         57).
+//       - Add the trailing symbol s.back() = 'I' (1) after the loop to return 58.
+//
+//   Example 2:
+//     Input:  s = "MCMXCIV"
+//     Output: 1994
+//     Explanation:
+//       - At i = 0 ('M'=1000, 'C'=100), add 1000 (total = 1000); at i = 1 ('C'=100,
+//         'M'=1000), 100 < 1000 subtracts 100 (total = 900).
+//       - At i = 2 ('M'=1000, 'X'=10), add 1000 (total = 1900); at i = 3 ('X'=10,
+//         'C'=100), 10 < 100 subtracts 10 (total = 1890).
+//       - At i = 4 ('C'=100, 'I'=1), add 100 (total = 1990); at i = 5 ('I'=1,
+//         'V'=5), 1 < 5 subtracts 1 (total = 1989).
+//       - Add the final character 'V' (5) outside the loop to get 1989 + 5 = 1994.
+//
+//   Example 3:
+//     Input:  s = "I"
+//     Output: 1
+//     Explanation:
+//       - Since s.size() == 1, the lookahead loop condition i + 1 < s.size() is
+//         false immediately and total remains 0.
+//       - Add symbolValue(s.back()) = symbolValue('I') = 1 and return 1.
+//
 // Algorithm:
 //   Scan `s` from left to right comparing each symbol's numeric value `curr`
 //   with the next symbol's value `next`. Whenever `curr < next`, the current

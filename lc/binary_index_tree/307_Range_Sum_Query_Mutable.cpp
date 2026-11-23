@@ -8,6 +8,49 @@
 //   2. `sumRange(left, right)`: return the sum of `nums[left..right]`
 //      inclusive (with `0 <= left <= right < nums.size()`).
 //
+// Examples:
+//   Example 1:
+//     Input:  NumArray([1, 3, 5]), sumRange(0, 2), update(1, 2), sumRange(0, 2)
+//     Output: sumRange(0, 2) = 9, sumRange(0, 2) = 8
+//     Explanation:
+//       - Linear construction builds the 1-indexed Fenwick tree tree_ = [0, 1, 4,
+//         5], where tree_[2] holds 1 + 3 = 4 and tree_[3] holds 5.
+//       - sumRange(0, 2) computes prefix_sum(3) - prefix_sum(0) = (tree_[3] +
+//         tree_[2]) - 0 = (5 + 4) - 0 = 9.
+//       - update(1, 2) computes delta = 2 - nums_[1] = -1, sets nums_[1] = 2, and
+//         adds -1 at 1-based index i = 2 (tree_[2] becomes 3; next i = 4 exceeds
+//         size 3).
+//       - The second sumRange(0, 2) evaluates (tree_[3] + tree_[2]) - 0 = (5 + 3) -
+//         0 = 8.
+//
+//   Example 2:
+//     Input:  NumArray([1, 2, 1, 3, 2, 5]), sumRange(1, 2), sumRange(0, 5),
+//             update(3, 5), sumRange(0, 5), update(3, 3), sumRange(0, 5)
+//     Output: sumRange(1, 2) = 3, sumRange(0, 5) = 14, sumRange(0, 5) = 16,
+//             sumRange(0, 5) = 14
+//     Explanation:
+//       - Construction populates tree_ = [0, 1, 3, 1, 7, 2, 7] via single-parent
+//         propagation i + lowbit(i).
+//       - sumRange(1, 2) returns prefix_sum(3) - prefix_sum(1) = (tree_[3] +
+//         tree_[2]) - tree_[1] = (1 + 3) - 1 = 3, and sumRange(0, 5) returns
+//         tree_[6] + tree_[4] = 7 + 7 = 14.
+//       - update(3, 5) computes delta = 5 - 3 = 2 and adds 2 to tree_[4] (becoming
+//         9), so sumRange(0, 5) increases to 7 + 9 = 16.
+//       - update(3, 3) applies delta = 3 - 5 = -2 to tree_[4] (restoring 7),
+//         bringing sumRange(0, 5) back to 14.
+//
+//   Example 3:
+//     Input:  NumArray([-10]), sumRange(0, 0), update(0, 7), sumRange(0, 0),
+//             update(0, -3), sumRange(0, 0)
+//     Output: sumRange(0, 0) = -10, sumRange(0, 0) = 7, sumRange(0, 0) = -3
+//     Explanation:
+//       - Construction initializes nums_ = [-10] and tree_ = [0, -10], so
+//         sumRange(0, 0) returns prefix_sum(1) - prefix_sum(0) = -10.
+//       - update(0, 7) applies delta = 7 - (-10) = 17 to tree_[1] (-10 + 17 = 7),
+//         returning 7 on sumRange(0, 0).
+//       - update(0, -3) applies delta = -3 - 7 = -10 to tree_[1] (7 - 10 = -3),
+//         returning -3 on sumRange(0, 0).
+//
 // Algorithm:
 //   1-indexed Binary Indexed Tree (Fenwick Tree). Each slot `tree_[i]` stores
 //   the sum of the half-open block of length `lowbit(i) = i & -i` ending at

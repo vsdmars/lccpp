@@ -9,6 +9,44 @@
 //     - 1 <= arr1.length, arr2.length, arr3.length <= 1000
 //     - 1 <= arr1[i], arr2[i], arr3[i] <= 2000
 //
+// Examples:
+//   Example 1:
+//     Input:  arr1 = [1, 2, 3, 4, 5], arr2 = [1, 2, 5, 7, 9], arr3 = [1, 3, 4, 5,
+//             8]
+//     Output: [1, 5]
+//     Explanation:
+//       - Start at indices i = 0, j = 0, k = 0 with values (1, 1, 1); all three
+//         match, so append 1 to result and advance to (1, 1, 1).
+//       - At (1, 1, 1) with values (2, 2, 3), target = max(2, 2, 3) = 3, so advance
+//         lagging pointers i and j to (2, 2, 1).
+//       - At (2, 2, 1) with values (3, 5, 3), target = 5 advances i and k to (3, 2,
+//         2) with values (4, 5, 4), and then target = 5 advances i and k again to
+//         (4, 2, 3).
+//       - At (4, 2, 3) all three arrays hold 5, so append 5 to result and advance
+//         to (5, 3, 4), where i == arr1.size() ends the loop and returns [1, 5].
+//
+//   Example 2:
+//     Input:  arr1 = [6, 9, 100], arr2 = [1, 3, 6, 9], arr3 = [9, 10, 11]
+//     Output: [9]
+//     Explanation:
+//       - Start at (0, 0, 0) with values (6, 1, 9); target = 9 advances i and j to
+//         (1, 1, 0) with values (9, 3, 9).
+//       - Two consecutive steps with target = 9 advance only j from 1 to 2 (value
+//         6) and then to 3 (value 9).
+//       - At (1, 3, 0) all three values equal 9, so append 9 to result and advance
+//         to (2, 4, 1), where j == arr2.size() ends the loop and returns [9].
+//
+//   Example 3:
+//     Input:  arr1 = [1, 4, 7], arr2 = [2, 5, 8], arr3 = [3, 6, 9]
+//     Output: []
+//     Explanation:
+//       - Start at (0, 0, 0) with values (1, 2, 3); target = 3 advances i and j to
+//         (1, 1, 0) with values (4, 5, 3).
+//       - Target = 5 advances i and k to (2, 1, 1) with values (7, 5, 6), and then
+//         target = 7 advances j and k to (2, 2, 2) with values (7, 8, 9).
+//       - Target = 9 advances i and j to (3, 3, 2), exhausting arr1 and arr2 with
+//         no common elements found and returning [].
+//
 // Algorithm:
 //   Use three synchronized pointers (i, j, k) initialized to the start of
 //   arr1, arr2, and arr3 respectively. Because every array is strictly

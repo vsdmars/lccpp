@@ -10,6 +10,45 @@
 //   Constraints: 1 <= number of nodes <= 1000, distinct values in [1, 1000],
 //   to_delete.size() <= 1000 with distinct values in [1, 1000].
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, 4, 5, 6, 7], to_delete = [3, 5]
+//     Output: [[1, 2, null, 4], [6], [7]]
+//     Explanation:
+//       - Build delete_set = {3, 5}; since root 1 is not in delete_set, add node 1
+//         to forest and enqueue (1, nullptr, kNone).
+//       - Pop 1 (enqueuing 2 and 3) and pop 2 (enqueuing 4 and 5) without deleting
+//         either node.
+//       - Pop (3, 1, kRight): enqueue 6 and 7, detach 3 by setting 1->right =
+//         nullptr, promote surviving children 6 and 7 to forest, and clear 3's
+//         child links.
+//       - Pop 4 (kept) and (5, 2, kRight) (setting 2->right = nullptr), then finish
+//         popping 6 and 7 to return trees rooted at [1, 6, 7].
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, 4, 5], to_delete = [1, 2]
+//     Output: [[3], [4], [5]]
+//     Explanation:
+//       - Build delete_set = {1, 2}; because root 1 is deleted, leave forest empty
+//         initially and enqueue (1, nullptr, kNone).
+//       - Pop 1: enqueue 2 and 3, skip promoting 2 (in delete_set), promote
+//         surviving child 3 to forest, and clear 1's child pointers.
+//       - Pop 2: enqueue 4 and 5, promote both surviving children 4 and 5 to
+//         forest, and clear 2's child pointers.
+//       - Pop leaves 3, 4, and 5 with no further deletions, returning the three
+//         single-node trees [3], [4], and [5].
+//
+//   Example 3:
+//     Input:  root = [1, 2, 3], to_delete = [1, 2, 3]
+//     Output: []
+//     Explanation:
+//       - Build delete_set = {1, 2, 3}; root 1 is in delete_set, so forest starts
+//         empty and frontier starts with (1, nullptr, kNone).
+//       - Pop 1: enqueue 2 and 3, promote neither because both appear in
+//         delete_set, and clear 1's child pointers.
+//       - Pop 2 and 3 (both in delete_set with no children), leaving forest empty
+//         and returning [].
+//
 // Algorithm:
 //   Two clean O(N) approaches are provided:
 //   1. Top-Down BFS with Parent Tracking (primary, `delNodes`):

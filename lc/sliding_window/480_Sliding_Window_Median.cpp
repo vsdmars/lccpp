@@ -9,6 +9,46 @@
 //   arithmetic mean of the two middle elements. Answers within 10^-5 of the
 //   exact value are accepted.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 3, -1, -3, 5, 3, 6, 7], k = 3
+//     Output: [1.0, -1.0, -1.0, 3.0, 5.0, 6.0]
+//     Explanation:
+//       - Insert 1, 3, -1 to form low_ = {-1, 1} and high_ = {3}; since low_.size()
+//         > high_.size(), emit *prev(low_.end()) = 1.0.
+//       - At i = 3 (-3), insert -3, rebalance, and erase outgoing 1 to get low_ =
+//         {-3, -1}, high_ = {3}, emitting -1.0.
+//       - At i = 4 (5), insert 5 and erase outgoing 3 to get low_ = {-3, -1}, high_
+//         = {5}, emitting -1.0.
+//       - For i = 5..7, inserting 3, 6, 7 and erasing -1, -3, 5 while rebalancing
+//         leaves low_ maxima of 3, 5, and 6, producing [1.0, -1.0, -1.0, 3.0, 5.0,
+//         6.0].
+//
+//   Example 2:
+//     Input:  nums = [1, 4, 2, 3], k = 4
+//     Output: [2.5]
+//     Explanation:
+//       - Insert 1, 4, 2, and 3 into DualMultisetWindow while rebalancing after
+//         each step.
+//       - At i = 3, the four elements split evenly into low_ = {1, 2} and high_ =
+//         {3, 4}.
+//       - Since low_.size() == high_.size(), median() averages *prev(low_.end())
+//         and *high_.begin() as (2.0 + 3.0) / 2.0 = 2.5, returning [2.5].
+//
+//   Example 3:
+//     Input:  nums = [2147483647, 2147483647, -2147483648, -2147483648], k = 2
+//     Output: [2147483647.0, -0.5, -2147483648.0]
+//     Explanation:
+//       - At i = 1, low_ = {2147483647} and high_ = {2147483647}; casting both ends
+//         to double before adding avoids signed 32-bit overflow and emits
+//         2147483647.0.
+//       - At i = 2, inserting -2147483648 and erasing one 2147483647 leaves low_ =
+//         {-2147483648} and high_ = {2147483647}, emitting (-2147483648.0 +
+//         2147483647.0) / 2.0 = -0.5.
+//       - At i = 3, inserting -2147483648, erasing 2147483647, and rebalancing
+//         yields low_ = {-2147483648} and high_ = {-2147483648}, emitting
+//         -2147483648.0.
+//
 // Algorithm:
 //   Maintain the active window partitioned into two balanced std::multiset<int>
 //   containers:

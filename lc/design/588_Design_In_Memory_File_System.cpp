@@ -16,6 +16,46 @@
 //     - readContentFromFile(filePath): Return the current contents of the file
 //       at filePath.
 //
+// Examples:
+//   Example 1:
+//     Input:  FileSystem(); ls("/"); mkdir("/a/b/c"); addContentToFile("/a/b/c/d",
+//             "hello"); ls("/"); readContentFromFile("/a/b/c/d"); ls("/a/b/c/d")
+//     Output: [[], null, null, ["a"], "hello", ["d"]]
+//     Explanation:
+//       - Initial ls("/") inspects root_.children, which is empty, and returns [].
+//       - mkdir("/a/b/c") splits the path into ["a", "b", "c"] and allocates
+//         missing Trie nodes along root_ -> a -> b -> c.
+//       - addContentToFile("/a/b/c/d", "hello") creates child "d" under "c", sets
+//         is_file = true, and appends "hello" to its content.
+//       - ls("/") returns ["a"] from root_.children,
+//         readContentFromFile("/a/b/c/d") returns "hello", and ls("/a/b/c/d") sees
+//         is_file == true and returns ["d"].
+//
+//   Example 2:
+//     Input:  FileSystem(); mkdir("/dir/zeta"); addContentToFile("/dir/beta", "1");
+//             mkdir("/dir/alpha"); addContentToFile("/dir/gamma", "2"); ls("/dir");
+//             ls("/dir/beta")
+//     Output: [null, null, null, null, ["alpha", "beta", "gamma", "zeta"],
+//             ["beta"]]
+//     Explanation:
+//       - Each mkdir and addContentToFile inserts child keys under node "dir" into
+//         its std::map<std::string, std::unique_ptr<Node>, std::less<>>.
+//       - Because std::map stores keys in lexicographical order, /dir/children
+//         holds {"alpha", "beta", "gamma", "zeta"} regardless of insertion order.
+//       - ls("/dir") iterates /dir/children directly in O(K) to return ["alpha",
+//         "beta", "gamma", "zeta"], while ls("/dir/beta") detects is_file == true
+//         and returns ["beta"].
+//
+//   Example 3:
+//     Input:  FileSystem(); ls("/does/not/exist"); readContentFromFile("/no/file")
+//     Output: [[], ""]
+//     Explanation:
+//       - ls("/does/not/exist") calls find_node, which fails to find "does" in
+//         root_.children and returns nullptr without mutating the Trie, yielding
+//         [].
+//       - readContentFromFile("/no/file") similarly gets nullptr from find_node on
+//         missing component "no" and returns "".
+//
 // Algorithm:
 //   Represent the directory hierarchy as a path-component Trie rooted at `/`.
 //   Each node stores a `is_file` flag, a `content` string (populated when the

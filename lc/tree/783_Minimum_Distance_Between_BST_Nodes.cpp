@@ -6,6 +6,38 @@
 //   return the minimum absolute difference between the values of any two
 //   different nodes in the tree.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [4, 2, 6, 1, 3]
+//     Output: 1
+//     Explanation:
+//       - In-order DFS visits the BST keys in sorted sequence 1 -> 2 -> 3 -> 4 ->
+//         6.
+//       - Visiting 1 sets prev_val = 1, and visiting 2 updates min_diff = 2 - 1 = 1
+//         and prev_val = 2.
+//       - Remaining adjacent differences are 3 - 2 = 1, 4 - 3 = 1, and 6 - 4 = 2,
+//         so min_diff remains 1.
+//
+//   Example 2:
+//     Input:  root = [90, 69, null, 49, 89, null, 52]
+//     Output: 1
+//     Explanation:
+//       - In-order DFS visits nodes in sorted order 49 -> 52 -> 69 -> 89 -> 90
+//         while tracking prev_val.
+//       - Differences across 49 -> 52 -> 69 -> 89 are 52 - 49 = 3, 69 - 52 = 17,
+//         and 89 - 69 = 20, keeping min_diff = 3.
+//       - Visiting root 90 after its left-subtree maximum 89 computes 90 - 89 = 1,
+//         updating min_diff to 1.
+//
+//   Example 3:
+//     Input:  root = [5, 5, 10]
+//     Output: 0
+//     Explanation:
+//       - In-order DFS visits the left child 5 first and sets prev_val = 5.
+//       - Next, visiting root 5 computes 5 - 5 = 0, updating min_diff to 0 and
+//         prev_val = 5.
+//       - Visiting right child 10 yields 10 - 5 = 5, leaving min_diff = 0.
+//
 // Algorithm:
 //   Approach 1 — In-Order Traversal (`minDiffInBST`):
 //     An in-order traversal (left -> node -> right) visits BST keys in sorted

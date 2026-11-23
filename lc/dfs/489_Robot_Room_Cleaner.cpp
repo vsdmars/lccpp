@@ -9,6 +9,50 @@
 //   `move()`, `turnLeft()`, `turnRight()`, and `clean()` — design an algorithm
 //   to clean every reachable cell in the room.
 //
+// Examples:
+//   Example 1:
+//     Input:  room = [[1, 1, 1, 1, 1, 0, 1, 1], [1, 1, 1, 1, 1, 0, 1, 1], [1, 0, 1,
+//             1, 1, 1, 1, 1], [0, 0, 0, 1, 0, 0, 0, 0], [1, 1, 1, 1, 1, 1, 1, 1]],
+//             start = (1, 3), dir = 0 (Up)
+//     Output: allAccessibleCellsClean = true, cleanedCount = 30, finalPose = (1, 3,
+//             dir = 0)
+//     Explanation:
+//       - Start dfs(0, 0, 0) in relative coordinates at (1, 3) facing Up, insert
+//         (0, 0) into visited, and call robot.clean().
+//       - At each cell, loop step = 0..3 over clockwise headings next_dir = (dir +
+//         step) % 4, recursing whenever encodeCell(nr, nc) is unvisited and
+//         robot.move() succeeds, then calling stepBack to return and face next_dir
+//         before turnRight().
+//       - Obstacles (col 5 in rows 0-1 and wall cells in row 3) make move() return
+//         false, forcing traversal through the single open bridge at (3, 3) to
+//         reach row 4.
+//       - Backtracking unwinds all moves and turns, cleaning all 30 reachable open
+//         cells and returning the robot to (1, 3) with dir = 0.
+//
+//   Example 2:
+//     Input:  room = [[1, 1, 1], [1, 0, 1], [1, 1, 1]], start = (2, 2), dir = 0
+//             (Up)
+//     Output: allAccessibleCellsClean = true, cleanedCount = 8
+//     Explanation:
+//       - Enter dfs(0, 0, 0) at (2, 2), mark relative (0, 0) visited, clean it, and
+//         step Up (next_dir = 0) to (1, 2).
+//       - DFS follows the open perimeter around the blocked center (1, 1) through
+//         (0, 2) -> (0, 1) -> (0, 0) -> (1, 0) -> (2, 0) -> (2, 1), cleaning each
+//         cell on entry.
+//       - Probes into (1, 1) fail move() while probes back into (2, 2) are skipped
+//         because relative (0, 0) is already in visited, completing all 8 reachable
+//         cells.
+//
+//   Example 3:
+//     Input:  room = [[1]], start = (0, 0), dir = 0 (Up)
+//     Output: allAccessibleCellsClean = true, cleanedCount = 1
+//     Explanation:
+//       - Enter dfs(0, 0, 0) at (0, 0), insert encodeCell(0, 0) into visited, and
+//         call robot.clean() so cleanedCount becomes 1.
+//       - All four clockwise probes (next_dir = 0, 1, 2, 3) hit the room boundary
+//         and return false from robot.move(), executing turnRight() four times to
+//         restore dir = 0 before returning.
+//
 // Algorithm:
 //   Perform blindfolded DFS with explicit physical backtracking in a relative
 //   coordinate frame centered at the starting cell `(0, 0)` with initial

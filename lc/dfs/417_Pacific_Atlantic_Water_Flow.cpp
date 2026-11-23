@@ -9,6 +9,45 @@
 //   to the current cell's elevation. Return all coordinates `[r, c]` from which
 //   water can flow to both the Pacific and Atlantic oceans (in any order).
 //
+// Examples:
+//   Example 1:
+//     Input:  heights = [[1, 2, 2, 3, 5], [3, 2, 3, 4, 4], [2, 4, 5, 3, 1], [6, 7,
+//             1, 4, 5], [5, 1, 1, 2, 4]]
+//     Output: [[0, 4], [1, 3], [1, 4], [2, 2], [3, 0], [3, 1], [4, 0]]
+//     Explanation:
+//       - dfsUphill seeds the pacific grid from row 0 and column 0, walking only to
+//         neighbors with height >= current height to mark Pacific-reachable cells
+//         including (0, 4), (1, 3), (1, 4), (2, 2), (3, 0), (3, 1), and (4, 0).
+//       - dfsUphill then seeds the atlantic grid from row 4 and column 4, marking
+//         border cells (0, 4), (1, 4), and (4, 0) directly and climbing via (0,
+//         4)/(1, 4) to (1, 3), (2, 4)=1 -> (2, 3)=3 -> (2, 2)=5, and (4, 0)=5 ->
+//         (3, 0)=6 -> (3, 1)=7.
+//       - Scanning all 25 cells in row-major order collects every coordinate where
+//         both pacific[idx] and atlantic[idx] are 1, returning [[0, 4], [1, 3], [1,
+//         4], [2, 2], [3, 0], [3, 1], [4, 0]].
+//
+//   Example 2:
+//     Input:  heights = [[1, 2, 2], [3, 4, 5], [6, 1, 1]]
+//     Output: [[0, 1], [0, 2], [1, 1], [1, 2], [2, 0]]
+//     Explanation:
+//       - Uphill DFS from the Pacific borders (row 0 and column 0) marks (0, 0),
+//         (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), and (2, 0), leaving only (2, 1)=1
+//         and (2, 2)=1 unreached.
+//       - Uphill DFS from the Atlantic borders (row 2 and column 2) reaches (0, 1),
+//         (0, 2), (1, 1), (1, 2), (2, 0), (2, 1), and (2, 2), while failing to step
+//         downhill into (0, 0)=1 or (1, 0)=3.
+//       - Taking the intersection in row-major order excludes (0, 0), (1, 0), (2,
+//         1), and (2, 2), returning [[0, 1], [0, 2], [1, 1], [1, 2], [2, 0]].
+//
+//   Example 3:
+//     Input:  heights = [[1]]
+//     Output: [[0, 0]]
+//     Explanation:
+//       - With rows = 1 and cols = 1, border seeding runs dfsUphill at (0, 0) for
+//         both pacific and atlantic, setting pacific[0] = 1 and atlantic[0] = 1.
+//       - The row-major intersection check finds both flags nonzero at (0, 0) and
+//         returns [[0, 0]].
+//
 // Algorithm:
 //   Reverse-flow multi-source DFS starting from each ocean's coastal border:
 //   Instead of running an expensive downhill search from every interior cell,

@@ -5,6 +5,41 @@
 //   Given an integer array `nums` and an integer `k`, return the number of
 //   contiguous subarrays of `nums` that contain exactly `k` distinct integers.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 1, 2, 3], k = 2
+//     Output: 7
+//     Explanation:
+//       - In countAtMost(nums, 2), right = 0..3 keep left = 0 with freq keys {1, 2}
+//         (adding 1 + 2 + 3 + 4 = 10), and right = 4 (3) shrinks left to 3 ({2, 3},
+//         adding 2) for a total of 12.
+//       - In countAtMost(nums, 1), adjacent elements differ at every step so left
+//         advances to right at each index, adding 1 + 1 + 1 + 1 + 1 = 5.
+//       - Subtracting countAtMost(nums, 2) - countAtMost(nums, 1) gives 12 - 5 = 7.
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 1, 3, 4], k = 3
+//     Output: 3
+//     Explanation:
+//       - In countAtMost(nums, 3), right = 0..3 keep left = 0 with at most three
+//         distinct keys {1, 2, 3} (adding 1 + 2 + 3 + 4 = 10), and right = 4 (4)
+//         shrinks left to 2 ({1, 3, 4}, adding 3) for a total of 13.
+//       - In countAtMost(nums, 2), right = 0..2 add 1 + 2 + 3 = 6, right = 3 (3)
+//         shrinks left to 2 ({1, 3}, adding 2), and right = 4 (4) shrinks left to 3
+//         ({3, 4}, adding 2), totaling 10.
+//       - Subtracting 13 - 10 returns 3.
+//
+//   Example 3:
+//     Input:  nums = [1, 1, 1, 1], k = 2
+//     Output: 0
+//     Explanation:
+//       - In countAtMost(nums, 2), freq.size() stays 1 <= 2 so left remains 0 and
+//         all 1 + 2 + 3 + 4 = 10 subarrays are counted.
+//       - In countAtMost(nums, 1), freq.size() also stays 1 <= 1 so left remains 0
+//         and the same 10 subarrays are counted.
+//       - Subtracting 10 - 10 yields 0 because no subarray contains 2 distinct
+//         integers.
+//
 // Algorithm:
 //   Exact-K via At-Most-K inclusion-exclusion:
 //     exact(k) = atMost(k) - atMost(k - 1).

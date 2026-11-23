@@ -5,6 +5,42 @@
 //   Given the head of a singly linked list, reverse the list in-place and
 //   return the reversed list's new head.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3, 4, 5]
+//     Output: [5, 4, 3, 2, 1]
+//     Explanation:
+//       - Initialize prev = nullptr and curr = node(1).
+//       - Iteration 1-2: save next_node = node(2), set node(1)->next = nullptr,
+//         advance prev = node(1), curr = node(2); next, point node(2)->next =
+//         node(1) and advance prev = node(2), curr = node(3).
+//       - Iteration 3-4: redirect node(3)->next = node(2) and node(4)->next =
+//         node(3), advancing prev to node(4) and curr to node(5).
+//       - Iteration 5: save next_node = nullptr, set node(5)->next = node(4), and
+//         advance prev = node(5), curr = nullptr.
+//       - The loop terminates when curr == nullptr, returning prev = node(5), which
+//         yields [5, 4, 3, 2, 1].
+//
+//   Example 2:
+//     Input:  head = [1, 2]
+//     Output: [2, 1]
+//     Explanation:
+//       - Initialize prev = nullptr and curr = node(1).
+//       - Iteration 1: save next_node = node(2), set node(1)->next = nullptr, and
+//         advance prev = node(1), curr = node(2).
+//       - Iteration 2: save next_node = nullptr, set node(2)->next = node(1), and
+//         advance prev = node(2), curr = nullptr.
+//       - Exit the while loop on curr == nullptr and return prev = node(2),
+//         producing [2, 1].
+//
+//   Example 3:
+//     Input:  head = []
+//     Output: []
+//     Explanation:
+//       - Initialize prev = nullptr and curr = head (nullptr).
+//       - Because curr == nullptr on entry, the while loop executes zero times and
+//         returns prev (nullptr), representing [].
+//
 // Algorithm:
 //   1. Iterative Three-Pointer Reversal (`reverseList`):
 //      Maintain `prev` (the head of the already-reversed prefix, initially

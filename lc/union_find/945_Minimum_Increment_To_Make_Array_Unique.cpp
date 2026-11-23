@@ -6,6 +6,42 @@
 //   and increment `nums[i]` by 1. Return the minimum total number of moves
 //   needed so that every element in `nums` is strictly unique.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 2]
+//     Output: 1
+//     Explanation:
+//       - Approach 1 keeps sorted [1, 2, 2] with level = 1 and moves = 0; i = 1
+//         advances level to 2 (0 moves), and i = 2 bumps level to 3 and adds 3 - 2
+//         = 1 move.
+//       - Approach 2 processes [1, 2, 2] in order using sparse map root: 1 and 2
+//         claim root[1] = 1 and root[2] = 2 with 0 moves.
+//       - The second 2 probes root[2] + 1 = 3, sets root[3] = 3, path-compresses
+//         root[2] = 3, and adds 3 - 2 = 1 move.
+//
+//   Example 2:
+//     Input:  nums = [3, 2, 1, 2, 1, 7]
+//     Output: 6
+//     Explanation:
+//       - Approach 1 sorts a copy to [1, 1, 2, 2, 3, 7] and starts with level = 1,
+//         moves = 0.
+//       - Indices 1 through 4 each satisfy nums[i] <= level, so level increments
+//         through 2, 3, 4, 5 and adds (2 - 1) + (3 - 2) + (4 - 2) + (5 - 3) = 6
+//         moves; index 5 (7 > 5) sets level = 7 with 0 moves.
+//       - Approach 2 claims slots 3, 2, 1 for 0 moves, then maps the second 2 to 4
+//         (+2, compressing root[2] = root[3] = 4), the second 1 to 5 (+4,
+//         compressing 1, 2, 4 to 5), and 7 to 7 (+0) for 6 moves total.
+//
+//   Example 3:
+//     Input:  nums = [0, 0, 0, 0]
+//     Output: 6
+//     Explanation:
+//       - Approach 1 initializes level = 0 and moves = 0 on sorted [0, 0, 0, 0].
+//       - Indices 1, 2, and 3 increment level to 1, 2, and 3, accumulating 1 + 2 +
+//         3 = 6 moves.
+//       - Approach 2 probes from 0 four times to claim slots 0, 1, 2, and 3 with
+//         path compression on root, totaling 0 + 1 + 2 + 3 = 6 moves.
+//
 // Algorithm:
 //   This file implements two approaches:
 //   1. Sorting + Greedy (`minIncrementForUnique`):

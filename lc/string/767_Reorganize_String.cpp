@@ -6,6 +6,42 @@
 //   two adjacent characters are identical. Return any valid rearrangement if
 //   one exists, or an empty string "" if it is impossible.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "aab"
+//     Output: "aba"
+//     Explanation:
+//       - Count character frequencies to get freq['a'] = 2 and freq['b'] = 1, with
+//         max_idx pointing to 'a'.
+//       - Check the Pigeonhole bound: max frequency 2 <= (3 + 1) / 2 = 2, so
+//         reorganization is feasible.
+//       - Place both 'a' characters at even indices 0 and 2, setting result = "a_a"
+//         and advancing write_pos to 4.
+//       - Because write_pos (4) >= n (3), wrap write_pos to 1 and place 'b' at
+//         index 1 to return "aba".
+//
+//   Example 2:
+//     Input:  s = "aaab"
+//     Output: ""
+//     Explanation:
+//       - Tally character frequencies to find freq['a'] = 3 and freq['b'] = 1, with
+//         max_idx pointing to 'a'.
+//       - Check the Pigeonhole bound: max frequency 3 > (4 + 1) / 2 = 2, so no
+//         non-adjacent placement exists and the function returns "".
+//
+//   Example 3:
+//     Input:  s = "cbbaaaa"
+//     Output: "ababaca"
+//     Explanation:
+//       - Tally frequencies to get freq['a'] = 4, freq['b'] = 2, and freq['c'] = 1,
+//         with max_idx pointing to 'a' and 4 <= (7 + 1) / 2 = 4.
+//       - Place all four 'a' characters at even indices 0, 2, 4, and 6, advancing
+//         write_pos to 8.
+//       - When placing 'b', wrap write_pos (8 >= 7) to odd index 1 and write both
+//         'b' characters at indices 1 and 3, advancing write_pos to 5.
+//       - Write the single 'c' at index 5 to complete the valid arrangement
+//         "ababaca".
+//
 // Algorithm:
 //   Count the frequency of each lowercase letter ('a'-'z') and identify the
 //   most frequent character `max_char` with frequency `max_cnt`.

@@ -9,6 +9,38 @@
 //   leftChild.length == rightChild.length == n, and
 //   -1 <= leftChild[i], rightChild[i] <= n - 1.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 4, leftChild = [1, -1, 3, -1], rightChild = [2, -1, -1, -1]
+//     Output: true
+//     Explanation:
+//       - find_unique_root computes indegree = [0, 1, 1, 1] and identifies node 0
+//         as the unique root.
+//       - BFS starts at node 0 (visited_count = 1), enqueues children 1 and 2, and
+//         then pops node 2 to enqueue child 3.
+//       - All nodes are visited once without revisits, so visited_count == 4
+//         matches n and returns true.
+//
+//   Example 2:
+//     Input:  n = 4, leftChild = [1, -1, 3, -1], rightChild = [2, 3, -1, -1]
+//     Output: false
+//     Explanation:
+//       - find_unique_root scans parent links and increments indegree[1] = 1,
+//         indegree[2] = 1, and indegree[3] = 1 from nodes 0 and 1.
+//       - At node 2, leftChild[2] = 3 increments indegree[3] to 2 > 1, so
+//         find_unique_root returns -1 and validation returns false.
+//
+//   Example 3:
+//     Input:  n = 4, leftChild = [1, 0, 3, -1], rightChild = [-1, -1, -1, -1]
+//     Output: false
+//     Explanation:
+//       - find_unique_root computes indegree = [1, 1, 0, 1] and finds node 2 as the
+//         unique node with indegree 0.
+//       - BFS starting from root 2 visits only nodes 2 and 3, leaving the {0, 1}
+//         cycle unreachable.
+//       - When the queue empties, visited_count is 2 != 4, so
+//         validateBinaryTreeNodes returns false.
+//
 // Algorithm:
 //   Two-phase validation combining in-degree inspection with Breadth-First
 //   Search (BFS). A directed graph where every vertex has out-degree <= 2 forms

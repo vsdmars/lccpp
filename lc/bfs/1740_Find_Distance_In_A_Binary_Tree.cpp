@@ -7,6 +7,43 @@
 //   nodes with values p and q (the number of edges on the unique simple path
 //   connecting them).
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], p = 5, q = 0
+//     Output: 3
+//     Explanation:
+//       - build_graph runs DFS over the tree to populate bidirectional parent-child
+//         edges in adj, including 5 <-> 3, 3 <-> 1, and 1 <-> 0.
+//       - BFS starts with frontier = [5], visited = {5}, and distance = 0; since 5
+//         != 0, it enqueues 5's neighbors 3, 6, and 2 and increments distance to 1.
+//       - At distance = 1, popping 3 enqueues unvisited neighbor 1 while 6 and 2
+//         enqueue 7 and 4, incrementing distance to 2.
+//       - At distance = 2, popping 1 enqueues unvisited neighbors 0 and 8,
+//         incrementing distance to 3.
+//       - At distance = 3, popping 0 matches curr == q and returns 3 along the path
+//         5 -> 3 -> 1 -> 0.
+//
+//   Example 2:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], p = 5, q = 7
+//     Output: 2
+//     Explanation:
+//       - build_graph records undirected edges in adj, including 5 <-> 2 and 2 <->
+//         7.
+//       - BFS pops 5 at distance = 0, enqueues neighbors 3, 6, and 2, and advances
+//         distance to 1.
+//       - At distance = 1, popping 2 enqueues unvisited children 7 and 4 (alongside
+//         3 enqueuing 1), advancing distance to 2.
+//       - At distance = 2, popping 7 satisfies curr == q and returns 2 along the
+//         path 5 -> 2 -> 7.
+//
+//   Example 3:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], p = 5, q = 5
+//     Output: 0
+//     Explanation:
+//       - findDistance verifies root != nullptr and evaluates if (p == q).
+//       - Because p and q are both 5, it immediately returns 0 without constructing
+//         adj or launching BFS.
+//
 // Algorithm:
 //   Tree-to-Graph Conversion + Level-Order BFS:
 //   - Because every node value in the tree is unique, perform a DFS traversal

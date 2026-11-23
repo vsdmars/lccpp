@@ -7,6 +7,38 @@
 //   only right or down. Return the number of unique paths to (m - 1, n - 1)
 //   that never step onto an obstacle cell.
 //
+// Examples:
+//   Example 1:
+//     Input:  obstacleGrid = [[0, 0, 0], [0, 1, 0], [0, 0, 0]]
+//     Output: 2
+//     Explanation:
+//       - Both start (0, 0) and end (2, 2) are open, so initialize dp = [1, 0, 0].
+//       - Row 0 ([0, 0, 0]) propagates left-to-right to dp = [1, 1, 1].
+//       - Row 1 ([0, 1, 0]) keeps dp[0] = 1, zeroes dp[1] = 0 at the obstacle, and
+//         updates dp[2] = 1 + 0 = 1.
+//       - Row 2 ([0, 0, 0]) updates dp[1] = 0 + 1 = 1 and dp[2] = 1 + 1 = 2,
+//         returning dp[2] = 2.
+//
+//   Example 2:
+//     Input:  obstacleGrid = [[0, 1], [0, 0]]
+//     Output: 1
+//     Explanation:
+//       - Initialize dp = [1, 0] since both corners are open.
+//       - Row 0 ([0, 1]) keeps dp[0] = 1 and zeroes dp[1] = 0 at obstacle (0, 1).
+//       - Row 1 ([0, 0]) keeps dp[0] = 1 and sets dp[1] = dp[1] + dp[0] = 0 + 1 =
+//         1, returning dp[1] = 1.
+//
+//   Example 3:
+//     Input:  obstacleGrid = [[0, 0, 0], [1, 1, 1], [0, 0, 0]]
+//     Output: 0
+//     Explanation:
+//       - Initialize dp = [1, 0, 0] and process row 0 ([0, 0, 0]) to get dp = [1,
+//         1, 1].
+//       - Row 1 ([1, 1, 1]) has kObstacle in every column, resetting dp to [0, 0,
+//         0].
+//       - Row 2 ([0, 0, 0]) adds only zeros across dp, leaving dp[2] = 0 as the
+//         returned count.
+//
 // Algorithm:
 //   1. Bottom-up rolling-row DP (`uniquePathsWithObstacles`): Maintain a 1D
 //      array dp of length n representing path counts for the current row,

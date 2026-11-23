@@ -6,6 +6,46 @@
 //   `n` (`x^n`), where `x` is a double-precision floating-point number in
 //   (-100.0, 100.0) and `n` is a 32-bit signed integer in [-2^31, 2^31 - 1].
 //
+// Examples:
+//   Example 1:
+//     Input:  x = 2.0, n = 10
+//     Output: 1024.0
+//     Explanation:
+//       - Because exp = 10 is non-negative, base stays 2.0 and result starts at
+//         1.0.
+//       - Iteration 1 (exp = 10, even): (exp & 1) == 0 leaves result = 1.0, exp
+//         shifts right to 5, and base squares to 4.0.
+//       - Iteration 2 (exp = 5, odd): result becomes 1.0 * 4.0 = 4.0, exp shifts
+//         right to 2, and base squares to 16.0.
+//       - Iteration 3 (exp = 2, even): result stays 4.0, exp shifts right to 1, and
+//         base squares to 256.0.
+//       - Iteration 4 (exp = 1, odd): result becomes 4.0 * 256.0 = 1024.0, exp
+//         shifts right to 0, and the loop terminates returning 1024.0.
+//
+//   Example 2:
+//     Input:  x = 2.0, n = -2
+//     Output: 0.25
+//     Explanation:
+//       - Because exp = -2 < 0, the base is inverted to base = 1.0 / 2.0 = 0.5 and
+//         exp is negated to 2, with result = 1.0.
+//       - Iteration 1 (exp = 2, even): result remains 1.0, exp shifts right to 1,
+//         and base squares to 0.5 * 0.5 = 0.25.
+//       - Iteration 2 (exp = 1, odd): result multiplies by 0.25 to become 0.25, exp
+//         shifts right to 0, and the loop ends returning 0.25.
+//
+//   Example 3:
+//     Input:  x = -1.0, n = -2147483648
+//     Output: 1.0
+//     Explanation:
+//       - Widening n to 64-bit exp = -2147483648 prevents signed overflow when exp
+//         < 0 inverts base to 1.0 / -1.0 = -1.0 and negates exp to 2147483648
+//         (2^31).
+//       - During the 31 iterations where exp decreases from 2^31 down to 2, (exp &
+//         1) == 0 keeps result = 1.0 while base squares from -1.0 to 1.0 on the
+//         first step and remains 1.0 thereafter.
+//       - On the final iteration (exp = 1), (exp & 1) != 0 multiplies result = 1.0
+//         by base = 1.0, then exp becomes 0 and the function returns 1.0.
+//
 // Algorithm:
 //   Iterative binary exponentiation (exponentiation by squaring). First widen
 //   `n` to `std::int64_t` so negating `INT_MIN` (`-2^31`) does not overflow.

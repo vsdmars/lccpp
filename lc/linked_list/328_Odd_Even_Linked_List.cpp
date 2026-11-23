@@ -8,6 +8,38 @@
 //   within both the odd group and the even group must be preserved, and the
 //   reordering must run in O(n) time and O(1) extra space.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3, 4, 5]
+//     Output: [1, 3, 5, 2, 4]
+//     Explanation:
+//       - Initialize odd = 1, even = 2, and even_head = 2.
+//       - Iteration 1 relinks odd->next = 3 (odd = 3) and even->next = 4 (even =
+//         4), yielding partial chains 1 -> 3 and 2 -> 4.
+//       - Iteration 2 relinks odd->next = 5 (odd = 5) and even->next = nullptr
+//         (even = nullptr), yielding 1 -> 3 -> 5 and 2 -> 4 -> nullptr.
+//       - Because even is nullptr, exit the loop and stitch odd->next = even_head
+//         (5 -> 2) to return [1, 3, 5, 2, 4].
+//
+//   Example 2:
+//     Input:  head = [1, 2, 3, 4, 5, 6]
+//     Output: [1, 3, 5, 2, 4, 6]
+//     Explanation:
+//       - Initialize odd = 1, even = 2, and even_head = 2.
+//       - Iteration 1 advances odd to 3 (1 -> 3) and even to 4 (2 -> 4).
+//       - Iteration 2 advances odd to 5 (1 -> 3 -> 5) and even to 6 (2 -> 4 -> 6),
+//         where even->next is nullptr.
+//       - Because even->next is nullptr, exit the loop and link 5->next = even_head
+//         (2) to produce [1, 3, 5, 2, 4, 6].
+//
+//   Example 3:
+//     Input:  head = [42]
+//     Output: [42]
+//     Explanation:
+//       - Check the guard head == nullptr || head->next == nullptr, which succeeds
+//         because head->next is nullptr.
+//       - Return head directly without modifying any links, yielding [42].
+//
 // Algorithm:
 //   Two-pointer in-place chain splitting:
 //   1. Lists with 0 or 1 nodes are already partitioned; return immediately.

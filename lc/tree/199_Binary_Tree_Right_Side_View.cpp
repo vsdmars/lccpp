@@ -7,6 +7,39 @@
 //   ordered from top (root) to bottom (deepest level). If the tree is empty,
 //   return an empty list.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, null, 5, null, 4]
+//     Output: [1, 3, 4]
+//     Explanation:
+//       - BFS initializes level = [1], appends level.back()->val = 1 to result, and
+//         collects next_level = [2, 3].
+//       - At depth 1 with level = [2, 3], BFS appends level.back()->val = 3 to
+//         result and collects children left-to-right into next_level = [5, 4].
+//       - At depth 2 with level = [5, 4], BFS appends level.back()->val = 4 to
+//         result, finds no further children, and returns [1, 3, 4].
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, null, 5, null, 4, null, 7]
+//     Output: [1, 3, 4, 7]
+//     Explanation:
+//       - BFS traverses levels [1], [2, 3], [5, 4], and [7], recording
+//         level.back()->val at each tier to produce [1, 3, 4, 7].
+//       - In rightSideViewDfs, visiting right children before left reaches 1 (depth
+//         0), 3 (depth 1), and 4 (depth 2) first, appending [1, 3, 4] as depth ==
+//         result.size().
+//       - When DFS backtracks into the left branch 2 -> 5 -> 7, depths 1 and 2 are
+//         already filled while node 7 at depth 3 == result.size() appends 7.
+//
+//   Example 3:
+//     Input:  root = [] (nullptr)
+//     Output: []
+//     Explanation:
+//       - In rightSideView, the initial guard root == nullptr immediately returns
+//         an empty vector [].
+//       - In rightSideViewDfs, dfs(nullptr, 0) hits the node == nullptr base case
+//         on entry and leaves result empty.
+//
 // Algorithm:
 //   1. Level-order BFS (primary):
 //      Traverse the tree one level at a time from left to right. At every

@@ -10,6 +10,34 @@
 //   LeetCode.)
 //   Constraints: 1 <= moves.size() <= 2 * 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  moves = "UD"
+//     Output: true
+//     Explanation:
+//       - Initialize horizontal and vertical accumulators to x = 0 and y = 0.
+//       - Process 'U' by incrementing y to 1, moving to (0, 1).
+//       - Process 'D' by decrementing y to 0, returning to (0, 0).
+//       - Finish the scan with x == 0 && y == 0, so return true.
+//
+//   Example 2:
+//     Input:  moves = "LL"
+//     Output: false
+//     Explanation:
+//       - Initialize accumulators to x = 0 and y = 0.
+//       - Process the first 'L' by decrementing x to -1, then the second 'L' by
+//         decrementing x to -2.
+//       - Finish the scan at (x, y) = (-2, 0); since x != 0, return false.
+//
+//   Example 3:
+//     Input:  moves = ""
+//     Output: true
+//     Explanation:
+//       - Initialize accumulators to x = 0 and y = 0.
+//       - Because moves is empty, the loop executes zero iterations and leaves both
+//         accumulators at 0.
+//       - Check x == 0 && y == 0, which evaluates to true.
+//
 // Algorithm:
 //   Single-pass net displacement tracking:
 //   Because 2D translations are commutative and independent along the x- and

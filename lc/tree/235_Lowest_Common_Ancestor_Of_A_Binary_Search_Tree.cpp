@@ -8,6 +8,37 @@
 //   `p` and `q` as descendants, where a node is allowed to be a descendant of
 //   itself.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [6, 2, 8, 0, 4, 7, 9, null, null, 3, 5], p = 2, q = 8
+//     Output: 6
+//     Explanation:
+//       - Normalize targets so low = 2 and high = 8 since low->val <= high->val.
+//       - Start DFS at root = 6 and check node->val > high->val (6 > 8, false) and
+//         node->val < low->val (6 < 2, false).
+//       - Because 2 < 6 < 8, node 6 is the split point separating p and q, so
+//         return node 6 as the LCA.
+//
+//   Example 2:
+//     Input:  root = [6, 2, 8, 0, 4, 7, 9, null, null, 3, 5], p = 4, q = 2
+//     Output: 2
+//     Explanation:
+//       - Swap p = 4 and q = 2 during normalization so low = 2 and high = 4.
+//       - At root = 6, since 6 > high (4), both targets lie in the left subtree, so
+//         recurse to node 2.
+//       - At node 2, the base case node == low triggers immediately and returns
+//         node 2 as the LCA.
+//
+//   Example 3:
+//     Input:  root = [6, 2, 8, 0, 4, 7, 9, null, null, 3, 5], p = 3, q = 5
+//     Output: 4
+//     Explanation:
+//       - Normalize targets to low = 3 and high = 5, then begin at root = 6.
+//       - Since 6 > 5, descend left to node 2; since 2 < 3, descend right to node
+//         4.
+//       - At node 4, neither 4 > 5 nor 4 < 3 holds, so node 4 is the split point
+//         and is returned as the LCA.
+//
 // Algorithm:
 //   Leverage the BST ordering invariant (every value in `node->left` is
 //   strictly less than `node->val`, and every value in `node->right` is

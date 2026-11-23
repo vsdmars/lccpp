@@ -10,6 +10,37 @@
 //   Constraints: costs.length == 2n, 2 <= costs.length <= 100,
 //   1 <= a_cost, b_cost <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  costs = [[10, 20], [30, 200], [400, 50], [30, 20]]
+//     Output: 110
+//     Explanation:
+//       - Sum all City A costs as the baseline: total_cost = 10 + 30 + 400 + 30 =
+//         470, and record deltas (b_cost - a_cost) = [10, 170, -350, -10].
+//       - Sort deltas ascending to [-350, -10, 10, 170].
+//       - Add the first half = 4 / 2 = 2 deltas to switch those candidates to City
+//         B: total_cost = 470 + (-350) + (-10) = 110.
+//
+//   Example 2:
+//     Input:  costs = [[259, 770], [448, 54], [926, 667], [184, 139], [840, 118],
+//             [577, 469]]
+//     Output: 1859
+//     Explanation:
+//       - Compute the all-City-A baseline total_cost = 259 + 448 + 926 + 184 + 840
+//         + 577 = 3234 and deltas = [511, -394, -259, -45, -722, -108].
+//       - Sort deltas ascending to [-722, -394, -259, -108, -45, 511].
+//       - Add the first half = 6 / 2 = 3 deltas (-722 + -394 + -259 = -1375) to
+//         total_cost, returning 3234 - 1375 = 1859.
+//
+//   Example 3:
+//     Input:  costs = [[100, 1], [1, 100]]
+//     Output: 2
+//     Explanation:
+//       - Compute baseline total_cost = 100 + 1 = 101 and deltas = [-99, 99].
+//       - Sort deltas ascending to [-99, 99].
+//       - Add the first half = 2 / 2 = 1 delta (-99), yielding total_cost = 101 -
+//         99 = 2.
+//
 // Algorithm:
 //   Greedy opportunity-cost ("refund") minimization.
 //   Start with the baseline assignment of flying all `2n` candidates to City A,

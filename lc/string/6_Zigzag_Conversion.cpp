@@ -12,6 +12,39 @@
 //   - s consists of English letters (lower-case and upper-case), ',' and '.'
 //   - 1 <= numRows <= 1000
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "PAYPALISHIRING", numRows = 3
+//     Output: "PAHNAPLSIIGYIR"
+//     Explanation:
+//       - Allocate 3 row buffers with row = 0 and going_down = false; at row = 0,
+//         going_down flips to true and places 'P', 'A', 'Y' into rows 0, 1, 2.
+//       - Upon hitting row = 2 (num_rows - 1), going_down flips to false so 'P'
+//         goes into row 1, bouncing back down at row = 0 for 'A' and continuing
+//         across all 14 characters.
+//       - After the pass, the buckets hold rows[0] = "PAHN", rows[1] = "APLSIIG",
+//         and rows[2] = "YIR", which concatenate to "PAHNAPLSIIGYIR".
+//
+//   Example 2:
+//     Input:  s = "PAYPALISHIRING", numRows = 4
+//     Output: "PINALSIGYAHRPI"
+//     Explanation:
+//       - Allocate 4 row buffers and traverse downward through rows 0..3 for
+//         "PAYP", then reverse direction at row 3 to place "AL" into rows 2 and 1.
+//       - Bounce at row 0 to place "ISHI" down rows 0..3, then "RI" up rows 2..1,
+//         and finally "NG" into rows 0..1.
+//       - Concatenate the four buckets rows[0] = "PIN", rows[1] = "ALSIG", rows[2]
+//         = "YAHR", and rows[3] = "PI" to return "PINALSIGYAHRPI".
+//
+//   Example 3:
+//     Input:  s = "AB", numRows = 5
+//     Output: "AB"
+//     Explanation:
+//       - Evaluate the base-case guard num_rows <= 1 || s.size() <=
+//         static_cast<std::size_t>(num_rows).
+//       - Because s.size() = 2 <= 5, no zigzag folding occurs and the function
+//         immediately returns "AB" without allocating row buffers.
+//
 // Algorithm:
 //   Row-by-row simulation using a direction toggle. If `numRows <= 1` or
 //   `s.size() <= numRows`, no zigzag folding occurs and `s` is returned as-is.

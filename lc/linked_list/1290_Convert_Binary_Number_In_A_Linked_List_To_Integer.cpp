@@ -8,6 +8,36 @@
 //   The list contains at most 30 nodes, so the result always fits in a signed
 //   32-bit `int`.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 0, 1]
+//     Output: 5
+//     Explanation:
+//       - Initialize `value = 0` and start `curr` at the head node `1`.
+//       - At node `1`, compute `value = (0 * 2) + 1 = 1` and advance `curr` to `0`.
+//       - At node `0`, compute `value = (1 * 2) + 0 = 2` and advance `curr` to `1`.
+//       - At node `1`, compute `value = (2 * 2) + 1 = 5`, reach `curr == nullptr`,
+//         and return `5`.
+//
+//   Example 2:
+//     Input:  head = [0, 0, 1, 0, 0]
+//     Output: 4
+//     Explanation:
+//       - Initialize `value = 0` and consume the first two `0` nodes, keeping
+//         `value = 0`.
+//       - At the third node (`1`), compute `value = (0 * 2) + 1 = 1`.
+//       - At the fourth node (`0`), compute `value = (1 * 2) + 0 = 2`.
+//       - At the fifth node (`0`), compute `value = (2 * 2) + 0 = 4` and return
+//         `4`.
+//
+//   Example 3:
+//     Input:  head = [0]
+//     Output: 0
+//     Explanation:
+//       - Initialize `value = 0` with `curr` pointing to the single node `0`.
+//       - Compute `value = (0 * 2) + 0 = 0`, advance `curr` to `nullptr`, and
+//         return `0`.
+//
 // Algorithm:
 //   Horner's method (online base-2 accumulation) in a single pass:
 //   1. Start with `value = 0`.

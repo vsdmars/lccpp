@@ -8,6 +8,39 @@
 //   smallest sums `u + v` (or all `nums1.size() * nums2.size()` pairs if fewer
 //   than `k` exist).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums1 = [1, 7, 11], nums2 = [2, 4, 6], k = 3
+//     Output: [[1, 2], [1, 4], [1, 6]]
+//     Explanation:
+//       - Seed min_heap with the spanning-tree root (sum = 3, i = 0, j = 0).
+//       - Pop (3, 0, 0) to record [1, 2], push right neighbor (sum = 5, 0, 1), and
+//         because j == 0 also push down neighbor (sum = 9, 1, 0).
+//       - Pop (5, 0, 1) to record [1, 4] and push right neighbor (sum = 7, 0, 2)
+//         without expanding down since j != 0.
+//       - Pop (7, 0, 2) to record [1, 6], reaching result.size() == 3 and returning
+//         [[1, 2], [1, 4], [1, 6]].
+//
+//   Example 2:
+//     Input:  nums1 = [1, 1, 2], nums2 = [1, 2, 3], k = 2
+//     Output: [[1, 1], [1, 1]]
+//     Explanation:
+//       - Seed min_heap with (sum = 2, i = 0, j = 0).
+//       - Pop (2, 0, 0) to record the first [1, 1], then push right neighbor (sum =
+//         3, 0, 1) and down neighbor (sum = 2, 1, 0) since j == 0.
+//       - Pop the new minimum (2, 1, 0) to record the second [1, 1], reaching k = 2
+//         and returning [[1, 1], [1, 1]].
+//
+//   Example 3:
+//     Input:  nums1 = [1, 2], nums2 = [3], k = 3
+//     Output: [[1, 3], [2, 3]]
+//     Explanation:
+//       - Seed min_heap with (sum = 4, i = 0, j = 0).
+//       - Pop (4, 0, 0) to record [1, 3]; right index j + 1 = 1 is out of bounds
+//         for nums2, while j == 0 pushes down neighbor (sum = 5, 1, 0).
+//       - Pop (5, 1, 0) to record [2, 3]; both (1, 1) and (2, 0) are out of bounds,
+//         so min_heap empties and the loop returns [[1, 3], [2, 3]].
+//
 // Algorithm:
 //   Best-first search over the virtual sorted `m x n` sum matrix using a
 //   min-heap without needing a `visited` hash set:

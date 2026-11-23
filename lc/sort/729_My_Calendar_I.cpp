@@ -9,6 +9,45 @@
 //   unchanged and returns `false`.
 //   Constraints: `0 <= start < end <= 10^9`, at most `1000` calls to `book`.
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["MyCalendar", "book", "book", "book"], args = [[], [10,
+//             20], [15, 25], [20, 30]]
+//     Output: [null, true, false, true]
+//     Explanation:
+//       - book(10, 20) sees bookings_ is empty, inserts 10 -> 20, and returns true.
+//       - book(15, 25) gets next = end() and checks predecessor (10, 20); since
+//         prev->second (20) > 15, it detects an overlap and returns false.
+//       - book(20, 30) checks predecessor (10, 20); since prev->second (20) <= 20,
+//         the half-open intervals do not overlap, so it inserts 20 -> 30 and
+//         returns true.
+//
+//   Example 2:
+//     Input:  operations = ["MyCalendar", "book", "book", "book", "book", "book"],
+//             args = [[], [20, 30], [10, 20], [30, 40], [0, 10], [19, 21]]
+//     Output: [null, true, true, true, true, false]
+//     Explanation:
+//       - book(20, 30) inserts 20 -> 30; book(10, 20) finds next = (20, 30) with
+//         next->first (20) >= 20 and no predecessor, so it inserts 10 -> 20 and
+//         returns true.
+//       - book(30, 40) checks prev = (20, 30) (30 <= 30) and inserts 30 -> 40;
+//         book(0, 10) checks next = (10, 20) (10 >= 10) and inserts 0 -> 10, both
+//         returning true.
+//       - book(19, 21) finds next = (20, 30) where next->first (20) < 21, so it
+//         rejects the overlap and returns false.
+//
+//   Example 3:
+//     Input:  operations = ["MyCalendar", "book", "book", "book", "book"], args =
+//             [[], [10, 20], [30, 40], [20, 30], [25, 26]]
+//     Output: [null, true, true, true, false]
+//     Explanation:
+//       - book(10, 20) and book(30, 40) insert disjoint bookings {10 -> 20, 30 ->
+//         40} and both return true.
+//       - book(20, 30) finds next = (30, 40) (30 >= 30) and prev = (10, 20) (20 <=
+//         20), fitting cleanly between them to insert 20 -> 30 and return true.
+//       - book(25, 26) finds prev = (20, 30) with prev->second (30) > 25, returning
+//         false.
+//
 // Algorithm:
 //   Ordered interval map with binary search (`lower_bound`):
 //   Store all accepted, mutually disjoint intervals in a balanced binary search

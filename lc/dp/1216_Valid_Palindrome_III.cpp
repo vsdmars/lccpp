@@ -7,6 +7,47 @@
 //   whether `s` can be turned into a palindrome by deleting at most `k`
 //   characters.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abcdeca", k = 2
+//     Output: true
+//     Explanation:
+//       - Allocate size-7 rolling arrays prev_dp and cur_dp initialized to 0 and
+//         iterate l from 6 down to 0.
+//       - Rows l = 6..3 find no matching endpoints, leaving prev_dp[3..6] = [1, 1,
+//         1, 1], then row l = 2 ('c') matches s[5] = 'c' to set cur_dp[5] =
+//         prev_dp[4] + 2 = 3 and prev_dp[2..6] = [1, 1, 1, 3, 3].
+//       - Row l = 1 ('b') keeps prev_dp[1..6] = [1, 1, 1, 1, 3, 3], and row l = 0
+//         ('a') carries cur_dp[1..5] = [1, 1, 1, 3, 3] before s[0] == s[6] sets
+//         cur_dp[6] = prev_dp[5] + 2 = 5.
+//       - After the final swap, min_deletions = 7 - prev_dp[6] = 2 satisfies 2 <=
+//         2, returning true.
+//
+//   Example 2:
+//     Input:  s = "bacabaaa", k = 2
+//     Output: false
+//     Explanation:
+//       - Iterate l from 7 down to 0 over size-8 rolling arrays prev_dp and cur_dp.
+//       - By l = 3 ('a'), matching trailing 'a' pairs builds prev_dp[3..7] = [1, 1,
+//         3, 3, 4], which row l = 2 ('c') preserves as prev_dp[2..7] = [1, 1, 1, 3,
+//         3, 4].
+//       - Row l = 1 ('a') matches at r = 3, 5, 6, and 7 to reach prev_dp[1..7] =
+//         [1, 1, 3, 3, 3, 5, 5], and at l = 0 ('b') matching s[4] = 'b' gives
+//         cur_dp[4] = prev_dp[3] + 2 = 5 with cur_dp[7] = 5.
+//       - After swapping, min_deletions = 8 - prev_dp[7] = 3 exceeds k = 2,
+//         returning false.
+//
+//   Example 3:
+//     Input:  s = "racecar", k = 0
+//     Output: true
+//     Explanation:
+//       - Allocate size-7 vectors prev_dp and cur_dp and sweep l backward from 6 to
+//         0.
+//       - Symmetrically matching outer pairs (2, 4) ('c'), (1, 5) ('a'), and (0, 6)
+//         ('r') extend the central 'e' palindrome length from 1 to 3, 5, and
+//         finally prev_dp[6] = 7.
+//       - Compute min_deletions = 7 - 7 = 0 <= k = 0 and return true.
+//
 // Algorithm:
 //   A string of length `n` can become a palindrome with at most `k` deletions
 //   if and only if its Longest Palindromic Subsequence (LPS) has length at

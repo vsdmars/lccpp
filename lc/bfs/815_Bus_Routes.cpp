@@ -8,6 +8,46 @@
 //   `target`. Return 0 if `source == target`, or -1 if `target` is
 //   unreachable.
 //
+// Examples:
+//   Example 1:
+//     Input:  routes = [[1, 2, 7], [3, 6, 7]], source = 1, target = 6
+//     Output: 2
+//     Explanation:
+//       - Build `stop_to_routes` mapping `1 -> [0]`, `2 -> [0]`, `7 -> [0, 1]`, `3
+//         -> [1]`, and `6 -> [1]`; both `source = 1` and `target = 6` exist in the
+//         map.
+//       - Mark `visited_stop = {1}` and enqueue route `0` (`visited_route[0] = 1`)
+//         at `buses = 1`.
+//       - At `buses = 1`, pop route `0` (`[1, 2, 7]`); none equals `6`, so stops
+//         `2` and `7` are added to `visited_stop` and hub stop `7` enqueues
+//         unvisited route `1`.
+//       - Increment `buses` to `2` and pop route `1` (`[3, 6, 7]`), where stop `6
+//         == target` triggers an immediate return of `2`.
+//
+//   Example 2:
+//     Input:  routes = [[1, 2, 7]], source = 999, target = 999
+//     Output: 0
+//     Explanation:
+//       - Check `source == target` (`999 == 999`) at the entry of
+//         `numBusesToDestination`.
+//       - Return `0` immediately without building `stop_to_routes` or requiring
+//         stop `999` to appear on any route.
+//
+//   Example 3:
+//     Input:  routes = [[7, 12], [4, 5, 15], [6], [15, 19], [9, 12, 13]], source =
+//             15, target = 12
+//     Output: -1
+//     Explanation:
+//       - Build `stop_to_routes`, confirming both `source = 15` (`[1, 3]`) and
+//         `target = 12` (`[0, 4]`) exist.
+//       - Mark `visited_stop = {15}` and enqueue routes `1` (`[4, 5, 15]`) and `3`
+//         (`[15, 19]`) with `visited_route[1] = visited_route[3] = 1`.
+//       - At `buses = 1`, scanning route `1` visits stops `4` and `5` and scanning
+//         route `3` visits stop `19`, none of which equals `12` or connects to any
+//         unvisited route.
+//       - Once `frontier` empties without reaching stop `12`,
+//         `numBusesToDestination` returns `-1`.
+//
 // Algorithm:
 //   Model the transit network as a bipartite stop-route graph and run
 //   level-order Breadth-First Search (BFS) where each BFS level corresponds to

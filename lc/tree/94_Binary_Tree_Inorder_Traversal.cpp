@@ -6,6 +6,38 @@
 //   nodes' values (left subtree, then root, then right subtree). The tree may
 //   be empty (0 to 100 nodes) with node values in [-100, 100].
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, null, 2, 3]
+//     Output: [1, 3, 2]
+//     Explanation:
+//       - Recursive DFS checks 1->left (nullptr), appends 1 to result, and recurses
+//         into 1->right (node 2).
+//       - At node 2, DFS descends into 2->left (node 3), appends 3, returns to
+//         append 2, and visits 2->right (nullptr), yielding [1, 3, 2].
+//       - Iteratively, pending pushes and pops 1 (emitting 1), pushes 2 then 3,
+//         pops 3 (emitting 3), and pops 2 (emitting 2).
+//
+//   Example 2:
+//     Input:  root = [1, 2, 2, null, 7, 4, 3]
+//     Output: [2, 7, 1, 4, 2, 3]
+//     Explanation:
+//       - Descending the left subtree of root 1 reaches left node 2 whose left
+//         child is nullptr, emitting 2 and then its right child 7 ([2, 7]).
+//       - Returning to root 1 appends 1 ([2, 7, 1]) before entering the right
+//         subtree rooted at 2.
+//       - In the right subtree, DFS visits left child 4, parent 2, and right child
+//         3 in order, producing [2, 7, 1, 4, 2, 3].
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: []
+//     Explanation:
+//       - In inorderTraversal, the initial call receives node == nullptr and
+//         returns immediately without modifying result.
+//       - In inorderTraversalIterative, curr is nullptr and pending is empty, so
+//         the loop condition fails and [] is returned.
+//
 // Algorithm:
 //   1. Recursive DFS: Visit the left child recursively, record the current
 //      node's value, and then visit the right child recursively. Base case is

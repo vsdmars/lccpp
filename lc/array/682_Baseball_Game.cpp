@@ -13,6 +13,44 @@
 //   Return the sum of all valid scores remaining on the record after applying
 //   all operations.
 //
+// Examples:
+//   Example 1:
+//     Input:  ops = ["5", "2", "C", "D", "+"]
+//     Output: 30
+//     Explanation:
+//       - Parse "5" and "2" with std::stoi to push them onto the stack, giving
+//         scores = [5, 2].
+//       - Process "C" by popping the top element, reducing scores to [5].
+//       - Process "D" by doubling scores.back() (5 * 2 = 10) and pushing it, giving
+//         scores = [5, 10].
+//       - Process "+" by adding the top two scores (10 + 5 = 15) and pushing 15,
+//         giving scores = [5, 10, 15].
+//       - Sum all remaining elements in scores with std::accumulate (5 + 10 + 15)
+//         to return 30.
+//
+//   Example 2:
+//     Input:  ops = ["5", "-2", "4", "C", "D", "9", "+", "+"]
+//     Output: 27
+//     Explanation:
+//       - Parse the initial integer tokens "5", "-2", and "4" sequentially,
+//         building scores = [5, -2, 4].
+//       - Apply "C" to pop 4 (scores = [5, -2]), then apply "D" to double -2 and
+//         push -4 (scores = [5, -2, -4]).
+//       - Push 9 for token "9", then apply the first "+" to push 9 + (-4) = 5,
+//         yielding scores = [5, -2, -4, 9, 5].
+//       - Apply the second "+" to push 5 + 9 = 14 (scores = [5, -2, -4, 9, 5, 14]),
+//         and sum the stack (5 - 2 - 4 + 9 + 5 + 14) to return 27.
+//
+//   Example 3:
+//     Input:  ops = ["1", "C"]
+//     Output: 0
+//     Explanation:
+//       - Parse "1" via std::stoi and push 1 onto the stack, giving scores = [1].
+//       - Process "C" by seeing !scores.empty() and popping 1, leaving scores
+//         empty.
+//       - Sum the empty scores vector with std::accumulate starting from 0 to
+//         return 0.
+//
 // Algorithm:
 //   Stack-Based Simulation (O(n) time, O(n) space):
 //     Maintain a dynamic array (`std::vector<int>`) acting as a LIFO stack of

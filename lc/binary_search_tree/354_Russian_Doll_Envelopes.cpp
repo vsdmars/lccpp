@@ -9,6 +9,42 @@
 //   Return the maximum number of envelopes that can be nested (Russian-dolled)
 //   one inside another.
 //
+// Examples:
+//   Example 1:
+//     Input:  envelopes = [[5, 4], [6, 4], [6, 7], [2, 3]]
+//     Output: 3
+//     Explanation:
+//       - Sort envelopes by width ascending and height descending on ties to get
+//         [[2, 3], [5, 4], [6, 7], [6, 4]].
+//       - Process heights [3, 4, 7] via patience sorting: each exceeds the current
+//         tails maximum, expanding tails to [3], [3, 4], and [3, 4, 7].
+//       - For the last height 4, lower_bound(tails, 4) points to index 1 (value 4),
+//         leaving tails = [3, 4, 7].
+//       - Return tails.size() = 3 as the maximum nesting depth.
+//
+//   Example 2:
+//     Input:  envelopes = [[4, 5], [4, 6], [6, 7], [2, 3], [1, 1]]
+//     Output: 4
+//     Explanation:
+//       - Sort by (width asc, height desc) into [[1, 1], [2, 3], [4, 6], [4, 5],
+//         [6, 7]] so [4, 5] cannot extend [4, 6].
+//       - Heights 1, 3, and 6 append to tails, giving [1, 3, 6].
+//       - For height 5, lower_bound(tails, 5) locates index 2 (value 6) and
+//         replaces it, updating tails to [1, 3, 5].
+//       - Height 7 is greater than 5 and appends to tails, producing [1, 3, 5, 7]
+//         and returning 4.
+//
+//   Example 3:
+//     Input:  envelopes = [[1, 5], [2, 4], [3, 3], [4, 2], [5, 1]]
+//     Output: 1
+//     Explanation:
+//       - Widths are already strictly increasing, so sorting preserves [[1, 5], [2,
+//         4], [3, 3], [4, 2], [5, 1]].
+//       - Height 5 appends to empty tails, yielding [5].
+//       - Each subsequent height 4, 3, 2, and 1 is smaller than tails[0], so
+//         lower_bound repeatedly overwrites index 0 down to [1].
+//       - Return tails.size() = 1 since no two envelopes can nest.
+//
 // Algorithm:
 //   Reduce the 2D partial-order nesting problem to 1D Longest Strictly
 //   Increasing Subsequence (LIS) via a careful tie-breaking sort:

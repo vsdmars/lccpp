@@ -11,6 +11,35 @@
 //   east wall at distance `q` (0 <= q <= p) from receptor 0 (i.e., at (p, q)).
 //   Return the number of the receptor (0, 1, or 2) that the ray meets first.
 //
+// Examples:
+//   Example 1:
+//     Input:  p = 2, q = 1
+//     Output: 2
+//     Explanation:
+//       - Compute g = std::gcd(2, 1) = 1, giving horizontal traversals n = 2 / 1 =
+//         2 and vertical extensions m = 1 / 1 = 1.
+//       - Because n = 2 is even (n % 2 == 0), the unfolded ray lands on the west
+//         wall, which only holds receptor 2.
+//       - Return 2 directly.
+//
+//   Example 2:
+//     Input:  p = 3, q = 1
+//     Output: 1
+//     Explanation:
+//       - Compute g = std::gcd(3, 1) = 1, giving n = 3 / 1 = 3 and m = 1 / 1 = 1.
+//       - Since n = 3 is odd, the ray lands on the east wall; since m = 1 is also
+//         odd, it reaches the northeast corner.
+//       - Return 1 for receptor 1.
+//
+//   Example 3:
+//     Input:  p = 6, q = 4
+//     Output: 0
+//     Explanation:
+//       - Compute g = std::gcd(6, 4) = 2 to reduce the slope to lowest terms,
+//         yielding n = 6 / 2 = 3 and m = 4 / 2 = 2.
+//       - Check parity: n = 3 is odd (east wall) and m = 2 is even (south corner).
+//       - Because n % 2 != 0 and m % 2 == 0, return 0 for receptor 0.
+//
 // Algorithm:
 //   Unfold the mirror room into an infinite grid of p x p cells so the laser
 //   travels in a straight line y = (q / p) * x without bouncing:

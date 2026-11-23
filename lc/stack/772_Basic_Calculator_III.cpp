@@ -8,6 +8,52 @@
 //   (`*` and `/` before `+` and `-`), integer division truncates toward zero,
 //   and all intermediate results fit within 32-bit signed integers.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "2*(5+5*2)/3+(6/2+8)"
+//     Output: 21
+//     Explanation:
+//       - Read 2 then * and (: push 2 onto terms = [2], save frame {op = '*', base
+//         = 1}, and reset prev_op = '+' and num = 0.
+//       - Inside 5+5*2): apply_op builds terms = [2, 5, 10], and on )
+//         collapse_frame(terms, 1) sums 5 + 10 = 15 into num and restores prev_op =
+//         '*' with terms = [2].
+//       - At / then 3 then +: prev_op = '*' multiplies terms.back() to 2 * 15 = 30,
+//         then prev_op = '/' divides 30 / 3 = 10, leaving terms = [10] and prev_op
+//         = '+'.
+//       - At the second (: push frame {op = '+', base = 1}, evaluate 6/2+8 into
+//         terms = [10, 3, 8], and collapse on ) to num = 11 with prev_op = '+' and
+//         terms = [10].
+//       - The virtual trailing '+' sentinel pushes +11 onto terms = [10, 11], and
+//         collapse_frame(terms, 0) returns 21.
+//
+//   Example 2:
+//     Input:  s = " 6 - 4 / 24 + 10"
+//     Output: 16
+//     Explanation:
+//       - Skip the leading space, read 6, and on - apply prev_op = '+' to push 6
+//         onto terms = [6] while setting prev_op = '-'.
+//       - Read 4 and on / apply prev_op = '-' to push -4 onto terms = [6, -4] while
+//         setting prev_op = '/'.
+//       - Read 24 and on + apply prev_op = '/' so integer division truncates
+//         terms.back() to -4 / 24 = 0, leaving terms = [6, 0] and prev_op = '+'.
+//       - Read 10 and on the trailing '+' sentinel push +10 onto terms = [6, 0,
+//         10], summing via collapse_frame(terms, 0) to 16.
+//
+//   Example 3:
+//     Input:  s = "-(2 + 3) * 4"
+//     Output: -20
+//     Explanation:
+//       - At -, apply initial prev_op = '+' to push num = 0 onto terms = [0] and
+//         set prev_op = '-'.
+//       - At (, push frame {op = '-', base = 1} and evaluate 2 + 3 inside to
+//         produce terms = [0, 2, 3].
+//       - At ), collapse_frame(terms, 1) sums 2 + 3 into num = 5 and restores
+//         prev_op = '-', leaving terms = [0].
+//       - At *, apply prev_op = '-' to push -5 onto terms = [0, -5]; the trailing
+//         '+' sentinel multiplies terms.back() by 4 to yield terms = [0, -20],
+//         which sums to -20.
+//
 // Algorithm:
 //   Single-pass deferred-operator stack evaluation with explicit parenthesis
 //   frames. Maintain a running operand `num`, the pending operator `prev_op`

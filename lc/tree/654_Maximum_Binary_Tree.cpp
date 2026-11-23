@@ -11,6 +11,41 @@
 //      right of the maximum element.
 //   Array length is in [1, 1000] and elements are distinct in [0, 1000].
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 2, 1, 6, 0, 5]
+//     Output: [6, 3, 5, null, 2, 0, null, null, 1]
+//     Explanation:
+//       - constructMaximumBinaryTree finds the maximum 6 at index 3 of [3, 2, 1, 6,
+//         0, 5], creates root 6, and partitions into left subspan [3, 2, 1] and
+//         right subspan [0, 5].
+//       - On [3, 2, 1], max 3 at index 0 forms node 3 with empty left child and
+//         right subspan [2, 1], which recursively builds node 2 with right child 1.
+//       - On [0, 5], max 5 at index 1 forms node 5 with left child 0 and empty
+//         right child, producing level-order [6, 3, 5, null, 2, 0, null, null, 1].
+//
+//   Example 2:
+//     Input:  nums = [3, 2, 1]
+//     Output: [3, null, 2, null, 1]
+//     Explanation:
+//       - constructMaximumBinaryTreeLinear pushes 3 onto the empty monotonic
+//         decreasing stack spine = [3].
+//       - Next 2 < 3 pops nothing, attaches 2 as 3->right, and pushes 2 to make
+//         spine = [3, 2].
+//       - Finally 1 < 2 attaches 1 as 2->right (spine = [3, 2, 1]) and returns
+//         spine.front() (3), giving [3, null, 2, null, 1].
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 3, 4]
+//     Output: [4, 3, null, 2, null, 1]
+//     Explanation:
+//       - Starting with spine = [1], incoming 2 > 1 pops 1 and sets 2->left = 1,
+//         leaving spine = [2].
+//       - Incoming 3 > 2 pops 2 and sets 3->left = 2 (spine = [3]), and incoming 4
+//         > 3 pops 3 and sets 4->left = 3 (spine = [4]).
+//       - Returning spine.front() yields root 4 with left-skewed chain 4 -> 3 -> 2
+//         -> 1, serialized as [4, 3, null, 2, null, 1].
+//
 // Algorithm:
 //   1. Divide-and-conquer recursion (`constructMaximumBinaryTree`):
 //      Operate on a zero-copy `std::span<const int>` view of the active

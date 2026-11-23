@@ -9,6 +9,41 @@
 //   person `b`, identify the celebrity's label or return `-1` if none exists,
 //   minimizing the number of `knows` calls.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3, knows = [[1, 1, 0], [0, 1, 0], [1, 1, 1]]
+//     Output: 1
+//     Explanation:
+//       - Initialize candidate = 0 in Pass 1 and iterate i from 1 to 2.
+//       - At i = 1, knows(0, 1) is true, so person 0 cannot be a celebrity and
+//         candidate becomes 1.
+//       - At i = 2, knows(1, 2) is false, so person 2 cannot be a celebrity and
+//         candidate stays 1.
+//       - Run Pass 2 for candidate = 1: verify knows(0, 1) is true and knows(1, 0)
+//         is false, then verify knows(2, 1) is true and knows(1, 2) is false.
+//       - All verification queries succeed, so return 1.
+//
+//   Example 2:
+//     Input:  n = 3, knows = [[1, 0, 1], [1, 1, 0], [0, 1, 1]]
+//     Output: -1
+//     Explanation:
+//       - Initialize candidate = 0 in Pass 1 and iterate i from 1 to 2.
+//       - At i = 1, knows(0, 1) is false, keeping candidate = 0; at i = 2, knows(0,
+//         2) is true, updating candidate to 2.
+//       - In Pass 2 for candidate = 2, i = 0 passes because knows(0, 2) is true and
+//         knows(2, 0) is false.
+//       - At i = 1, knows(1, 2) is false, violating the requirement that everyone
+//         knows the celebrity, so return -1 immediately.
+//
+//   Example 3:
+//     Input:  n = 1, knows = [[1]]
+//     Output: 0
+//     Explanation:
+//       - Since n = 1 > 0, initialize candidate = 0.
+//       - Pass 1 (i = 1 < 1) executes zero iterations, and Pass 2 skips i = 0
+//         because i == candidate.
+//       - Return the lone surviving person 0 without making any knows queries.
+//
 // Algorithm:
 //   Two-phase linear elimination and verification (Universal Sink in a Directed
 //   Graph):

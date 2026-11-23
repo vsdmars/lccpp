@@ -8,6 +8,44 @@
 //   parentheses to evaluate to 24. Unary minus and digit concatenation are
 //   not permitted.
 //
+// Examples:
+//   Example 1:
+//     Input:  cards = [4, 1, 8, 7]
+//     Output: true
+//     Explanation:
+//       - Convert cards to doubles and start BFS level 0 with a single 4-element
+//         state {4.0, 1.0, 8.0, 7.0}.
+//       - In level 1 (size 3), expand_state pairs 4.0 and 8.0 via 8.0 - 4.0 = 4.0,
+//         producing {1.0, 7.0, 4.0} among the 36 successor states.
+//       - In level 2 (size 2), pairing 1.0 and 7.0 via 7.0 - 1.0 = 6.0 produces
+//         state {4.0, 6.0}.
+//       - In level 3 (size 1), combine_pair evaluates 4.0 * 6.0 = 24.0, yielding
+//         {24.0}, which satisfies |24.0 - 24.0| < 1e-6 and returns true.
+//
+//   Example 2:
+//     Input:  cards = [3, 3, 8, 8]
+//     Output: true
+//     Explanation:
+//       - Start BFS level 0 with {3.0, 3.0, 8.0, 8.0}.
+//       - In level 1 (size 3), pairing 3.0 and 8.0 with real division 8.0 / 3.0
+//         creates state {3.0, 8.0, 2.666666...}.
+//       - In level 2 (size 2), combining 3.0 and 8.0 / 3.0 via 3.0 - (8.0 / 3.0)
+//         produces {8.0, 0.333333...} (1/3).
+//       - In level 3 (size 1), since |1/3| > 1e-6, combine_pair computes 8.0 /
+//         (1/3) = 24.0, which lies within 1e-6 of 24.0 and returns true.
+//
+//   Example 3:
+//     Input:  cards = [1, 2, 1, 2]
+//     Output: false
+//     Explanation:
+//       - Start BFS level 0 with {1.0, 2.0, 1.0, 2.0} and expand all unordered
+//         pairs across three BFS reductions (4 -> 3 -> 2 -> 1).
+//       - Guard division at each step so neither a nor b is used as a divisor when
+//         its absolute value is <= 1e-6 (e.g., after 1.0 - 1.0 or 2.0 - 2.0).
+//       - Check every final 1-element state in level 3 (maximum achievable value is
+//         9.0 from (1 + 2) * (1 + 2)); none satisfy |val - 24.0| < 1e-6, so return
+//         false.
+//
 // Algorithm:
 //   Perform level-by-level Breadth-First Search (BFS) over multisets of
 //   remaining numbers, reducing the multiset cardinality by 1 at each level

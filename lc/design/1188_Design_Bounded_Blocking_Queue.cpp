@@ -10,6 +10,37 @@
 //       blocking the calling consumer thread while the queue is empty.
 //     - `int size()`: return the current number of stored elements safely.
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["BoundedBlockingQueue", "size", "enqueue", "enqueue",
+//             "size", "dequeue", "enqueue", "dequeue", "dequeue", "size"], args =
+//             [[2], [], [10], [20], [], [], [30], [], [], []]
+//     Output: [null, 0, null, null, 2, 10, null, 20, 30, 0]
+//     Explanation:
+//       - Constructing BoundedBlockingQueue(2) sets capacity_ = 2 with an empty
+//         queue_, so the initial size() call acquires mutex_ and returns 0.
+//       - enqueue(10) and enqueue(20) both satisfy queue_.size() < 2 without
+//         blocking, leaving queue_ = [10, 20] and size() returning 2.
+//       - dequeue() pops 10 from the front of queue_ and notifies not_full_,
+//         allowing enqueue(30) to push 30 so queue_ becomes [20, 30].
+//       - The final two dequeue() calls return 20 and 30 in FIFO order, leaving
+//         queue_ empty so the last size() returns 0.
+//
+//   Example 2:
+//     Input:  capacity = 2; producer thread enqueues [1, 0, 2, 3, 4]; consumer
+//             thread calls dequeue() 3 times; then main calls size(), dequeue(),
+//             dequeue(), size()
+//     Output: consumer dequeued = [1, 0, 2], size() = 2, remaining dequeues = [3,
+//             4], final size() = 0
+//     Explanation:
+//       - After the producer enqueues 1 and 0, queue_ reaches capacity_ = 2 and the
+//         producer blocks in not_full_.wait until queue_.size() < 2 holds again.
+//       - Each of the consumer thread's three dequeue() calls waits on not_empty_,
+//         pops the front element, and calls not_full_.notify_one(), waking the
+//         producer to push the remaining items and yielding dequeued = [1, 0, 2].
+//       - Once both threads join, [3, 4] remain in queue_, so size() returns 2, two
+//         more dequeue() calls return 3 and 4, and the final size() returns 0.
+//
 // Algorithm:
 //   Use the classic C++ monitor pattern (mutex + two condition variables)
 //   wrapping a FIFO `std::deque<int>`. This is the idiomatic C++23 counterpart

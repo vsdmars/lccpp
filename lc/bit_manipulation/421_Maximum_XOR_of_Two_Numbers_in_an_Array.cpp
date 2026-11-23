@@ -7,6 +7,49 @@
 //   over all pairs `0 <= i <= j < nums.length`.
 //   Constraints: 1 <= nums.length <= 2 * 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 10, 5, 25, 2, 8]
+//     Output: 28
+//     Explanation:
+//       - For bit = 30 down to 5, every num >> bit is 0, so prefixes = {0} and
+//         candidate = 1 fails to match, keeping answer = 0.
+//       - At bit = 4, candidate = 1 finds 1 ^ 0 = 1 in prefixes (from 25 >> 4 = 1
+//         and 3 >> 4 = 0), updating answer to 1 (00001_2).
+//       - At bit = 3, candidate = 3 finds 3 ^ 0 = 3 in prefixes (from 25 >> 3 = 3
+//         and 5 >> 3 = 0), updating answer to 3 (00011_2).
+//       - At bit = 2, candidate = 7 finds 7 ^ 1 = 6 in prefixes (from 5 >> 2 = 1
+//         and 25 >> 2 = 6), updating answer to 7 (00111_2).
+//       - At bit = 1 (candidate = 15 with prefixes = {1, 2, 4, 5, 12}) and bit = 0
+//         (candidate = 29 with prefixes = {2, 3, 5, 8, 10, 25}), no complement
+//         candidate ^ prefix exists, leaving answer = 28 (5 ^ 25).
+//
+//   Example 2:
+//     Input:  nums = [8, 10, 2]
+//     Output: 10
+//     Explanation:
+//       - For bit = 30 down to 4, all shifted prefixes equal 0, so answer remains
+//         0.
+//       - At bit = 3, candidate = 1 matches prefixes {0, 1} via 1 ^ 0 = 1, setting
+//         answer = 1; at bit = 2, candidate = 3 fails against prefixes {0, 2},
+//         keeping answer = 2.
+//       - At bit = 1, candidate = 5 matches prefixes {1, 4, 5} via 5 ^ 4 = 1 (from
+//         8 >> 1 = 4 and 2 >> 1 = 1), setting answer = 5.
+//       - At bit = 0, candidate = 11 finds no complement among prefixes {2, 8, 10},
+//         so answer stays 10 (8 ^ 2).
+//
+//   Example 3:
+//     Input:  nums = [7, 7, 7, 7]
+//     Output: 0
+//     Explanation:
+//       - Because nums.size() = 4 > 1, the algorithm iterates bit from 30 down to 0
+//         starting with answer = 0U.
+//       - At each bit depth, every element yields the identical prefix 7 >> bit, so
+//         prefixes contains only a single value.
+//       - Because candidate = (answer << 1) | 1U always has bit 0 set to 1,
+//         candidate ^ prefix != prefix, so no bit of answer can be set and the
+//         function returns 0.
+//
 // Algorithm:
 //   Greedy MSB-to-LSB bit-prefix construction with a hash set:
 //   Because setting bit `k` contributes 2^k — strictly greater than the sum of

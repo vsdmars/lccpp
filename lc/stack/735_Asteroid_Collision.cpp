@@ -10,6 +10,38 @@
 //   size, both explode. Asteroids moving in the same direction (or away from
 //   each other) never collide.
 //
+// Examples:
+//   Example 1:
+//     Input:  asteroids = [10, 2, -5]
+//     Output: [10]
+//     Explanation:
+//       - Process 10 (> 0): stack is empty, so push 10 onto stack giving [10].
+//       - Process 2 (> 0): moving right cannot collide with stack.back() = 10, so
+//         push 2 giving [10, 2].
+//       - Process -5 (< 0, incoming_size = 5): stack.back() = 2 < 5, so 2 explodes
+//         and is popped leaving [10].
+//       - Continue checking -5 against the new stack.back() = 10 > 5: -5 explodes
+//         (alive becomes false) and stack remains [10].
+//
+//   Example 2:
+//     Input:  asteroids = [8, -8]
+//     Output: []
+//     Explanation:
+//       - Process 8 (> 0): stack is empty, so push 8 onto stack giving [8].
+//       - Process -8 (< 0, incoming_size = 8): stack.back() = 8 == 8, so 8 is
+//         popped and alive becomes false, leaving stack = [].
+//
+//   Example 3:
+//     Input:  asteroids = [1, 5, 2, -5]
+//     Output: [1]
+//     Explanation:
+//       - Process 1, 5, and 2 (all > 0): no collisions occur, leaving stack = [1,
+//         5, 2].
+//       - Process -5 (< 0, incoming_size = 5): stack.back() = 2 < 5, so 2 explodes
+//         and is popped leaving [1, 5].
+//       - Continue checking -5 against stack.back() = 5 == 5: both explode by
+//         popping 5 and setting alive = false, leaving final stack = [1].
+//
 // Algorithm:
 //   Sweep left-to-right while maintaining a stack of surviving asteroids that
 //   are already in a collision-free prefix state. A new asteroid can collide

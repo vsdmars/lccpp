@@ -8,6 +8,43 @@
 //   every element in the inclusive subarray `[start_idx, end_idx]`. Return the
 //   final array after applying all `k` updates.
 //
+// Examples:
+//   Example 1:
+//     Input:  length = 5, updates = [[1, 3, 2], [2, 4, 3], [0, 2, -2]]
+//     Output: [-2, 0, 3, 5, 3]
+//     Explanation:
+//       - Initialize result as [0, 0, 0, 0, 0] with n = 5.
+//       - Apply [1, 3, 2] by adding 2 at index 1 and subtracting 2 at index 4,
+//         giving [0, 2, 0, 0, -2].
+//       - Apply [2, 4, 3] by adding 3 at index 2 (skipping end + 1 = 5 since it is
+//         not < 5), giving [0, 2, 3, 0, -2].
+//       - Apply [0, 2, -2] by adding -2 at index 0 and subtracting -2 at index 3,
+//         yielding difference array [-2, 2, 3, 2, -2].
+//       - Run the prefix-sum sweep left to right, accumulating running_sum values
+//         -2, 0, 3, 5, 3 into [-2, 0, 3, 5, 3].
+//
+//   Example 2:
+//     Input:  length = 10, updates = [[2, 4, 6], [5, 6, 8], [1, 9, -4]]
+//     Output: [0, -4, 2, 2, 2, 4, 4, -4, -4, -4]
+//     Explanation:
+//       - Initialize result as 10 zeros.
+//       - Apply [2, 4, 6] (+6 at index 2, -6 at index 5) and [5, 6, 8] (+8 at index
+//         5, -8 at index 7), producing [0, 0, 6, 0, 0, 2, 0, -8, 0, 0].
+//       - Apply [1, 9, -4] (+(-4) at index 1, skipping end + 1 = 10), resulting in
+//         difference array [0, -4, 6, 0, 0, 2, 0, -8, 0, 0].
+//       - Compute the in-place running prefix sum across indices 0..9 to
+//         reconstruct [0, -4, 2, 2, 2, 4, 4, -4, -4, -4].
+//
+//   Example 3:
+//     Input:  length = 1, updates = [[0, 0, 5], [0, 0, -5], [0, 0, 3]]
+//     Output: [3]
+//     Explanation:
+//       - Initialize result as [0] with n = 1.
+//       - For each update [0, 0, inc], add inc to result[0] and skip the end
+//         subtraction because end + 1 = 1 is not < 1.
+//       - After applying +5, -5, and +3, the difference array holds [3].
+//       - Sweep the prefix sum over the single element to return [3].
+//
 // Algorithm:
 //   Difference Array + Prefix Sum Reconstruction:
 //   Instead of updating every element in `[start_idx, end_idx]` (which would

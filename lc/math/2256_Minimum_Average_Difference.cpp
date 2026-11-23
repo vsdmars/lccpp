@@ -9,6 +9,46 @@
 //   where the average of 0 elements (when i == n - 1) is defined as 0.
 //   Return the smallest index `i` that minimizes this average difference.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 5, 3, 9, 5, 3]
+//     Output: 3
+//     Explanation:
+//       - First pass computes total_sum = 2 + 5 + 3 + 9 + 5 + 3 = 27 with n_count =
+//         6.
+//       - At i = 0, prefix_sum = 2 and suffix_sum = 25 give |2 / 1 - 25 / 5| = |2 -
+//         5| = 3, setting min_diff = 3 and best_idx = 0.
+//       - At i = 1, prefix_sum = 7 and suffix_sum = 20 give |3 - 5| = 2 (best_idx =
+//         1); at i = 2, prefix_sum = 10 and suffix_sum = 17 give |3 - 5| = 2 (tie
+//         keeps best_idx = 1).
+//       - At i = 3, prefix_sum = 19 and suffix_sum = 8 give |19 / 4 - 8 / 2| = |4 -
+//         4| = 0, updating min_diff = 0 and best_idx = 3.
+//       - Remaining indices i = 4 and i = 5 yield diffs |4 - 3| = 1 and |4 - 0| =
+//         4, so best_idx = 3 is returned.
+//
+//   Example 2:
+//     Input:  nums = [0, 1, 0, 1, 0, 1]
+//     Output: 0
+//     Explanation:
+//       - First pass computes total_sum = 3 across n_count = 6 elements.
+//       - At i = 0, prefix_sum = 0 and suffix_sum = 3 give left_avg = 0 / 1 = 0 and
+//         right_avg = 3 / 5 = 0, setting min_diff = 0 and best_idx = 0.
+//       - At i = 1, 2, 3, and 5, integer division again gives diff = 0, while i = 4
+//         gives |0 - 1| = 1.
+//       - Strict comparison diff < min_diff never triggers after i = 0, preserving
+//         and returning the smallest index 0.
+//
+//   Example 3:
+//     Input:  nums = [0, 0, 0, 10]
+//     Output: 3
+//     Explanation:
+//       - First pass computes total_sum = 10 with n_count = 4.
+//       - Indices i = 0, 1, and 2 have prefix_sum = 0 and suffix_sum = 10,
+//         producing diffs |0 - 3| = 3 (best_idx = 0), |0 - 5| = 5, and |0 - 10| =
+//         10.
+//       - At i = 3, right_count = 0 sets right_avg = 0 while left_avg = 10 / 4 = 2,
+//         giving diff = 2 < 3 and returning best_idx = 3.
+//
 // Algorithm:
 //   Two-pass running prefix/suffix sum scan:
 //     1. First pass: compute `total_sum` across all elements in 64-bit integer

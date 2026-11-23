@@ -7,6 +7,38 @@
 //   reverse the prefix `arr[0..k-1]`. Return a sequence of `k`-values that
 //   sorts `arr` in ascending order using at most `10 * n` flips.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [3, 2, 4, 1]
+//     Output: [3, 4, 2, 3, 2]
+//     Explanation:
+//       - For target = 4, locate 4 at idx = 2; flip prefix k = 3 to move 4 to the
+//         front ([4, 2, 3, 1]), then flip k = 4 to place 4 at index 3 ([1, 3, 2,
+//         4]).
+//       - For target = 3, locate 3 at idx = 1 in [1, 3, 2]; flip k = 2 ([3, 1, 2,
+//         4]) and then k = 3 ([2, 1, 3, 4]) to place 3 at index 2.
+//       - For target = 2, 2 is already at idx = 0 in [2, 1], so skip the first flip
+//         and flip k = 2 to reach [1, 2, 3, 4], returning flips = [3, 4, 2, 3, 2].
+//
+//   Example 2:
+//     Input:  arr = [1, 2, 3]
+//     Output: []
+//     Explanation:
+//       - For target = 3, find 3 at idx = 2; since idx + 1 == 3 == target, skip
+//         flipping.
+//       - For target = 2, find 2 at idx = 1; since idx + 1 == 2 == target, skip
+//         flipping and return the empty flip sequence [].
+//
+//   Example 3:
+//     Input:  arr = [5, 4, 3, 2, 1]
+//     Output: [5]
+//     Explanation:
+//       - For target = 5, 5 is at idx = 0, so omit the first flip and reverse
+//         prefix k = 5 to get [1, 2, 3, 4, 5].
+//       - For targets 4, 3, and 2, each element now sits at idx = target - 1 (3, 2,
+//         1 respectively), so all remaining targets are skipped and [5] is
+//         returned.
+//
 // Algorithm:
 //   Selection-style largest-to-back pancake sorting:
 //   Place each target value `val` from `n` down to `2` into its final sorted

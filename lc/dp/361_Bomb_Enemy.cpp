@@ -8,6 +8,46 @@
 //   `'0'` and kills every enemy in the same row and column radiating outward
 //   until blocked by a wall `'W'` or the grid boundary.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [["0","E","0","0"],["E","0","W","E"],["0","E","0","0"]]
+//     Output: 3
+//     Explanation:
+//       - Row 0 initializes row_hits = 1 at (0, 0) and col_hits = [1, 2, 0, 1];
+//         empty cells (0, 0), (0, 2), and (0, 3) yield 1 + 1 = 2, 1 + 0 = 1, and 1
+//         + 1 = 2, setting best = 2.
+//       - At (1, 0), c == 0 recomputes row_hits = 1 up to the wall at (1, 2), while
+//         col_hits[0] = 1 is reused.
+//       - At empty cell (1, 1), row_hits = 1 and cached col_hits[1] = 2 give 1 + 2
+//         = 3, updating best = 3.
+//       - At (1, 3) after the wall at (1, 2), row_hits is recomputed as 1, and row
+//         2 evaluates empty cells (2, 0), (2, 2), and (2, 3) with totals 2, 1, and
+//         2, leaving best = 3.
+//
+//   Example 2:
+//     Input:  grid = [["W","W","W"],["0","0","0"],["E","E","E"]]
+//     Output: 1
+//     Explanation:
+//       - Row 0 consists only of walls 'W', so col_hits remains [0, 0, 0] and no
+//         bomb can be placed in row 0.
+//       - At row 1, c == 0 sets row_hits = 0 while grid[0][c] == 'W' recomputes
+//         col_hits[c] = 1 for each column c = 0, 1, 2 due to the 'E' cells in row
+//         2.
+//       - Each empty cell (1, 0), (1, 1), and (1, 2) evaluates row_hits +
+//         col_hits[c] = 0 + 1 = 1, updating best = 1 before row 2 (all 'E')
+//         finishes without changes.
+//
+//   Example 3:
+//     Input:  grid = [["E","0","E","W","E","E","E"]]
+//     Output: 2
+//     Explanation:
+//       - At (0, 0), countRowSegment counts 2 enemies before the wall at (0, 3),
+//         setting row_hits = 2, and col_hits[0] = 1.
+//       - At the sole empty cell (0, 1), row_hits = 2 is reused and col_hits[1] =
+//         0, updating best = 2 + 0 = 2.
+//       - After the wall at (0, 3), (0, 4) recomputes row_hits = 3 for the right
+//         segment, but all remaining cells are 'E', so best remains 2.
+//
 // Algorithm:
 //   Row/Column Segment Caching (Space-Optimized 2D DP). Walls partition each
 //   row and each column into independent maximal wall-free segments; every cell

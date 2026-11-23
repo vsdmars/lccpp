@@ -8,6 +8,38 @@
 //   smallest distinct value among all nodes in the tree. If no second smallest
 //   value exists (all nodes share the same value), return -1.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [2, 2, 5, null, null, 5, 7]
+//     Output: 5
+//     Explanation:
+//       - Initialize global_min = root->val = 2 and call dfs(root).
+//       - The left child has val == 2 == global_min, so dfs recurses into its
+//         nullptr children and returns std::nullopt.
+//       - The right child has val == 5 > global_min, so dfs prunes its subtree (5,
+//         7) and immediately returns 5.
+//       - Combining std::nullopt and 5 at the root yields 5.
+//
+//   Example 2:
+//     Input:  root = [2, 2, 5, 2, 3, 5, 7]
+//     Output: 3
+//     Explanation:
+//       - Set global_min = 2; because the left child also has val == 2, dfs
+//         descends into its children 2 and 3.
+//       - Leaf 2 matches global_min and returns std::nullopt, while leaf 3 > 2
+//         returns 3, producing 3 for the left subtree.
+//       - On the right child 5 > 2, dfs prunes its children (5, 7) and returns 5.
+//       - At the root, std::min(3, 5) selects 3 as the second minimum value.
+//
+//   Example 3:
+//     Input:  root = [2, 2, 2]
+//     Output: -1
+//     Explanation:
+//       - Set global_min = 2; both children have val == 2 == global_min, so dfs
+//         recurses to their nullptr children.
+//       - No node satisfies node->val > global_min, so dfs(root) returns
+//         std::nullopt and .value_or(-1) yields -1.
+//
 // Algorithm:
 //   Because every parent is the minimum of its children, the root value
 //   `min_val = root->val` is guaranteed to be the global minimum of the entire

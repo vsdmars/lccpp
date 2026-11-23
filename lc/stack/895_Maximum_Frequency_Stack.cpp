@@ -10,6 +10,49 @@
 //   It is guaranteed that `pop()` is only called when at least one element is
 //   in the stack.
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["FreqStack", "push(5)", "push(7)", "push(5)",
+//             "push(7)", "push(4)", "push(5)", "pop", "pop", "pop", "pop", "pop",
+//             "pop"]
+//     Output: [null, null, null, null, null, null, null, 5, 7, 5, 4, 7, 5]
+//     Explanation:
+//       - The six push calls populate freq_ = {5: 3, 7: 2, 4: 1} and
+//         frequency-indexed LIFO buckets groups_ = [[5, 7, 4], [5, 7], [5]].
+//       - First pop() pops 5 from groups_[2], removes the now-empty groups_[2]
+//         bucket, and decrements freq_[5] to 2.
+//       - Second pop() pops 7 from the top of groups_[1] = [5, 7] to break the
+//         frequency-2 tie by most recent push, setting freq_[7] = 1.
+//       - Third pop() pops 5 from groups_[1] = [5], pops the empty bucket so
+//         groups_ = [[5, 7, 4]], and sets freq_[5] = 1.
+//       - The final three pop() calls drain groups_[0] = [5, 7, 4] in LIFO order,
+//         returning 4, 7, and 5 while erasing each key from freq_ and leaving
+//         groups_ empty.
+//
+//   Example 2:
+//     Input:  operations = ["FreqStack", "push(1)", "push(2)", "push(3)", "pop",
+//             "pop", "pop"]
+//     Output: [null, null, null, null, 3, 2, 1]
+//     Explanation:
+//       - Pushing distinct values 1, 2, and 3 sets freq_ = {1: 1, 2: 1, 3: 1} and
+//         places all three in frequency-1 bucket groups_ = [[1, 2, 3]].
+//       - Because all three elements tie at maximum frequency 1, the three pop()
+//         calls pop from groups_[0] in LIFO order, returning 3, 2, and 1 and
+//         leaving groups_ empty.
+//
+//   Example 3:
+//     Input:  operations = ["FreqStack", "push(10)", "pop", "push(20)", "push(20)",
+//             "push(30)", "pop", "pop", "pop"]
+//     Output: [null, null, 10, null, null, null, 20, 30, 20]
+//     Explanation:
+//       - push(10) creates freq_ = {10: 1} and groups_ = [[10]], and pop() returns
+//         10 while removing both the empty bucket and the key 10 from freq_.
+//       - Reusing the empty FreqStack, push(20), push(20), and push(30) build freq_
+//         = {20: 2, 30: 1} and groups_ = [[20, 30], [20]].
+//       - The next pop() removes 20 from groups_[1], drops empty groups_[1], and
+//         sets freq_[20] = 1; the last two pops drain groups_[0] = [20, 30] to
+//         return 30 then 20.
+//
 // Algorithm:
 //   Maintain a hash map `freq_` tracking each value's current occurrence count,
 //   and a vector of frequency buckets `groups_` where `groups_[f - 1]` is a

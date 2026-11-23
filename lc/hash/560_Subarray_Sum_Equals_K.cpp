@@ -6,6 +6,49 @@
 //   and an integer `k`, return the total number of non-empty contiguous
 //   subarrays whose elements sum to `k`.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3], k = 3
+//     Output: 2
+//     Explanation:
+//       - Initialize prefix_counts = {0: 1}, prefix_sum = 0, and total_subarrays =
+//         0.
+//       - At value = 1: prefix_sum becomes 1, needed = 1 - 3 = -2 is absent from
+//         prefix_counts, and prefix_counts[1] becomes 1.
+//       - At value = 2: prefix_sum becomes 3, needed = 3 - 3 = 0 matches count 1 in
+//         prefix_counts (total_subarrays = 1, subarray [1, 2]), and
+//         prefix_counts[3] becomes 1.
+//       - At value = 3: prefix_sum becomes 6, needed = 6 - 3 = 3 matches count 1 in
+//         prefix_counts (total_subarrays = 2, subarray [3]), and prefix_counts[6]
+//         becomes 1.
+//
+//   Example 2:
+//     Input:  nums = [2, 3, -3, 3], k = 3
+//     Output: 3
+//     Explanation:
+//       - Initialize prefix_counts = {0: 1}; processing 2 updates prefix_sum = 2,
+//         finds no match for needed = -1, and sets prefix_counts[2] = 1.
+//       - Processing 3 updates prefix_sum = 5, finds prefix_counts[5 - 3] =
+//         prefix_counts[2] = 1 (total_subarrays = 1), and sets prefix_counts[5] =
+//         1.
+//       - Processing -3 brings prefix_sum back to 2, finds no match for needed =
+//         -1, and increments prefix_counts[2] to 2.
+//       - Processing the final 3 updates prefix_sum = 5 and finds prefix_counts[2]
+//         = 2 (for [3, -3, 3] and [3]), raising total_subarrays to 1 + 2 = 3.
+//
+//   Example 3:
+//     Input:  nums = [0, 0, 0], k = 0
+//     Output: 6
+//     Explanation:
+//       - Initialize prefix_counts = {0: 1}; at index 0 (value = 0), prefix_sum = 0
+//         queries needed = 0 before incrementing, adding 1 to total_subarrays and
+//         updating prefix_counts[0] to 2.
+//       - At index 1 (value = 0), prefix_sum = 0 finds prefix_counts[0] = 2
+//         (total_subarrays = 3), then increments prefix_counts[0] to 3.
+//       - At index 2 (value = 0), prefix_sum = 0 finds prefix_counts[0] = 3
+//         (total_subarrays = 6), then increments prefix_counts[0] to 4 and returns
+//         6.
+//
 // Algorithm:
 //   Prefix Sum + Frequency Hash Map:
 //     Let P[i] = nums[0] + ... + nums[i - 1] with P[0] = 0. A contiguous

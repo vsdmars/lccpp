@@ -10,6 +10,49 @@
 //   Constraints: 0 <= number of nodes <= 100, unique node values (1..100 in
 //   standard inputs; the implementation also handles self-cycles).
 //
+// Examples:
+//   Example 1:
+//     Input:  adjList = [[2, 4], [1, 3], [2, 4], [1, 3]] (starting at node 1)
+//     Output: [[2, 4], [1, 3], [2, 4], [1, 3]] (deep copy with newly allocated
+//             Node* instances)
+//     Explanation:
+//       - `dfs(1)` allocates clone `1'`, records `cloned[1] = 1'` before recursing,
+//         and visits neighbors `2` and `4`.
+//       - Recursing on `2` allocates `2'` and stores `cloned[2] = 2'`; its neighbor
+//         `1` hits `cloned[1]` and returns `1'`, then DFS recurses on `3`.
+//       - Recursing on `3` allocates `3'` and stores `cloned[3] = 3'`; neighbor `2`
+//         hits `cloned[2]`, and neighbor `4` allocates `4'` and stores `cloned[4] =
+//         4'`.
+//       - At `4`, neighbors `1` and `3` hit `cloned[1]` and `cloned[3]`, completing
+//         `4'->neighbors = {1', 3'}` and unwinding so every cloned node mirrors the
+//         original topology with no shared pointers.
+//
+//   Example 2:
+//     Input:  adjList = [[1, 2], [2], [2]] (3-node graph 0->[1,2], 1->[2], 2->[2]
+//             starting at node 0)
+//     Output: [[1, 2], [2], [2]] (deep copy preserving shared edge to 2 and
+//             self-loop on 2)
+//     Explanation:
+//       - `dfs(0)` allocates clone `0'`, stores `cloned[0] = 0'`, and recurses on
+//         neighbor `1`.
+//       - `dfs(1)` allocates `1'`, stores `cloned[1] = 1'`, and recurses on
+//         neighbor `2`.
+//       - `dfs(2)` allocates `2'` and stores `cloned[2] = 2'` before visiting
+//         neighbors, so the self-edge `2 -> 2` hits `cloned[2]` immediately and
+//         appends `2'` to `2'->neighbors`.
+//       - Unwinding sets `1'->neighbors = {2'}` and returns to `0'`, where the
+//         second neighbor `2` hits `cloned[2]` so `0'->neighbors = {1', 2'}` shares
+//         the same `2'`.
+//
+//   Example 3:
+//     Input:  node = nullptr
+//     Output: nullptr
+//     Explanation:
+//       - `cloneGraph(nullptr)` (and `review(nullptr)`) checks `if (node ==
+//         nullptr)` at entry.
+//       - Because the input pointer is null, it immediately returns `nullptr`
+//         without allocating any `Node` or hash map entries.
+//
 // Algorithm:
 //   Memoized Depth-First Search (DFS) graph cloning. Both `cloneGraph` (keyed
 //   by original `const Node*` address) and `review` (keyed by unique `int` node

@@ -8,6 +8,37 @@
 //   Constraints: 1 <= num.length <= 50; `num` consists only of digits and has
 //   no leading zeros except for "0" itself.
 //
+// Examples:
+//   Example 1:
+//     Input:  num = "69"
+//     Output: true
+//     Explanation:
+//       - Initialize two pointers `left = 0` and `right = 1` on `"69"`.
+//       - Look up `expected = kRotationTable['6'] = '9'` and confirm `num[1] ==
+//         '9'`.
+//       - Advance to `left = 1` and `right = 0`, terminating the `left <= right`
+//         loop and returning `true`.
+//
+//   Example 2:
+//     Input:  num = "818"
+//     Output: true
+//     Explanation:
+//       - Initialize `left = 0` and `right = 2`; `kRotationTable['8'] = '8'`
+//         matches `num[2] = '8'`, so advance to `left = 1` and `right = 1`.
+//       - At `left == right == 1`, look up `kRotationTable['1'] = '1'` and verify
+//         `num[1] == '1'`.
+//       - Because `left == right`, break out of the loop safely without
+//         decrementing `right` and return `true`.
+//
+//   Example 3:
+//     Input:  num = "962"
+//     Output: false
+//     Explanation:
+//       - Initialize `left = 0` and `right = 2` on `"962"`.
+//       - Look up `expected = kRotationTable['9'] = '6'` for `num[0] = '9'`.
+//       - Compare `num[2] = '2'` against `expected = '6'`, observe a mismatch, and
+//         immediately return `false`.
+//
 // Algorithm:
 //   Rotating a string by 180 degrees reverses character order and maps each
 //   digit to its upside-down counterpart. Only five digits remain valid digits

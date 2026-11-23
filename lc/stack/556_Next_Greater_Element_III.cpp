@@ -7,6 +7,46 @@
 //   as `n` and is strictly greater than `n`. Return `-1` if no such integer
 //   exists or if the smallest such rearrangement exceeds `INT_MAX` (2^31 - 1).
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 230241
+//     Output: 230412
+//     Explanation:
+//       - Convert n to digits = "230241" and scan right-to-left to find the
+//         rightmost pivot where digits[i] < digits[i + 1], which is index 3 ('2' <
+//         '4').
+//       - Reverse the non-increasing suffix "41" starting at index 4 into ascending
+//         order "14", producing "230214".
+//       - Use upper_bound on the ascending suffix "14" to find the smallest digit
+//         strictly greater than '2', which is '4' at index 5, and swap it with
+//         digits[3] to get "230412".
+//       - Parse "230412" in 64-bit arithmetic and return 230412 since it does not
+//         exceed INT_MAX.
+//
+//   Example 2:
+//     Input:  n = 4976
+//     Output: 6479
+//     Explanation:
+//       - Scan digits = "4976" right-to-left (7 >= 6, 9 >= 7, 4 < 9) to identify
+//         pivot = 0 with digit '4'.
+//       - Reverse the suffix "976" at indices 1..3 into ascending "679", changing
+//         digits to "4679".
+//       - Find upper_bound('4') in "679", which selects '6' at index 1, and swap it
+//         with digits[0] to obtain "6479".
+//       - Parse "6479" within 32-bit signed bounds and return 6479.
+//
+//   Example 3:
+//     Input:  n = 2147483486
+//     Output: -1
+//     Explanation:
+//       - Scan digits = "2147483486" right-to-left to locate pivot = 7 where
+//         digits[7] = '4' < digits[8] = '8'.
+//       - Reverse the suffix "86" into "68" to form "2147483468", then swap
+//         digits[7] ('4') with upper_bound result '6' at index 8 to yield
+//         "2147483648".
+//       - Parse "2147483648" into 2147483648, which exceeds INT_MAX (2147483647),
+//         so parse_checked_int32 returns -1.
+//
 // Algorithm:
 //   Convert `n` to its decimal digit sequence and compute its next
 //   lexicographical permutation:

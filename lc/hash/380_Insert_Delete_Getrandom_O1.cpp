@@ -11,6 +11,52 @@
 //   - `getRandom()`: Returns a uniformly random element from the current
 //     non-empty set (every present element has equal probability 1/n).
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["RandomizedSet", "insert", "remove", "insert",
+//             "getRandom", "remove", "insert", "getRandom"], args = [[], [1], [2],
+//             [2], [], [1], [2], []]
+//     Output: [null, true, false, true, 2, true, false, 2]
+//     Explanation:
+//       - insert(1) appends 1 to values_ ([1]), maps val_to_index_[1] = 0, and
+//         returns true, while remove(2) finds 2 absent and returns false.
+//       - insert(2) appends 2 to values_ ([1, 2]), maps val_to_index_[2] = 1, and
+//         returns true, so getRandom() uniformly samples index 0 or 1 from [1, 2]
+//         (returning 2).
+//       - remove(1) looks up remove_idx = 0 and last_idx = 1, copies last_val = 2
+//         into values_[0], updates val_to_index_[2] = 0, pops back so values_ =
+//         [2], and erases 1.
+//       - insert(2) finds 2 in val_to_index_ and returns false, and getRandom()
+//         samples index 0 from values_ = [2] to return 2.
+//
+//   Example 2:
+//     Input:  operations = ["RandomizedSet", "insert", "remove", "remove",
+//             "insert", "insert", "insert", "getRandom"], args = [[], [3], [3],
+//             [3], [7], [7], [8], []]
+//     Output: [null, true, true, false, true, false, true, 7]
+//     Explanation:
+//       - insert(3) stores values_ = [3] with val_to_index_[3] = 0 and returns
+//         true.
+//       - First remove(3) has remove_idx = 0 equal to last_idx = 0, so it skips
+//         swapping, pops values_ to [], erases 3 from val_to_index_, and returns
+//         true; the second remove(3) returns false.
+//       - insert(7) returns true (values_ = [7]), duplicate insert(7) returns
+//         false, and insert(8) returns true (values_ = [7, 8]).
+//       - getRandom() uniformly draws index 0 or 1 from values_ = [7, 8], returning
+//         7 (or 8).
+//
+//   Example 3:
+//     Input:  operations = ["RandomizedSet", "insert", "insert", "remove",
+//             "getRandom"], args = [[], [0], [-1], [0], []]
+//     Output: [null, true, true, true, -1]
+//     Explanation:
+//       - insert(0) and insert(-1) populate values_ = [0, -1] with val_to_index_[0]
+//         = 0 and val_to_index_[-1] = 1, both returning true.
+//       - remove(0) finds remove_idx = 0 != last_idx = 1, overwrites values_[0]
+//         with last_val = -1, updates val_to_index_[-1] = 0, pops back to values_ =
+//         [-1], and erases 0.
+//       - getRandom() draws index 0 from values_ = [-1] and returns -1.
+//
 // Algorithm:
 //   A hash table alone cannot support O(1) uniform random selection because
 //   bucket arrays are sparse, while a dynamic array alone cannot support O(1)

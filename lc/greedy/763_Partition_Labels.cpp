@@ -7,6 +7,43 @@
 //   possible so that each letter appears in at most one part. Return a vector
 //   of integers giving the length of each part in order.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "ababcbacadefegdehijhklij"
+//     Output: [9, 7, 8]
+//     Explanation:
+//       - Pass 1 records rightmost indices: 'a': 8, 'b': 5, 'c': 7, 'd': 14, 'e':
+//         15, 'f': 11, 'g': 13, 'h': 19, 'i': 22, 'j': 23, 'k': 20, 'l': 21.
+//       - Starting at part_start = 0, i = 0 ('a') sets part_end = 8, indices 1..7
+//         stay within 8, and at i = 8 == part_end we close a part of length 9 and
+//         set part_start = 9.
+//       - From part_start = 9, 'd' sets part_end = 14 and 'e' at i = 10 expands
+//         part_end to 15; at i = 15 == part_end we close a part of length 7 and set
+//         part_start = 16.
+//       - From part_start = 16, 'h', 'i', and 'j' push part_end to 19, 22, and 23,
+//         closing the final part of length 8 at i = 23 and returning [9, 7, 8].
+//
+//   Example 2:
+//     Input:  s = "eccbbbbdec"
+//     Output: [10]
+//     Explanation:
+//       - Pass 1 records last_pos['e'] = 8, last_pos['c'] = 9, last_pos['b'] = 6,
+//         and last_pos['d'] = 7.
+//       - At i = 0 ('e'), part_end becomes 8; at i = 1 ('c'), part_end expands to
+//         max(8, 9) = 9.
+//       - Indices 2..8 never reach part_end = 9, and at i = 9 == part_end a single
+//         partition of length (9 - 0) + 1 = 10 is closed, returning [10].
+//
+//   Example 3:
+//     Input:  s = "abcdef"
+//     Output: [1, 1, 1, 1, 1, 1]
+//     Explanation:
+//       - Pass 1 sets last_pos for 'a'..'f' to 0, 1, 2, 3, 4, and 5 respectively.
+//       - At each index i from 0 to 5, part_end = max(part_end, i) = i immediately
+//         matches i == part_end.
+//       - Each step pushes length (i - i) + 1 = 1 and advances part_start to i + 1,
+//         returning [1, 1, 1, 1, 1, 1].
+//
 // Algorithm:
 //   First pass: record the last occurrence index of each letter 'a'..'z' in a
 //   fixed 26-element table.

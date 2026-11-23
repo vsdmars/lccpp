@@ -9,6 +9,40 @@
 //   standard constraints), reconstruct and return the original sentence with
 //   the trailing position numbers removed.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "is2 sentence4 This1 a3"
+//     Output: "This is a sentence"
+//     Explanation:
+//       - Phase 1 scans space-delimited tokens and calls parseToken on each,
+//         populating words = [(2, "is"), (4, "sentence"), (1, "This"), (3, "a")]
+//         with total_chars = 2 + 8 + 4 + 1 = 15.
+//       - Phase 2 sorts words ascending by the first tuple element (position),
+//         reordering it to [(1, "This"), (2, "is"), (3, "a"), (4, "sentence")].
+//       - Phase 3 reserves 15 + (4 - 1) = 18 characters in result and appends the
+//         sorted words separated by single spaces to return "This is a sentence".
+//
+//   Example 2:
+//     Input:  s = "ten10 one1 two2 three3 four4 five5 six6 seven7 eight8 nine9"
+//     Output: "one two three four five six seven eight nine ten"
+//     Explanation:
+//       - Phase 1 calls parseToken on each token; on "ten10", walking backward over
+//         trailing digits sets split = 3, extracts word = "ten", and parses "10" in
+//         base 10 as position = 10, while the other nine tokens parse to positions
+//         1 through 9.
+//       - Phase 2 sorts the 10-element words vector by numeric position so (1,
+//         "one") through (9, "nine") precede (10, "ten").
+//       - Phase 3 joins the ordered words with single spaces into a pre-reserved
+//         buffer and returns "one two three four five six seven eight nine ten".
+//
+//   Example 3:
+//     Input:  s = ""
+//     Output: ""
+//     Explanation:
+//       - Phase 1 begins with i = 0 and n = s.size() = 0, so the tokenization loop
+//         never runs and words stays empty.
+//       - The words.empty() check triggers and immediately returns "".
+//
 // Algorithm:
 //   Scan `s` linearly to extract each space-delimited token as a non-owning
 //   `std::string_view`. For each token, walk backward over its trailing decimal

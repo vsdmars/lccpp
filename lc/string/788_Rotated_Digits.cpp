@@ -11,6 +11,37 @@
 //     - 3, 4, 7 do not form valid digits when rotated (invalid).
 //   Given a positive integer `n`, return how many integers in [1, n] are good.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 10
+//     Output: 4
+//     Explanation:
+//       - Iterate x from 1 to 10 and inspect each decimal digit via kDigitState[x %
+//         10].
+//       - Reject x = 3, 4, and 7 immediately upon seeing state -1, and reject x =
+//         1, 8, and 10 because all their digits have state 0.
+//       - Accept x = 2, 5, 6, and 9 because each has only valid digits with at
+//         least one state 1 digit, returning good_count = 4.
+//
+//   Example 2:
+//     Input:  n = 20
+//     Output: 9
+//     Explanation:
+//       - Count 4 good numbers in [1, 10] from {2, 5, 6, 9}.
+//       - For x in [11, 19], the tens digit 1 has state 0, so 12, 15, 16, and 19
+//         pass via their units digit (increasing good_count to 8), while 13, 14, 17
+//         fail on -1 and 11, 18 stay unchanged.
+//       - For x = 20, digit 0 has state 0 and digit 2 has state 1, so is_good(20)
+//         returns true and yields good_count = 9.
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: 0
+//     Explanation:
+//       - Run the loop once for x = 1 and look up kDigitState[1] = 0.
+//       - Finish the digit loop with has_changing_digit still false, so is_good(1)
+//         returns false and good_count remains 0.
+//
 // Algorithm:
 //   Classify each decimal digit 0..9 in a compile-time lookup table as:
 //     - -1 (invalid: 3, 4, 7),

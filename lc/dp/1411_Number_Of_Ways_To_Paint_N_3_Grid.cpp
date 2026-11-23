@@ -7,6 +7,38 @@
 //   adjacent cells share the same color. Return the total number of valid
 //   colorings modulo `10^9 + 7`.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 1
+//     Output: 12
+//     Explanation:
+//       - Initialize row 1 counts to abc = 6 (three-color patterns) and aba = 6
+//         (two-color patterns).
+//       - The transition loop for row = 1 to n - 1 executes zero iterations because
+//         n = 1.
+//       - Return (abc + aba) % 1000000007 = (6 + 6) % 1000000007 = 12.
+//
+//   Example 2:
+//     Input:  n = 2
+//     Output: 54
+//     Explanation:
+//       - Initialize row 1 counts to abc = 6 and aba = 6.
+//       - In the single iteration row = 1, compute next_abc = (2 * 6 + 2 * 6) %
+//         1000000007 = 24 and next_aba = (2 * 6 + 3 * 6) % 1000000007 = 30.
+//       - Update abc = 24 and aba = 30, then return (24 + 30) % 1000000007 = 54.
+//
+//   Example 3:
+//     Input:  n = 4
+//     Output: 1122
+//     Explanation:
+//       - Initialize row 1 counts to abc = 6 and aba = 6.
+//       - At row = 1, transition to abc = (2 * 6 + 2 * 6) = 24 and aba = (2 * 6 + 3
+//         * 6) = 30.
+//       - At row = 2, transition to abc = (2 * 24 + 2 * 30) = 108 and aba = (2 * 24
+//         + 3 * 30) = 138.
+//       - At row = 3, transition to abc = (2 * 108 + 2 * 138) = 492 and aba = (2 *
+//         108 + 3 * 138) = 630, and return (492 + 630) % 1000000007 = 1122.
+//
 // Algorithm:
 //   State-equivalence linear dynamic programming across rows. Any valid single
 //   row of 3 cells belongs to one of two symmetry classes:

@@ -10,6 +10,37 @@
 //   Constraints: 1 <= nums1.length == nums2.length <= 100,
 //   0 <= nums1[i], nums2[i] <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums1 = [12, 28, 46, 32, 50], nums2 = [50, 12, 32, 46, 28]
+//     Output: [1, 4, 3, 2, 0]
+//     Explanation:
+//       - Index nums2 into positions: 50 -> [0], 12 -> [1], 32 -> [2], 46 -> [3],
+//         28 -> [4].
+//       - Scan nums1 and pop from each value's vector: 12 yields 1, 28 yields 4, 46
+//         yields 3, 32 yields 2, and 50 yields 0.
+//       - Return mapping = [1, 4, 3, 2, 0], satisfying nums2[mapping[i]] ==
+//         nums1[i] for every index i.
+//
+//   Example 2:
+//     Input:  nums1 = [50, 12, 28, 46, 32, 50], nums2 = [50, 12, 32, 46, 28, 50]
+//     Output: [5, 1, 4, 3, 2, 0]
+//     Explanation:
+//       - Index nums2 into positions: 50 -> [0, 5], 12 -> [1], 32 -> [2], 46 ->
+//         [3], 28 -> [4].
+//       - For nums1[0] = 50, pop the back of positions[50], recording index 5 and
+//         leaving [0].
+//       - Pop indices for 12 (1), 28 (4), 46 (3), and 32 (2) in order.
+//       - For nums1[5] = 50, pop the remaining index 0 from positions[50],
+//         returning the valid bijection [5, 1, 4, 3, 2, 0].
+//
+//   Example 3:
+//     Input:  nums1 = [42], nums2 = [42]
+//     Output: [0]
+//     Explanation:
+//       - Index the single element of nums2 into positions[42] = [0].
+//       - Scan nums1[0] = 42, pop 0 from positions[42], and return [0].
+//
 // Algorithm:
 //   1. Index every element of `nums2` into a hash map `positions` that maps
 //      each value `v` to a stack (`std::vector<int>`) of all indices where `v`

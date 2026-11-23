@@ -8,6 +8,34 @@
 //   across all `n` banks.
 //   Constraints: 1 <= m, n <= 50; 1 <= accounts[i][j] <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  accounts = [[1, 2, 3], [3, 2, 1]]
+//     Output: 6
+//     Explanation:
+//       - Initialize max_wealth = 0 before iterating over customer rows.
+//       - Accumulate row 0 ([1, 2, 3]) to wealth = 6 and update max_wealth = max(0,
+//         6) = 6.
+//       - Accumulate row 1 ([3, 2, 1]) to wealth = 6, keeping max_wealth = max(6,
+//         6) = 6, and return 6.
+//
+//   Example 2:
+//     Input:  accounts = [[2, 8, 7], [7, 1, 3], [1, 9, 5]]
+//     Output: 17
+//     Explanation:
+//       - Initialize max_wealth = 0.
+//       - Row 0 ([2, 8, 7]) sums to 17, updating max_wealth to 17.
+//       - Row 1 ([7, 1, 3]) sums to 11 and row 2 ([1, 9, 5]) sums to 15, neither
+//         exceeding 17, so 17 is returned.
+//
+//   Example 3:
+//     Input:  accounts = [[42]]
+//     Output: 42
+//     Explanation:
+//       - Initialize max_wealth = 0 and inspect the single customer row [42].
+//       - std::accumulate computes wealth = 42, updating max_wealth to max(0, 42) =
+//         42 and returning 42.
+//
 // Algorithm:
 //   Row-wise Reduction + Running Maximum:
 //   Iterate over every customer row in `accounts`, sum the balances in that

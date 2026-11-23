@@ -10,6 +10,43 @@
 //   only cross an aisle if split evenly (2 seats on each side).
 //   Constraints: 1 <= n <= 10^9, 1 <= reservedSeats.length <= min(10*n, 10^4).
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3, reservedSeats = [[1, 2], [1, 3], [1, 8], [2, 6], [3, 1], [3,
+//             10]]
+//     Output: 4
+//     Explanation:
+//       - Process row 1 reservations: seats 2 and 3 set kLeftBlock and seat 8 sets
+//         kRightBlock, leaving blocked_masks[1] = kLeftBlock | kRightBlock (Middle
+//         remains open).
+//       - Process row 2 reservation [2, 6]: seat 6 sets kMiddleBlock and
+//         kRightBlock, so blocked_masks[2] = kMiddleBlock | kRightBlock (Left
+//         remains open).
+//       - Ignore row 3 reservations [3, 1] and [3, 10] because seats 1 and 10 yield
+//         mask = 0 and do not insert row 3 into blocked_masks.
+//       - Start with max_families = 2 * 3 = 6 and subtract 1 for each of rows 1 and
+//         2 (neither equals kAllBlocks), returning 4.
+//
+//   Example 2:
+//     Input:  n = 4, reservedSeats = [[4, 3], [1, 4], [4, 6], [1, 7]]
+//     Output: 4
+//     Explanation:
+//       - For row 4, seat 3 sets kLeftBlock and seat 6 sets kMiddleBlock |
+//         kRightBlock, so blocked_masks[4] reaches kAllBlocks.
+//       - For row 1, seat 4 sets kLeftBlock | kMiddleBlock and seat 7 sets
+//         kMiddleBlock | kRightBlock, so blocked_masks[1] also reaches kAllBlocks.
+//       - Start with max_families = 2 * 4 = 8 and subtract 2 for row 1 and 2 for
+//         row 4, returning 4 for the two untouched rows 2 and 3.
+//
+//   Example 3:
+//     Input:  n = 1000000000, reservedSeats = [[500000000, 1], [500000000, 10]]
+//     Output: 2000000000
+//     Explanation:
+//       - Check [500000000, 1] and [500000000, 10]: both seats fall outside 2..9,
+//         so mask = 0 and blocked_masks stays empty.
+//       - Initialize max_families = 2 * 1000000000 = 2000000000 and perform 0
+//         deductions over the empty map, returning 2000000000.
+//
 // Algorithm:
 //   Observe that there are only three valid 4-seat blocks per row:
 //     - Left block:   seats {2, 3, 4, 5}

@@ -11,6 +11,56 @@
 //       `[left, right)`.
 //   Constraints: 1 <= left < right <= 10^9; up to 10^4 total calls.
 //
+// Examples:
+//   Example 1:
+//     Input:  RangeModule(); addRange(10, 20); removeRange(14, 16); queryRange(10,
+//             14); queryRange(13, 15); queryRange(16, 17)
+//     Output: [null, null, null, true, false, true]
+//     Explanation:
+//       - Initialize segments_ with sentinels [(-inf, false), (+inf, false)].
+//       - addRange(10, 20) inserts boundaries 10 and 20 and sets segment (10,
+//         true), yielding [(-inf, false), (10, true), (20, false), (+inf, false)].
+//       - removeRange(14, 16) splits [10, 20) at 14 and 16 and marks [14, 16)
+//         false, leaving [(-inf, false), (10, true), (14, false), (16, true), (20,
+//         false), (+inf, false)].
+//       - queryRange(10, 14) checks segments in [idx(10), idx(14)) and sees only
+//         (10, true), returning true.
+//       - queryRange(13, 15) spans [(10, true), (14, false)], sees (14, false), and
+//         returns false; queryRange(16, 17) checks (16, true) and returns true.
+//
+//   Example 2:
+//     Input:  RangeModule(); addRange(150, 200); addRange(250, 500); addRange(50,
+//             100); addRange(180, 300); queryRange(150, 500); queryRange(100, 150);
+//             addRange(100, 150); queryRange(50, 500)
+//     Output: [null, null, null, null, null, true, false, null, true]
+//     Explanation:
+//       - After the first three addRange calls, segments_ alternates between false
+//         and true at boundaries 50, 100, 150, 200, 250, and 500.
+//       - addRange(180, 300) inserts 180 and 300, collapses intermediate boundaries
+//         200 and 250, and coalesces with adjacent true segments at 150 and 300 to
+//         form (150, true) followed by (500, false).
+//       - queryRange(150, 500) verifies (150, true) and returns true, whereas
+//         queryRange(100, 150) inspects (100, false) and returns false.
+//       - addRange(100, 150) flips (100, false) to true and coalesces with both
+//         (50, true) and (150, true), leaving a single tracked segment [50, 500) so
+//         queryRange(50, 500) returns true.
+//
+//   Example 3:
+//     Input:  RangeModule(); addRange(1, 100); removeRange(1, 100); queryRange(1,
+//             2); addRange(20, 40); queryRange(20, 40); queryRange(19, 40)
+//     Output: [null, null, null, false, null, true, false]
+//     Explanation:
+//       - addRange(1, 100) transitions segments_ to [(-inf, false), (1, true),
+//         (100, false), (+inf, false)].
+//       - removeRange(1, 100) sets (1, false) and coalesces with both (100, false)
+//         and (-inf, false), collapsing segments_ back to the two sentinels [(-inf,
+//         false), (+inf, false)].
+//       - queryRange(1, 2) maps via upper_bound(1) - 1 to (-inf, false) and returns
+//         false.
+//       - addRange(20, 40) inserts (20, true) and (40, false), so queryRange(20,
+//         40) returns true while queryRange(19, 40) includes (-inf, false) and
+//         returns false.
+//
 // Algorithm:
 //   Partition the entire real line `[-inf, +inf)` into a sorted sequence of
 //   maximal half-open segments `[segments_[i].start, segments_[i+1].start)`,

@@ -11,6 +11,40 @@
 //   Constraints: 1 <= licensePlate.length <= 7, 1 <= words.length <= 1000,
 //   1 <= words[i].length <= 15.
 //
+// Examples:
+//   Example 1:
+//     Input:  licensePlate = "1s3 PSt", words = ["step", "steps", "stripe",
+//             "stepple"]
+//     Output: "steps"
+//     Explanation:
+//       - countLetters("1s3 PSt") ignores digits and spaces and lowercases letters
+//         to produce required = {'p': 1, 's': 2, 't': 1}.
+//       - Check "step": have['s'] = 1 < required['s'] = 2, so covers returns false.
+//       - Check "steps": have = {'e': 1, 'p': 1, 's': 2, 't': 1} covers required,
+//         setting best = "steps" (length 5).
+//       - Skip "stripe" (length 6 >= 5) and "stepple" (length 7 >= 5) via the
+//         length check and return "steps".
+//
+//   Example 2:
+//     Input:  licensePlate = "1s3 456", words = ["looks", "pest", "stew", "show"]
+//     Output: "pest"
+//     Explanation:
+//       - countLetters("1s3 456") extracts required = {'s': 1}.
+//       - "looks" (length 5) covers {'s': 1}, setting best = "looks".
+//       - "pest" (length 4 < 5) also covers {'s': 1}, updating best = "pest".
+//       - "stew" and "show" both have length 4 >= best.size() (4), so both are
+//         skipped to preserve the earliest shortest match "pest".
+//
+//   Example 3:
+//     Input:  licensePlate = "PP", words = ["pair", "supper", "apple"]
+//     Output: "apple"
+//     Explanation:
+//       - countLetters("PP") produces required = {'p': 2}.
+//       - "pair" has only have['p'] = 1 < 2, failing covers.
+//       - "supper" supplies have['p'] = 2, setting best = "supper" (length 6).
+//       - "apple" (length 5 < 6) also supplies have['p'] = 2, updating best to
+//         "apple" before returning it.
+//
 // Algorithm:
 //   1. Extract a 26-element case-insensitive letter frequency histogram
 //      `required` from `licensePlate`, ignoring non-alphabetic characters.

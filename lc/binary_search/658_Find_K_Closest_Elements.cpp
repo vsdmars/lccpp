@@ -8,6 +8,37 @@
 //   and `a < b` (ties always prefer the smaller element).
 //   Constraints: 1 <= k <= arr.length <= 10^4, -10^4 <= arr[i], x <= 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [1, 2, 3, 4, 5], k = 4, x = 3
+//     Output: [1, 2, 3, 4]
+//     Explanation:
+//       - Initialize window-start bounds to lhs = 0 and rhs = 5 - 4 = 1.
+//       - At mid = 0, compare left_diff = 3 - arr[0] = 2 against right_diff =
+//         arr[4] - 3 = 2; since 2 > 2 is false, ties favor the smaller elements and
+//         set rhs = 0.
+//       - Loop terminates at lhs = 0, returning arr[0..3] = [1, 2, 3, 4].
+//
+//   Example 2:
+//     Input:  arr = [1, 1, 2, 2, 2, 2, 2, 3, 3], k = 3, x = 3
+//     Output: [2, 3, 3]
+//     Explanation:
+//       - Initialize window-start bounds to lhs = 0 and rhs = 9 - 3 = 6.
+//       - At mid = 3, left_diff = 3 - arr[3] = 1 exceeds right_diff = arr[6] - 3 =
+//         -1, so advance lhs = 4.
+//       - At mid = 5, left_diff = 3 - arr[5] = 1 exceeds right_diff = arr[8] - 3 =
+//         0, so advance lhs = 6.
+//       - Loop terminates at lhs = rhs = 6, returning arr[6..8] = [2, 3, 3].
+//
+//   Example 3:
+//     Input:  arr = [1, 2, 3, 4, 5], k = 4, x = -1
+//     Output: [1, 2, 3, 4]
+//     Explanation:
+//       - Initialize window-start bounds to lhs = 0 and rhs = 5 - 4 = 1.
+//       - At mid = 0, left_diff = -1 - arr[0] = -2 is not greater than right_diff =
+//         arr[4] - (-1) = 6, so set rhs = 0.
+//       - Loop terminates at lhs = 0, returning the leftmost window [1, 2, 3, 4].
+//
 // Algorithm:
 //   Because `arr` is sorted, the `k` closest elements must form a contiguous
 //   subarray `arr[lhs .. lhs + k - 1]`. Instead of searching for `x` and

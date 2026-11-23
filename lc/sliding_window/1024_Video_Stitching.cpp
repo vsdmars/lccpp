@@ -8,6 +8,44 @@
 //   Return the minimum number of clips required to cover the entire interval
 //   `[0, time]`, or `-1` if complete coverage is impossible.
 //
+// Examples:
+//   Example 1:
+//     Input:  clips = [[0, 2], [4, 6], [8, 10], [1, 9], [1, 5], [5, 9]], time = 10
+//     Output: 3
+//     Explanation:
+//       - Sort the copied intervals by start time to get [[0, 2], [1, 5], [1, 9],
+//         [4, 6], [5, 9], [8, 10]] with current_end = 0, num_clips = 0, and idx =
+//         0.
+//       - Round 1 scans intervals with start <= 0 (only [0, 2]), setting
+//         farthest_end = 2, incrementing num_clips to 1, and advancing current_end
+//         to 2 (idx = 1).
+//       - Round 2 scans intervals with start <= 2 ([1, 5] and [1, 9]), finding
+//         farthest_end = 9, incrementing num_clips to 2, and advancing current_end
+//         to 9 (idx = 3).
+//       - Round 3 scans [4, 6], [5, 9], and [8, 10] (all start <= 9), reaching
+//         farthest_end = 10, incrementing num_clips to 3, and returning 3
+//         immediately since current_end = 10 >= time = 10.
+//
+//   Example 2:
+//     Input:  clips = [[0, 1], [1, 2]], time = 5
+//     Output: -1
+//     Explanation:
+//       - After sorting [[0, 1], [1, 2]] with current_end = 0 and num_clips = 0,
+//         round 1 selects [0, 1] to reach current_end = 1 with num_clips = 1.
+//       - Round 2 selects [1, 2] (start 1 <= 1) to reach current_end = 2 with
+//         num_clips = 2 and idx = 2.
+//       - The loop exits with idx == intervals.size() and current_end = 2 < time =
+//         5, returning -1.
+//
+//   Example 3:
+//     Input:  clips = [[1, 5], [4, 10]], time = 10
+//     Output: -1
+//     Explanation:
+//       - Since time = 10 > 0, sort intervals to [[1, 5], [4, 10]] with current_end
+//         = 0 and idx = 0.
+//       - On the first check, intervals[0].start = 1 > current_end = 0, meaning no
+//         clip covers time 0, so videoStitching returns -1 immediately.
+//
 // Algorithm:
 //   Greedy interval covering (Jump Game II frontier expansion):
 //     1. Handle the trivial edge case `time <= 0` (0 clips required).

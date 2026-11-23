@@ -10,6 +10,45 @@
 //   Constraints: 1 <= ring.size(), key.size() <= 100; both contain lowercase
 //   English letters and `key` is guaranteed to be spellable from `ring`.
 //
+// Examples:
+//   Example 1:
+//     Input:  ring = "godding", key = "gd"
+//     Output: 4
+//     Explanation:
+//       - Index ring positions ('g' at [0, 6], 'd' at [2, 3]) and start with states
+//         = {(0, 0)}.
+//       - For key[0] = 'g', transition from (0, 0) to index 0 (distance 0) and
+//         index 6 (wrap-around distance 1), yielding states = {(0, 0), (6, 1)}.
+//       - For key[1] = 'd', take minimum transition cost to index 2 (min(0 + 2, 1 +
+//         3) = 2) and index 3 (min(0 + 3, 1 + 3) = 3), yielding states = {(2, 2),
+//         (3, 3)}.
+//       - Take min_rotations = min(2, 3) = 2 and add key.size() = 2 button presses
+//         to return 4.
+//
+//   Example 2:
+//     Input:  ring = "iotfo", key = "fioot"
+//     Output: 11
+//     Explanation:
+//       - Index ring positions ('f': [3], 'i': [0], 'o': [1, 4], 't': [2]) on
+//         ring_len = 5 and start with states = {(0, 0)}.
+//       - Spell 'f' then 'i' via unique indices 3 (cost 2) and 0 (cost 2 + 2 = 4),
+//         yielding states = {(0, 4)}.
+//       - Spell the first 'o' at indices 1 and 4 (both distance 1 from 0) for
+//         states = {(1, 5), (4, 5)}, and stay at those indices for the second 'o'
+//         at cost 5 each.
+//       - Spell 't' at index 2: moving from (1, 5) costs 5 + 1 = 6 while moving
+//         from (4, 5) costs 5 + 2 = 7, so min_rotations = 6.
+//       - Add key.size() = 5 button presses to min_rotations = 6 and return 11.
+//
+//   Example 3:
+//     Input:  ring = "abc", key = "aaaa"
+//     Output: 4
+//     Explanation:
+//       - Index 'a' at [0] on ring_len = 3 and initialize states = {(0, 0)}.
+//       - For each of the 4 'a' characters in key, transition from (0, 0) to index
+//         0 with ring_distance(0, 0, 3) = 0, keeping states = {(0, 0)}.
+//       - Add key.size() = 4 button presses to min_rotations = 0 to return 4.
+//
 // Algorithm:
 //   Use layered dynamic programming over the characters of `key`, pre-indexing
 //   all occurrences of each letter `'a'..'z'` in `ring`.

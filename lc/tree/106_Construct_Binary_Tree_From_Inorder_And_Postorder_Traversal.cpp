@@ -6,6 +6,44 @@
 //   (left, right, root) of the same binary tree whose node values are unique,
 //   reconstruct and return the binary tree.
 //
+// Examples:
+//   Example 1:
+//     Input:  inorder = [9, 3, 15, 20, 7], postorder = [9, 15, 7, 20, 3]
+//     Output: [3, 9, 20, null, null, 15, 7]
+//     Explanation:
+//       - Build inorder_index = {9: 0, 3: 1, 15: 2, 20: 3, 7: 4}, initialize
+//         post_remaining = 5, and call build(0, 5).
+//       - Pre-decrement post_remaining to 4 to consume postorder[4] = 3 (split =
+//         1), allocate root 3, and recurse right on [2, 5) before left on [0, 1).
+//       - On [2, 5), consume postorder[3] = 20 (split = 3) for 3->right, then
+//         consume postorder[2] = 7 on right subrange [4, 5) and postorder[1] = 15
+//         on left subrange [2, 3).
+//       - Return to [0, 1) and consume postorder[0] = 9 (split = 0) for 3->left,
+//         producing [3, 9, 20, null, null, 15, 7].
+//
+//   Example 2:
+//     Input:  inorder = [2, 1], postorder = [2, 1]
+//     Output: [1, 2]
+//     Explanation:
+//       - Build inorder_index = {2: 0, 1: 1}, set post_remaining = 2, and call
+//         build(0, 2).
+//       - Consume postorder[1] = 1 (split = 1) as the root, then call build(2, 2)
+//         for the right child which returns nullptr because in_left >= in_right.
+//       - Call build(0, 1) for the left child, consuming postorder[0] = 2 (split =
+//         0) with empty child ranges [0, 0) and [1, 1), yielding [1, 2].
+//
+//   Example 3:
+//     Input:  inorder = [1, 2, 3], postorder = [3, 2, 1]
+//     Output: [1, null, 2, null, 3]
+//     Explanation:
+//       - Build inorder_index = {1: 0, 2: 1, 3: 2}, set post_remaining = 3, and
+//         call build(0, 3).
+//       - Consume postorder[2] = 1 (split = 0) for root 1 and recurse right on [1,
+//         3), which consumes postorder[1] = 2 (split = 1) for 1->right.
+//       - Recurse right again on [2, 3) to consume postorder[0] = 3 (split = 2) for
+//         2->right while all left subranges [0, 0), [1, 1), and [2, 2) return
+//         nullptr, yielding [1, null, 2, null, 3].
+//
 // Algorithm:
 //   Reverse-postorder divide-and-conquer with an O(1) inorder index map.
 //   1. Precompute `inorder_index[val] = idx` for every value in `inorder`.

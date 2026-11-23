@@ -8,6 +8,41 @@
 //   is the arithmetic mean of the two middle elements. The required optimal
 //   runtime complexity is O(log(m + n)).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums1 = [1, 3], nums2 = [2]
+//     Output: 2.0
+//     Explanation:
+//       - Assign shorter array a = [2] (m = 1) and longer array b = [1, 3] (n = 2),
+//         giving total = 3 and half_len = 2.
+//       - Start with lo = 0, hi = 1; at i = 0, j = 2, check b[1] = 3 > a[0] = 2
+//         succeeds, advancing lo = 1.
+//       - At i = 1, j = 1, both partition inequalities pass with left_a = a[0] = 2
+//         and left_b = b[0] = 1.
+//       - Compute max_left = max(2, 1) = 2 and return 2.0 because total = 3 is odd.
+//
+//   Example 2:
+//     Input:  nums1 = [1, 2], nums2 = [3, 4]
+//     Output: 2.5
+//     Explanation:
+//       - Set a = [1, 2] (m = 2), b = [3, 4] (n = 2), total = 4, and half_len = 2.
+//       - At lo = 0, hi = 2 (i = 1, j = 1), b[0] = 3 > a[1] = 2 holds, advancing lo
+//         = 2.
+//       - At lo = 2, hi = 2 (i = 2, j = 0), the partition is valid with max_left =
+//         a[1] = 2 and min_right = b[0] = 3.
+//       - Since total = 4 is even, return (2.0 + 3.0) / 2.0 = 2.5.
+//
+//   Example 3:
+//     Input:  nums1 = [], nums2 = [10, 20, 30]
+//     Output: 20.0
+//     Explanation:
+//       - Assign shorter array a = [] (m = 0) and b = [10, 20, 30] (n = 3), giving
+//         total = 3 and half_len = 2.
+//       - With lo = 0, hi = 0, the sole candidate i = 0, j = 2 satisfies the
+//         partition checks immediately.
+//       - Compute max_left = max(INT_MIN, b[1] = 20) = 20 and return 20.0 because
+//         total = 3 is odd.
+//
 // Algorithm:
 //   Primary (Binary Search on Partition):
 //     Ensure `a` is the shorter array (`m <= n`) so the search space is

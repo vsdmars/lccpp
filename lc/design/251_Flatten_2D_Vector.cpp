@@ -9,6 +9,45 @@
 //   Inner vectors may be empty (including leading, consecutive, or trailing
 //   empty rows).
 //
+// Examples:
+//   Example 1:
+//     Input:  vec = [[1, 2], [3], [4, 5, 6]], iterate while hasNext()
+//     Output: [1, 2, 3, 4, 5, 6]
+//     Explanation:
+//       - Construction sets `(row_, col_) = (0, 0)` since `data_[0]` is non-empty.
+//       - The first two `next()` calls yield `data_[0][0] = 1` (advancing `col_` to
+//         `1`) and `data_[0][1] = 2`, after which `advance_to_valid()` sees `col_
+//         == 2 == data_[0].size()` and moves to `(1, 0)`.
+//       - Subsequent `next()` calls yield `data_[1][0] = 3` (moving to `(2, 0)`)
+//         and then `4`, `5`, and `6` across row `2`, advancing `row_` to `3 ==
+//         data_.size()` so `hasNext()` returns `false`.
+//
+//   Example 2:
+//     Input:  vec = [[], [1], [], [], [2, 3], [], [4], []], iterate while hasNext()
+//     Output: [1, 2, 3, 4]
+//     Explanation:
+//       - In the constructor, `advance_to_valid()` skips empty row `0` (`col_ == 0
+//         == data_[0].size()`) and positions `(row_, col_)` at `(1, 0)`.
+//       - Calling `next()` returns `1` and increments `col_` to `1 ==
+//         data_[1].size()`, so `advance_to_valid()` skips empty rows `2` and `3` to
+//         land at `(4, 0)`.
+//       - The next two `next()` calls return `2` and `3` from row `4`, and
+//         `advance_to_valid()` skips empty row `5` to reach `(6, 0)`.
+//       - The final `next()` returns `4`, and `advance_to_valid()` skips trailing
+//         empty row `7` so `row_ = 8 == data_.size()` and `hasNext()` returns
+//         `false`.
+//
+//   Example 3:
+//     Input:  vec = [[], [], []], call hasNext()
+//     Output: false
+//     Explanation:
+//       - Construction initializes `(row_, col_) = (0, 0)` and calls
+//         `advance_to_valid()`.
+//       - Because `col_ == 0 == data_[row_].size()` for rows `0`, `1`, and `2`, the
+//         loop increments `row_` until `row_ = 3 == data_.size()`.
+//       - `hasNext()` evaluates `row_ < data_.size()` (`3 < 3`) and returns
+//         `false`.
+//
 // Algorithm:
 //   Two-Index Lazy Cursor with Eager Empty-Row Skipping:
 //   - Store the 2D vector alongside a cursor `(row_, col_)`.

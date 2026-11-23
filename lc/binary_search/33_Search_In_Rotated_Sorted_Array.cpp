@@ -7,6 +7,39 @@
 //   to `[4,5,6,7,0,1,2]`). Given a `target` integer, return its index in
 //   `nums` if present, or `-1` otherwise, in O(log n) time.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [4, 5, 6, 7, 0, 1, 2], target = 0
+//     Output: 4
+//     Explanation:
+//       - Start on [left, right) = [0, 7) with mid = 3 (nums[3] = 7 != 0).
+//       - Since mid_in_left is true (4 <= 7) and target_in_left is false (0 < 4),
+//         discard the left half by setting left = 4.
+//       - On [4, 7), compute mid = 5 (nums[5] = 1 != 0); both mid_in_left (0 <= 1)
+//         and target_in_left (0 >= 0) are true with 0 < 1, so set right = 5.
+//       - On [4, 5), compute mid = 4, match nums[4] == 0, and return 4.
+//
+//   Example 2:
+//     Input:  nums = [4, 5, 6, 7, 0, 1, 2], target = 3
+//     Output: -1
+//     Explanation:
+//       - Start on [left, right) = [0, 7) with mid = 3 (nums[3] = 7); mid_in_left
+//         is true (4 <= 7) and target_in_left is false (3 < 4), so set left = 4.
+//       - On [4, 7), compute mid = 5 (nums[5] = 1); both mid_in_left (0 <= 1) and
+//         target_in_left (3 >= 0) are true with 3 > 1, so set left = 6.
+//       - On [6, 7), compute mid = 6 (nums[6] = 2); both sides match (2 <= 2 and 3
+//         >= 2) with 3 > 2, so set left = 7.
+//       - Exit the loop because left == right == 7 and return -1.
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 3, 4, 5], target = 5
+//     Output: 4
+//     Explanation:
+//       - Start on [left, right) = [0, 5) with mid = 2 (nums[2] = 3 != 5).
+//       - Both mid_in_left (1 <= 3) and target_in_left (5 >= 1) are true with
+//         target > nums[2], so set left = 3.
+//       - On [3, 5), compute mid = 4, find nums[4] == 5, and return 4.
+//
 // Algorithm:
 //   Use half-open binary search over `[left, right)`. Because all values are
 //   distinct, comparing `nums[mid]` and `target` against `nums[left]` tells us

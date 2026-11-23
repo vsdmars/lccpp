@@ -6,6 +6,44 @@
 //   to obtain the maximum possible integer value. Return the maximum integer
 //   achievable.
 //
+// Examples:
+//   Example 1:
+//     Input:  num = 2736
+//     Output: 7236
+//     Explanation:
+//       - Convert 2736 to "2736" and initialize max_digit = '6', max_idx = 3, and
+//         has_swap = false.
+//       - At i = 2 ('3' < '6'), record has_swap = true, swap_left = 2, and
+//         swap_right = 3; at i = 1 ('7' > '6'), update max_digit = '7' and max_idx
+//         = 1.
+//       - At i = 0 ('2' < '7'), update swap_left = 0 and swap_right = 1, then swap
+//         indices 0 and 1 to form "7236" and return 7236.
+//
+//   Example 2:
+//     Input:  num = 98368
+//     Output: 98863
+//     Explanation:
+//       - Convert 98368 to "98368" with max_digit = '8' at max_idx = 4; scanning i
+//         = 3 ('6' < '8') and i = 2 ('3' < '8') sets swap_left = 2 and swap_right =
+//         4.
+//       - At i = 1 ('8' == '8'), neither branch executes so max_idx remains 4 (the
+//         rightmost '8').
+//       - At i = 0 ('9' > '8'), update max_digit = '9' and max_idx = 0 without
+//         overwriting (swap_left, swap_right) = (2, 4), then swap indices 2 and 4
+//         to return 98863.
+//
+//   Example 3:
+//     Input:  num = 9973
+//     Output: 9973
+//     Explanation:
+//       - Convert 9973 to "9973" and initialize max_digit = '3', max_idx = 3, and
+//         has_swap = false.
+//       - Scanning i = 2 ('7' > '3'), i = 1 ('9' > '7'), and i = 0 ('9' == '9')
+//         only updates max_digit and max_idx without ever finding digits[i] <
+//         max_digit.
+//       - Because has_swap remains false, no swap is performed and 9973 is returned
+//         unchanged.
+//
 // Algorithm:
 //   Single-Pass Right-to-Left Suffix-Maximum Scan (O(d) time, O(d) space,
 //   where `d` is the number of base-10 digits, `d <= 9` for 32-bit `int`):

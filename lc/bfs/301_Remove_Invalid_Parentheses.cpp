@@ -7,6 +7,48 @@
 //   the input string balanced. Return all unique valid results in any order.
 //   Input length is at most 25 with at most 20 parentheses.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "()())()"
+//     Output: ["(())()", "()()()"]
+//     Explanation:
+//       - Start level-order BFS with frontier = {"()())()"} at removal depth 0;
+//         is_valid("()())()") returns false when the fifth character ')' drops
+//         open_count below 0.
+//       - Run generate_deletions on "()())()", skipping the duplicate ')' at index
+//         4 because expr[4] == expr[3], which yields six depth-1 candidates in
+//         next_frontier including "(())()" (deleting index 1) and "()()()"
+//         (deleting index 3).
+//       - Scan the depth-1 frontier with is_valid: "(())()" and "()()()" are both
+//         balanced and added to results, suppressing further child generation for
+//         the remainder of the level.
+//       - Since results is non-empty after completing depth 1, return ["(())()",
+//         "()()()"] as all minimal-removal valid strings.
+//
+//   Example 2:
+//     Input:  s = "(a)())()"
+//     Output: ["(a())()", "(a)()()"]
+//     Explanation:
+//       - Initialize frontier = {"(a)())()"} at depth 0; is_valid fails at the
+//         unmatched ')' at index 5.
+//       - Call generate_deletions, keeping letter 'a' at index 1 untouched and
+//         skipping the consecutive duplicate ')' at index 5, producing six depth-1
+//         strings including "(a())()" (removing index 2) and "(a)()()" (removing
+//         index 4).
+//       - Validate the depth-1 frontier: "(a())()" and "(a)()()" pass is_valid, so
+//         both are collected into results and returned immediately at depth 1.
+//
+//   Example 3:
+//     Input:  s = ")("
+//     Output: [""]
+//     Explanation:
+//       - Check depth 0 frontier = {")("}: is_valid returns false at index 0, so
+//         generate_deletions produces depth-1 next_frontier = {"(", ")"}.
+//       - Check depth 1: neither "(" nor ")" is balanced, so deleting the single
+//         parenthesis from each yields depth-2 next_frontier = {""}.
+//       - Check depth 2: is_valid("") returns true with open_count == 0, so results
+//         collects "" and returns [""].
+//
 // Algorithm:
 //   We provide two complementary approaches from the Python source:
 //   1. Level-order BFS (`removeInvalidParentheses`): Treat each single

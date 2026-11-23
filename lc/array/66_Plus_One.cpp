@@ -7,6 +7,35 @@
 //   leading zeros except for 0 itself), increment the integer by one and
 //   return the resulting array of digits.
 //
+// Examples:
+//   Example 1:
+//     Input:  digits = [1, 2, 3]
+//     Output: [1, 2, 4]
+//     Explanation:
+//       - Copy digits into result = [1, 2, 3] and initialize carry = 1.
+//       - On the first reverse-view step at index 2, compute sum = 3 + 1 = 4, set
+//         result[2] = 4, and update carry = 0.
+//       - Because carry == 0, break out of the loop early and return [1, 2, 4].
+//
+//   Example 2:
+//     Input:  digits = [1, 9, 9]
+//     Output: [2, 0, 0]
+//     Explanation:
+//       - Copy digits into result = [1, 9, 9] and initialize carry = 1.
+//       - In the reverse scan, index 2 yields 9 + 1 = 10 (result[2] = 0, carry = 1)
+//         and index 1 yields 9 + 1 = 10 (result[1] = 0, carry = 1).
+//       - At index 0, compute 1 + 1 = 2 (result[0] = 2, carry = 0), break out of
+//         the loop, and return [2, 0, 0].
+//
+//   Example 3:
+//     Input:  digits = [9, 9]
+//     Output: [1, 0, 0]
+//     Explanation:
+//       - Copy digits into result = [9, 9] and initialize carry = 1.
+//       - The reverse scan turns index 1 (9 + 1 = 10) and index 0 (9 + 1 = 10) into
+//         0 while keeping carry = 1 after the loop ends.
+//       - Since carry != 0, insert 1 at result.begin() to return [1, 0, 0].
+//
 // Algorithm:
 //   Schoolbook base-10 ripple-carry addition from least significant digit to
 //   most significant digit:

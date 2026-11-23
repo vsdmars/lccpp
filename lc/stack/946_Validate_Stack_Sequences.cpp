@@ -7,6 +7,38 @@
 //   of popped values produced by some valid interleaving of `push` and `pop`
 //   operations on an initially empty stack given push order `pushed`.
 //
+// Examples:
+//   Example 1:
+//     Input:  pushed = [1, 2, 3, 4, 5], popped = [4, 5, 3, 2, 1]
+//     Output: true
+//     Explanation:
+//       - Push 1, 2, 3, and 4 so stack = [1, 2, 3, 4]; since stack.back() ==
+//         popped[0] = 4, pop 4 and advance pop_idx to 1.
+//       - Push 5 so stack = [1, 2, 3, 5]; stack.back() now matches popped[1] = 5,
+//         then 3, 2, and 1 in succession, popping the entire stack and advancing
+//         pop_idx to 5.
+//       - Because stack is empty and pop_idx == 5 == popped.size(), return true.
+//
+//   Example 2:
+//     Input:  pushed = [1, 2, 3, 4, 5], popped = [4, 3, 5, 1, 2]
+//     Output: false
+//     Explanation:
+//       - Push 1, 2, 3, and 4 (stack = [1, 2, 3, 4]), then greedily pop 4 and 3 to
+//         match popped[0..1], leaving stack = [1, 2] and pop_idx = 2.
+//       - Push 5 (stack = [1, 2, 5]) and pop 5 to match popped[2] = 5, leaving
+//         stack = [1, 2] and pop_idx = 3 where stack.back() = 2 != popped[3] = 1.
+//       - All elements of pushed are consumed while stack remains non-empty and
+//         pop_idx = 3 < 5, so return false.
+//
+//   Example 3:
+//     Input:  pushed = [1], popped = [2]
+//     Output: false
+//     Explanation:
+//       - Sizes match (1 == 1), so start with an empty stack and pop_idx = 0.
+//       - Push 1 onto stack = [1]; since stack.back() = 1 != popped[0] = 2, the
+//         while loop does not pop.
+//       - After the loop, stack is non-empty and pop_idx = 0 != 1, so return false.
+//
 // Algorithm:
 //   Greedy stack simulation. Because all values are distinct, whenever the
 //   current top of the stack matches the next required value `popped[pop_idx]`,

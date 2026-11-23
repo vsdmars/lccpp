@@ -10,6 +10,39 @@
 //   solution is guaranteed to exist.
 //   Constraints: 1 <= n <= 500; 1 <= groupSizes[i] <= n.
 //
+// Examples:
+//   Example 1:
+//     Input:  groupSizes = [3, 3, 3, 3, 3, 1, 3]
+//     Output: [[0, 1, 2], [5], [3, 4, 6]]
+//     Explanation:
+//       - Scan indices 0, 1, 2 (size 3): buckets[3] grows to [0, 1, 2], reaches
+//         length 3, flushes [0, 1, 2] into result, and erases key 3 from buckets.
+//       - Scan indices 3 and 4 (size 3): buckets[3] accumulates [3, 4].
+//       - Scan index 5 (size 1): buckets[1] becomes [5], immediately reaches length
+//         1, flushes [5] into result, and erases key 1.
+//       - Scan index 6 (size 3): buckets[3] becomes [3, 4, 6], reaches length 3,
+//         and flushes [3, 4, 6] into result, returning [[0, 1, 2], [5], [3, 4, 6]].
+//
+//   Example 2:
+//     Input:  groupSizes = [2, 1, 3, 3, 3, 2]
+//     Output: [[1], [2, 3, 4], [0, 5]]
+//     Explanation:
+//       - Scan index 0 (size 2): buckets[2] stores [0].
+//       - Scan index 1 (size 1): buckets[1] receives [1], hits length 1, and
+//         flushes [1] into result.
+//       - Scan indices 2, 3, 4 (size 3): buckets[3] accumulates [2, 3, 4], hits
+//         length 3, flushes [2, 3, 4] into result, and erases key 3.
+//       - Scan index 5 (size 2): buckets[2] becomes [0, 5], hits length 2, and
+//         flushes [0, 5] into result, returning [[1], [2, 3, 4], [0, 5]].
+//
+//   Example 3:
+//     Input:  groupSizes = [1]
+//     Output: [[0]]
+//     Explanation:
+//       - At i = 0 with size = 1, append person 0 to buckets[1] to get [0].
+//       - Because buckets[1].size() equals 1, move [0] into result, erase key 1
+//         from buckets, and return [[0]].
+//
 // Algorithm:
 //   Greedy hash bucketing in a single linear pass:
 //   Maintain an open bucket (vector of person IDs) for each required group

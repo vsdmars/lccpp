@@ -10,6 +10,48 @@
 //   Constraints: 1 <= sub.length <= s.length <= 5000; 0 <= mappings.length <=
 //   1000; characters are uppercase/lowercase English letters and digits.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "fool3e7bar", sub = "leet", mappings = [['e', '3'], ['t', '7'],
+//             ['t', '8']]
+//     Output: true
+//     Explanation:
+//       - Initialize the 256x256 `can_replace` bitset table with identity bits
+//         `can_replace[c][c] = true`, then set `can_replace['e']['3']`,
+//         `can_replace['t']['7']`, and `can_replace['t']['8']` to `true`.
+//       - Compute `max_start = 10 - 4 = 6` and test `matches_at` from `start = 0`:
+//         offsets `0` (`"fool"`), `1` (`"ool3"`), and `2` (`"ol3e"`) fail
+//         immediately at `j = 0` because `'l'` does not map to `'f'` or `'o'`.
+//       - At `start = 3` (`s[3..7) = "l3e7"`), verify all four positions: `'l'`
+//         matches `'l'`, `'e'` maps to `'3'`, `'e'` matches `'e'`, and `'t'` maps
+//         to `'7'`.
+//       - Because `matches_at` succeeds at `start = 3`, `matchReplacement` returns
+//         `true` immediately.
+//
+//   Example 2:
+//     Input:  s = "fooleetbar", sub = "f00l", mappings = [['o', '0']]
+//     Output: false
+//     Explanation:
+//       - Populate `can_replace` with identity entries plus `can_replace['o']['0']
+//         = true`; the reverse direction `can_replace['0']['o']` remains `false`.
+//       - At `start = 0` (`"fool"`), `j = 0` matches `'f'` to `'f'`, but `j = 1`
+//         fails because `can_replace['0']['o']` is `false`.
+//       - For all remaining offsets `start = 1` through `max_start = 6`, `s[start]`
+//         is never `'f'`, so every window fails at `j = 0` and the function returns
+//         `false`.
+//
+//   Example 3:
+//     Input:  s = "c", sub = "a", mappings = [['a', 'b'], ['b', 'c']]
+//     Output: false
+//     Explanation:
+//       - Build `can_replace` with identity bits and the two single-step rules
+//         `can_replace['a']['b'] = true` and `can_replace['b']['c'] = true`,
+//         without transitive closure so `can_replace['a']['c']` stays `false`.
+//       - With `max_start = 1 - 1 = 0`, check the sole window at `start = 0`
+//         (`"c"`).
+//       - At `j = 0`, `can_replace['a']['c']` is `false`, so `matches_at` fails and
+//         `matchReplacement` returns `false`.
+//
 // Algorithm:
 //   Direct-address character lookup table with sliding-window matching:
 //   1. Build a 256 x 256 bitset table `can_replace` representing a collision-

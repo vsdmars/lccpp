@@ -10,6 +10,51 @@
 //     - remove(key): Delete the mapping for `key` if present.
 //   Constraints: 0 <= key, value <= 10^6, at most 10^4 calls total.
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["MyHashMap", "put", "put", "get", "get", "put", "get",
+//             "remove", "get"], args = [[], [1, 1], [2, 2], [1], [3], [2, 1], [2],
+//             [2], [2]]
+//     Output: [null, null, null, 1, -1, null, 1, null, -1]
+//     Explanation:
+//       - put(1, 1) and put(2, 2) compute key % 1009 to prepend ListNode(1, 1) in
+//         buckets_[1] and ListNode(2, 2) in buckets_[2].
+//       - get(1) traverses buckets_[1] and returns 1, while get(3) finds
+//         buckets_[3] is nullptr and returns -1.
+//       - put(2, 1) walks buckets_[2], finds cur->key == 2, and overwrites
+//         cur->value from 2 to 1 so get(2) returns 1.
+//       - remove(2) unlinks the node at buckets_[2] via *link =
+//         std::move((*link)->next), leaving buckets_[2] empty so get(2) returns -1.
+//
+//   Example 2:
+//     Input:  operations = ["MyHashMap", "put", "put", "put", "put", "get",
+//             "remove", "get", "get", "remove", "get"], args = [[], [0, 10], [1009,
+//             20], [2018, 30], [1009, 25], [1009], [1009], [1009], [2018], [2018],
+//             [2018]]
+//     Output: [null, null, null, null, null, 25, null, -1, 30, null, -1]
+//     Explanation:
+//       - Keys 0, 1009, and 2018 all satisfy key % 1009 == 0, so prepending each
+//         builds the chain 2018:30 -> 1009:20 -> 0:10 in buckets_[0].
+//       - put(1009, 25) traverses buckets_[0], finds middle node key == 1009, and
+//         updates its value to 25 so get(1009) returns 25.
+//       - remove(1009) relinks 2018->next to 0:10, making get(1009) return -1 while
+//         get(2018) still returns 30.
+//       - remove(2018) unlinks the head node in buckets_[0] so the chain becomes
+//         0:10 and get(2018) returns -1.
+//
+//   Example 3:
+//     Input:  operations = ["MyHashMap", "remove", "get", "put", "put", "get",
+//             "get"], args = [[], [42], [42], [0, 0], [1000000, 999999], [0],
+//             [1000000]]
+//     Output: [null, null, -1, null, null, 0, 999999]
+//     Explanation:
+//       - remove(42) inspects buckets_[42], sees *link == nullptr, and returns
+//         without modifying anything, so get(42) returns -1.
+//       - put(0, 0) stores (0, 0) in buckets_[0], and put(1000000, 999999) hashes
+//         1000000 % 1009 = 81 to store (1000000, 999999) in buckets_[81].
+//       - get(0) returns the stored value 0 (distinct from the -1 missing-key
+//         sentinel) and get(1000000) returns 999999.
+//
 // Algorithm:
 //   Use separate chaining over a fixed-size bucket array of prime capacity
 //   `kBucketCount = 1009` (a prime near 1000 that spreads patterned keys such

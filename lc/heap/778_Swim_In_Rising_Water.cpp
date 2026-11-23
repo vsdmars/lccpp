@@ -8,6 +8,47 @@
 //   both cells have elevation <= t. Starting at `(0, 0)`, return the minimum
 //   time `t` required to reach `(n - 1, n - 1)`.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[0, 2], [1, 3]]
+//     Output: 3
+//     Explanation:
+//       - Mark (0, 0) visited, push Cell(elevation=0, row=0, col=0) into min_heap,
+//         and initialize min_time = 0.
+//       - Pop (0, 0, 0) with min_time = max(0, 0) = 0, then mark and push neighbors
+//         (2, 0, 1) and (1, 1, 0).
+//       - Pop (1, 1, 0), updating min_time = max(0, 1) = 1, and mark and push
+//         unvisited neighbor (3, 1, 1).
+//       - Pop (2, 0, 1) (min_time = max(1, 2) = 2), then pop target (3, 1, 1),
+//         updating min_time = max(2, 3) = 3 and returning 3.
+//
+//   Example 2:
+//     Input:  grid = [[0, 1, 2, 3, 4], [24, 23, 22, 21, 5], [12, 13, 14, 15, 16],
+//             [11, 17, 18, 19, 20], [10, 9, 8, 7, 6]]
+//     Output: 16
+//     Explanation:
+//       - Starting from (0, 0) = 0, min_heap pops the top edge
+//         (0,0)->(0,1)->(0,2)->(0,3)->(0,4)->(1,4) with elevations 0..5, raising
+//         min_time to 5 while pushing cells 24, 23, 22, 21, and 16.
+//       - Next min_heap pops (16, 2, 4), updating min_time = max(5, 16) = 16 and
+//         pushing neighbors (15, 2, 3) and (20, 3, 4).
+//       - Because 15 < 17..24, subsequent pops follow the decreasing spiral
+//         (2,3)->(2,2)->(2,1)->(2,0)->(3,0)->(4,0)->(4,1)->(4,2)->(4,3)->(4,4)
+//         through elevations 15 down to 6.
+//       - When target cell (6, 4, 4) is popped, min_time remains max(16, 6) = 16
+//         and is returned.
+//
+//   Example 3:
+//     Input:  grid = [[5, 1, 2], [8, 7, 3], [6, 4, 0]]
+//     Output: 5
+//     Explanation:
+//       - Push (5, 0, 0) into min_heap and initialize min_time = grid[0][0] = 5.
+//       - Pop (5, 0, 0) and push unvisited neighbors (1, 0, 1) and (8, 1, 0).
+//       - min_heap pops (1, 0, 1) (pushing 2 and 7), then (2, 0, 2) (pushing 3),
+//         then (3, 1, 2) (pushing 0), and then target (0, 2, 2).
+//       - Each popped cell along (0,0)->(0,1)->(0,2)->(1,2)->(2,2) has elevation <=
+//         5, so min_time stays 5 and is returned at (2, 2).
+//
 // Algorithm:
 //   Minimax Path Dijkstra / Best-First Search with a Min-Heap:
 //   Finding the earliest reachable time is equivalent to finding a path from

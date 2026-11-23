@@ -7,6 +7,46 @@
 //   original list. Return the resulting linked list sorted in ascending order.
 //   Constraints: 0 <= number of nodes <= 300, -100 <= Node.val <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3, 3, 4, 4, 5]
+//     Output: [1, 2, 5]
+//     Explanation:
+//       - Initialize dummy(0, head), prev = &dummy, and cur = 1; nodes 1 and 2 each
+//         have run length 1 (cur == run_start), so prev advances to 1 and then 2.
+//       - At run_start = 3, the inner loop advances cur to the second 3; since cur
+//         != run_start, cur moves to 4 and prev->next = 4 bypasses [3, 3] while
+//         prev stays at 2.
+//       - At run_start = 4, cur advances to the second 4, so cur moves to 5 and
+//         prev->next = 5 bypasses [4, 4] with prev still at 2.
+//       - At run_start = 5, cur->next is nullptr so cur == run_start confirms node
+//         5 by advancing prev to 5 and cur to nullptr, returning dummy.next as [1,
+//         2, 5].
+//
+//   Example 2:
+//     Input:  head = [1, 1, 1, 2, 3]
+//     Output: [2, 3]
+//     Explanation:
+//       - Initialize dummy(0, head), prev = &dummy, and cur = 1 (run_start = first
+//         1).
+//       - The inner loop advances cur across all three 1s; since cur != run_start,
+//         cur moves to 2 and prev->next = 2 updates dummy.next to skip [1, 1, 1]
+//         while prev remains &dummy.
+//       - At run_start = 2 and then run_start = 3, each value has run length 1 (cur
+//         == run_start), so prev advances to 2 and then 3, returning dummy.next as
+//         [2, 3].
+//
+//   Example 3:
+//     Input:  head = [2, 2, 2, 2]
+//     Output: []
+//     Explanation:
+//       - Initialize dummy(0, head), prev = &dummy, and cur = 2 (run_start = first
+//         2).
+//       - The inner loop consumes all four equal nodes until cur reaches the final
+//         2 (cur->next == nullptr).
+//       - Because cur != run_start, cur advances to nullptr and prev->next =
+//         nullptr unlinks the entire run, returning dummy.next == nullptr ([]).
+//
 // Algorithm:
 //   Use a dummy sentinel node pointing to `head`, and maintain two pointers:
 //   - `prev`: the last confirmed unique node appended to the result prefix.

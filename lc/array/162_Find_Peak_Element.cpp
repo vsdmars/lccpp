@@ -7,6 +7,41 @@
 //   nums[i + 1]` for all valid `i` and virtual sentinels `nums[-1] = nums[n] =
 //   -infinity`, find any peak element and return its index.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3, 1]
+//     Output: 2
+//     Explanation:
+//       - Binary search initializes left = 0 and right = 3, then computes mid = 1
+//         where nums[1] = 2 <= nums[2] = 3, moving left = 2.
+//       - With left = 2 and right = 3, mid = 2 checks nums[2] = 3 > nums[3] = 1,
+//         narrowing right = 2.
+//       - Loop ends at left == right == 2 and returns 2 (the linear slope scan also
+//         detects nums[3] < nums[2] and returns 2).
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 1, 3, 5, 6, 4]
+//     Output: 5
+//     Explanation:
+//       - Binary search starts with left = 0, right = 6 and tests mid = 3 where
+//         nums[3] = 3 <= nums[4] = 5, setting left = 4.
+//       - At left = 4, right = 6, mid = 5 finds nums[5] = 6 > nums[6] = 4,
+//         narrowing right = 5.
+//       - At left = 4, right = 5, mid = 4 finds nums[4] = 5 <= nums[5] = 6, setting
+//         left = 5 and returning valid peak index 5 (linear scan returns the
+//         earlier valid peak index 1).
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 3, 4, 5]
+//     Output: 4
+//     Explanation:
+//       - Binary search starts with left = 0, right = 4; at mid = 2, nums[2] = 3 <=
+//         nums[3] = 4 moves left = 3.
+//       - At left = 3, right = 4, mid = 3 sees nums[3] = 4 <= nums[4] = 5 and moves
+//         left = 4.
+//       - Loop exits at left == right == 4 and returns 4 (matching the linear scan
+//         returning nums.size() - 1 = 4 after observing no drop).
+//
 // Algorithm:
 //   1. Linear Slope Scan (`findPeakElement`):
 //      Because `nums[-1] = -infinity`, the sequence starts on an upward slope.

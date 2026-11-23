@@ -8,6 +8,40 @@
 //   fully decoded string. The input is guaranteed to be well-formed and
 //   original text never contains digits.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "3[a]2[bc]"
+//     Output: "aaabcbc"
+//     Explanation:
+//       - Seed stack with sentinel frame {1, ""}; reading '3' sets current_count =
+//         3 and '[' pushes {3, ""}, resetting current_count = 0.
+//       - Reading 'a' appends to the top frame ({3, "a"}), and ']' pops it and
+//         appends "a" 3 times to the root frame ("aaa").
+//       - Reading '2', '[', 'b', 'c' builds top frame {2, "bc"}, and the closing
+//         ']' pops it and appends "bc" twice to return "aaabcbc".
+//
+//   Example 2:
+//     Input:  s = "3[a2[c]]"
+//     Output: "accaccacc"
+//     Explanation:
+//       - Reading "3[a" builds stack [{1, ""}, {3, "a"}], then reading "2[c" pushes
+//         inner frame {2, "c"}.
+//       - The first ']' pops {2, "c"} and appends "c" twice to its parent frame {3,
+//         "a"}, updating it to {3, "acc"}.
+//       - The second ']' pops {3, "acc"} and appends "acc" 3 times to the root
+//         frame, returning "accaccacc".
+//
+//   Example 3:
+//     Input:  s = "10[a]"
+//     Output: "aaaaaaaaaa"
+//     Explanation:
+//       - Starting from sentinel frame {1, ""}, digit '1' sets current_count = 1
+//         and digit '0' accumulates current_count = (1 * 10) + 0 = 10.
+//       - Character '[' pushes {10, ""} and resets current_count = 0, then 'a'
+//         updates the top frame to {10, "a"}.
+//       - Character ']' pops {10, "a"} and appends "a" 10 times to the root frame,
+//         returning "aaaaaaaaaa".
+//
 // Algorithm:
 //   Explicit frame-stack parser:
 //   - Maintain a stack of `Frame{repeat_count, text}` entries seeded with a

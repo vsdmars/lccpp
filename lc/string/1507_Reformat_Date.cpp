@@ -9,6 +9,37 @@
 //   convert the string to ISO-8601 format "YYYY-MM-DD" with zero-padded
 //   2-digit month and day fields.
 //
+// Examples:
+//   Example 1:
+//     Input:  date = "20th Oct 2052"
+//     Output: "2052-10-20"
+//     Explanation:
+//       - With `n = 13`, slice `year = date.substr(9, 4) = "2052"` and look up
+//         `date.substr(5, 3) = "Oct"` in `kMonthTable` to get `"10"`.
+//       - Since `n == 13` (`kTwoDigitDayInputLength`), extract the two-digit day
+//         `date.substr(0, 2) = "20"`.
+//       - Append `"2052"`, `'-'`, `"10"`, `'-'`, and `"20"` into the reserved
+//         buffer to return `"2052-10-20"`.
+//
+//   Example 2:
+//     Input:  date = "6th Jun 1933"
+//     Output: "1933-06-06"
+//     Explanation:
+//       - With `n = 12`, slice `year = date.substr(8, 4) = "1933"` and map
+//         `date.substr(4, 3) = "Jun"` via `kMonthTable` to `"06"`.
+//       - Because `n != 13`, zero-pad the single-digit day by appending `'0'` and
+//         `date[0] = '6'` to form `"06"`.
+//       - Return the assembled ISO date string `"1933-06-06"`.
+//
+//   Example 3:
+//     Input:  date = "1st Jan 1900"
+//     Output: "1900-01-01"
+//     Explanation:
+//       - With `n = 12`, slice `year = date.substr(8, 4) = "1900"` and map
+//         `date.substr(4, 3) = "Jan"` via `kMonthTable` to `"01"`.
+//       - Because `n != 13`, zero-pad `date[0] = '1'` to `"01"` and return
+//         `"1900-01-01"`.
+//
 // Algorithm:
 //   Exploit the fixed-width layout of the tail (" MMM YYYY" is always 9
 //   characters):

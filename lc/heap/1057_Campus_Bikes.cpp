@@ -10,6 +10,49 @@
 //   every worker has a bike, and return `ans` where `ans[i]` is the bike index
 //   assigned to worker `i`.
 //
+// Examples:
+//   Example 1:
+//     Input:  workers = [[0, 0], [2, 1]], bikes = [[1, 2], [3, 3]]
+//     Output: [1, 0]
+//     Explanation:
+//       - Worker 0's candidates sort descending as [(6, w=0, b=1), (3, w=0, b=0)]
+//         and worker 1's as [(3, w=1, b=1), (2, w=1, b=0)], seeding min_heap with
+//         (2, 1, 0) and (3, 0, 0).
+//       - First pop is (2, 1, 0); bike 0 is unused, so assignment[1] = 0,
+//         bike_used[0] = 1, and assigned_count becomes 1.
+//       - Next pop is (3, 0, 0); since bike_used[0] is 1, discard it and push
+//         worker 0's remaining candidate (6, 0, 1).
+//       - Final pop is (6, 0, 1); bike 1 is unused, so assignment[0] = 1,
+//         assigned_count reaches 2, and assignBikes returns [1, 0].
+//
+//   Example 2:
+//     Input:  workers = [[0, 0], [1, 1], [2, 0]], bikes = [[1, 0], [2, 2], [2, 1]]
+//     Output: [0, 2, 1]
+//     Explanation:
+//       - Each worker's closest candidate has distance 1 to bike 0, seeding
+//         min_heap with (1, 0, 0), (1, 1, 0), and (1, 2, 0), while workers 1 and 2
+//         also have distance-1 candidates to bike 2.
+//       - Pop (1, 0, 0) first due to smallest worker index 0, setting assignment[0]
+//         = 0 and marking bike_used[0] = 1.
+//       - Pop (1, 1, 0), see bike 0 is used, push worker 1's next candidate (1, 1,
+//         2), then pop (1, 1, 2) (breaking the distance-1 tie over worker 2) to set
+//         assignment[1] = 2 and bike_used[2] = 1.
+//       - Pop (1, 2, 0) (pushing (1, 2, 2)), then pop (1, 2, 2) (pushing (2, 2,
+//         1)), and finally pop (2, 2, 1) to assign assignment[2] = 1, returning [0,
+//         2, 1].
+//
+//   Example 3:
+//     Input:  workers = [[5, 5]], bikes = [[10, 10], [6, 5], [4, 5]]
+//     Output: [1]
+//     Explanation:
+//       - Worker 0's Manhattan distances are 10 to bike 0, 1 to bike 1, and 1 to
+//         bike 2, so descending sort orders candidates as [(10, 0, 0), (1, 0, 2),
+//         (1, 0, 1)].
+//       - Popping back() seeds min_heap with (1, 0, 1) because bike index 1 < 2
+//         breaks the distance-1 tie.
+//       - The single heap pop assigns assignment[0] = 1, marks bike_used[1] = 1,
+//         and returns [1].
+//
 // Algorithm:
 //   Per-Worker Sorted Lists + Multi-Way Min-Heap Merge:
 //   1. For each worker `w`, compute its distance to all M bikes and sort the

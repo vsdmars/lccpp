@@ -8,6 +8,39 @@
 //   components (friend circles / provinces). Friendship is reflexive and
 //   symmetric, and groups are closed under transitivity.
 //
+// Examples:
+//   Example 1:
+//     Input:  isConnected = [[1, 1, 0], [1, 1, 0], [0, 0, 1]]
+//     Output: 2
+//     Explanation:
+//       - Initialize visited = [0, 0, 0] and circles = 0 for n = 3.
+//       - At i = 0 (visited[0] == 0), dfs(0) sets visited[0] = 1 and follows
+//         isConnected[0][1] == 1 to call dfs(1), which sets visited[1] = 1 and
+//         increments circles to 1.
+//       - Skip i = 1 because visited[1] is already 1.
+//       - At i = 2 (visited[2] == 0), dfs(2) marks visited[2] = 1 with no unvisited
+//         neighbors and increments circles to 2.
+//
+//   Example 2:
+//     Input:  isConnected = [[1, 1, 0], [1, 1, 1], [0, 1, 1]]
+//     Output: 1
+//     Explanation:
+//       - Initialize visited = [0, 0, 0] and circles = 0 for n = 3.
+//       - At i = 0, dfs(0) marks visited[0] = 1 and visits neighbor 1
+//         (isConnected[0][1] == 1).
+//       - dfs(1) marks visited[1] = 1 and visits neighbor 2 (isConnected[1][2] ==
+//         1), which marks visited[2] = 1 and increments circles to 1.
+//       - Skip i = 1 and i = 2 because visited is now [1, 1, 1], returning 1.
+//
+//   Example 3:
+//     Input:  isConnected = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+//     Output: 3
+//     Explanation:
+//       - Initialize visited = [0, 0, 0] and circles = 0 for n = 3.
+//       - For each i in 0, 1, 2, dfs(i) finds no off-diagonal 1s, marks only
+//         visited[i] = 1, and increments circles.
+//       - Return circles = 3 after all three isolated nodes are processed.
+//
 // Algorithm:
 //   Depth-First Search (DFS) connected-component counting directly over the
 //   adjacency matrix. Iterate over each node `i` from `0` to `n - 1`; whenever

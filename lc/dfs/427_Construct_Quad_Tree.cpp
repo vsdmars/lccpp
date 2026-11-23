@@ -11,6 +11,51 @@
 //   children recursively represent the top-left, top-right, bottom-left, and
 //   bottom-right quadrants of size (n / 2) x (n / 2).
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[1, 1, 1, 1, 0, 0, 0, 0], [1, 1, 1, 1, 0, 0, 0, 0], [1, 1, 1,
+//             1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 0, 0, 0, 0],
+//             [1, 1, 1, 1, 0, 0, 0, 0], [1, 1, 1, 1, 0, 0, 0, 0], [1, 1, 1, 1, 0,
+//             0, 0, 0]]
+//     Output: Node(val=true, is_leaf=false, top_left=Leaf(true),
+//             top_right=Node(val=true, is_leaf=false, top_left=Leaf(false),
+//             top_right=Leaf(false), bottom_left=Leaf(true),
+//             bottom_right=Leaf(true)), bottom_left=Leaf(true),
+//             bottom_right=Leaf(false))
+//     Explanation:
+//       - buildPrefixSum constructs a 9 x 9 prefix table, and buildNode(0, 0, 8)
+//         queries regionSum = 40 out of area = 64, creating an internal root node
+//         (is_leaf = false) and splitting into 4 x 4 quadrants.
+//       - For the 4 x 4 quadrants (area = 16), top_left (0, 0, 4) has sum = 16 ->
+//         Leaf(true), bottom_left (4, 0, 4) has sum = 16 -> Leaf(true), and
+//         bottom_right (4, 4, 4) has sum = 0 -> Leaf(false).
+//       - top_right (0, 4, 4) has sum = 8 (mixed), so it becomes an internal node
+//         and subdivides into four 2 x 2 quadrants (area = 4): top_left (0, 4, 2)
+//         and top_right (0, 6, 2) have sum = 0 -> Leaf(false), while bottom_left
+//         (2, 4, 2) and bottom_right (2, 6, 2) have sum = 4 -> Leaf(true).
+//
+//   Example 2:
+//     Input:  grid = [[0, 1], [1, 0]]
+//     Output: Node(val=true, is_leaf=false, top_left=Leaf(false),
+//             top_right=Leaf(true), bottom_left=Leaf(true),
+//             bottom_right=Leaf(false))
+//     Explanation:
+//       - buildPrefixSum builds the 3 x 3 prefix table [[0, 0, 0], [0, 0, 1], [0,
+//         1, 2]], and buildNode(0, 0, 2) finds regionSum = 2 out of area = 4,
+//         creating an internal root node.
+//       - Splitting with half = 1 evaluates four 1 x 1 regions (area = 1): (0, 0)
+//         sums to 0 -> Leaf(false), (0, 1) sums to 1 -> Leaf(true), (1, 0) sums to
+//         1 -> Leaf(true), and (1, 1) sums to 0 -> Leaf(false).
+//
+//   Example 3:
+//     Input:  grid = [[1, 1], [1, 1]]
+//     Output: Node(val=true, is_leaf=true)
+//     Explanation:
+//       - buildPrefixSum computes regionSum(prefix, 0, 0, 2) = 4 for the 2 x 2 grid
+//         of area 4.
+//       - Because sum == area, buildNode returns a single leaf node with val = true
+//         and is_leaf = true without subdividing.
+//
 // Algorithm:
 //   Top-down divide-and-conquer DFS accelerated with a 2D prefix-sum table:
 //   1. Precompute an (n + 1) x (n + 1) 2D prefix sum over `grid` in O(n^2) time

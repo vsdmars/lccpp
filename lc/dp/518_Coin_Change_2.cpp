@@ -9,6 +9,38 @@
 //   Constraints: 1 <= coins.size() <= 300, 1 <= coins[i] <= 5000,
 //   0 <= amount <= 5000, answer fits in a signed 32-bit integer.
 //
+// Examples:
+//   Example 1:
+//     Input:  amount = 5, coins = [1, 2, 5]
+//     Output: 4
+//     Explanation:
+//       - Allocate dp of size 6 initialized to [1, 0, 0, 0, 0, 0] with base case
+//         dp[0] = 1.
+//       - Process coin = 1 for a = 1..5 via dp[a] += dp[a - 1], updating dp to [1,
+//         1, 1, 1, 1, 1].
+//       - Process coin = 2 for a = 2..5: dp[2] = 2, dp[3] = 2, dp[4] = 3, dp[5] =
+//         3, giving dp = [1, 1, 2, 2, 3, 3].
+//       - Process coin = 5 at a = 5: dp[5] += dp[0] = 3 + 1 = 4, and return dp[5] =
+//         4.
+//
+//   Example 2:
+//     Input:  amount = 3, coins = [2]
+//     Output: 0
+//     Explanation:
+//       - Initialize dp = [1, 0, 0, 0] for target amount 3.
+//       - Process coin = 2 for a = 2..3: dp[2] += dp[0] sets dp[2] = 1, and dp[3]
+//         += dp[1] adds 0 so dp[3] remains 0.
+//       - Return dp[3] = 0 because 3 cannot be formed from denomination 2 alone.
+//
+//   Example 3:
+//     Input:  amount = 0, coins = [1, 2, 5]
+//     Output: 1
+//     Explanation:
+//       - Initialize dp of size 1 to [1] for target = 0.
+//       - For each coin (1, 2, 5), the inner loop condition a <= 0 fails
+//         immediately because every denomination exceeds target = 0.
+//       - Return dp[0] = 1 representing the single empty combination.
+//
 // Algorithm:
 //   Use bottom-up 1D unbounded-knapsack dynamic programming where `dp[a]`
 //   stores the number of combinations summing to `a`, initialized with

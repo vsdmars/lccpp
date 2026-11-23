@@ -6,6 +6,43 @@
 //   matrix visited in clockwise spiral order starting from the top-left corner
 //   `(0, 0)` and moving right, down, left, and up while shrinking inward.
 //
+// Examples:
+//   Example 1:
+//     Input:  matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+//     Output: [1, 2, 3, 6, 9, 8, 7, 4, 5]
+//     Explanation:
+//       - Initialize half-open bounds top = 0, bottom = 3, left = 0, and right = 3.
+//       - Peel the outer layer: top row appends 1, 2, 3 (top becomes 1) and right
+//         column appends 6, 9 (right becomes 2).
+//       - Since top < bottom and left < right, bottom row appends 8, 7 (bottom
+//         becomes 2) and left column appends 4 (left becomes 1).
+//       - Peel the remaining inner cell at top = 1, bottom = 2, left = 1, right =
+//         2: top row appends 5 and increments top to 2, ending the loop.
+//
+//   Example 2:
+//     Input:  matrix = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]
+//     Output: [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]
+//     Explanation:
+//       - Initialize bounds top = 0, bottom = 3, left = 0, and right = 4.
+//       - Outer sweep appends top row 1, 2, 3, 4 (top = 1), right column 8, 12
+//         (right = 3), bottom row 11, 10, 9 (bottom = 2), and left column 5 (left =
+//         1).
+//       - Second iteration with [top, bottom) = [1, 2) and [left, right) = [1, 3)
+//         appends 6, 7 along row 1 and increments top to 2.
+//       - Right column loop r = 2..1 does nothing (right becomes 2), and top <
+//         bottom is false so traversal ends.
+//
+//   Example 3:
+//     Input:  matrix = [[1, 2, 3, 4]]
+//     Output: [1, 2, 3, 4]
+//     Explanation:
+//       - Initialize bounds top = 0, bottom = 1, left = 0, and right = 4.
+//       - Top row sweep appends 1, 2, 3, 4 and increments top to 1, while the right
+//         column loop r = 1..0 executes zero times and decrements right to 3.
+//       - Because top < bottom (1 < 1) is now false, the guarded bottom-row sweep
+//         is skipped and the empty left-column loop increments left to 1 before
+//         exiting.
+//
 // Algorithm:
 //   Maintain four half-open layer boundaries `[top, bottom)` for rows and
 //   `[left, right)` for columns. In each iteration, peel off the outer

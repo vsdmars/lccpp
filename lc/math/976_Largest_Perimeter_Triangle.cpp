@@ -8,6 +8,34 @@
 //   can form a valid triangle, return 0.
 //   Constraints: 3 <= nums.length <= 10^4, 1 <= nums[i] <= 10^6.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 6, 2, 3]
+//     Output: 8
+//     Explanation:
+//       - Copy and sort nums in descending order to get sorted = [6, 3, 3, 2].
+//       - At i = 0, test longest = 6, mid = 3, shortest = 3: 6 < 3 + 3 is false, so
+//         advance to i = 1.
+//       - At i = 1, test longest = 3, mid = 3, shortest = 2: 3 < 3 + 2 holds, so
+//         return 3 + 3 + 2 = 8.
+//
+//   Example 2:
+//     Input:  nums = [3, 2, 3, 4]
+//     Output: 10
+//     Explanation:
+//       - Copy and sort nums in descending order to get sorted = [4, 3, 3, 2].
+//       - At i = 0, test longest = 4, mid = 3, shortest = 3: 4 < 3 + 3 holds
+//         immediately.
+//       - Return the first valid triple perimeter 4 + 3 + 3 = 10.
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 1]
+//     Output: 0
+//     Explanation:
+//       - Copy and sort nums in descending order to get sorted = [2, 1, 1].
+//       - At i = 0, test longest = 2, mid = 1, shortest = 1: 2 < 1 + 1 is false.
+//       - No more indices satisfy i + 2 < 3, so the loop exits and returns 0.
+//
 // Algorithm:
 //   Greedy selection after descending sort.
 //   For three side lengths c >= b >= a > 0, the triangle inequality holds

@@ -9,6 +9,39 @@
 //   a 32-bit signed integer.
 //   Constraints: 1 <= s.length, t.length <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "babgbag", t = "bag"
+//     Output: 5
+//     Explanation:
+//       - Allocate a 4 x 8 uint64_t table dp with base row dp[0][0..7] = 1 and
+//         dp[1..3][0] = 0.
+//       - Row y = 1 (t[0] = 'b') matches s at x = 1, 3, and 5, accumulating
+//         dp[1][1..7] = [1, 1, 2, 2, 3, 3, 3].
+//       - Row y = 2 (t[1] = 'a') matches s at x = 2 and 6, setting dp[2][2] = 0 +
+//         dp[1][1] = 1 and dp[2][6] = 1 + dp[1][5] = 4, giving dp[2][1..7] = [0, 1,
+//         1, 1, 1, 4, 4].
+//       - Row y = 3 (t[2] = 'g') matches s at x = 4 and 7, setting dp[3][4] = 0 +
+//         dp[2][3] = 1 and dp[3][7] = 1 + dp[2][6] = 5, returning 5.
+//
+//   Example 2:
+//     Input:  s = "aaaaa", t = "aa"
+//     Output: 10
+//     Explanation:
+//       - Allocate a 3 x 6 table dp with dp[0][0..5] = 1 and dp[1..2][0] = 0.
+//       - Row y = 1 (t[0] = 'a') matches at every x = 1..5, adding dp[0][x - 1] = 1
+//         at each step to form dp[1][1..5] = [1, 2, 3, 4, 5].
+//       - Row y = 2 (t[1] = 'a') adds dp[1][x - 1] to dp[2][x - 1] across x = 1..5,
+//         producing dp[2][1..5] = [0, 1, 3, 6, 10] and returning dp[2][5] = 10.
+//
+//   Example 3:
+//     Input:  s = "ab", t = "abc"
+//     Output: 0
+//     Explanation:
+//       - Measure s_len = 2 and t_len = 3.
+//       - Because s_len < t_len, no subsequence of s can reach length 3, so
+//         numDistinct returns 0 immediately.
+//
 // Algorithm:
 //   Bottom-up 2D Dynamic Programming over string prefixes:
 //   - Define dp[y][x] = number of distinct subsequences of s[0..x-1] that equal

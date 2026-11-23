@@ -9,6 +9,39 @@
 //   remain. Assuming every senator plays optimally, predict which party will
 //   win ("Radiant" or "Dire").
 //
+// Examples:
+//   Example 1:
+//     Input:  senate = "RD"
+//     Output: "Radiant"
+//     Explanation:
+//       - Initialize turn queues with n = 2: radiant = [0] and dire = [1].
+//       - Pop r_turn = 0 and d_turn = 1; since 0 < 1, Radiant acts first, bans Dire
+//         index 1, and re-enqueues 0 + 2 = 2 into radiant.
+//       - dire is now empty so the loop terminates and returns "Radiant".
+//
+//   Example 2:
+//     Input:  senate = "RDD"
+//     Output: "Dire"
+//     Explanation:
+//       - Initialize turn queues with n = 3: radiant = [0] and dire = [1, 2].
+//       - Round 1 pops r_turn = 0 and d_turn = 1; since 0 < 1, Radiant bans Dire
+//         index 1 and pushes 0 + 3 = 3 into radiant, leaving dire = [2].
+//       - Round 2 pops r_turn = 3 and d_turn = 2; since 2 < 3, Dire bans Radiant
+//         index 3 and pushes 2 + 3 = 5 into dire.
+//       - radiant is now empty so the loop ends and returns "Dire".
+//
+//   Example 3:
+//     Input:  senate = "DDRRR"
+//     Output: "Dire"
+//     Explanation:
+//       - Initialize turn queues with n = 5: radiant = [2, 3, 4] and dire = [0, 1].
+//       - First two matchups compare (r=2, d=0) and (r=3, d=1); Dire acts earlier
+//         in both, banning 2 and 3 while pushing 5 and 6 to dire = [5, 6].
+//       - Third matchup pops r_turn = 4 and d_turn = 5; Radiant acts earlier, bans
+//         5, and pushes 4 + 5 = 9 into radiant = [9].
+//       - Fourth matchup pops r_turn = 9 and d_turn = 6; Dire acts earlier, bans 9,
+//         and pushes 6 + 5 = 11, leaving radiant empty so "Dire" wins.
+//
 // Algorithm:
 //   Greedy strategy: whenever a senator acts, it is strictly optimal to ban
 //   the *earliest* active opposing senator who will act next (delaying or

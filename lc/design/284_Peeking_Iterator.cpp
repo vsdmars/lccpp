@@ -8,6 +8,43 @@
 //   the iterator. Follow-up: generalize the design to work with arbitrary
 //   element types, not just integers.
 //
+// Examples:
+//   Example 1:
+//     Input:  PeekingIterator([1, 2, 3]); calls: hasNext(), next(), peek(), next(),
+//             next(), hasNext()
+//     Output: [true, 1, 2, 2, 3, false]
+//     Explanation:
+//       - Constructor stores Iterator([1, 2, 3]) and calls advance(), prefetching 1
+//         into cached_ and leaving iterator_.index_ at 1.
+//       - hasNext() sees cached_.has_value() is true and returns true; next() moves
+//         out 1 and calls advance() to refill cached_ with 2.
+//       - peek() returns cached_.value() (2) by const reference without invoking
+//         advance(), leaving cached_ at 2.
+//       - The next two next() calls return 2 (refilling cached_ with 3) and then 3
+//         (calling cached_.reset() since iterator_.hasNext() is false), so the
+//         final hasNext() returns false.
+//
+//   Example 2:
+//     Input:  PeekingIterator(["alpha", "beta", "gamma"]); loop while hasNext():
+//             compare peek() with next() and collect
+//     Output: ["alpha", "beta", "gamma"]
+//     Explanation:
+//       - PeekingIterator<std::string> wraps Iterator<std::string> and prefetches
+//         "alpha" into cached_ on construction.
+//       - On each of the three loop iterations, hasNext() is true, peek() returns
+//         the cached string ("alpha", then "beta", then "gamma"), and next()
+//         returns the exact same value while advancing cached_ to the next string.
+//       - After consuming "gamma", iterator_.hasNext() is false so advance() resets
+//         cached_ to std::nullopt and the loop terminates.
+//
+//   Example 3:
+//     Input:  PeekingIterator([]); call: hasNext()
+//     Output: false
+//     Explanation:
+//       - Constructor invokes advance(), which checks iterator_.hasNext() (0 < 0 is
+//         false) and executes cached_.reset() to leave cached_ as std::nullopt.
+//       - hasNext() returns cached_.has_value(), which is false.
+//
 // Algorithm:
 //   Use one-element eager lookahead (buffering). On construction and after
 //   every `next()` call, pull the next available element from the underlying

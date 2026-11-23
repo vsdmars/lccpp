@@ -6,6 +6,44 @@
 //   such that `nums[i] == nums[j]` and `i < j`.
 //   Constraints: 1 <= nums.length <= 100, 1 <= nums[i] <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3, 1, 1, 3]
+//     Output: 4
+//     Explanation:
+//       - Initialize seen_counts = {} and good_pairs = 0, then scan indices 0, 1,
+//         and 2 (values 1, 2, 3), adding 0 each time and updating seen_counts to
+//         {1: 1, 2: 1, 3: 1}.
+//       - At index 3 (value 1), seen_counts[1] is 1, so add 1 to good_pairs (1) and
+//         increment seen_counts[1] to 2.
+//       - At index 4 (value 1), seen_counts[1] is 2, so add 2 to good_pairs (3) and
+//         increment seen_counts[1] to 3.
+//       - At index 5 (value 3), seen_counts[3] is 1, so add 1 to good_pairs (4) and
+//         increment seen_counts[3] to 2, returning 4.
+//
+//   Example 2:
+//     Input:  nums = [1, 1, 1, 1]
+//     Output: 6
+//     Explanation:
+//       - Initialize seen_counts = {} and good_pairs = 0; at index 0 (1), add 0 and
+//         set seen_counts[1] = 1.
+//       - At index 1 (1), add 1 (good_pairs = 1) and increment seen_counts[1] to 2;
+//         at index 2 (1), add 2 (good_pairs = 3) and increment seen_counts[1] to 3.
+//       - At index 3 (1), add 3 (good_pairs = 6) and increment seen_counts[1] to 4,
+//         returning 6.
+//
+//   Example 3:
+//     Input:  nums = [-5, -5, 1000, -5, 1000]
+//     Output: 4
+//     Explanation:
+//       - Initialize seen_counts = {} and good_pairs = 0; indices 0 and 1 (-5) add
+//         0 then 1 (good_pairs = 1, seen_counts[-5] = 2), and index 2 (1000) adds 0
+//         (seen_counts[1000] = 1).
+//       - At index 3 (-5), add seen_counts[-5] = 2 (good_pairs = 3) and increment
+//         seen_counts[-5] to 3.
+//       - At index 4 (1000), add seen_counts[1000] = 1 (good_pairs = 4) and
+//         increment seen_counts[1000] to 2, returning 4.
+//
 // Algorithm:
 //   Single-pass frequency counting using a hash map. As we scan `nums` from
 //   left to right, each occurrence of a value `v` can pair with every earlier

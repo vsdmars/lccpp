@@ -7,6 +7,41 @@
 //   Return true if and only if there exists a finite sequence of moves (possibly
 //   zero moves) transforming (sx, sy) into (tx, ty).
 //
+// Examples:
+//   Example 1:
+//     Input:  sx = 1, sy = 1, tx = 3, ty = 5
+//     Output: true
+//     Explanation:
+//       - Enter the loop with `tx = 3 > 1` and `ty = 5 > 1`; since `tx <= ty`,
+//         reduce `ty %= tx` (`5 % 3 = 2`), giving `(3, 2)`.
+//       - Continue the loop with `tx = 3 > 1` and `ty = 2 > 1`; since `tx > ty`,
+//         reduce `tx %= ty` (`3 % 2 = 1`), giving `(1, 2)`.
+//       - Exit the loop because `tx == sx` (`1 > 1` is false).
+//       - Verify `(sx == tx && sy <= ty && (ty - sy) % sx == 0)` with `(1 == 1 && 1
+//         <= 2 && (2 - 1) % 1 == 0)`, returning `true`.
+//
+//   Example 2:
+//     Input:  sx = 3, sy = 3, tx = 12, ty = 9
+//     Output: true
+//     Explanation:
+//       - Enter the loop with `tx = 12 > 3` and `ty = 9 > 3`; since `tx > ty`,
+//         reduce `tx %= ty` (`12 % 9 = 3`), giving `(3, 9)`.
+//       - Exit the loop because `tx == sx` (`3 > 3` is false).
+//       - Check `(sx == tx && sy <= ty && (ty - sy) % sx == 0)`: `3 == 3`, `3 <=
+//         9`, and `(9 - 3) % 3 = 0`, so return `true`.
+//
+//   Example 3:
+//     Input:  sx = 1, sy = 1, tx = 2, ty = 2
+//     Output: false
+//     Explanation:
+//       - Enter the loop with `tx = 2 > 1` and `ty = 2 > 1`; since `tx > ty` is
+//         false, execute the `else` branch `ty %= tx` (`2 % 2 = 0`), giving `(2,
+//         0)`.
+//       - Exit the loop immediately because `ty = 0` violates `ty > sy` (`0 > 1` is
+//         false).
+//       - Neither `sx == tx` (`1 == 2`) nor `sy == ty` (`1 == 0`) holds in the
+//         final return check, so return `false`.
+//
 // Algorithm:
 //   Work backward from (tx, ty) toward (sx, sy) using modulo reduction, analogous
 //   to the Euclidean GCD algorithm:

@@ -9,6 +9,42 @@
 //   can never become rotten.
 //   Constraints: 1 <= m, n <= 10, grid[i][j] in {0, 1, 2}.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[2, 1, 1], [1, 1, 0], [0, 1, 1]]
+//     Output: 4
+//     Explanation:
+//       - The initial grid scan counts fresh_count = 6 and enqueues the sole rotten
+//         source (0, 0) into frontier with minutes = 0.
+//       - Minute 1 pops (0, 0), infects fresh neighbors (0, 1) and (1, 0) in-place,
+//         decrements fresh_count to 4, and increments minutes to 1.
+//       - Minute 2 drains [(0, 1), (1, 0)], infecting (0, 2) and (1, 1)
+//         (fresh_count = 2, minutes = 2), and minute 3 spreads from (1, 1) to (2,
+//         1) (fresh_count = 1, minutes = 3).
+//       - Minute 4 spreads from (2, 1) to (2, 2), dropping fresh_count to 0 and
+//         setting minutes = 4; the loop exits immediately because fresh_count == 0,
+//         returning 4.
+//
+//   Example 2:
+//     Input:  grid = [[2, 1, 1], [0, 1, 1], [1, 0, 1]]
+//     Output: -1
+//     Explanation:
+//       - The initial scan counts fresh_count = 6 and enqueues (0, 0) into
+//         frontier.
+//       - Four BFS waves infect (0, 1), (1, 1), (0, 2), (1, 2), and (2, 2),
+//         reducing fresh_count from 6 to 1.
+//       - The remaining fresh orange at (2, 0) is blocked by empty 0 cells at (1,
+//         0) and (2, 1), so frontier empties with fresh_count = 1 and
+//         orangesRotting returns -1.
+//
+//   Example 3:
+//     Input:  grid = [[0, 2]]
+//     Output: 0
+//     Explanation:
+//       - The initial scan finds fresh_count = 0 and pushes (0, 1) into frontier.
+//       - Because the loop condition checks !frontier.empty() && fresh_count > 0,
+//         zero waves execute, minutes stays 0, and the function returns 0.
+//
 // Algorithm:
 //   Multi-source level-by-level BFS (simultaneous wave propagation):
 //   1. Initial Scan: Traverse the grid once to count all fresh oranges

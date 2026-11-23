@@ -9,6 +9,41 @@
 //   Player 2's score (ties go to Player 1), and `false` otherwise.
 //   Constraints: 1 <= nums.size() <= 20, 0 <= nums[i] <= 10^7.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 5, 2]
+//     Output: false
+//     Explanation:
+//       - Build prefix = [0, 1, 6, 8] (total_sum = 8) and initialize base cases
+//         dp[0][0] = 1, dp[1][1] = 5, dp[2][2] = 2.
+//       - Compute length-2 intervals: dp[0][1] = 6 - min(5, 1) = 5 and dp[1][2] = 7
+//         - min(2, 5) = 5.
+//       - Compute length-3 interval: dp[0][2] = 8 - min(dp[1][2], dp[0][1]) = 8 -
+//         min(5, 5) = 3.
+//       - Since 2 * dp[0][2] = 6 < total_sum = 8, Player 1 cannot force a tie or
+//         win, so return false.
+//
+//   Example 2:
+//     Input:  nums = [1, 5, 233, 7]
+//     Output: true
+//     Explanation:
+//       - Build prefix = [0, 1, 6, 239, 246] (total_sum = 246) and set diagonal
+//         base cases dp[i][i] = nums[i].
+//       - Compute length-2 intervals: dp[0][1] = 5, dp[1][2] = 233, and dp[2][3] =
+//         233.
+//       - Compute length-3 intervals: dp[0][2] = 239 - min(233, 5) = 234 and
+//         dp[1][3] = 245 - min(233, 233) = 12.
+//       - Compute dp[0][3] = 246 - min(12, 234) = 234; since 2 * 234 = 468 >= 246,
+//         return true.
+//
+//   Example 3:
+//     Input:  nums = [5, 5]
+//     Output: true
+//     Explanation:
+//       - Check n = nums.size() = 2 against the early-return guard n <= 2uz.
+//       - Player 1 takes 5 on the first move, securing at least half of the total
+//         score 10, so return true immediately.
+//
 // Algorithm:
 //   Use bottom-up interval dynamic programming paired with a prefix-sum array
 //   for O(1) subarray sum queries.

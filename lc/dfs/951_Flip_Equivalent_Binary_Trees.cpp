@@ -9,6 +9,43 @@
 //   Constraints: Each tree has at most 100 nodes, and all node values within
 //   each tree are unique integers in [0, 99].
 //
+// Examples:
+//   Example 1:
+//     Input:  root1 = [1, 2, 3, 4, 5, 6, null, null, null, 7, 8], root2 = [1, 3, 2,
+//             null, 6, 4, 5, null, null, null, null, 8, 7]
+//     Output: true
+//     Explanation:
+//       - At root (1, 1), node values match; the unflipped check flipEquiv(2, 3)
+//         returns false because 2 != 3, so the algorithm tests the flipped pairing
+//         (2, 2) and (3, 3).
+//       - Comparing (2, 2) keeps children unflipped on (4, 4) (both leaves,
+//         returning true) and checks (5, 5), where unflipped (7, 8) fails and
+//         flipped (7, 7) and (8, 8) succeed.
+//       - Comparing (3, 3) fails unflipped on (6, null) and then succeeds with
+//         flipped children (6, 6) and (null, null).
+//       - Both flipped child pairs of root 1 return true, so flipEquiv(root1,
+//         root2) returns true.
+//
+//   Example 2:
+//     Input:  root1 = [1, 2, 3, 4], root2 = [1, 3, 2, 4]
+//     Output: false
+//     Explanation:
+//       - At root (1, 1), the unflipped branch fails immediately because
+//         root1->left (2) differs from root2->left (3).
+//       - The flipped branch calls flipEquiv(root1->left [2], root2->right [2]),
+//         where node 2 has left child 4 in root1 but is a leaf in root2.
+//       - Inside (2, 2), both the unflipped check (4, null) and the flipped check
+//         (4, null) return false, so flipEquiv returns false.
+//
+//   Example 3:
+//     Input:  root1 = [1, 2], root2 = [1, null, 2]
+//     Output: true
+//     Explanation:
+//       - At root (1, 1), the unflipped branch calls flipEquiv(2, nullptr), which
+//         returns false because one subtree is null and the other is not.
+//       - The flipped branch evaluates flipEquiv(2, 2) && flipEquiv(nullptr,
+//         nullptr), returning true for both base/leaf pairs and overall true.
+//
 // Algorithm:
 //   Run simultaneous recursive DFS on `(root1, root2)`:
 //     1. If both pointers are null, the empty subtrees match -> return true.

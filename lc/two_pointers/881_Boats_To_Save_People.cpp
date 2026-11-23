@@ -9,6 +9,45 @@
 //   at most `limit`. Every person weighs at most `limit`.
 //   Constraints: 1 <= people.length <= 5 * 10^4, 1 <= people[i] <= limit <= 3 * 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  people = [3, 2, 2, 1], limit = 3
+//     Output: 3
+//     Explanation:
+//       - Sort people ascending to [1, 2, 2, 3] and initialize left = 0, right = 4,
+//         and boats = 0.
+//       - Iteration 1 decrements right to 3 (weight 3); since people[0] + people[3]
+//         = 1 + 3 = 4 > 3, left stays 0 and boats becomes 1.
+//       - Iteration 2 decrements right to 2 (weight 2); people[0] + people[2] = 1 +
+//         2 = 3 <= 3 pairs both people, advancing left to 1 and setting boats = 2.
+//       - Iteration 3 decrements right to 1 (weight 2); left < right is now false
+//         (1 < 1), so person 1 rides alone, boats becomes 3, and the loop returns
+//         3.
+//
+//   Example 2:
+//     Input:  people = [1, 2, 2, 3], limit = 4
+//     Output: 2
+//     Explanation:
+//       - With sorted weights [1, 2, 2, 3], start with left = 0, right = 4, and
+//         boats = 0.
+//       - Iteration 1 pairs right = 3 (weight 3) with left = 0 (weight 1) since 1 +
+//         3 = 4 <= 4, advancing left to 1 and incrementing boats to 1.
+//       - Iteration 2 pairs right = 2 (weight 2) with left = 1 (weight 2) since 2 +
+//         2 = 4 <= 4, advancing left to 2 and incrementing boats to 2.
+//       - Now left == right (both 2), so the loop terminates and returns 2.
+//
+//   Example 3:
+//     Input:  people = [3, 5, 3, 4], limit = 5
+//     Output: 4
+//     Explanation:
+//       - Sort people ascending to [3, 3, 4, 5] with left = 0, right = 4, and boats
+//         = 0.
+//       - Even with the lightest person (people[0] = 3), pairing with people[3] = 5
+//         (sum 8), people[2] = 4 (sum 7), or people[1] = 3 (sum 6) always exceeds
+//         limit = 5.
+//       - Each of the 4 iterations decrements right by 1 without advancing left,
+//         returning boats = 4.
+//
 // Algorithm:
 //   Greedy sorting + opposite-direction two pointers:
 //   1. Sort `people` in non-decreasing order of weight.

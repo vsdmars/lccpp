@@ -6,6 +6,34 @@
 //   is a node with no children, and a left leaf is a leaf that is the left
 //   child of its parent. A single-node tree has no left leaves (sum is 0).
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 9, 20, null, null, 15, 7]
+//     Output: 24
+//     Explanation:
+//       - Call dfs(3, false); since 3 has children, compute dfs(9, true) + dfs(20,
+//         false).
+//       - Node 9 is a leaf with is_left == true, so dfs(9, true) returns 9.
+//       - dfs(20, false) sums dfs(15, true) + dfs(7, false) = 15 + 0 = 15,
+//         returning 9 + 15 = 24.
+//
+//   Example 2:
+//     Input:  root = [3, 9, 20, 8, null, 15, 7]
+//     Output: 23
+//     Explanation:
+//       - Call dfs(3, false), recursing into dfs(9, true) and dfs(20, false).
+//       - Node 9 is not a leaf because it has left child 8, so dfs(9, true) returns
+//         dfs(8, true) + dfs(nullptr, false) = 8 + 0 = 8.
+//       - dfs(20, false) returns dfs(15, true) + dfs(7, false) = 15 + 0 = 15,
+//         giving total sum 8 + 15 = 23.
+//
+//   Example 3:
+//     Input:  root = [1]
+//     Output: 0
+//     Explanation:
+//       - Invoke dfs(1, false) at the root.
+//       - Node 1 is a leaf with is_left == false, so it returns 0.
+//
 // Algorithm:
 //   Perform a Depth-First Search carrying a boolean tag `is_left` indicating
 //   whether the current node was reached via its parent's `left` pointer:

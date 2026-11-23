@@ -9,6 +9,43 @@
 //   Return the minimum number of semesters required to complete all `n`
 //   courses, or `-1` if a prerequisite cycle makes completion impossible.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3, relations = [[1, 3], [2, 3]]
+//     Output: 2
+//     Explanation:
+//       - Build adj[1] = [3], adj[2] = [3], and indegree = [0, 0, 0, 2] for courses
+//         1..3.
+//       - Seed the initial frontier with all zero-indegree courses: frontier = [1,
+//         2].
+//       - In BFS wave 1 (semesters = 1), process courses 1 and 2 (completed = 2)
+//         and decrement indegree[3] twice from 2 to 0, pushing 3 into next_frontier
+//         = [3].
+//       - In BFS wave 2 (semesters = 2), process course 3 (completed = 3) with
+//         empty next_frontier; since completed == n (3 == 3), return 2.
+//
+//   Example 2:
+//     Input:  n = 3, relations = [[1, 2], [2, 3], [3, 1]]
+//     Output: -1
+//     Explanation:
+//       - Build directed edges 1 -> 2, 2 -> 3, and 3 -> 1, giving indegree[1] = 1,
+//         indegree[2] = 1, and indegree[3] = 1.
+//       - Scan courses 1..3 for indegree[course] == 0; none qualify, so frontier
+//         starts empty.
+//       - The while loop does not execute (semesters = 0, completed = 0), and
+//         because completed != n (0 != 3), return -1.
+//
+//   Example 3:
+//     Input:  n = 4, relations = [[1, 2], [2, 3], [3, 4]]
+//     Output: 4
+//     Explanation:
+//       - Build linear chain adj 1 -> 2 -> 3 -> 4 with indegree[1] = 0 and
+//         indegree[2..4] = 1, seeding frontier = [1].
+//       - Wave 1 (semesters = 1) completes course 1 and unlocks course 2
+//         (next_frontier = [2]); wave 2 (semesters = 2) completes 2 and unlocks 3.
+//       - Wave 3 (semesters = 3) completes 3 and unlocks 4; wave 4 (semesters = 4)
+//         completes 4 (completed = 4) and returns 4.
+//
 // Algorithm:
 //   Level-order Kahn's BFS topological sort. Build the directed adjacency list
 //   and indegree count for each course, then initialize `frontier` with all

@@ -11,6 +11,49 @@
 //   Constraints: 1 <= arr.length <= 10^4, 0 <= arr[i] <= 10^4.
 //   Follow-up: solve in a single pass with O(1) extra space.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [2, 1, 4, 7, 3, 2, 5]
+//     Output: 5
+//     Explanation:
+//       - Initialize up = 0, down = 0, and best = 0 before scanning adjacent pairs
+//         from index 1.
+//       - At i = 1 (2 -> 1), prev > curr increments down to 1 while up remains 0,
+//         so no valid mountain exists yet.
+//       - At i = 2 (1 -> 4), down > 0 && prev < curr resets up = 0 and down = 0
+//         before incrementing up to 1; at i = 3 (4 -> 7), up becomes 2.
+//       - At i = 4 (7 -> 3), down increments to 1, and since up > 0 && down > 0,
+//         best updates to 2 + 1 + 1 = 4.
+//       - At i = 5 (3 -> 2), down increments to 2, updating best to 2 + 2 + 1 = 5
+//         for the subarray [1, 4, 7, 3, 2].
+//       - At i = 6 (2 -> 5), down > 0 && prev < curr resets both counters and sets
+//         up = 1, leaving best = 5 as the final return value.
+//
+//   Example 2:
+//     Input:  arr = [0, 1, 0, 2, 3, 4, 2, 1]
+//     Output: 6
+//     Explanation:
+//       - Pairs (0 -> 1) at i = 1 and (1 -> 0) at i = 2 set up = 1 and down = 1,
+//         recording best = 1 + 1 + 1 = 3 for [0, 1, 0].
+//       - At i = 3 (0 -> 2), down > 0 && prev < curr resets up = 0 and down = 0
+//         before incrementing up to 1, starting a new mountain from the shared
+//         valley 0.
+//       - Ascending pairs (2 -> 3) at i = 4 and (3 -> 4) at i = 5 advance up to 3
+//         while down stays 0.
+//       - Descending pairs (4 -> 2) at i = 6 and (2 -> 1) at i = 7 increment down
+//         to 1 (best = 5) and then 2, updating best to 3 + 2 + 1 = 6 for [0, 2, 3,
+//         4, 2, 1].
+//
+//   Example 3:
+//     Input:  arr = [1, 2, 2, 1]
+//     Output: 0
+//     Explanation:
+//       - At i = 1 (1 -> 2), up increments to 1 while down remains 0.
+//       - At i = 2 (2 -> 2), prev == curr resets both up and down to 0 because a
+//         plateau breaks any mountain.
+//       - At i = 3 (2 -> 1), down increments to 1 while up stays 0, so up > 0 &&
+//         down > 0 is never satisfied and 0 is returned.
+//
 // Algorithm:
 //   Single-pass state tracking with two counters (`up`, `down`):
 //   - Walk adjacent pairs `(prev, curr) = (arr[i - 1], arr[i])` from left to

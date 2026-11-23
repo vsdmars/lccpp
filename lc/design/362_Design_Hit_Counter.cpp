@@ -9,6 +9,49 @@
 //   the same timestamp. Follow-up: scale cleanly when hits per second are
 //   very large.
 //
+// Examples:
+//   Example 1:
+//     Input:  HitCounter(); calls: hit(1), hit(2), hit(3), getHits(4), hit(300),
+//             getHits(300), getHits(301)
+//     Output: [3, 4, 3] (for the getHits calls)
+//     Explanation:
+//       - hit(1), hit(2), and hit(3) populate ring-buffer buckets 1, 2, and 3 with
+//         timestamps_[i] = i and hits_[i] = 1.
+//       - getHits(4) sums all buckets with timestamps_[i] > 0 and 4 -
+//         timestamps_[i] < 300, matching buckets 1, 2, and 3 for a total of 3.
+//       - hit(300) sets bucket 300 % 300 = 0 to (timestamp 300, hits 1), so
+//         getHits(300) includes buckets 0..3 (300 - 1 = 299 < 300) and returns 4.
+//       - getHits(301) drops bucket 1 because 301 - 1 = 300 is not < 300, returning
+//         3 from buckets 2, 3, and 0.
+//
+//   Example 2:
+//     Input:  HitCounter(); calls: hit(1), hit(1), hit(1), hit(300), getHits(300),
+//             hit(300), getHits(300), getHits(301)
+//     Output: [4, 5, 2] (for the getHits calls)
+//     Explanation:
+//       - Three hit(1) calls all map to bucket 1: the first sets timestamps_[1] = 1
+//         and hits_[1] = 1, and the next two find timestamps_[1] == 1 and increment
+//         hits_[1] to 3.
+//       - hit(300) records (timestamps_[0] = 300, hits_[0] = 1), so getHits(300)
+//         sums hits_[1] + hits_[0] = 3 + 1 = 4; a second hit(300) increments
+//         hits_[0] to 2, making getHits(300) return 5.
+//       - getHits(301) excludes bucket 1 (301 - 1 = 300) and counts only bucket 0
+//         (301 - 300 = 1 < 300), returning 2.
+//
+//   Example 3:
+//     Input:  HitCounter(); calls: getHits(1), hit(1), getHits(300), getHits(301),
+//             hit(301), hit(301), getHits(600), getHits(601)
+//     Output: [0, 1, 0, 2, 0] (for the getHits calls)
+//     Explanation:
+//       - Before any hits, all timestamps_ entries are 0, so getHits(1) skips all
+//         buckets and returns 0.
+//       - After hit(1) sets bucket 1 to (1, 1), getHits(300) includes it (299 <
+//         300) to return 1, while getHits(301) excludes it (300 is not < 300) and
+//         returns 0.
+//       - Two hit(301) calls map to bucket 301 % 300 = 1, overwriting the expired
+//         timestamp 1 with (301, 1) and incrementing hits_[1] to 2, so getHits(600)
+//         returns 2 before expiring at getHits(601) with 0.
+//
 // Algorithm:
 //   Use a fixed-size 300-slot circular buffer (ring buffer) indexed by
 //   `timestamp % 300`. Each slot stores the most recent timestamp mapped to

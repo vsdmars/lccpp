@@ -6,6 +6,41 @@
 //   made non-decreasing (`nums[i] <= nums[i + 1]` for every `0 <= i < n - 1`)
 //   by modifying at most one element.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [4, 2, 3]
+//     Output: true
+//     Explanation:
+//       - Initialize modified = false, prev = 4, and prev_prev = 0.
+//       - At i = 1, nums[1] = 2 < prev (4), so set modified = true; because i == 1,
+//         lower nums[0] to 2 by setting prev_prev = 2 and prev = 2.
+//       - At i = 2, nums[2] = 3 >= prev (2), so update prev_prev = 2 and prev = 3,
+//         then return true.
+//
+//   Example 2:
+//     Input:  nums = [3, 4, 2, 3]
+//     Output: false
+//     Explanation:
+//       - Initialize modified = false, prev = 3, and prev_prev = 0; at i = 1 (4 >=
+//         3), advance to prev_prev = 3 and prev = 4.
+//       - At i = 2, nums[2] = 2 < prev (4), so set modified = true; because
+//         prev_prev (3) > 2, keep prev = 4 and set prev_prev = 4 (equivalent to
+//         raising nums[2] to 4).
+//       - At i = 3, nums[3] = 3 < prev (4) while modified is already true, so
+//         return false immediately.
+//
+//   Example 3:
+//     Input:  nums = [2, 3, 3, 2, 4]
+//     Output: true
+//     Explanation:
+//       - Initialize modified = false and prev = 2; indices i = 1 and i = 2 satisfy
+//         3 >= 2 and 3 >= 3, reaching prev_prev = 3 and prev = 3.
+//       - At i = 3, nums[3] = 2 < prev (3), so set modified = true; since prev_prev
+//         (3) > 2, raise nums[3] to 3 by setting prev_prev = 3 and keeping prev =
+//         3.
+//       - At i = 4, nums[4] = 4 >= prev (3), updating prev_prev = 3 and prev = 4
+//         and returning true.
+//
 // Algorithm:
 //   1. Optimal Single-Pass Greedy (O(n) time, O(1) space):
 //      Scan left to right while maintaining the effective last two values

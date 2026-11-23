@@ -8,6 +8,39 @@
 //     F(k) = 0 * B_k[0] + 1 * B_k[1] + ... + (n - 1) * B_k[n - 1].
 //   Return the maximum value of F(0), F(1), ..., F(n - 1).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [4, 3, 2, 6]
+//     Output: 26
+//     Explanation:
+//       - Compute total_sum = 4 + 3 + 2 + 6 = 15 and base value F(0) = 0*4 + 1*3 +
+//         2*2 + 3*6 = 25, initializing max_f = 25.
+//       - For rotation k = 1, the element wrapping from index 3 to 0 is nums[4 - 1]
+//         = 6, so current_f = (25 + 15) - 4 * 6 = 16 and max_f remains 25.
+//       - For rotation k = 2, nums[4 - 2] = 2 wraps around, giving current_f = (16
+//         + 15) - 4 * 2 = 23 and max_f = 25.
+//       - For rotation k = 3, nums[4 - 3] = 3 wraps around, giving current_f = (23
+//         + 15) - 4 * 3 = 26 and updating max_f to 26.
+//
+//   Example 2:
+//     Input:  nums = [1, -2, 3, -4]
+//     Output: 6
+//     Explanation:
+//       - Compute total_sum = 1 + (-2) + 3 + (-4) = -2 and F(0) = 0*1 + 1*(-2) +
+//         2*3 + 3*(-4) = -8, setting max_f = -8.
+//       - At k = 1, nums[3] = -4 wraps around, yielding current_f = (-8 + (-2)) - 4
+//         * (-4) = 6 and updating max_f to 6.
+//       - At k = 2 and k = 3, nums[2] = 3 and nums[1] = -2 wrap around, producing
+//         current_f = -8 and current_f = -2, so max_f stays 6.
+//
+//   Example 3:
+//     Input:  nums = [100]
+//     Output: 0
+//     Explanation:
+//       - Compute total_sum = 100 and F(0) = 0 * 100 = 0, initializing max_f = 0.
+//       - Because len = 1, the Phase 2 loop for k = 1 to len - 1 executes zero
+//         times and the function returns max_f = 0.
+//
 // Algorithm:
 //   Rather than recomputing F(k) in O(n) for each of the n rotations (which
 //   would take O(n^2)), derive the O(1) recurrence between consecutive

@@ -8,6 +8,43 @@
 //   `heights[j]`. Return an array `answer` of length `n` where `answer[i]` is
 //   the number of people to the right that person `i` can see.
 //
+// Examples:
+//   Example 1:
+//     Input:  heights = [10, 6, 8, 5, 11, 9]
+//     Output: [3, 1, 2, 1, 1, 0]
+//     Explanation:
+//       - Push index 0 (height 10); at i = 1 (height 6 < 10), increment visible[0]
+//         to 1 and push 1 so stack = [0, 1].
+//       - At i = 2 (height 8), pop 1 (6 <= 8, visible[1] = 1), increment remaining
+//         top visible[0] to 2, and push 2 so stack = [0, 2].
+//       - At i = 3 (height 5 < 8), increment visible[2] to 1 and push 3 so stack =
+//         [0, 2, 3].
+//       - At i = 4 (height 11), pop 3 (visible[3] = 1), 2 (visible[2] = 2), and 0
+//         (visible[0] = 3) in order because all are <= 11, then push 4 so stack =
+//         [4].
+//       - At i = 5 (height 9 < 11), increment visible[4] to 1 and push 5, leaving
+//         visible = [3, 1, 2, 1, 1, 0].
+//
+//   Example 2:
+//     Input:  heights = [5, 1, 2, 3, 10]
+//     Output: [4, 1, 1, 1, 0]
+//     Explanation:
+//       - Push index 0 (height 5); at i = 1 (height 1 < 5), increment visible[0] to
+//         1 and push 1 so stack = [0, 1].
+//       - At i = 2 (height 2), pop 1 (1 <= 2, visible[1] = 1), increment visible[0]
+//         to 2, and push 2; at i = 3 (height 3), pop 2 (2 <= 3, visible[2] = 1),
+//         increment visible[0] to 3, and push 3.
+//       - At i = 4 (height 10), pop 3 (visible[3] = 1) and 0 (visible[0] = 4), then
+//         push 4, returning [4, 1, 1, 1, 0].
+//
+//   Example 3:
+//     Input:  heights = [42]
+//     Output: [0]
+//     Explanation:
+//       - Initialize visible = [0] and an empty monotonic stack.
+//       - At i = 0 (height 42), the stack is empty so no prior person's count is
+//         incremented, and 0 is pushed onto stack before returning [0].
+//
 // Algorithm:
 //   Left-to-Right Monotonic Decreasing Stack:
 //     Maintain a stack of indices of people whose rightward view has not yet

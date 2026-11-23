@@ -8,6 +8,38 @@
 //   constructed by following index pointers until right before a duplicate
 //   element would occur. Return the maximum size of `S[i]` over all `i`.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [5, 4, 0, 3, 1, 6, 2]
+//     Output: 4
+//     Explanation:
+//       - Starting at i = 0, follow 0 -> 5 -> 6 -> 2 -> 0 while setting those slots
+//         to -1, recording cycle_len = 4 and max_len = 4.
+//       - At i = 1, follow 1 -> 4 -> 1 while setting slots 1 and 4 to -1, yielding
+//         cycle_len = 2 and keeping max_len = 4.
+//       - Skip i = 2 because nums[2] == -1, then at i = 3 traverse self-loop 3 -> 3
+//         (cycle_len = 1) and skip remaining -1 slots at indices 4, 5, and 6 to
+//         return 4.
+//
+//   Example 2:
+//     Input:  nums = [1, 0, 3, 4, 2]
+//     Output: 3
+//     Explanation:
+//       - Starting at i = 0, follow cycle 0 -> 1 -> 0, marking indices 0 and 1 as
+//         -1 and setting max_len = 2.
+//       - Skip i = 1 since nums[1] == -1, then at i = 2 follow cycle 2 -> 3 -> 4 ->
+//         2, marking indices 2, 3, and 4 as -1 and updating max_len = 3.
+//       - Skip visited indices 3 and 4, then return max_len = 3.
+//
+//   Example 3:
+//     Input:  nums = [0, 1, 2]
+//     Output: 1
+//     Explanation:
+//       - At i = 0, traverse self-loop 0 -> 0, mark nums[0] = -1, and update
+//         max_len = 1.
+//       - At i = 1 and i = 2, each index forms a self-loop of length 1 and is
+//         marked -1, leaving max_len = 1 to be returned.
+//
 // Algorithm:
 //   Because `nums` is a permutation of `[0, n - 1]`, the directed graph
 //   `i -> nums[i]` has in-degree 1 and out-degree 1 at every vertex, so it

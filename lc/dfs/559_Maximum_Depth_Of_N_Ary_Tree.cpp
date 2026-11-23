@@ -7,6 +7,46 @@
 //   nodes along the longest downward path from the root node to any leaf node.
 //   An empty tree (`nullptr`) has depth 0.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, null, 3, 2, 4, null, 5, 6]
+//     Output: 3
+//     Explanation:
+//       - maxDepth(1) initializes max_child_depth = 0 and iterates over children
+//         [3, 2, 4].
+//       - For node 3, recursive calls on leaves 5 and 6 each have empty children
+//         and return 1, so maxDepth(3) returns 1 + max(1, 1) = 2.
+//       - Leaf nodes 2 and 4 each have no children, returning maxDepth(2) = 1 and
+//         maxDepth(4) = 1.
+//       - At root 1, max_child_depth becomes max(2, 1, 1) = 2, so maxDepth returns
+//         1 + 2 = 3.
+//
+//   Example 2:
+//     Input:  root = [1, null, 2, 3, 4, 5, null, null, 6, 7, null, 8, null, 9, 10,
+//             null, null, 11, null, 12, null, 13, null, null, 14]
+//     Output: 5
+//     Explanation:
+//       - maxDepth(1) evaluates children [2, 3, 4, 5], with leaf 2 returning 1
+//         immediately.
+//       - Under node 3, leaf 6 returns 1 while the chain 7 -> 11 -> 14 unwinds as
+//         maxDepth(14) = 1, maxDepth(11) = 2, and maxDepth(7) = 3, giving
+//         maxDepth(3) = 1 + max(1, 3) = 4.
+//       - Subtree 4 -> 8 -> 12 returns 3, and subtree 5 -> {9 -> 13, 10} returns 1
+//         + max(2, 1) = 3.
+//       - At root 1, max_child_depth is max(1, 4, 3, 3) = 4, yielding final depth 1
+//         + 4 = 5.
+//
+//   Example 3:
+//     Input:  root = [1, null, 2, null, 3, null, 4]
+//     Output: 4
+//     Explanation:
+//       - maxDepth(1) follows the single-child chain 1 -> 2 -> 3 -> 4 down to leaf
+//         4.
+//       - Because node 4 has empty children, max_child_depth stays 0 and
+//         maxDepth(4) returns 1.
+//       - Each ancestor adds 1 on return: maxDepth(3) = 2, maxDepth(2) = 3, and
+//         maxDepth(1) = 4.
+//
 // Algorithm:
 //   Use postorder recursive DFS: the depth of a null node is 0, and the depth
 //   of any non-null node is `1 + max(maxDepth(child) for child in children)`

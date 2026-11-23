@@ -5,6 +5,47 @@
 //   Given an n x n 2D integer matrix representing an image, rotate the image
 //   by 90 degrees clockwise in-place without allocating a second 2D matrix.
 //
+// Examples:
+//   Example 1:
+//     Input:  matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+//     Output: [[7, 4, 1], [8, 5, 2], [9, 6, 3]]
+//     Explanation:
+//       - Compute quadrant bounds for `n = 3`: `half_rows = 1` and `half_cols = 2`,
+//         so only `i = 0` (`opp_i = 2`) with `j = 0, 1` is visited.
+//       - For `(i=0, j=0)` (`opp_j = 2`), perform a 4-way cyclic swap of the
+//         corners `matrix[0][0]=1`, `matrix[2][0]=7`, `matrix[2][2]=9`, and
+//         `matrix[0][2]=3` to place `7`, `9`, `3`, and `1` at `(0,0)`, `(2,0)`,
+//         `(2,2)`, and `(0,2)`.
+//       - For `(i=0, j=1)` (`opp_j = 1`), perform a 4-way cyclic swap of the edge
+//         midpoints `matrix[0][1]=2`, `matrix[1][0]=4`, `matrix[2][1]=8`, and
+//         `matrix[1][2]=6` to place `4`, `8`, `6`, and `2` at `(0,1)`, `(1,0)`,
+//         `(2,1)`, and `(1,2)`.
+//       - Leave the center cell `(1, 1)` (`5`) untouched, resulting in `[[7, 4, 1],
+//         [8, 5, 2], [9, 6, 3]]`.
+//
+//   Example 2:
+//     Input:  matrix = [[5, 1, 9, 11], [2, 4, 8, 10], [13, 3, 6, 7], [15, 14, 12,
+//             16]]
+//     Output: [[15, 13, 2, 5], [14, 3, 4, 1], [12, 6, 8, 9], [16, 7, 10, 11]]
+//     Explanation:
+//       - Compute quadrant bounds for `n = 4`: `half_rows = 2` and `half_cols = 2`.
+//       - At `(0, 0)`, cycle outer corners `(0,0)=5`, `(3,0)=15`, `(3,3)=16`, and
+//         `(0,3)=11` into `15`, `16`, `11`, and `5`; at `(0, 1)`, cycle `(0,1)=1`,
+//         `(2,0)=13`, `(3,2)=12`, and `(1,3)=10` into `13`, `12`, `10`, and `1`.
+//       - At `(1, 0)`, cycle `(1,0)=2`, `(3,1)=14`, `(2,3)=7`, and `(0,2)=9` into
+//         `14`, `7`, `9`, and `2`.
+//       - At `(1, 1)`, cycle the inner 2x2 ring `(1,1)=4`, `(2,1)=3`, `(2,2)=6`,
+//         and `(1,2)=8` into `3`, `6`, `8`, and `4`, yielding the rotated 4x4
+//         matrix.
+//
+//   Example 3:
+//     Input:  matrix = [[42]]
+//     Output: [[42]]
+//     Explanation:
+//       - Inspect `n = matrix.size()`, which is `1`.
+//       - Because `n <= 1`, `rotate` returns immediately without modifying any
+//         elements, leaving `[[42]]` unchanged.
+//
 // Algorithm:
 //   A 90-degree clockwise rotation maps cell (r, c) -> (c, n - 1 - r). We
 //   provide two classic O(1)-space in-place realizations:

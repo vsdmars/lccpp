@@ -11,6 +11,47 @@
 //   Constraints: 10 <= stations.length <= 2000, 0 <= stations[i] <= 10^8,
 //   1 <= k <= 10^6.
 //
+// Examples:
+//   Example 1:
+//     Input:  stations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], k = 9
+//     Output: 0.5
+//     Explanation:
+//       - Compute max_gap = 1.0 across adjacent stations and initialize binary
+//         search bounds left = 0.0 and right = 1.0.
+//       - At mid = 0.5, each of the 9 unit gaps requires ceil(1.0 / 0.5) - 1 = 1
+//         new station (9 <= k), so canAchieveMaxDist returns true and updates right
+//         = 0.5.
+//       - For any candidate mid < 0.5, each of the 9 gaps requires at least 2
+//         stations (18 > k), so canAchieveMaxDist exits early with false and raises
+//         left = mid.
+//       - Stop once right - left <= 1e-7 and return right = 0.5.
+//
+//   Example 2:
+//     Input:  stations = [23, 24, 36, 39, 46, 56, 57, 65, 84, 98], k = 1
+//     Output: 14.0
+//     Explanation:
+//       - Scan adjacent station differences [1, 12, 3, 7, 10, 1, 8, 19, 14] to set
+//         max_gap = 19.0, left = 0.0, and right = 19.0.
+//       - For any mid >= 14.0 (such as the initial mid = 9.5 failing, then upper
+//         candidates like 14.25 succeeding), only the gap 84 - 65 = 19 exceeds mid
+//         and needs ceil(19 / mid) - 1 = 1 <= k station, lowering right toward
+//         14.0.
+//       - For any mid < 14.0, both gaps 19 and 14 require at least 1 station each
+//         (needed >= 2 > k), causing canAchieveMaxDist to return false and raise
+//         left toward 14.0.
+//       - Converge within kEps = 1e-7 and return 14.0.
+//
+//   Example 3:
+//     Input:  stations = [0, 10, 11], k = 3
+//     Output: 2.5
+//     Explanation:
+//       - Compute max_gap = 10.0 from adjacent gaps 10 and 1, initializing left =
+//         0.0 and right = 10.0.
+//       - At mid = 2.5, gap 10 requires ceil(10 / 2.5) - 1 = 3 stations and gap 1
+//         <= 2.5 requires 0, totaling 3 <= k and setting right = 2.5.
+//       - Any mid < 2.5 makes ceil(10 / mid) - 1 >= 4 > k, failing feasibility and
+//         advancing left toward 2.5 until right - left <= 1e-7.
+//
 // Algorithm:
 //   Binary search on the continuous answer `D` ("binary search on the answer").
 //   Feasibility is monotonic: if a maximum gap `D` is achievable with `<= k`

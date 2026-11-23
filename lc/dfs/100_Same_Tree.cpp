@@ -6,6 +6,41 @@
 //   trees are structurally identical and every pair of corresponding nodes
 //   holds the same integer value; otherwise return false.
 //
+// Examples:
+//   Example 1:
+//     Input:  p = [1, 2, 3], q = [1, 2, 3]
+//     Output: true
+//     Explanation:
+//       - Compare roots p (val 1) and q (val 1): both are non-null with matching
+//         values, so recurse into left and right children.
+//       - Recurse left to p->left (val 2) and q->left (val 2): values match, and
+//         their null left/right child pairs both hit the base case (p == nullptr &&
+//         q == nullptr) returning true.
+//       - Recurse right to p->right (val 3) and q->right (val 3): values match, and
+//         their null child pairs return true.
+//       - Combine left (true) && right (true) at the root to return true.
+//
+//   Example 2:
+//     Input:  p = [1, 2], q = [1, null, 2]
+//     Output: false
+//     Explanation:
+//       - Compare roots p (val 1) and q (val 1): both are non-null with equal
+//         values, so check left subtrees next.
+//       - Recurse left to p->left (val 2) and q->left (nullptr): one pointer is
+//         null while the other is non-null, returning false immediately.
+//       - Short-circuit && at the root without inspecting the right subtrees and
+//         return false.
+//
+//   Example 3:
+//     Input:  p = [1, 2, 1], q = [1, 1, 2]
+//     Output: false
+//     Explanation:
+//       - Compare roots p (val 1) and q (val 1): values match, so recurse into the
+//         left subtrees.
+//       - Compare p->left (val 2) and q->left (val 1): p->val != q->val triggers an
+//         immediate false return.
+//       - Short-circuit the && conjunction at the root and return false.
+//
 // Algorithm:
 //   Simultaneous pre-order Depth-First Search (DFS) over both trees.
 //   At each pair of nodes (p, q):

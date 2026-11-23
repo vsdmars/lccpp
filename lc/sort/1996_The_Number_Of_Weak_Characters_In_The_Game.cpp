@@ -11,6 +11,43 @@
 //   Constraints: 2 <= properties.length <= 10^5,
 //   1 <= attack_i, defense_i <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  properties = [[5, 5], [6, 3], [3, 6]]
+//     Output: 0
+//     Explanation:
+//       - Sort by attack ascending and defense descending to [[3, 6], [5, 5], [6,
+//         3]], starting with max_defense = INT_MIN and weak_count = 0.
+//       - Reverse-sweep visits [6, 3] first: 3 >= INT_MIN, so max_defense updates
+//         to 3.
+//       - Next visits [5, 5]: 5 >= 3 updates max_defense to 5; then [3, 6]: 6 >= 5
+//         updates max_defense to 6.
+//       - No defense is strictly below max_defense, so return weak_count = 0.
+//
+//   Example 2:
+//     Input:  properties = [[1, 5], [10, 4], [4, 3]]
+//     Output: 1
+//     Explanation:
+//       - Sort by attack ascending and defense descending to [[1, 5], [4, 3], [10,
+//         4]].
+//       - Reverse-sweep starts at [10, 4] and sets max_defense = 4 with weak_count
+//         = 0.
+//       - At [4, 3], defense 3 < max_defense (4), so weak_count increments to 1.
+//       - At [1, 5], defense 5 >= 4 updates max_defense to 5, and the function
+//         returns 1.
+//
+//   Example 3:
+//     Input:  properties = [[3, 6], [5, 7], [5, 5], [6, 3]]
+//     Output: 1
+//     Explanation:
+//       - Sort by attack ascending and defense descending to [[3, 6], [5, 7], [5,
+//         5], [6, 3]] so [5, 7] precedes [5, 5].
+//       - Reverse-sweep visits [6, 3] first, setting max_defense = 3.
+//       - Next visits [5, 5] before [5, 7], raising max_defense to 5 without
+//         falsely marking [5, 5] weak, and then [5, 7] raises max_defense to 7.
+//       - Finally [3, 6] has defense 6 < 7, incrementing weak_count to 1 and
+//         returning 1.
+//
 // Algorithm:
 //   This is a classic 2D Pareto dominance counting problem solved by sorting
 //   and sweeping one dimension while tracking a running maximum in the other:

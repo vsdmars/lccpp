@@ -8,6 +8,44 @@
 //   number of 4-directionally connected islands after each operation. Duplicate
 //   operations on an existing land cell leave the grid and count unchanged.
 //
+// Examples:
+//   Example 1:
+//     Input:  m = 3, n = 3, positions = [[0, 0], [0, 1], [1, 2], [2, 1]]
+//     Output: [1, 1, 2, 3]
+//     Explanation:
+//       - Adding [0, 0] (id = 0) sets parent[0] = 0 with no land neighbors, raising
+//         islands to 1 and appending 1.
+//       - Adding [0, 1] (id = 1) sets parent[1] = 1 (islands = 2), then finds left
+//         land neighbor (0, 0) via kDirs and calls unite(1, 0), decrementing
+//         islands back to 1.
+//       - Adding [1, 2] (id = 5) and then [2, 1] (id = 7) finds only water
+//         neighbors (-1) around each cell, raising islands to 2 and then 3 to
+//         produce [1, 1, 2, 3].
+//
+//   Example 2:
+//     Input:  m = 3, n = 3, positions = [[0, 0], [0, 1], [1, 2], [1, 2]]
+//     Output: [1, 1, 2, 2]
+//     Explanation:
+//       - The first three operations [0, 0], [0, 1], and [1, 2] create and merge
+//         islands to yield running counts [1, 1, 2], leaving parent[5] = 5 for cell
+//         (1, 2).
+//       - On the duplicate [1, 2] (id = 5), parent[5] != -1 triggers the
+//         early-continue guard without modifying islands.
+//       - The unchanged count islands = 2 is appended again, returning [1, 1, 2,
+//         2].
+//
+//   Example 3:
+//     Input:  m = 3, n = 3, positions = [[0, 0], [0, 2], [1, 1], [0, 1]]
+//     Output: [1, 2, 3, 1]
+//     Explanation:
+//       - The first three positions [0, 0] (id = 0), [0, 2] (id = 2), and [1, 1]
+//         (id = 4) have no orthogonal land neighbors, yielding three isolated
+//         islands with running counts [1, 2, 3].
+//       - Adding [0, 1] (id = 1) marks parent[1] = 1 and increments islands to 4.
+//       - Scanning kDirs finds existing land at (0, 2), (0, 0), and (1, 1), and
+//         each successful unite call decrements islands once (4 -> 3 -> 2 -> 1),
+//         resulting in [1, 2, 3, 1].
+//
 // Algorithm:
 //   Model dynamic 4-directional grid connectivity using Disjoint Set Union
 //   (Union-Find) over flattened 1D cell IDs `id = r * n + c`, with path

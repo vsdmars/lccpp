@@ -7,6 +7,39 @@
 //   7896 has 4 digits, while 345 has 3 digits).
 //   Constraints: 1 <= nums.length <= 500, 1 <= nums[i] <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [12, 345, 2, 6, 7896]
+//     Output: 2
+//     Explanation:
+//       - For 12, countDigits divides by 10 twice (12 -> 1 -> 0) and returns 2
+//         (even), incrementing even_digit_count to 1.
+//       - For 345, 2, and 6, countDigits returns 3, 1, and 1 (all odd), leaving
+//         even_digit_count at 1.
+//       - For 7896, countDigits runs 4 divisions (7896 -> 789 -> 78 -> 7 -> 0) to
+//         return 4 (even), raising even_digit_count to 2.
+//
+//   Example 2:
+//     Input:  nums = [555, 901, 482, 1771]
+//     Output: 1
+//     Explanation:
+//       - For 555, 901, and 482, countDigits performs 3 divisions each and returns
+//         3 (odd), keeping even_digit_count at 0.
+//       - For 1771, countDigits performs 4 divisions (1771 -> 177 -> 17 -> 1 -> 0)
+//         and returns 4 (even).
+//       - Increment even_digit_count to 1 and return 1.
+//
+//   Example 3:
+//     Input:  nums = [1, 9, 10, 99, 100, 999, 1000, 9999, 10000, 99999, 100000]
+//     Output: 5
+//     Explanation:
+//       - Values 1 and 9 have 1 digit (odd), while 10 and 99 take 2 divisions each
+//         (even), setting even_digit_count to 2.
+//       - Values 100 and 999 have 3 digits (odd), while 1000 and 9999 have 4 digits
+//         (even), advancing even_digit_count to 4.
+//       - Values 10000 and 99999 have 5 digits (odd), and 100000 takes 6 divisions
+//         (even), returning even_digit_count = 5.
+//
 // Algorithm:
 //   Iterate once over `nums` and count the decimal digits of each value by
 //   repeatedly dividing by 10 until it reaches 0 (treating 0 as 1 digit).

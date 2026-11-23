@@ -7,6 +7,38 @@
 //   Each input has exactly one valid solution, the same element cannot be used
 //   twice, and the answer may be returned in any order.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 7, 11, 15], target = 9
+//     Output: [0, 1]
+//     Explanation:
+//       - Initialize an empty hash map `seen` mapping visited values to their
+//         indices.
+//       - At `i = 0`, `nums[0] = 2` needs complement `9 - 2 = 7`; `7` is not in
+//         `seen`, so record `seen[2] = 0`.
+//       - At `i = 1`, `nums[1] = 7` needs complement `9 - 7 = 2`; `2` is found in
+//         `seen` at index `0`, so return `{0, 1}`.
+//
+//   Example 2:
+//     Input:  nums = [3, 2, 4], target = 6
+//     Output: [1, 2]
+//     Explanation:
+//       - At `i = 0`, `nums[0] = 3` needs `6 - 3 = 3`; checking `seen` before
+//         inserting avoids pairing index `0` with itself, so record `seen[3] = 0`.
+//       - At `i = 1`, `nums[1] = 2` needs `6 - 2 = 4`; `4` is not in `seen`, so
+//         record `seen[2] = 1`.
+//       - At `i = 2`, `nums[2] = 4` needs `6 - 4 = 2`; `2` is found in `seen` at
+//         index `1`, so return `{1, 2}`.
+//
+//   Example 3:
+//     Input:  nums = [3, 3], target = 6
+//     Output: [0, 1]
+//     Explanation:
+//       - At `i = 0`, `nums[0] = 3` computes `need = 6 - 3 = 3`; `seen` is empty,
+//         so record `seen[3] = 0`.
+//       - At `i = 1`, `nums[1] = 3` computes `need = 6 - 3 = 3`; `3` is now found
+//         in `seen` at index `0`, so return `{0, 1}`.
+//
 // Algorithm:
 //   Single-pass complement lookup using a hash map. As we scan `nums` from
 //   left to right, we compute the required complement `need = target - nums[i]`

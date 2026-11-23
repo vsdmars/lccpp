@@ -7,6 +7,44 @@
 //   position `i` (1 <= i <= n), either `perm[i]` is divisible by `i` or `i` is
 //   divisible by `perm[i]`.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 2
+//     Output: 2
+//     Explanation:
+//       - Allocate `memo` of size `2^2 = 4` initialized to `-1` and invoke `dfs(2,
+//         0b00)` to fill positions from `2` down to `1`.
+//       - At `pos = 2`, both `num = 1` (`2 % 1 == 0`) and `num = 2` (`2 % 2 == 0`)
+//         satisfy the divisibility check.
+//       - Branching on `num = 1` calls `dfs(1, 0b01)`, which hits the base case
+//         `pos <= 1` and returns `1` for `[2, 1]`; branching on `num = 2` calls
+//         `dfs(1, 0b10)` and returns `1` for `[1, 2]`.
+//       - Sum both branches to cache `memo[0b00] = 2` and return `2`.
+//
+//   Example 2:
+//     Input:  n = 3
+//     Output: 3
+//     Explanation:
+//       - Start `dfs(3, 0b000)` at `pos = 3`, where `num = 1` (`3 % 1 == 0`) and
+//         `num = 3` (`3 % 3 == 0`) pass while `num = 2` fails divisibility.
+//       - Branch `num = 1` calls `dfs(2, 0b001)`, where only `num = 2` (`2 % 2 ==
+//         0`) is valid at `pos = 2`, reaching `dfs(1, 0b011) = 1` and caching
+//         `memo[0b001] = 1`.
+//       - Branch `num = 3` calls `dfs(2, 0b100)`, where both `num = 1` (`2 % 1 ==
+//         0`) and `num = 2` (`2 % 2 == 0`) reach `pos = 1`, caching `memo[0b100] =
+//         2`.
+//       - Add the branch totals `1 + 2 = 3`, store `memo[0b000] = 3`, and return
+//         `3`.
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: 1
+//     Explanation:
+//       - Allocate `memo` of size `2^1 = 2` initialized to `-1` and invoke `dfs(1,
+//         0u)`.
+//       - Since `pos <= 1` holds immediately on entry, `dfs` returns `1` without
+//         looping, counting the single valid arrangement `[1]`.
+//
 // Algorithm:
 //   Top-down bitmask dynamic programming (memoized backtracking) filling
 //   positions backwards from `pos = n` down to `pos = 1`.

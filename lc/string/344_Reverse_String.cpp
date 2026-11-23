@@ -5,6 +5,40 @@
 //   Given a string represented as a mutable array of characters `s`, reverse
 //   the characters in place using O(1) extra memory.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = ['h', 'e', 'l', 'l', 'o']
+//     Output: ['o', 'l', 'l', 'e', 'h']
+//     Explanation:
+//       - Initialize left = 0 and right = 4 since s.size() == 5 >= 2.
+//       - Because left < right (0 < 4), swap s[0] ('h') and s[4] ('o') to get ['o',
+//         'e', 'l', 'l', 'h'], then advance to left = 1, right = 3.
+//       - Because left < right (1 < 3), swap s[1] ('e') and s[3] ('l') to get ['o',
+//         'l', 'l', 'e', 'h'], then advance to left = 2, right = 2.
+//       - Now left < right (2 < 2) is false, so the loop exits with s reversed in
+//         place to ['o', 'l', 'l', 'e', 'h'].
+//
+//   Example 2:
+//     Input:  s = ['H', 'a', 'n', 'n', 'a', 'h']
+//     Output: ['h', 'a', 'n', 'n', 'a', 'H']
+//     Explanation:
+//       - Initialize left = 0 and right = 5.
+//       - Swap s[0] ('H') and s[5] ('h') to get ['h', 'a', 'n', 'n', 'a', 'H'],
+//         advancing to left = 1, right = 4.
+//       - Swap s[1] with s[4] ('a' with 'a') and advance to left = 2, right = 3,
+//         then swap s[2] with s[3] ('n' with 'n') and advance to left = 3, right =
+//         2.
+//       - Since left < right (3 < 2) is false, the loop stops with s equal to ['h',
+//         'a', 'n', 'n', 'a', 'H'].
+//
+//   Example 3:
+//     Input:  s = ['x']
+//     Output: ['x']
+//     Explanation:
+//       - Check the guard s.size() < 2, which evaluates 1 < 2 as true.
+//       - Return immediately without performing any swaps, leaving s unchanged as
+//         ['x'].
+//
 // Algorithm:
 //   Use two opposite-direction pointers, `left` initialized to `0` and `right`
 //   initialized to `s.size() - 1`. While `left < right`, swap `s[left]` with

@@ -8,6 +8,42 @@
 //   separated string `preorder`, verify whether it represents a valid preorder
 //   serialization of a binary tree without reconstructing the tree.
 //
+// Examples:
+//   Example 1:
+//     Input:  preorder = "9,3,4,#,#,1,#,#,2,#,6,#,#"
+//     Output: true
+//     Explanation:
+//       - Initialize slots = 1 for the root; token "9" consumes 1 slot and opens 2
+//         child slots, updating slots from 1 -> 0 -> 2.
+//       - Tokens "3" and "4" each consume 1 slot and add 2, advancing slots from 2
+//         -> 3 -> 4, then two "#" tokens consume 1 slot each to leave slots = 2.
+//       - Token "1" changes slots 2 -> 1 -> 3, followed by two "#" tokens reducing
+//         slots to 1.
+//       - Tokens "2", "#", "6", "#", "#" update slots as 1 -> 2 -> 1 -> 2 -> 1 ->
+//         0, returning true because slots == 0 at the end.
+//
+//   Example 2:
+//     Input:  preorder = "9,#,#,1"
+//     Output: false
+//     Explanation:
+//       - Initialize slots = 1; token "9" decrements slots to 0 and adds 2 child
+//         slots so slots = 2.
+//       - The next two "#" tokens each decrement slots by 1, bringing slots to 0
+//         and closing the tree.
+//       - Token "1" decrements slots to -1 (< 0), immediately returning false
+//         because no open slot remains.
+//
+//   Example 3:
+//     Input:  preorder = "1,#"
+//     Output: false
+//     Explanation:
+//       - Initialize slots = 1; token "1" decrements slots to 0 and adds 2 child
+//         slots so slots = 2.
+//       - Token "#" decrements slots by 1 to leave slots = 1 without adding any new
+//         slots.
+//       - All tokens are exhausted while slots == 1 != 0 (one right-child slot
+//         remains unclosed), so isValidSerialization returns false.
+//
 // Algorithm:
 //   Two complementary linear-time verifiers are provided:
 //   1. Slot-Counting / Degree Balance (`isValidSerialization`):

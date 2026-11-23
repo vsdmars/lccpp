@@ -5,6 +5,48 @@
 //   Given an integer array `arr`, find the sum of `min(b)` over every
 //   contiguous subarray `b` of `arr`. Return the result modulo 10^9 + 7.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [3, 1, 2, 4]
+//     Output: 17
+//     Explanation:
+//       - Push index 0 (3); at i = 1 (1), arr[0] > arr[1] pops mid = 0 with
+//         left_span = 1 and right_span = 1, adding 3 * 1 * 1 = 3 to total before
+//         pushing index 1.
+//       - Indices 2 (2) and 3 (4) preserve non-decreasing order, leaving stack =
+//         [1, 2, 3].
+//       - At sentinel i = 4, popping mid = 3 (4) gives left_span = 3 - 2 = 1 and
+//         right_span = 4 - 3 = 1 (+4), and popping mid = 2 (2) gives left_span = 2
+//         - 1 = 1 and right_span = 4 - 2 = 2 (+4), bringing total to 11.
+//       - Popping mid = 1 (1) empties stack, giving left_span = 1 + 1 = 2 and
+//         right_span = 4 - 1 = 3 (+6), so sumSubarrayMins returns 17.
+//
+//   Example 2:
+//     Input:  arr = [11, 81, 94, 43, 3]
+//     Output: 444
+//     Explanation:
+//       - Indices 0, 1, and 2 (11, 81, 94) are increasing and push onto stack = [0,
+//         1, 2].
+//       - At i = 3 (43), pop mid = 2 (94) with spans 1 and 1 (+94) and mid = 1 (81)
+//         with spans 1 and 2 (+162), pushing 3 so stack = [0, 3] and total = 256.
+//       - At i = 4 (3), pop mid = 3 (43) with left_span = 3 - 0 = 3 and right_span
+//         = 1 (+129) and mid = 0 (11) with left_span = 1 and right_span = 4 (+44),
+//         pushing 4 so stack = [4] and total = 429.
+//       - At sentinel i = 5, pop mid = 4 (3) with left_span = 5 and right_span = 1
+//         (+15), returning total = 444.
+//
+//   Example 3:
+//     Input:  arr = [5, 5, 5]
+//     Output: 30
+//     Explanation:
+//       - Because the pop condition requires strict arr[stack.back()] > arr[i],
+//         equal values at i = 0, 1, 2 all push onto stack = [0, 1, 2].
+//       - At sentinel i = 3, popping mid = 2 gives left_span = 1 and right_span = 1
+//         (+5), and popping mid = 1 gives left_span = 1 and right_span = 2 (+10).
+//       - Popping mid = 0 leaves stack empty with left_span = 1 and right_span = 3
+//         (+15), totaling 5 + 10 + 15 = 30 without double-counting duplicate
+//         subarrays.
+//
 // Algorithm:
 //   Contribution technique powered by a monotonic non-decreasing stack.
 //   Instead of enumerating all O(N^2) subarrays, compute for each index `mid`

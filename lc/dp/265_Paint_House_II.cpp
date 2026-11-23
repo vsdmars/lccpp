@@ -7,6 +7,43 @@
 //   all n houses such that no two adjacent houses share the same color, and
 //   return the minimum total cost. Follow-up: solve in O(n * k) time.
 //
+// Examples:
+//   Example 1:
+//     Input:  costs = [[1, 5, 3], [2, 9, 4]]
+//     Output: 5
+//     Explanation:
+//       - Initialize prev_min1 = 0, prev_min2 = 0, and prev_min1_color = kNoColor.
+//       - On house 0 ([1, 5, 3]), all colors add prev_best = 0 to produce totals
+//         [1, 5, 3], updating prev_min1 = 1, prev_min2 = 3, and prev_min1_color =
+//         0.
+//       - On house 1 ([2, 9, 4]), color 0 matches prev_min1_color = 0 and uses
+//         prev_min2 = 3 (total 2 + 3 = 5), while colors 1 and 2 use prev_min1 = 1
+//         (totals 10 and 5).
+//       - The row summary updates prev_min1 = 5 and prev_min2 = 5, and minCostII
+//         returns 5.
+//
+//   Example 2:
+//     Input:  costs = [[2, 2, 9], [1, 8, 9]]
+//     Output: 3
+//     Explanation:
+//       - On house 0 ([2, 2, 9]), color 0 sets curr_min1 = 2 (curr_min1_color = 0),
+//         tied color 1 sets curr_min2 = 2, and color 2 gives 9, leaving prev_min1 =
+//         2, prev_min2 = 2, and prev_min1_color = 0.
+//       - On house 1 ([1, 8, 9]), color 0 matches prev_min1_color = 0 and falls
+//         back to prev_min2 = 2 for total 1 + 2 = 3, while colors 1 and 2 yield 10
+//         and 11.
+//       - Updating prev_min1 to 3 completes the loop and returns 3.
+//
+//   Example 3:
+//     Input:  costs = [[8]]
+//     Output: 8
+//     Explanation:
+//       - With num_colors = 1, start with prev_min1 = 0, prev_min2 = 0, and
+//         prev_min1_color = kNoColor.
+//       - On house 0 ([8]), color 0 differs from kNoColor and uses prev_best =
+//         prev_min1 = 0, giving total = 8 + 0 = 8 and setting prev_min1 = 8 before
+//         returning 8.
+//
 // Algorithm:
 //   Bottom-up dynamic programming optimized to O(n * k) time and O(1) space.
 //   Naively computing dp[i][j] = costs[i][j] + min_{c != j} dp[i - 1][c] takes

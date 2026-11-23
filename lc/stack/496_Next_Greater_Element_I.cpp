@@ -7,6 +7,44 @@
 //   find the first element strictly greater than `x` appearing to the right of
 //   `x` in `nums2`, or `-1` if no such element exists.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums1 = [4, 1, 2], nums2 = [1, 3, 4, 2]
+//     Output: [-1, 3, -1]
+//     Explanation:
+//       - Reverse-scan nums2 starting at 2: stack is empty, so record
+//         next_greater[2] = -1 and push 2 (stack = [2]).
+//       - At 4, pop 2 (2 <= 4) leaving an empty stack, record next_greater[4] = -1,
+//         and push 4 (stack = [4]).
+//       - At 3, stack top 4 > 3 remains, so record next_greater[3] = 4 and push 3
+//         (stack = [4, 3]).
+//       - At 1, stack top 3 > 1 remains, so record next_greater[1] = 3 and push 1
+//         (stack = [4, 3, 1]).
+//       - Look up each element of nums1 = [4, 1, 2] in next_greater to return [-1,
+//         3, -1].
+//
+//   Example 2:
+//     Input:  nums1 = [2, 4], nums2 = [1, 2, 3, 4]
+//     Output: [3, -1]
+//     Explanation:
+//       - Reverse-scan nums2 from 4 down to 1; each value is strictly smaller than
+//         the previous stack top, so no elements are popped.
+//       - The scan builds stack [4], [4, 3], [4, 3, 2], [4, 3, 2, 1] and records
+//         next_greater[4] = -1, next_greater[3] = 4, next_greater[2] = 3, and
+//         next_greater[1] = 2.
+//       - Querying nums1 = [2, 4] in next_greater returns [3, -1].
+//
+//   Example 3:
+//     Input:  nums1 = [5, 3, 1], nums2 = [5, 4, 3, 2, 1]
+//     Output: [-1, -1, -1]
+//     Explanation:
+//       - Start reverse-scanning nums2 at 1: stack is empty, so record
+//         next_greater[1] = -1 and push 1 (stack = [1]).
+//       - At each subsequent element (2, 3, 4, 5), the current value is >= the
+//         stack top, popping the stack empty and storing -1 in next_greater for all
+//         five values.
+//       - Looking up nums1 = [5, 3, 1] in next_greater produces [-1, -1, -1].
+//
 // Algorithm:
 //   Right-to-left monotonic decreasing stack + hash map lookup:
 //   1. Traverse `nums2` in reverse order while maintaining a strictly

@@ -8,6 +8,44 @@
 //   may execute other tasks or stay idle), return the minimum total number of
 //   intervals required to complete all tasks.
 //
+// Examples:
+//   Example 1:
+//     Input:  tasks = ['A', 'A', 'A', 'B', 'B', 'B'], n = 2
+//     Output: 8
+//     Explanation:
+//       - Tally task frequencies in freq: 'A' appears 3 times and 'B' appears 3
+//         times.
+//       - Find max_freq = 3 and max_count = 2 since both 'A' and 'B' share the
+//         maximum frequency.
+//       - Compute frame_intervals = ((3 - 1) * (2 + 1)) + 2 = 8 for 2 frames of
+//         width 3 plus the final 2-task tail.
+//       - Return max(tasks.size(), frame_intervals) = max(6, 8) = 8.
+//
+//   Example 2:
+//     Input:  tasks = ['A', 'A', 'A', 'A', 'A', 'A', 'B', 'C', 'D', 'E', 'F', 'G'],
+//             n = 2
+//     Output: 16
+//     Explanation:
+//       - Tally task frequencies: 'A' occurs 6 times while 'B', 'C', 'D', 'E', 'F',
+//         and 'G' each occur 1 time.
+//       - Find max_freq = 6 and max_count = 1 since only 'A' has frequency 6.
+//       - Compute frame_intervals = ((6 - 1) * (2 + 1)) + 1 = 16.
+//       - Return max(tasks.size(), frame_intervals) = max(12, 16) = 16.
+//
+//   Example 3:
+//     Input:  tasks = ['A', 'A', 'A', 'A', 'B', 'B', 'B', 'B', 'C', 'C', 'C', 'C',
+//             'D', 'D', 'D', 'E', 'E', 'E', 'F', 'F', 'G', 'G', 'H', 'H', 'J', 'J',
+//             'K', 'K'], n = 6
+//     Output: 28
+//     Explanation:
+//       - Tally all 28 tasks: 'A', 'B', 'C' have frequency 4; 'D', 'E' have
+//         frequency 3; 'F', 'G', 'H', 'J', 'K' have frequency 2.
+//       - Find max_freq = 4 and max_count = 3 for the three tasks tied at frequency
+//         4.
+//       - Compute frame_intervals = ((4 - 1) * (6 + 1)) + 3 = 24.
+//       - Because tasks.size() (28) exceeds frame_intervals (24), all idle slots
+//         are filled and max(28, 24) = 28 is returned.
+//
 // Algorithm:
 //   Use the greedy frame-construction counting formula:
 //     1. Tally the frequency of each task letter 'A'-'Z' in a 26-element array.

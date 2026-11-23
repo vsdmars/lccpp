@@ -11,6 +11,42 @@
 //   Constraints: 1 <= schedule.size() <= 50, each employee has 1..50 intervals
 //   (empty lists are handled gracefully), 0 <= start < end <= 10^8.
 //
+// Examples:
+//   Example 1:
+//     Input:  schedule = [[[1, 2], [5, 6]], [[1, 3]], [[4, 10]]]
+//     Output: [[3, 4]]
+//     Explanation:
+//       - Seed min_heap with each employee's first interval: [1, 2] (emp 0), [1, 3]
+//         (emp 1), and [4, 10] (emp 2).
+//       - Pop [1, 2] to initialize current_end = 2 and push [5, 6] (emp 0), then
+//         pop [1, 3] where 1 <= 2 and update current_end = max(2, 3) = 3.
+//       - Pop [4, 10], where 4 > current_end (3), so record the free gap [3, 4] and
+//         set current_end = 10.
+//       - Pop [5, 6], where 5 <= 10 adds no gap, returning [[3, 4]].
+//
+//   Example 2:
+//     Input:  schedule = [[[1, 3], [6, 7]], [[2, 4]], [[2, 5], [9, 12]]]
+//     Output: [[5, 6], [7, 9]]
+//     Explanation:
+//       - Seed min_heap with [1, 3] (emp 0), [2, 4] (emp 1), and [2, 5] (emp 2).
+//       - Pop [1, 3] (current_end = 3, push [6, 7]), [2, 4] (2 <= 3, current_end =
+//         4), and [2, 5] (2 <= 4, current_end = 5, push [9, 12]).
+//       - Pop [6, 7], where 6 > current_end (5), so append [5, 6] and update
+//         current_end = 7.
+//       - Pop [9, 12], where 9 > current_end (7), so append [7, 9] and update
+//         current_end = 12, returning [[5, 6], [7, 9]].
+//
+//   Example 3:
+//     Input:  schedule = [[[1, 2], [2, 5]], [[2, 4], [4, 8]]]
+//     Output: []
+//     Explanation:
+//       - Seed min_heap with [1, 2] (emp 0) and [2, 4] (emp 1); popping [1, 2] sets
+//         current_end = 2 and pushes [2, 5].
+//       - Pop [2, 4] (2 <= 2, current_end = 4, push [4, 8]), then pop [2, 5] (2 <=
+//         4, current_end = 5).
+//       - Pop [4, 8] (4 <= 5, current_end = 8); because iv.start > current_end is
+//         never satisfied, return [].
+//
 // Algorithm:
 //   Two approaches are implemented:
 //   1. `employeeFreeTime` (K-way min-heap merge): Push each non-empty

@@ -8,6 +8,43 @@
 //   `nums`, and equal consecutive elements count as non-decreasing. The output
 //   subsequences may be returned in any order.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [4, 6, 7, 7]
+//     Output: [[4, 6], [4, 6, 7], [4, 6, 7, 7], [4, 7], [4, 7, 7], [6, 7], [6, 7,
+//             7], [7, 7]]
+//     Explanation:
+//       - At dfs(0), pick 4 (i = 0) and then in dfs(1) pick 6 (i = 1) so path = [4,
+//         6] reaches length 2 and is recorded.
+//       - From path = [4, 6], dfs(2) picks 7 at i = 2 to record [4, 6, 7] and then
+//         7 at i = 3 to record [4, 6, 7, 7]; back in dfs(2), i = 3 (7) is skipped
+//         by the local used set.
+//       - Continuing dfs(1) with path = [4], i = 2 (7) records [4, 7] and [4, 7, 7]
+//         while i = 3 is skipped, and top-level dfs(0) similarly produces [6, 7],
+//         [6, 7, 7], and [7, 7] without duplicating 7.
+//
+//   Example 2:
+//     Input:  nums = [4, 4, 3, 2, 1]
+//     Output: [[4, 4]]
+//     Explanation:
+//       - At dfs(0), pick nums[0] = 4 and enter dfs(1) with path = [4].
+//       - In dfs(1), nums[1] = 4 >= path.back() extends path to [4, 4] and records
+//         it, while nums[2..4] (3, 2, 1) are all < 4 and skipped.
+//       - Returning to dfs(0), nums[1] = 4 is skipped via used, and starting with
+//         3, 2, or 1 finds no subsequent element >= path.back(), returning [[4,
+//         4]].
+//
+//   Example 3:
+//     Input:  nums = [5, 4, 3, 2, 1]
+//     Output: []
+//     Explanation:
+//       - At dfs(0), each element 5, 4, 3, 2, 1 is tried as the single-element
+//         starting path (length 1 < 2, so nothing is recorded).
+//       - For any starting index k, every subsequent element nums[i] (i > k)
+//         satisfies nums[i] < path.back() and is skipped by the non-decreasing
+//         check.
+//       - No branch ever reaches path.size() >= 2, so findSubsequences returns [].
+//
 // Algorithm:
 //   Depth-first backtracking with per-level deduplication. Starting from index
 //   `start`, we try extending the current non-decreasing prefix `path` with

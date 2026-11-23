@@ -6,6 +6,40 @@
 //   can be reordered (including leaving them in their original order) with no
 //   leading zero to form a power of two.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 1
+//     Output: true
+//     Explanation:
+//       - Compute target_counts for n = 1, recording counts[1] = 1 and 0 for all
+//         other digits.
+//       - Start iterating bit from 0 to 30; at bit = 0, power_of_two = 1ULL << 0 =
+//         1 has digitCounts(1) equal to target_counts.
+//       - Return true immediately on the match.
+//
+//   Example 2:
+//     Input:  n = 10
+//     Output: false
+//     Explanation:
+//       - Compute target_counts for n = 10, yielding counts[0] = 1, counts[1] = 1,
+//         and 0 elsewhere.
+//       - Test every power of two from 2^0 = 1 through 2^30 = 1073741824; the only
+//         two-digit powers of two are 16, 32, and 64, none of which have one '0'
+//         and one '1'.
+//       - Finish the loop with no matching histogram (eliminating '01' due to the
+//         no-leading-zero invariant) and return false.
+//
+//   Example 3:
+//     Input:  n = 4201
+//     Output: true
+//     Explanation:
+//       - Compute target_counts for n = 4201, producing counts[0] = 1, counts[1] =
+//         1, counts[2] = 1, counts[4] = 1, and 0 for other digits.
+//       - Check powers 2^0 through 2^9 (1 through 512), none of which match
+//         target_counts.
+//       - At bit = 10, power_of_two = 1024 has digitCounts(1024) matching counts[0]
+//         = counts[1] = counts[2] = counts[4] = 1, so return true.
+//
 // Algorithm:
 //   Two positive integers without leading zeros are digit permutations of each
 //   other if and only if they have identical frequency counts for every digit

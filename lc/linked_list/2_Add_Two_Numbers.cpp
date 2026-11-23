@@ -8,6 +8,40 @@
 //   as a newly constructed linked list in the same reverse-digit format.
 //   Neither input has leading zeros except the number 0 itself.
 //
+// Examples:
+//   Example 1:
+//     Input:  l1 = [2, 4, 3], l2 = [5, 6, 4]
+//     Output: [7, 0, 8]
+//     Explanation:
+//       - Start with carry = 0 and dummy node dummy(0).
+//       - First position computes sum = 2 + 5 + 0 = 7, appends node 7, and sets
+//         carry = 0.
+//       - Second position computes sum = 4 + 6 + 0 = 10, appends node 0, and sets
+//         carry = 1.
+//       - Third position computes sum = 3 + 4 + 1 = 8, appends node 8, sets carry =
+//         0, and terminates with [7, 0, 8].
+//
+//   Example 2:
+//     Input:  l1 = [9, 9, 9, 9, 9, 9, 9], l2 = [9, 9, 9, 9]
+//     Output: [8, 9, 9, 9, 0, 0, 0, 1]
+//     Explanation:
+//       - Position 1 adds 9 + 9 + 0 = 18 to append 8 with carry = 1, and positions
+//         2 through 4 each add 9 + 9 + 1 = 19 to append 9 with carry = 1.
+//       - After l2 is exhausted, positions 5 through 7 each add l1's remaining 9
+//         with carry = 1 (sum = 10) to append 0 and keep carry = 1.
+//       - With both lists exhausted and carry = 1 remaining, run one final
+//         iteration (sum = 1) to append 1 and return [8, 9, 9, 9, 0, 0, 0, 1].
+//
+//   Example 3:
+//     Input:  l1 = [0], l2 = [0]
+//     Output: [0]
+//     Explanation:
+//       - Start with carry = 0 and enter the loop because l1 and l2 are non-null.
+//       - Compute sum = 0 + 0 + 0 = 0, update carry = 0, and append a single node
+//         with value 0.
+//       - Both l1 and l2 are now nullptr and carry is 0, so the loop exits and
+//         returns [0].
+//
 // Algorithm:
 //   Simulate elementary school column-by-column addition from least significant
 //   to most significant digit using a sentinel dummy head and a running `carry`.

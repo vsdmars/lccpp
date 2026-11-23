@@ -7,6 +7,46 @@
 //   the smallest possible. Return the answer as a string with no leading zeros
 //   (returning `"0"` if all digits are removed or only zeros remain).
 //
+// Examples:
+//   Example 1:
+//     Input:  num = "1432219", k = 3
+//     Output: "1219"
+//     Explanation:
+//       - Start with stack = "" and remaining = 3, pushing '1' then '4' to get
+//         stack = "14".
+//       - At '3', pop '4' since '4' > '3' and remaining = 3 > 0 (remaining = 2),
+//         then push '3' (stack = "13").
+//       - At the first '2', pop '3' (remaining = 1) and push '2' (stack = "12"); at
+//         the second '2', '2' > '2' is false so push it (stack = "122").
+//       - At '1', pop '2' (remaining = 0) and push '1' (stack = "121"); with
+//         remaining == 0, push '9' unchanged to form "1219".
+//       - strip_leading_zeros("1219") finds '1' at index 0 and returns "1219".
+//
+//   Example 2:
+//     Input:  num = "10200", k = 1
+//     Output: "200"
+//     Explanation:
+//       - Start with stack = "" and remaining = 1, pushing '1' so stack = "1".
+//       - At '0', pop '1' since '1' > '0' and remaining = 1 > 0 (remaining = 0),
+//         then push '0' (stack = "0").
+//       - With remaining == 0, push the remaining digits '2', '0', '0' directly to
+//         obtain stack = "0200".
+//       - strip_leading_zeros("0200") finds the first non-zero character '2' at
+//         index 1 and returns "200".
+//
+//   Example 3:
+//     Input:  num = "100000", k = 3
+//     Output: "0"
+//     Explanation:
+//       - Push '1' onto stack, then at the first '0' pop '1' (remaining = 2) and
+//         push '0' (stack = "0").
+//       - The next four '0' digits do not trigger pops since '0' > '0' is false,
+//         leaving stack = "00000" and remaining = 2.
+//       - Because remaining > 0 after the scan, resize stack from length 5 to 5 - 2
+//         = 3 ("000").
+//       - strip_leading_zeros("000") finds no non-zero digit (npos) and returns
+//         "0".
+//
 // Algorithm:
 //   Greedy monotonic non-decreasing stack:
 //   - Leftmost digits carry the highest place value. Whenever a digit `d` is

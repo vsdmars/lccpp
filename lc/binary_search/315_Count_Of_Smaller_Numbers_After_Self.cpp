@@ -7,6 +7,51 @@
 //   than nums[i] that appear to the right of index i (i.e., j > i with
 //   nums[j] < nums[i]).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [5, 2, 6, 1]
+//     Output: [2, 1, 1, 0]
+//     Explanation:
+//       - Pair each value with its original index: [(5, 0), (2, 1), (6, 2), (1,
+//         3)], and split at mid = 2.
+//       - Merge left halves [(5, 0)] and [(2, 1)]: (2, 1) emits first
+//         (right_smaller = 1), so (5, 0) adds 1 to counts[0], yielding [(2, 1), (5,
+//         0)].
+//       - Merge right halves [(6, 2)] and [(1, 3)]: (1, 3) emits first
+//         (right_smaller = 1), so (6, 2) adds 1 to counts[2], yielding [(1, 3), (6,
+//         2)].
+//       - Merge [(2, 1), (5, 0)] and [(1, 3), (6, 2)]: (1, 3) emits first
+//         (right_smaller = 1), then (2, 1) and (5, 0) each add 1 to counts[1] and
+//         counts[0] before (6, 2) emits, returning [2, 1, 1, 0].
+//
+//   Example 2:
+//     Input:  nums = [2, 0, 1, 2, 0]
+//     Output: [3, 0, 1, 1, 0]
+//     Explanation:
+//       - Split [0, 5) at mid = 2: sorting [0, 2) pairs [(0, 1), (2, 0)] with
+//         counts[0] = 1, and sorting [2, 5) produces [(0, 4), (1, 2), (2, 3)] with
+//         counts[2] = 1 and counts[3] = 1.
+//       - In the top-level merge, compare (0, 4) vs (0, 1): equality takes the left
+//         element (0, 1) first so equal right values are not counted, adding 0 to
+//         counts[1].
+//       - Next, (0, 4) < (2, 0) and (1, 2) < (2, 0) emit from the right,
+//         incrementing right_smaller to 2.
+//       - Compare (2, 3) vs (2, 0): equality again takes the left element (2, 0)
+//         first, adding right_smaller = 2 to counts[0] (1 + 2 = 3) and returning
+//         [3, 0, 1, 1, 0].
+//
+//   Example 3:
+//     Input:  nums = [-1, -1]
+//     Output: [0, 0]
+//     Explanation:
+//       - Pair elements with indices as [(-1, 0), (-1, 1)] and split at mid = 1
+//         into [(-1, 0)] and [(-1, 1)].
+//       - During mergeRanges, items[right_idx].value < items[left_idx].value (-1 <
+//         -1) is false, so the left item (-1, 0) is emitted first while
+//         right_smaller = 0.
+//       - The remaining right item (-1, 1) is emitted without incrementing any
+//         counts, returning [0, 0].
+//
 // Algorithm:
 //   Divide-and-conquer Merge Sort with Original Indices:
 //   Pair every element with its original index `(value, index)` and perform a

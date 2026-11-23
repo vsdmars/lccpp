@@ -5,6 +5,35 @@
 //   Given a valid IPv4 address string `address`, return its "defanged" version
 //   by replacing every period character '.' with "[.]".
 //
+// Examples:
+//   Example 1:
+//     Input:  address = "1.1.1.1"
+//     Output: "1[.]1[.]1[.]1"
+//     Explanation:
+//       - Pre-reserve result with capacity address.size() + 6 = 13 bytes so no
+//         reallocations occur.
+//       - Scan left to right, copying each '1' directly and appending "[.]"
+//         whenever '.' is encountered.
+//       - After processing all 7 input characters and 3 dots, return the
+//         13-character string "1[.]1[.]1[.]1".
+//
+//   Example 2:
+//     Input:  address = "255.100.50.0"
+//     Output: "255[.]100[.]50[.]0"
+//     Explanation:
+//       - Pre-reserve result for 12 + 6 = 18 bytes before scanning address.
+//       - Push digits "255", replace the first '.' with "[.]", then continue
+//         copying "100", "[.]", "50", "[.]", and "0".
+//       - Return the completed string "255[.]100[.]50[.]0".
+//
+//   Example 3:
+//     Input:  address = "0.0.0.0"
+//     Output: "0[.]0[.]0[.]0"
+//     Explanation:
+//       - Pre-reserve 7 + 6 = 13 bytes in result.
+//       - Copy each '0' as-is and expand each of the three '.' characters into
+//         "[.]" during the single pass, returning "0[.]0[.]0[.]0".
+//
 // Algorithm:
 //   Perform a single linear pass over `address`, copying every non-period
 //   character directly into a pre-reserved output string and expanding every

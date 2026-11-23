@@ -13,6 +13,40 @@
 //     right child at the midpoint of `[c + 1, rhs]` on row `r + 1`.
 //   - Every unoccupied cell contains the empty string `""`.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2]
+//     Output: [["", "1", ""], ["2", "", ""]]
+//     Explanation:
+//       - get_height returns rows = 2, so cols = (1 << 2) - 1 = 3 and a 2 x 3 grid
+//         of "" is allocated.
+//       - fill(1, row=0, lhs=0, rhs=2) computes mid = 0 + (2 - 0) / 2 = 1 and
+//         writes "1" at grid[0][1].
+//       - Recursing on non-null left child 2 with (row=1, lhs=0, rhs=0) computes
+//         mid = 0 and writes "2" at grid[1][0].
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, null, 4]
+//     Output: [["", "", "", "1", "", "", ""], ["", "2", "", "", "", "3", ""], ["",
+//             "", "4", "", "", "", ""]]
+//     Explanation:
+//       - get_height returns rows = 3, giving cols = (1 << 3) - 1 = 7 columns
+//         initialized to "".
+//       - Root 1 spans [0, 6] to place "1" at grid[0][3], splitting into left child
+//         2 on [0, 2] (grid[1][1] = "2") and right child 3 on [4, 6] (grid[1][5] =
+//         "3").
+//       - Node 2 skips its null left child and places right child 4 on [mid + 1,
+//         rhs] = [2, 2] at grid[2][2].
+//
+//   Example 3:
+//     Input:  root = [-1, null, -2]
+//     Output: [["", "-1", ""], ["", "", "-2"]]
+//     Explanation:
+//       - get_height returns rows = 2, yielding a 2 x 3 grid of "" strings.
+//       - Root -1 bisects [0, 2] to mid = 1 and places "-1" at grid[0][1].
+//       - Its null left child is skipped while right child -2 bisects [2, 2] to
+//         place "-2" at grid[1][2].
+//
 // Algorithm:
 //   Two-pass recursive DFS:
 //   1. Compute tree height `H` (number of levels) via post-order DFS.

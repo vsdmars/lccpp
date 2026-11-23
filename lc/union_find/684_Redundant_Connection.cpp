@@ -9,6 +9,41 @@
 //   nodes. If multiple edges qualify, return the one that appears last in
 //   `edges`. Typical constraints: 3 <= n <= 1000, no duplicate edges.
 //
+// Examples:
+//   Example 1:
+//     Input:  edges = [[1, 2], [1, 3], [2, 3]]
+//     Output: [2, 3]
+//     Explanation:
+//       - Scan edges to find max_node = 3 and initialize DisjointSet(4) with each
+//         node as its own parent.
+//       - Process [1, 2]: find(1) = 1 and find(2) = 2 differ, so unite(1, 2) merges
+//         {1, 2} under root 1 and returns true.
+//       - Process [1, 3]: find(1) = 1 and find(3) = 3 differ, so unite(1, 3) merges
+//         {1, 2, 3} under root 1 and returns true.
+//       - Process [2, 3]: both find(2) and find(3) return 1, so unite(2, 3) returns
+//         false and [2, 3] is returned as the redundant edge.
+//
+//   Example 2:
+//     Input:  edges = [[1, 2], [2, 3], [3, 4], [1, 4], [1, 5]]
+//     Output: [1, 4]
+//     Explanation:
+//       - Initialize DisjointSet(6) since max_node = 5.
+//       - Edges [1, 2], [2, 3], and [3, 4] unite distinct components until {1, 2,
+//         3, 4} all share root 1.
+//       - On edge [1, 4], find(1) = 1 and find(4) = 1 already match, so unite(1, 4)
+//         returns false and returns [1, 4] immediately without inspecting [1, 5].
+//
+//   Example 3:
+//     Input:  edges = [[1, 2], [2, 3], [3, 4], [4, 5], [5, 2]]
+//     Output: [5, 2]
+//     Explanation:
+//       - Initialize DisjointSet(6) for nodes 1 through 5.
+//       - Process [1, 2], [2, 3], [3, 4], and [4, 5] in order; each unites two
+//         separate sets until all five nodes belong to the same component rooted at
+//         1.
+//       - On the final edge [5, 2], find(5) = 1 equals find(2) = 1, so unite(5, 2)
+//         returns false and returns [5, 2].
+//
 // Algorithm:
 //   Incremental Cycle Detection via Disjoint Set Union (Union-Find):
 //   1. Determine `max_node` across `edges` and initialize a 1-indexed

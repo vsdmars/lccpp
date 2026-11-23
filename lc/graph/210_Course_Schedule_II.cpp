@@ -8,6 +8,38 @@
 //   prerequisite. If multiple valid orderings exist, return any of them; if no
 //   valid ordering exists (due to a cycle), return an empty vector.
 //
+// Examples:
+//   Example 1:
+//     Input:  numCourses = 2, prerequisites = [[1, 0]]
+//     Output: [0, 1]
+//     Explanation:
+//       - Build adj = [[], [0]] and initialize state = [kUnvisited, kUnvisited],
+//         order = [].
+//       - Run dfs(0): course 0 has no prerequisites, so it becomes kVisited and
+//         appends 0 to order ([0]).
+//       - Run dfs(1): prerequisite 0 is already kVisited, so course 1 becomes
+//         kVisited and appends 1, returning [0, 1].
+//
+//   Example 2:
+//     Input:  numCourses = 4, prerequisites = [[1, 0], [2, 0], [3, 1], [3, 2]]
+//     Output: [0, 1, 2, 3]
+//     Explanation:
+//       - Build adj = [[], [0], [0], [1, 2]] and initialize order = [].
+//       - Looping c = 0, 1, 2 runs dfs(0) -> appends 0, then dfs(1) sees 0 is
+//         kVisited -> appends 1, then dfs(2) sees 0 is kVisited -> appends 2.
+//       - Run dfs(3): both neighbors 1 and 2 are already kVisited, so course 3
+//         becomes kVisited and appends 3, returning [0, 1, 2, 3].
+//
+//   Example 3:
+//     Input:  numCourses = 2, prerequisites = [[1, 0], [0, 1]]
+//     Output: []
+//     Explanation:
+//       - Build adj = [[1], [0]] with state = [kUnvisited, kUnvisited].
+//       - Run dfs(0): mark state[0] = kVisiting, recurse into dfs(1) which marks
+//         state[1] = kVisiting, and inspect neighbor 0.
+//       - Seeing state[0] == kVisiting detects a directed cycle, causing dfs(0) to
+//         return false and findOrder to return [].
+//
 // Algorithm:
 //   Build a directed adjacency list with edges oriented `course -> prereq`,
 //   then run a post-order 3-state DFS (`kUnvisited`, `kVisiting`, `kVisited`)

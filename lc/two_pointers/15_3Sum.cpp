@@ -7,6 +7,43 @@
 //   and `nums[i] + nums[j] + nums[k] == 0`. The result set must not contain
 //   duplicate triplets.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [-1, 0, 1, 2, -1, -4]
+//     Output: [[-1, -1, 2], [-1, 0, 1]]
+//     Explanation:
+//       - Sort nums ascending to [-4, -1, -1, 0, 1, 2].
+//       - For anchor i = 0 (-4), left starts at 1 (-1) and right at 5 (2); even at
+//         left = 4 (1) and right = 5 (2) the sum -4 + 1 + 2 = -1 < 0, so no triplet
+//         is found.
+//       - For anchor i = 1 (-1), left = 2 (-1) and right = 5 (2) sum to 0,
+//         recording [-1, -1, 2] and advancing to left = 3 (0), right = 4 (1), which
+//         also sums to 0 and records [-1, 0, 1].
+//       - Anchor i = 2 (-1) is skipped because nums[2] == nums[1], and anchor i = 3
+//         (0) yields 0 + 1 + 2 = 3 > 0, returning [[-1, -1, 2], [-1, 0, 1]].
+//
+//   Example 2:
+//     Input:  nums = [-2, 0, 0, 2, 2]
+//     Output: [[-2, 0, 2]]
+//     Explanation:
+//       - The sorted array is [-2, 0, 0, 2, 2], and anchor i = 0 (-2) begins with
+//         left = 1 (0) and right = 4 (2).
+//       - The triplet -2 + 0 + 2 = 0 is recorded as [-2, 0, 2], then left
+//         increments past the duplicate 0 at index 2 and right decrements past the
+//         duplicate 2 at index 3 until left >= right.
+//       - Anchor i = 1 (0) produces only sums >= 2 and anchor i = 2 (0) is skipped
+//         as a duplicate, returning [[-2, 0, 2]].
+//
+//   Example 3:
+//     Input:  nums = [0, 1, 1]
+//     Output: []
+//     Explanation:
+//       - The sorted array remains [0, 1, 1], with last_anchor = nums.size() - 2 =
+//         1.
+//       - At anchor i = 0 (0), left = 1 (1) and right = 2 (1) give sum = 0 + 1 + 1
+//         = 2 > 0, decrementing right to 1 and ending the two-pointer scan.
+//       - The outer loop terminates with no zero-sum triplets found and returns [].
+//
 // Algorithm:
 //   Sort-and-two-pointers. Sort `nums` in ascending order so duplicates sit
 //   adjacent and target sums can be searched monotonically. Fix the smallest

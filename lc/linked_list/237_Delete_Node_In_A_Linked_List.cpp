@@ -9,6 +9,33 @@
 //   decreases by 1, and all values before and after `node` retain their
 //   relative order.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [4, 5, 1, 9], node = node(5) at index 1
+//     Output: head = [4, 1, 9]
+//     Explanation:
+//       - Verify node != nullptr and node->next != nullptr, then set successor =
+//         node->next = node(1).
+//       - Overwrite node->val with successor->val (5 becomes 1) and relink
+//         node->next = successor->next (node(9)), transforming [4, 5, 1, 9] into
+//         [4, 1, 9].
+//
+//   Example 2:
+//     Input:  head = [4, 5, 1, 9], node = node(1) at index 2
+//     Output: head = [4, 5, 9]
+//     Explanation:
+//       - Identify successor = node->next = node(9).
+//       - Copy 9 into node->val (replacing 1) and set node->next = successor->next
+//         (nullptr), leaving [4, 5, 9].
+//
+//   Example 3:
+//     Input:  head = [10, 20], node = node(10) at index 0
+//     Output: head = [20]
+//     Explanation:
+//       - Identify successor = node->next = node(20).
+//       - Copy 20 into node->val (replacing 10) and set node->next =
+//         successor->next (nullptr), yielding [20].
+//
 // Algorithm:
 //   Successor-copy and bypass (value overwrite trick):
 //   Because a singly linked list provides no pointer back to the predecessor of

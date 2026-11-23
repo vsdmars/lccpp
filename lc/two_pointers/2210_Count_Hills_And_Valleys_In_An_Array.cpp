@@ -12,6 +12,41 @@
 //     - 3 <= nums.length <= 100
 //     - 1 <= nums[i] <= 100
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 4, 1, 1, 6, 5]
+//     Output: 3
+//     Explanation:
+//       - Initialize left = 0 (nums[0] = 2) and count = 0; at i = 1 (nums[1] = 4),
+//         4 > nums[0] (2) and 4 > nums[2] (1) detects a hill, setting count = 1 and
+//         left = 1.
+//       - At i = 2 (nums[2] = 1), nums[2] == nums[3] (1) fails both strict
+//         comparisons, deferring the flat plateau without changing left or count.
+//       - At i = 3 (nums[3] = 1), 1 < nums[1] (4) and 1 < nums[4] (6) detects the
+//         end of the valley plateau, incrementing count to 2 and setting left = 3.
+//       - At i = 4 (nums[4] = 6), 6 > nums[3] (1) and 6 > nums[5] (5) detects a
+//         hill, incrementing count to 3 and returning 3.
+//
+//   Example 2:
+//     Input:  nums = [6, 6, 5, 5, 4, 1]
+//     Output: 0
+//     Explanation:
+//       - Initialize left = 0 (nums[0] = 6) and count = 0.
+//       - Across i = 1 to 4, the sequence 6, 5, 5, 4 is non-increasing, so nums[i]
+//         <= nums[left] and nums[i] >= nums[i + 1] at every index.
+//       - Neither is_hill nor is_valley ever becomes true, so left stays 0 and
+//         count = 0 is returned.
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 2, 3, 2]
+//     Output: 1
+//     Explanation:
+//       - Initialize left = 0 (nums[0] = 1) and count = 0; at i = 1 (nums[1] = 2)
+//         and i = 2 (nums[2] = 2), nums[i] <= nums[i + 1] holds, so left remains 0.
+//       - At i = 3 (nums[3] = 3), 3 > nums[0] (1) and 3 > nums[4] (2) identifies a
+//         single hill after the stepped ascent.
+//       - Increment count to 1, update left = 3, and return 1.
+//
 // Algorithm:
 //   Primary (Single-Pass Two Pointers):
 //     Maintain a pointer `left` recording the index of the most recent

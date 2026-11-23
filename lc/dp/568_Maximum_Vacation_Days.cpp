@@ -11,6 +11,45 @@
 //   fly immediately on Monday morning), return the maximum total vacation days
 //   achievable over all K weeks.
 //
+// Examples:
+//   Example 1:
+//     Input:  flights = [[0, 1, 1], [1, 0, 1], [1, 1, 0]], days = [[1, 3, 1], [6,
+//             0, 3], [3, 3, 3]]
+//     Output: 12
+//     Explanation:
+//       - Initialize dp = [0, -inf, -inf] so only city 0 is reachable before week
+//         0.
+//       - In week 0, city 0 relaxes all valid transitions (stay at 0 or fly to 1 or
+//         2), producing dp = [1, 6, 3].
+//       - In week 1, city 1 (dp[1] = 6) yields the best values when flying to city
+//         0 (6 + 3 = 9) or city 2 (6 + 3 = 9), updating dp = [9, 6, 9].
+//       - In week 2, cities 0 and 2 (dp = 9) can reach city 1 or 2 for +3 days,
+//         giving dp = [10, 12, 12] and max(dp) = 12.
+//
+//   Example 2:
+//     Input:  flights = [[0, 0, 0], [0, 0, 0], [0, 0, 0]], days = [[1, 1, 1], [7,
+//             7, 7], [7, 7, 7]]
+//     Output: 3
+//     Explanation:
+//       - Initialize dp = [0, -inf, -inf] with only city 0 reachable.
+//       - In week 0, flights[0][1] and flights[0][2] are 0, so only staying at city
+//         0 is relaxed and dp becomes [1, -inf, -inf].
+//       - In weeks 1 and 2, cities 1 and 2 remain kUnreachable and are skipped,
+//         while city 0 accumulates +1 each week to end at dp = [3, -inf, -inf] with
+//         max(dp) = 3.
+//
+//   Example 3:
+//     Input:  flights = [[0, 1, 0], [1, 0, 0], [0, 0, 0]], days = [[2, 2], [3, 4],
+//             [7, 7]]
+//     Output: 7
+//     Explanation:
+//       - Initialize dp = [0, -inf, -inf]; city 2 has no incoming edges from city 0
+//         or 1.
+//       - In week 0, city 0 relaxes staying at 0 (0 + 2 = 2) and flying to 1 (0 + 3
+//         = 3), producing dp = [2, 3, -inf].
+//       - In week 1, city 1 (dp[1] = 3) yields 5 at city 0 and 7 at city 1 while
+//         city 2 remains kUnreachable, giving dp = [5, 7, -inf] and max(dp) = 7.
+//
 // Algorithm:
 //   Space-optimized bottom-up dynamic programming over weeks.
 //   Maintain a 1D array `dp` of length N where `dp[c]` is the maximum total

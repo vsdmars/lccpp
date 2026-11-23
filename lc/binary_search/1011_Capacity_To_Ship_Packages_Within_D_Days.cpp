@@ -9,6 +9,42 @@
 //   ship weight capacity needed to ship all packages within `days` days.
 //   Constraints: 1 <= days <= weights.length <= 50,000, 1 <= weights[i] <= 500.
 //
+// Examples:
+//   Example 1:
+//     Input:  weights = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], days = 5
+//     Output: 15
+//     Explanation:
+//       - The initial scan sets tight bounds left = max(weights) = 10 and right =
+//         sum(weights) = 55.
+//       - Binary search tests mid = 32 (2 days <= 5, right = 32), mid = 21 (3 days
+//         <= 5, right = 21), and mid = 15 (daysRequired packs [1..5], [6,7], [8],
+//         [9], [10] in 5 days <= 5, right = 15).
+//       - Next, mid = 12 requires 6 days > 5 (left = 13) and mid = 14 requires 6
+//         days > 5 (left = 15).
+//       - The loop ends with left == right == 15, returning 15.
+//
+//   Example 2:
+//     Input:  weights = [3, 2, 2, 4, 1, 4], days = 3
+//     Output: 6
+//     Explanation:
+//       - Bounds are initialized to left = max(weights) = 4 and right =
+//         sum(weights) = 16.
+//       - Testing mid = 10 gives 2 days <= 3 (right = 10) and mid = 7 gives 3 days
+//         <= 3 (right = 7).
+//       - Testing mid = 5 needs 4 days > 3 ([3,2], [2], [4,1], [4]), raising left
+//         to 6; testing mid = 6 packs [3,2], [2,4], [1,4] in 3 days <= 3,
+//         tightening right to 6.
+//       - With left == right == 6, the loop terminates and returns 6.
+//
+//   Example 3:
+//     Input:  weights = [42], days = 1
+//     Output: 42
+//     Explanation:
+//       - The initial pass sets both left = max(weights) = 42 and right =
+//         sum(weights) = 42.
+//       - Because left < right is immediately false, binary search performs zero
+//         iterations and returns left = 42.
+//
 // Algorithm:
 //   Binary search on the ship capacity paired with a greedy linear feasibility
 //   check:

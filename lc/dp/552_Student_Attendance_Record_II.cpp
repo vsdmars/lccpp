@@ -11,6 +11,38 @@
 //   A record is rewardable if and only if it contains strictly fewer than
 //   two 'A's in total AND never contains three or more consecutive 'L's.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 2
+//     Output: 8
+//     Explanation:
+//       - Allocate dp of size 3 with 'A'-free base counts dp[0] = 1, dp[1] = 2, and
+//         dp[2] = 4 ("PP", "PL", "LP", "LL").
+//       - Skip the i = 3..length recurrence loop because length is 2, and
+//         initialize total = dp[2] = 4 for zero-'A' records.
+//       - Add single-'A' splits: pos = 0 contributes dp[0] * dp[1] = 1 * 2 = 2 and
+//         pos = 1 contributes dp[1] * dp[0] = 2 * 1 = 2.
+//       - Sum total = 4 + 2 + 2 = 8 modulo 10^9 + 7 and return 8.
+//
+//   Example 2:
+//     Input:  n = 4
+//     Output: 43
+//     Explanation:
+//       - Start with dp[0] = 1, dp[1] = 2, dp[2] = 4 and compute Tribonacci entries
+//         dp[3] = 4 + 2 + 1 = 7 and dp[4] = 7 + 4 + 2 = 13.
+//       - Initialize total = dp[4] = 13 for valid records containing zero 'A's.
+//       - Add single-'A' splits across pos = 0..3: dp[0]*dp[3] = 7, dp[1]*dp[2] =
+//         8, dp[2]*dp[1] = 8, and dp[3]*dp[0] = 7.
+//       - Accumulate total = 13 + 7 + 8 + 8 + 7 = 43 and return 43.
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: 3
+//     Explanation:
+//       - Pass the `n <= 0` guard and hit the early base case `if (n == 1)`.
+//       - Return 3 immediately, accounting for the three valid length-1 records
+//         "P", "L", and "A".
+//
 // Algorithm:
 //   Split rewardable records into two disjoint families by the count of 'A':
 //   1) Records with zero 'A's: let dp[i] be the number of valid strings of

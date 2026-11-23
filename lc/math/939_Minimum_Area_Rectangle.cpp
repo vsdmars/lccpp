@@ -7,6 +7,45 @@
 //   from any four of these points with sides parallel to the x- and y-axes.
 //   If no such rectangle exists, return 0.
 //
+// Examples:
+//   Example 1:
+//     Input:  points = [[1, 1], [1, 3], [3, 1], [3, 3], [2, 2]]
+//     Output: 4
+//     Explanation:
+//       - Process indices 0..2: (1, 1), (1, 3), and (3, 1) share coordinates or
+//         lack both off-diagonal corners in visited, so visited holds those three
+//         points and min_area stays at max.
+//       - At i = 3, pair points[3] = (3, 3) with j = 0, points[0] = (1, 1) as an
+//         opposite diagonal since 3 != 1 in both x and y.
+//       - Confirm both off-diagonal corners (3, 1) and (1, 3) exist in visited,
+//         updating min_area to |3 - 1| * |3 - 1| = 4.
+//       - At i = 4, (2, 2) forms diagonal pairs with earlier points, but none have
+//         both matching off-diagonal corners in visited, so return 4.
+//
+//   Example 2:
+//     Input:  points = [[1, 1], [1, 3], [3, 1], [3, 3], [4, 1], [4, 3]]
+//     Output: 2
+//     Explanation:
+//       - Through i = 3, (1, 1) and (3, 3) establish min_area = 4 using corners (1,
+//         3) and (3, 1) in visited.
+//       - At i = 4, (4, 1) is added to visited without completing any new
+//         axis-aligned rectangle.
+//       - At i = 5, pair points[5] = (4, 3) with j = 2, points[2] = (3, 1), and
+//         verify that both (4, 1) and (3, 3) are present in visited.
+//       - Compute area |4 - 3| * |3 - 1| = 1 * 2 = 2, tightening min_area from 4 to
+//         2 (smaller than the 3 * 2 = 6 rectangle with (1, 1)).
+//
+//   Example 3:
+//     Input:  points = [[0, 1], [1, 0], [1, 2], [2, 1]]
+//     Output: 0
+//     Explanation:
+//       - Iterate over all pairs (points[i], points[j]) with differing x and y
+//         coordinates, such as (1, 0) with (0, 1) or (2, 1) with (1, 2).
+//       - For every candidate diagonal, at least one required axis-aligned corner
+//         (e.g., (0, 0), (1, 1), or (2, 2)) is missing from visited.
+//       - Finish all pairs with min_area unchanged at INT64_MAX, so return 0
+//         because only a rotated diamond is present.
+//
 // Algorithm:
 //   1. Diagonal-Pair Hash Lookup (`minAreaRect`):
 //      Iterate through `points[i]` while maintaining a hash set `visited` of

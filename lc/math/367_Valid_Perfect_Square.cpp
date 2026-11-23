@@ -7,6 +7,37 @@
 //   and false otherwise, without using any built-in square root library
 //   function such as `std::sqrt`.
 //
+// Examples:
+//   Example 1:
+//     Input:  num = 16
+//     Output: true
+//     Explanation:
+//       - Initialize `x = 16` and `r = 16` in 64-bit signed integers.
+//       - Iteration 1 (`16 * 16 = 256 > 16`): update `r = (16 + 16 / 16) / 2 = 8`.
+//       - Iteration 2 (`8 * 8 = 64 > 16`): update `r = (8 + 16 / 8) / 2 = 5`.
+//       - Iteration 3 (`5 * 5 = 25 > 16`): update `r = (5 + 16 / 5) / 2 = 4`.
+//       - Exit the loop because `4 * 4 = 16` is not greater than `16`, and return
+//         `(4 * 4) == 16`, which is `true`.
+//
+//   Example 2:
+//     Input:  num = 14
+//     Output: false
+//     Explanation:
+//       - Initialize `x = 14` and `r = 14`.
+//       - Iteration 1 (`196 > 14`): update `r = (14 + 14 / 14) / 2 = 7`.
+//       - Iteration 2 (`49 > 14`): update `r = (7 + 14 / 7) / 2 = 4`.
+//       - Iteration 3 (`16 > 14`): update `r = (4 + 14 / 4) / 2 = 3`.
+//       - Exit the loop since `3 * 3 = 9 <= 14`, and return `(3 * 3) == 14`, which
+//         is `false`.
+//
+//   Example 3:
+//     Input:  num = 1
+//     Output: true
+//     Explanation:
+//       - Check `num < 1` (`false`), then initialize `x = 1` and `r = 1`.
+//       - Skip the `while ((r * r) > x)` loop because `1 * 1 > 1` is false, and
+//         return `(1 * 1) == 1`, which is `true`.
+//
 // Algorithm:
 //   Use integer Newton-Raphson iteration (Heron's method) to compute
 //   r = floor(sqrt(num)). Starting from r = num, while r * r > num, update:

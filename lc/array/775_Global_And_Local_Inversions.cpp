@@ -12,6 +12,36 @@
 //   Return `true` if the two counts are equal, and `false` otherwise.
 //   Constraints: 1 <= n <= 10^5; `nums` is a permutation of `0..n-1`.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 0, 2]
+//     Output: true
+//     Explanation:
+//       - At idx = 0, compute |nums[0] - 0| = |1 - 0| = 1 <= 1.
+//       - At idx = 1, compute |nums[1] - 1| = |0 - 1| = 1 <= 1.
+//       - At idx = 2, compute |nums[2] - 2| = |2 - 2| = 0 <= 1.
+//       - All elements sit within distance 1 of their sorted positions, so return
+//         true.
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 0]
+//     Output: false
+//     Explanation:
+//       - At idx = 0 and idx = 1, |1 - 0| = 1 and |2 - 1| = 1 both satisfy
+//         displacement <= 1.
+//       - At idx = 2, |nums[2] - 2| = |0 - 2| = 2 > 1 exceeds the allowed
+//         displacement of 1.
+//       - Return false immediately because the displacement proves a non-local
+//         inversion exists.
+//
+//   Example 3:
+//     Input:  nums = [0, 3, 2, 1]
+//     Output: false
+//     Explanation:
+//       - At idx = 0, compute |0 - 0| = 0 <= 1 and continue.
+//       - At idx = 1, compute |nums[1] - 1| = |3 - 1| = 2 > 1.
+//       - Return false immediately without scanning further.
+//
 // Algorithm:
 //   Every local inversion is automatically a global inversion, so the two
 //   counts are equal if and only if there is no non-local inversion (`i + 2 <= j`

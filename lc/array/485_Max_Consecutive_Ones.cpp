@@ -5,6 +5,40 @@
 //   Given a binary array `nums` containing only `0`s and `1`s, return the
 //   maximum number of consecutive `1`s in the array.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 1, 0, 1, 1, 1]
+//     Output: 3
+//     Explanation:
+//       - Initialize `current_streak = 0` and `max_streak = 0`.
+//       - At indices 0 and 1 (`1`, `1`), increment `current_streak` to `1` and `2`,
+//         updating `max_streak` to `2`.
+//       - At index 2 (`0`), reset `current_streak` to `0` while keeping `max_streak
+//         = 2`.
+//       - At indices 3, 4, and 5 (`1`, `1`, `1`), increment `current_streak` to
+//         `1`, `2`, and `3`, updating `max_streak` to `3` and returning `3`.
+//
+//   Example 2:
+//     Input:  nums = [1, 0, 1, 1, 0, 1]
+//     Output: 2
+//     Explanation:
+//       - Initialize `current_streak = 0` and `max_streak = 0`.
+//       - At index 0 (`1`), `current_streak` and `max_streak` become `1`; at index
+//         1 (`0`), `current_streak` resets to `0`.
+//       - At indices 2 and 3 (`1`, `1`), `current_streak` climbs to `1` then `2`,
+//         updating `max_streak` to `2`.
+//       - At index 4 (`0`), `current_streak` resets to `0`, and index 5 (`1`) only
+//         reaches `current_streak = 1`, so `max_streak = 2` is returned.
+//
+//   Example 3:
+//     Input:  nums = [0, 0, 0, 0]
+//     Output: 0
+//     Explanation:
+//       - Initialize `current_streak = 0` and `max_streak = 0`.
+//       - Each element from index 0 to 3 is `0`, so the `else` branch resets
+//         `current_streak` to `0` on every iteration without updating `max_streak`.
+//       - Return `max_streak = 0` after the single pass completes.
+//
 // Algorithm:
 //   Perform a single linear scan while maintaining two counters:
 //     - `current_streak`: length of the contiguous run of `1`s ending at the

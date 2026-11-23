@@ -8,6 +8,47 @@
 //   upper-left corner is `(row1, col1)` and lower-right corner is
 //   `(row2, col2)` (inclusive, with `row1 <= row2` and `col1 <= col2`).
 //
+// Examples:
+//   Example 1:
+//     Input:  matrix = [[3, 0, 1, 4, 2], [5, 6, 3, 2, 1], [1, 2, 0, 1, 5], [4, 1,
+//             0, 1, 7], [1, 0, 3, 0, 5]], queries = [sumRegion(2, 1, 4, 3),
+//             sumRegion(1, 1, 2, 2), sumRegion(1, 2, 2, 4)]
+//     Output: [8, 11, 12]
+//     Explanation:
+//       - Build the 6 x 6 zero-padded prefix_ table where prefix_[r + 1][c + 1] =
+//         matrix[r][c] + prefix_[r][c + 1] + prefix_[r + 1][c] - prefix_[r][c],
+//         giving rows [0, 3, 3, 4, 8, 10], [0, 8, 14, 18, 24, 27], [0, 9, 17, 21,
+//         28, 36], [0, 13, 22, 26, 34, 49], and [0, 14, 23, 30, 38, 58] after row 0
+//         of zeros.
+//       - For sumRegion(2, 1, 4, 3), compute prefix_[5][4] - prefix_[2][4] -
+//         prefix_[5][1] + prefix_[2][1] = 38 - 24 - 14 + 8 = 8.
+//       - For sumRegion(1, 1, 2, 2), compute prefix_[3][3] - prefix_[1][3] -
+//         prefix_[3][1] + prefix_[1][1] = 21 - 4 - 9 + 3 = 11.
+//       - For sumRegion(1, 2, 2, 4), compute prefix_[3][5] - prefix_[1][5] -
+//         prefix_[3][2] + prefix_[1][2] = 36 - 10 - 17 + 3 = 12.
+//
+//   Example 2:
+//     Input:  matrix = [[1, -2, 3], [-4, 5, -6]], queries = [sumRegion(0, 0, 0, 0),
+//             sumRegion(1, 2, 1, 2), sumRegion(0, 0, 1, 2)]
+//     Output: [1, -6, -3]
+//     Explanation:
+//       - Construct the 3 x 4 padded prefix_ table with row 0 = [0, 0, 0, 0], row 1
+//         = [0, 1, -1, 2], and row 2 = [0, -3, 2, -3].
+//       - For sumRegion(0, 0, 0, 0), compute prefix_[1][1] - prefix_[0][1] -
+//         prefix_[1][0] + prefix_[0][0] = 1 - 0 - 0 + 0 = 1.
+//       - For sumRegion(1, 2, 1, 2), compute prefix_[2][3] - prefix_[1][3] -
+//         prefix_[2][2] + prefix_[1][2] = -3 - 2 - 2 + (-1) = -6.
+//       - For sumRegion(0, 0, 1, 2), compute prefix_[2][3] - prefix_[0][3] -
+//         prefix_[2][0] + prefix_[0][0] = -3 - 0 - 0 + 0 = -3.
+//
+//   Example 3:
+//     Input:  matrix = [[-4]], query = sumRegion(0, 0, 0, 0)
+//     Output: -4
+//     Explanation:
+//       - Build the 2 x 2 padded prefix_ table [[0, 0], [0, -4]].
+//       - Evaluate sumRegion(0, 0, 0, 0) as prefix_[1][1] - prefix_[0][1] -
+//         prefix_[1][0] + prefix_[0][0] = -4 - 0 - 0 + 0 = -4.
+//
 // Algorithm:
 //   Two prefix-sum approaches are included:
 //   1. `NumMatrix` (Optimal 2D Integral Image / 2D Prefix Sum):

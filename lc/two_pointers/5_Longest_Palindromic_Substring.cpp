@@ -6,6 +6,46 @@
 //   reads the same forward and backward. If multiple palindromic substrings
 //   share the maximum length, any valid one may be returned.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "babad"
+//     Output: "bab"
+//     Explanation:
+//       - Initialize best_start = 0 and best_len = 1, then iterate center from 0 to
+//         4 checking odd (center, center) and even (center, center + 1) expansions.
+//       - At center = 0, odd expansion gives "b" (length 1) and even (0, 1) stops
+//         immediately because 'b' != 'a'.
+//       - At center = 1, odd expansion matches s[0] == s[2] == 'b' to form "bab"
+//         (start = 0, length = 3), updating best_start = 0 and best_len = 3.
+//       - At center = 2, odd expansion finds "aba" (length 3, not strictly greater
+//         than best_len = 3), and centers 3 and 4 yield length 1, so s.substr(0, 3)
+//         returns "bab".
+//
+//   Example 2:
+//     Input:  s = "cbbd"
+//     Output: "bb"
+//     Explanation:
+//       - Initialize best_start = 0 and best_len = 1 for s.size() = 4.
+//       - At center = 0 ('c'), odd expansion gives length 1 and even (0, 1) returns
+//         length 0 since 'c' != 'b'.
+//       - At center = 1 ('b'), even expansion (1, 2) sees s[1] == s[2] == 'b',
+//         stops because s[0] ('c') != s[3] ('d'), and updates best_start = 1 and
+//         best_len = 2.
+//       - Centers 2 and 3 produce lengths at most 1, so s.substr(1, 2) returns
+//         "bb".
+//
+//   Example 3:
+//     Input:  s = "aaaa"
+//     Output: "aaaa"
+//     Explanation:
+//       - At center = 0, odd (0, 0) gives length 1 and even (0, 1) expands to [0,
+//         1] ("aa"), updating best_start = 0 and best_len = 2.
+//       - At center = 1, odd (1, 1) expands to [0, 2] ("aaa", best_len = 3), then
+//         even (1, 2) expands to [0, 3] ("aaaa"), updating best_start = 0 and
+//         best_len = 4.
+//       - Centers 2 and 3 yield lengths at most 3, so s.substr(0, 4) returns
+//         "aaaa".
+//
 // Algorithm:
 //   Expand around center. Every palindrome is symmetric around either a
 //   single character (odd length, center `(i, i)`) or the gap between two

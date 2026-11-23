@@ -8,6 +8,44 @@
 //   - `AB` has score `score(A) + score(B)` for balanced substrings `A` and `B`.
 //   - `(A)` has score `2 * score(A)` for a balanced substring `A`.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "()"
+//     Output: 1
+//     Explanation:
+//       - Initialize the depth-frame stack scores = [0] for the top-level scope.
+//       - At index 0 ('('), push 0 to open a nested frame, yielding scores = [0,
+//         0].
+//       - At index 1 (')'), pop inner = 0, add std::max(2 * 0, 1) = 1 to the top
+//         frame, and return scores.front() = 1.
+//
+//   Example 2:
+//     Input:  s = "(()(()))"
+//     Output: 6
+//     Explanation:
+//       - Initialize scores = [0] and push 0 at indices 0 and 1 ('('), giving
+//         scores = [0, 0, 0].
+//       - At index 2 (')'), pop inner = 0 and add 1 to the enclosing frame, giving
+//         scores = [0, 1].
+//       - At indices 3 and 4 ('('), push two 0 frames ([0, 1, 0, 0]), then at index
+//         5 (')') pop inner = 0 and add 1, giving scores = [0, 1, 1].
+//       - At index 6 (')'), pop inner = 1 and add 2 * 1 = 2 to the enclosing frame,
+//         giving scores = [0, 3].
+//       - At index 7 (')'), pop inner = 3 and add 2 * 3 = 6 to depth 0, yielding
+//         scores = [6] and returning 6.
+//
+//   Example 3:
+//     Input:  s = "((((()))))"
+//     Output: 16
+//     Explanation:
+//       - Initialize scores = [0] and push 0 for each of the five opening '(' at
+//         indices 0..4, giving scores = [0, 0, 0, 0, 0, 0].
+//       - At index 5 (')'), pop inner = 0 and add std::max(2 * 0, 1) = 1 to its
+//         enclosing frame, giving scores = [0, 0, 0, 0, 1].
+//       - At indices 6..9 (')'), pop inner values 1, 2, 4, and 8 in succession and
+//         add 2 * inner to each enclosing frame, ending with scores = [16] and
+//         returning 16.
+//
 // Algorithm:
 //   1) Depth-Frame Stack (`scoreOfParentheses`):
 //      Maintain a stack `scores` where each entry holds the accumulated score

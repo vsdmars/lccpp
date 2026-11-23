@@ -8,6 +8,39 @@
 //   Continue until no `k` adjacent equal characters remain and return the
 //   resulting string (guaranteed to be unique).
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "deeedbbcccbdaa", k = 3
+//     Output: "aa"
+//     Explanation:
+//       - Push {d, 1}, then advance 'e' to {e, 3} and immediately pop it when count
+//         reaches k = 3, exposing {d, 1}.
+//       - Next 'd' merges into {d, 2}, followed by pushing {b, 2} and {c, 3}, where
+//         'c' hits k = 3 and pops to expose {b, 2}.
+//       - Next 'b' increments {b, 2} to {b, 3} and pops, exposing {d, 2}; the
+//         following 'd' increments {d, 2} to {d, 3} and pops.
+//       - The final two 'a' characters form {a, 2} on the empty stack, which
+//         reconstructs "aa".
+//
+//   Example 2:
+//     Input:  s = "abcd", k = 2
+//     Output: "abcd"
+//     Explanation:
+//       - Each character differs from stack.back().ch, pushing {a, 1}, {b, 1}, {c,
+//         1}, and {d, 1}.
+//       - No run count reaches k = 2, so no stack entries are popped.
+//       - Reconstructing the four remaining entries yields "abcd".
+//
+//   Example 3:
+//     Input:  s = "aaaaa", k = 3
+//     Output: "aa"
+//     Explanation:
+//       - The first three 'a' characters increment the top entry from {a, 1} to {a,
+//         3} and pop it at count == 3.
+//       - The fourth and fifth 'a' characters push {a, 1} and increment it to {a,
+//         2}.
+//       - Since count 2 < 3, {a, 2} remains on the stack and reconstructs "aa".
+//
 // Algorithm:
 //   Use a run-length encoded stack that stores `(character, consecutive_count)`
 //   pairs. Scan `s` from left to right:

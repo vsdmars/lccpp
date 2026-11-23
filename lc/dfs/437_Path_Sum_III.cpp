@@ -9,6 +9,49 @@
 //   nodes. The tree has up to 1,000 nodes with values in [-10^9, 10^9], so
 //   intermediate path sums require 64-bit signed integers to avoid overflow.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [10, 5, -3, 3, 2, null, 11, 3, -2, null, 1], targetSum = 8
+//     Output: 3
+//     Explanation:
+//       - Seed prefix_counts with {0: 1} and start preorder DFS from root 10
+//         (curr_sum = 10, no match for 10 - 8 = 2).
+//       - Descending left to 5 (curr_sum = 15) and then 3 (curr_sum = 18) finds
+//         prefix_counts[18 - 8 = 10] == 1, counting path [5, 3]; leaves 3 (curr_sum
+//         = 21) and -2 (curr_sum = 16) yield no matches and are erased on
+//         backtrack.
+//       - Visiting 2 (curr_sum = 17) and its right child 1 (curr_sum = 18) finds
+//         prefix_counts[18 - 8 = 10] == 1, counting path [5, 2, 1], before
+//         backtracking erases 17 and 15 so sibling branches stay isolated.
+//       - Descending right from 10 to -3 (curr_sum = 7) and 11 (curr_sum = 18)
+//         finds prefix_counts[18 - 8 = 10] == 1, counting path [-3, 11] for a total
+//         of 3.
+//
+//   Example 2:
+//     Input:  root = [5, 4, 8, 11, null, 13, 4, 7, 2, null, null, 5, 1], targetSum
+//             = 22
+//     Output: 3
+//     Explanation:
+//       - Start with prefix_counts = {0: 1} and walk down 5 -> 4 -> 11 (running
+//         sums 5, 9, 20).
+//       - At leaf 7 (curr_sum = 27), prefix_counts[27 - 22 = 5] == 1 counts [4, 11,
+//         7]; at leaf 2 (curr_sum = 22), prefix_counts[22 - 22 = 0] == 1 counts [5,
+//         4, 11, 2].
+//       - After backtracking removes the left subtree sums from prefix_counts, the
+//         right branch 5 -> 8 -> 4 -> 5 reaches curr_sum = 22 and matches
+//         prefix_counts[0] == 1 to count [5, 8, 4, 5], yielding 3 total paths.
+//
+//   Example 3:
+//     Input:  root = [0, 0, null, 0], targetSum = 0
+//     Output: 6
+//     Explanation:
+//       - Seed prefix_counts = {0: 1} and visit root 0: curr_sum - 0 = 0 matches
+//         count 1 for [0], then prefix_counts[0] increments to 2.
+//       - At middle node 0, curr_sum = 0 matches prefix_counts[0] == 2 (paths [0,
+//         0] and [0]), incrementing prefix_counts[0] to 3.
+//       - At leaf 0, curr_sum = 0 matches prefix_counts[0] == 3 (paths [0, 0, 0],
+//         [0, 0], and [0]), summing 1 + 2 + 3 = 6 downward paths.
+//
 // Algorithm:
 //   Use a single preorder DFS combined with prefix sums (the tree analogue of
 //   Subarray Sum Equals K). Maintain the running 64-bit sum `curr_sum` from

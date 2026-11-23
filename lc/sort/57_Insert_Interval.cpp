@@ -8,6 +8,40 @@
 //   the resulting list remains sorted by start time and contains no
 //   overlapping intervals (merging overlapping intervals as necessary).
 //
+// Examples:
+//   Example 1:
+//     Input:  intervals = [[1, 3], [6, 9]], new_interval = [2, 5]
+//     Output: [[1, 5], [6, 9]]
+//     Explanation:
+//       - Initialize merged = [2, 5]; Phase 1 copies nothing because intervals[0] =
+//         [1, 3] has end 3 >= 2.
+//       - Phase 2 overlaps intervals[0] = [1, 3] (1 <= 5), updating merged to
+//         [min(2, 1), max(5, 3)] = [1, 5], then stops before [6, 9] (6 > 5) and
+//         appends [1, 5].
+//       - Phase 3 copies the remaining interval [6, 9], returning [[1, 5], [6, 9]].
+//
+//   Example 2:
+//     Input:  intervals = [[1, 2], [3, 5], [6, 7], [8, 10], [12, 16]], new_interval
+//             = [4, 9]
+//     Output: [[1, 2], [3, 10], [12, 16]]
+//     Explanation:
+//       - Phase 1 copies [1, 2] because its end 2 < 4, stopping at [3, 5] where end
+//         5 >= 4.
+//       - Phase 2 merges [3, 5] -> [3, 9], [6, 7] -> [3, 9], and [8, 10] -> [3, 10]
+//         since each starts at or before merged_end, then appends [3, 10].
+//       - Phase 3 copies [12, 16] (start 12 > 10), returning [[1, 2], [3, 10], [12,
+//         16]].
+//
+//   Example 3:
+//     Input:  intervals = [[1, 2], [5, 6]], new_interval = [2, 5]
+//     Output: [[1, 6]]
+//     Explanation:
+//       - Phase 1 skips copying [1, 2] because its closed endpoint 2 is not
+//         strictly less than merged_start = 2.
+//       - Phase 2 merges touching intervals [1, 2] (1 <= 5 -> [1, 5]) and [5, 6] (5
+//         <= 5 -> [1, 6]), then appends [1, 6] with no trailing intervals left for
+//         Phase 3.
+//
 // Algorithm:
 //   Single-pass three-phase linear sweep taking advantage of the input's
 //   existing sorted, non-overlapping invariant:

@@ -10,6 +10,44 @@
 //   Return the largest possible overlap over all translations.
 //   Constraints: 1 <= n <= 30; img1[r][c], img2[r][c] in {0, 1}.
 //
+// Examples:
+//   Example 1:
+//     Input:  img1 = [[1, 1, 0], [0, 1, 0], [0, 1, 0]], img2 = [[0, 0, 0], [0, 1,
+//             1], [0, 0, 1]]
+//     Output: 3
+//     Explanation:
+//       - With n = 3, offset = 2, and span = 5, collectOnes extracts ones1 =
+//         [(0,0), (0,1), (1,1), (2,1)] and ones2 = [(1,1), (1,2), (2,2)].
+//       - Pairs (0,0)->(1,1), (0,1)->(1,2), and (1,1)->(2,2) all share displacement
+//         (dr, dc) = (1, 1), mapping to shifted coordinates (3, 3) and bucket 3 * 5
+//         + 3 = 18.
+//       - Incrementing shift_counts[18] three times raises max_overlap to 3 while
+//         all other shift buckets reach at most 2.
+//       - Return max_overlap = 3.
+//
+//   Example 2:
+//     Input:  img1 = [[0, 1], [1, 1]], img2 = [[1, 1], [1, 0]]
+//     Output: 2
+//     Explanation:
+//       - With n = 2, offset = 1, and span = 3, collectOnes extracts ones1 =
+//         [(0,1), (1,0), (1,1)] and ones2 = [(0,0), (0,1), (1,0)].
+//       - Pairs (0,1)->(0,1) and (1,0)->(1,0) produce shift (0, 0) at bucket 1 * 3
+//         + 1 = 4 with count 2.
+//       - Shifts (0, -1) (bucket 3) and (-1, 0) (bucket 1) also reach count 2, and
+//         no shift aligns all three 1s, so return max_overlap = 2.
+//
+//   Example 3:
+//     Input:  img1 = [[1, 0, 0], [0, 0, 0], [0, 0, 0]], img2 = [[0, 0, 0], [0, 0,
+//             0], [0, 0, 1]]
+//     Output: 1
+//     Explanation:
+//       - With n = 3, offset = 2, and span = 5, collectOnes extracts ones1 =
+//         [(0,0)] and ones2 = [(2,2)].
+//       - The sole pair yields shifted_dr = (2 + 2) - 0 = 4 and shifted_dc = (2 +
+//         2) - 0 = 4, mapping to bucket 4 * 5 + 4 = 24.
+//       - Incrementing shift_counts[24] updates max_overlap to 1, and the function
+//         returns 1.
+//
 // Algorithm:
 //   Instead of testing all `(2n - 1)^2` translations against every grid cell
 //   (including zeros), extract the sparse coordinate lists of `1`-cells in

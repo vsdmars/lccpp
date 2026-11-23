@@ -9,6 +9,44 @@
 //   earliest year with the maximum population.
 //   Constraints: 1 <= logs.length <= 100, 1950 <= birth_i < death_i <= 2050.
 //
+// Examples:
+//   Example 1:
+//     Input:  logs = [[1950, 1961], [1960, 1971], [1970, 1981]]
+//     Output: 1960
+//     Explanation:
+//       - Record +1 in delta at indices 0, 10, and 20 (years 1950, 1960, 1970) and
+//         -1 at indices 11, 21, and 31 (years 1961, 1971, 1981).
+//       - Sweeping forward, current_pop becomes 1 at 1950 (max_pop = 1, best_year =
+//         1950) and rises to 2 at 1960 (max_pop = 2, best_year = 1960).
+//       - At 1961 (delta[11] = -1) current_pop drops to 1, and at 1970 (delta[20] =
+//         +1) current_pop reaches 2, which is not strictly greater than max_pop = 2
+//         so best_year stays 1960.
+//       - Decrements at 1971 and 1981 bring current_pop back to 0, returning 1960.
+//
+//   Example 2:
+//     Input:  logs = [[1950, 1960], [1960, 1970], [1970, 1980]]
+//     Output: 1950
+//     Explanation:
+//       - Record +1 at years 1950, 1960, 1970 (indices 0, 10, 20) and -1 at years
+//         1960, 1970, 1980 (indices 10, 20, 30), causing delta[10] and delta[20] to
+//         cancel to 0.
+//       - At i = 0 (1950), current_pop increases to 1, setting max_pop = 1 and
+//         best_year = 1950.
+//       - From 1951 through 1979 current_pop stays at 1 (never exceeding max_pop)
+//         and drops to 0 at 1980, so 1950 is returned.
+//
+//   Example 3:
+//     Input:  logs = [[1950, 2050], [1960, 2040], [1970, 2030], [1980, 2020]]
+//     Output: 1980
+//     Explanation:
+//       - Add +1 to delta at indices 0, 10, 20, and 30 (years 1950, 1960, 1970,
+//         1980) and -1 at indices 70, 80, 90, and 100 (years 2020, 2030, 2040,
+//         2050).
+//       - During the prefix-sum sweep, current_pop and best_year step upward to 1
+//         (1950), 2 (1960), 3 (1970), and peak at 4 in 1980.
+//       - From 1981 to 2050, current_pop remains 4 until 2020 and then steps down
+//         by 1 at 2020, 2030, 2040, and 2050, returning 1980.
+//
 // Algorithm:
 //   Line sweep via a fixed-size difference array over the bounded year range
 //   `[1950, 2050]`. Each person contributes `+1` at `birth_i - 1950` and `-1`

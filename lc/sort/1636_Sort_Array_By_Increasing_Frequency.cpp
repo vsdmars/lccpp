@@ -7,6 +7,36 @@
 //   sort them in decreasing order of their numeric value.
 //   Constraints: 1 <= nums.length <= 100, -100 <= nums[i] <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 1, 2, 2, 2, 3]
+//     Output: [3, 1, 1, 2, 2, 2]
+//     Explanation:
+//       - Tally frequencies into freq = {3: 1, 1: 2, 2: 3}.
+//       - Sort nums by ascending freq.at(val), placing 3 (freq 1) before 1 (freq 2)
+//         and 2 (freq 3).
+//       - Return the sorted vector [3, 1, 1, 2, 2, 2].
+//
+//   Example 2:
+//     Input:  nums = [2, 3, 1, 3, 2]
+//     Output: [1, 3, 3, 2, 2]
+//     Explanation:
+//       - Count each value in freq = {1: 1, 2: 2, 3: 2}.
+//       - Place 1 first because its frequency (1) is smaller than 2 and 3 (both
+//         frequency 2).
+//       - Break the frequency-2 tie between 3 and 2 by descending value (3 > 2),
+//         yielding [1, 3, 3, 2, 2].
+//
+//   Example 3:
+//     Input:  nums = [-1, 1, -6, 4, 5, -6, 1, 4, 1]
+//     Output: [5, -1, 4, 4, -6, -6, 1, 1, 1]
+//     Explanation:
+//       - Count occurrences into freq = {5: 1, -1: 1, 4: 2, -6: 2, 1: 3}.
+//       - Sort the frequency-1 values descending (5 > -1) to produce [5, -1] and
+//         the frequency-2 values descending (4 > -6) to produce [4, 4, -6, -6].
+//       - Place the frequency-3 elements [1, 1, 1] last, returning [5, -1, 4, 4,
+//         -6, -6, 1, 1, 1].
+//
 // Algorithm:
 //   1. Count the frequency of every distinct integer in `nums` using a hash map
 //      (`std::unordered_map<int, int>`).

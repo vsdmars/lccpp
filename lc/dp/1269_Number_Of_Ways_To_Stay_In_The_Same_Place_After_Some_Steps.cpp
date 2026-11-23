@@ -9,6 +9,41 @@
 //   sequences that leave the pointer at index 0 after exactly `steps` moves,
 //   modulo `10^9 + 7`.
 //
+// Examples:
+//   Example 1:
+//     Input:  steps = 3, arrLen = 2
+//     Output: 4
+//     Explanation:
+//       - Clamp max_cols = min(3 / 2 + 1, 2) = 2 and initialize dp = [1, 0] at step
+//         0.
+//       - After step 1, next_dp[0] = 1 + 0 = 1 and next_dp[1] = 0 + 1 = 1, yielding
+//         dp = [1, 1].
+//       - After step 2, next_dp[0] = 1 + 1 = 2 and next_dp[1] = 1 + 1 = 2, yielding
+//         dp = [2, 2].
+//       - After step 3, next_dp[0] = 2 + 2 = 4 and next_dp[1] = 2 + 2 = 4, so dp[0]
+//         = 4 is returned.
+//
+//   Example 2:
+//     Input:  steps = 2, arrLen = 4
+//     Output: 2
+//     Explanation:
+//       - Clamp max_cols = min(2 / 2 + 1, 4) = 2 since positions >= 2 cannot return
+//         to 0 within 2 steps, and initialize dp = [1, 0].
+//       - After step 1, dp transitions to [1, 1] via staying at 0 or moving right
+//         to 1.
+//       - After step 2, next_dp[0] = dp[0] + dp[1] = 1 + 1 = 2, returning dp[0] =
+//         2.
+//
+//   Example 3:
+//     Input:  steps = 5, arrLen = 1
+//     Output: 1
+//     Explanation:
+//       - Clamp max_cols = min(5 / 2 + 1, 1) = 1 and initialize dp = [1].
+//       - On every step from 0 to 4, pos = 0 has neither a left neighbor (pos > 0
+//         is false) nor a right neighbor (pos + 1 < 1 is false), so next_dp[0]
+//         remains dp[0] = 1.
+//       - After all 5 steps complete, dp[0] = 1 is returned.
+//
 // Algorithm:
 //   Bottom-up rolling-array dynamic programming over step count and reachable
 //   positions. Notice two key pruning insights:

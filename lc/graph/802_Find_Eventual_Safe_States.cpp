@@ -8,6 +8,42 @@
 //   leads to a terminal node (equivalently, no path from it can ever enter a
 //   cycle). Return all eventually safe nodes sorted in ascending order.
 //
+// Examples:
+//   Example 1:
+//     Input:  graph = [[1, 2], [2, 3], [5], [0], [5], [], []]
+//     Output: [2, 4, 5, 6]
+//     Explanation:
+//       - Start DFS at node 0 (kVisiting) -> 1 -> 2 -> 5; node 5 has no outgoing
+//         edges so state[5] and then state[2] become kSafe.
+//       - From node 1, recurse to node 3, whose outgoing edge hits node 0 in state
+//         kVisiting; mark state[3], state[1], and state[0] as kUnsafe.
+//       - In the outer loop i = 0..6, i = 2 hits memoized state[2] == kSafe and
+//         appends 2, while i = 3 is skipped as kUnsafe.
+//       - Node 4 visits memoized safe node 5 and becomes kSafe, and terminal nodes
+//         5 and 6 confirm kSafe, yielding [2, 4, 5, 6].
+//
+//   Example 2:
+//     Input:  graph = [[0], [2, 3, 4], [3, 4], [0, 4], []]
+//     Output: [4]
+//     Explanation:
+//       - At i = 0, mark state[0] = kVisiting and follow self-loop edge 0 -> 0,
+//         immediately hitting kVisiting and marking state[0] = kUnsafe.
+//       - At i = 1, traverse 1 -> 2 -> 3 -> 0, where memoized kUnsafe at node 0
+//         propagates false back to mark nodes 3, 2, and 1 as kUnsafe.
+//       - Iterations i = 2 and i = 3 return false immediately from memoized kUnsafe
+//         state.
+//       - At i = 4, node 4 has no outgoing edges, transitions to kSafe, and returns
+//         [4].
+//
+//   Example 3:
+//     Input:  graph = [[], [], []]
+//     Output: [0, 1, 2]
+//     Explanation:
+//       - At i = 0, mark state[0] = kVisiting, find no outgoing neighbors in
+//         graph[0], set state[0] = kSafe, and push 0 to safe_nodes.
+//       - Repeat for i = 1 and i = 2, marking both kSafe in ascending index order
+//         and returning [0, 1, 2].
+//
 // Algorithm:
 //   Memoized DFS with 4-state node classification (`kUnvisited`, `kVisiting`,
 //   `kSafe`, `kUnsafe`), refining classic 3-color cycle detection. On entering

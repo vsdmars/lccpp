@@ -7,6 +7,47 @@
 //   separated by at least distance k (i.e., |idx1 - idx2| >= k). Return any
 //   valid rearrangement, or an empty string "" if no valid arrangement exists.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "aabbcc", k = 3
+//     Output: "cbacba"
+//     Explanation:
+//       - Count frequencies (a:2, b:2, c:2) and push them into the max-heap
+//         available = {(2, 'c'), (2, 'b'), (2, 'a')}.
+//       - Pop (2, 'c'), (2, 'b'), and (2, 'a') in turn to append "cba" and fill
+//         cooldown = [(1, 'c'), (1, 'b'), (1, 'a')] of size k = 3, releasing (1,
+//         'c') back to available.
+//       - Repeat three more steps, popping (1, 'c'), (1, 'b'), and (1, 'a') as each
+//         preceding letter exits cooldown, producing "cbacba" of length 6 with
+//         every repeated character 3 apart.
+//
+//   Example 2:
+//     Input:  s = "aaabc", k = 3
+//     Output: ""
+//     Explanation:
+//       - Populate available = {(3, 'a'), (1, 'b'), (1, 'c')} from character
+//         counts.
+//       - Pop (3, 'a'), (1, 'c'), and (1, 'b') to emit "acb"; cooldown reaches size
+//         3 with [(2, 'a'), (0, 'c'), (0, 'b')] and releases (2, 'a') back to
+//         available.
+//       - Pop (2, 'a') to emit "acba" and enqueue (1, 'a'), while releasing (0,
+//         'c') (not re-pushed because its remaining count is 0).
+//       - Now available is empty with result.size() == 4 < 5, so return "" because
+//         the last 'a' cannot be placed at distance 3.
+//
+//   Example 3:
+//     Input:  s = "aaadbbcc", k = 2
+//     Output: "acbadcba"
+//     Explanation:
+//       - Count frequencies (a:3, b:2, c:2, d:1) into available = {(3, 'a'), (2,
+//         'c'), (2, 'b'), (1, 'd')}.
+//       - Emit 'a' then 'c' ("ac"); cooldown reaches size k = 2 with [(2, 'a'), (1,
+//         'c')] and releases (2, 'a') back to available.
+//       - Continue popping the highest-count ready letter and releasing the entry
+//         from 2 steps prior: emit 'b', 'a', 'd', 'c', 'b', 'a' in sequence.
+//       - Finish with result = "acbadcba" of length 8, where every pair of
+//         identical characters is separated by at least 2 positions.
+//
 // Algorithm:
 //   Greedy scheduling with a max-heap and a cooldown queue:
 //   1. If k <= 1, no separation constraint applies, so return s immediately.

@@ -7,6 +7,31 @@
 //   `nums` (or 0 if none exist).
 //   Constraints: 1 <= nums.length <= 100; 1 <= nums[i] <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3, 2]
+//     Output: 4
+//     Explanation:
+//       - Phase 1 scans nums and records frequencies in freq = {1: 1, 2: 2, 3: 1}.
+//       - Phase 2 iterates over freq, adding 1 and 3 (both have count == 1) while
+//         skipping 2 (count == 2).
+//       - The accumulated sum 1 + 3 = 4 is returned.
+//
+//   Example 2:
+//     Input:  nums = [1, 1, 1, 1, 1]
+//     Output: 0
+//     Explanation:
+//       - Phase 1 counts five occurrences of 1, producing freq = {1: 5}.
+//       - Phase 2 sees count == 5 != 1 for key 1, leaves sum at 0, and returns 0.
+//
+//   Example 3:
+//     Input:  nums = [-3, 5, -3, 10, 10, 7]
+//     Output: 12
+//     Explanation:
+//       - Phase 1 builds freq = {-3: 2, 5: 1, 10: 2, 7: 1} across all six elements.
+//       - Phase 2 skips -3 and 10 (each has count == 2) and sums 5 + 7 = 12 for the
+//         entries with count == 1.
+//
 // Algorithm:
 //   Two-pass hash frequency counting:
 //   1. Traverse `nums` and tally the occurrence count of every value in an

@@ -7,6 +7,45 @@
 //   there exist two different nodes A and B such that A is an ancestor of B
 //   and V = |A.val - B.val|.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [8, 3, 10, 1, 6, null, 14, null, null, 4, 7, 13]
+//     Output: 7
+//     Explanation:
+//       - Start DFS at root 8 with path_min = 8 and path_max = 8, branching into
+//         subtrees rooted at 3 and 10.
+//       - Along path 8 -> 3 -> 1, update [next_min, next_max] to [3, 8] at node 3
+//         and [1, 8] at leaf 1; its null children return 8 - 1 = 7.
+//       - Along paths 8 -> 3 -> 6 -> 4 and 8 -> 3 -> 6 -> 7, [next_min, next_max]
+//         stays [3, 8], so leaves 4 and 7 return 8 - 3 = 5, giving max(7, 5) = 7
+//         for the left subtree of 8.
+//       - Along path 8 -> 10 -> 14 -> 13, [next_min, next_max] becomes [8, 10] at
+//         10 (null left child returns 2) and [8, 14] at 14 and 13 (returning 14 - 8
+//         = 6), giving 6 for the right subtree.
+//       - Combine both subtrees at the root via std::max(7, 6) to return 7.
+//
+//   Example 2:
+//     Input:  root = [1, null, 2, null, 0, 3]
+//     Output: 3
+//     Explanation:
+//       - Start DFS at root 1 with path_min = 1 and path_max = 1; its null left
+//         child returns 1 - 1 = 0 while its right call passes [1, 1] to node 2.
+//       - At node 2, update [next_min, next_max] to [1, 2]; its null left child
+//         returns 1 and its right call passes [1, 2] to node 0.
+//       - At node 0, lower next_min to 0 with next_max = 2; its null right child
+//         returns 2 - 0 = 2 and its left call passes [0, 2] to leaf 3.
+//       - At leaf 3, raise next_max to 3 with next_min = 0; its null children
+//         return 3 - 0 = 3, which bubbles up as the maximum difference 3.
+//
+//   Example 3:
+//     Input:  root = [3]
+//     Output: 0
+//     Explanation:
+//       - Start DFS at the single node 3 with path_min = 3 and path_max = 3,
+//         keeping next_min = 3 and next_max = 3.
+//       - Both null children return path_max - path_min = 3 - 3 = 0, so std::max(0,
+//         0) returns 0.
+//
 // Algorithm:
 //   Any ancestor-descendant pair lies on some root-to-leaf path. Because
 //   maximizing |A.val - B.val| along a path is equivalent to finding

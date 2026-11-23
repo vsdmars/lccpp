@@ -9,6 +9,41 @@
 //   Constraints: 1 <= triangle.length <= 200; -10^4 <= triangle[i][j] <= 10^4.
 //   Follow-up: solve using only O(n) extra space, where n is the number of rows.
 //
+// Examples:
+//   Example 1:
+//     Input:  triangle = [[2], [3, 4], [6, 5, 7], [4, 1, 8, 3]]
+//     Output: 11
+//     Explanation:
+//       - Initialize prev = [2] from triangle[0].
+//       - For row r = 1 ([3, 4]), compute left edge curr[0] = 2 + 3 = 5 and right
+//         edge curr[1] = 2 + 4 = 6, then swap to prev = [5, 6].
+//       - For row r = 2 ([6, 5, 7]), compute curr[0] = 5 + 6 = 11, interior curr[1]
+//         = min(5, 6) + 5 = 10, and curr[2] = 6 + 7 = 13, then swap to prev = [11,
+//         10, 13].
+//       - For row r = 3 ([4, 1, 8, 3]), compute curr = [15, min(11, 10) + 1,
+//         min(10, 13) + 8, 16] = [15, 11, 18, 16], swap into prev, and return
+//         std::ranges::min(prev) = 11.
+//
+//   Example 2:
+//     Input:  triangle = [[-1], [2, 3], [1, -1, -3]]
+//     Output: -1
+//     Explanation:
+//       - Initialize prev = [-1] from triangle[0].
+//       - For row r = 1 ([2, 3]), compute curr[0] = -1 + 2 = 1 and curr[1] = -1 + 3
+//         = 2, then swap to prev = [1, 2].
+//       - For row r = 2 ([1, -1, -3]), compute curr[0] = 1 + 1 = 2, interior
+//         curr[1] = min(1, 2) + (-1) = 0, and curr[2] = 2 + (-3) = -1.
+//       - Swap curr into prev = [2, 0, -1] and return std::ranges::min(prev) = -1.
+//
+//   Example 3:
+//     Input:  triangle = [[-10]]
+//     Output: -10
+//     Explanation:
+//       - Initialize prev = [-10] from triangle[0].
+//       - Because triangle.size() is 1, the row loop from r = 1 executes zero
+//         iterations.
+//       - Return std::ranges::min(prev) = -10.
+//
 // Algorithm:
 //   Top-down row-by-row Dynamic Programming with two rolling 1D rows:
 //   - Maintain `prev[idx]` = minimum path sum from the apex down to element

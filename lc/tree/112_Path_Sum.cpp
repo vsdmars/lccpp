@@ -8,6 +8,39 @@
 //   no left or right children. An empty tree has no root-to-leaf paths, so it
 //   always returns false (even when target_sum is 0).
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [5, 4, 8, 11, null, 13, 4, 7, 2, null, null, null, 1],
+//             target_sum = 22
+//     Output: true
+//     Explanation:
+//       - Call dfs(5, 22), compute next_remaining = 22 - 5 = 17, and recurse left
+//         to dfs(4, 17).
+//       - Continue down 4 -> 11 -> 7 with remaining values 17 -> 13 -> 2; leaf 7
+//         yields next_remaining = 2 - 7 = -5 != 0 and returns false.
+//       - Check right child dfs(2, 2) from node 11; leaf 2 computes next_remaining
+//         = 2 - 2 = 0 and returns true, short-circuiting the remaining branches.
+//
+//   Example 2:
+//     Input:  root = [1, 2], target_sum = 1
+//     Output: false
+//     Explanation:
+//       - Call dfs(1, 1) and compute next_remaining = 1 - 1 = 0, but node 1 has
+//         left child 2 so it is not a leaf.
+//       - Recurse left to leaf dfs(2, 0), which computes next_remaining = 0 - 2 =
+//         -2 != 0 and returns false.
+//       - Recurse right to dfs(nullptr, 0), which returns false, yielding false
+//         overall.
+//
+//   Example 3:
+//     Input:  root = [-2, null, -3], target_sum = -5
+//     Output: true
+//     Explanation:
+//       - Call dfs(-2, -5) to get next_remaining = -5 - (-2) = -3; its null left
+//         child returns false.
+//       - Recurse right to leaf dfs(-3, -3), compute next_remaining = -3 - (-3) =
+//         0, and return true.
+//
 // Algorithm:
 //   Perform a top-down depth-first search (DFS) from the root, tracking the
 //   remaining sum required to reach target_sum. At each visited node, subtract

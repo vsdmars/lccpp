@@ -7,6 +7,45 @@
 //   values in the BST are equally close to `target`, return the smaller value.
 //   Returns 0 defensively if `root` is null.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [4, 2, 5, 1, 3], target = 3.714286
+//     Output: 4
+//     Explanation:
+//       - Start at root 4 and initialize best_val = 4 with best_diff = |4 -
+//         3.714286| = 0.285714.
+//       - Since target 3.714286 < 4, descend left to node 2 where diff = |2 -
+//         3.714286| = 1.714286 > 0.285714, leaving best_val = 4.
+//       - Since 3.714286 > 2, descend right to node 3 where diff = |3 - 3.714286| =
+//         0.714286 > 0.285714, still leaving best_val = 4.
+//       - Since 3.714286 > 3, step to cur->right (nullptr), exit the loop, and
+//         return 4.
+//
+//   Example 2:
+//     Input:  root = [4, 2, 5, 1, 3], target = 4.5
+//     Output: 4
+//     Explanation:
+//       - Start at root 4 and initialize best_val = 4 with best_diff = |4 - 4.5| =
+//         0.5.
+//       - Since target 4.5 > 4, descend right to node 5 and compute diff = |5 -
+//         4.5| = 0.5.
+//       - Because diff == best_diff and 5 < best_val (4) is false, keep best_val =
+//         4 to break the distance tie in favor of the smaller value.
+//       - Since 4.5 < 5, step to cur->left (nullptr), terminate the loop, and
+//         return 4.
+//
+//   Example 3:
+//     Input:  root = [-5, -10, -2], target = -3.4
+//     Output: -2
+//     Explanation:
+//       - Start at root -5 and initialize best_val = -5 with best_diff = |-5 -
+//         (-3.4)| = 1.6.
+//       - Since target -3.4 > -5, descend right to node -2.
+//       - At node -2, compute diff = |-2 - (-3.4)| = 1.4 < 1.6, updating best_diff
+//         = 1.4 and best_val = -2.
+//       - Since -3.4 < -2, step to cur->left (nullptr), exit the loop, and return
+//         -2.
+//
 // Algorithm:
 //   Binary search along a single root-to-leaf path in the BST:
 //   - At each node, compute `diff = |node->val - target|`. Update `best_val`

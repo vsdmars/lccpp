@@ -13,6 +13,49 @@
 //   Return the final stable board.
 //   Constraints: 3 <= m, n <= 50; initial board[r][c] in [1, 2000].
 //
+// Examples:
+//   Example 1:
+//     Input:  board = [[4, 8, 5], [1, 2, 3], [6, 2, 7], [8, 2, 8]]
+//     Output: [[0, 0, 0], [4, 0, 5], [1, 0, 3], [6, 0, 7]]
+//     Explanation:
+//       - Round 1 markMatches scans all cells and detects a vertical triple of 2s
+//         at (1, 1), (2, 1), and (3, 1), setting their entries in crush_mask to 1.
+//       - Round 1 clearMarkedCells zeroes column 1 rows 1..3, and applyGravity
+//         drops 8 from (0, 1) down to (3, 1), forming row 3 = [8, 8, 8].
+//       - Round 2 markMatches finds the horizontal triple of 8s at (3, 0), (3, 1),
+//         and (3, 2) and flags them in crush_mask.
+//       - Round 2 clears row 3 and applyGravity compacts columns 0 and 2 downward
+//         into rows 1..3 while filling row 0 with 0s.
+//       - Round 3 markMatches finds no remaining horizontal or vertical triples,
+//         terminating the loop and returning [[0, 0, 0], [4, 0, 5], [1, 0, 3], [6,
+//         0, 7]].
+//
+//   Example 2:
+//     Input:  board = [[5, 1, 2], [5, 3, 4], [5, 5, 5]]
+//     Output: [[0, 0, 0], [0, 1, 2], [0, 3, 4]]
+//     Explanation:
+//       - Round 1 markMatches flags both the horizontal triple at (2, 0)..(2, 2)
+//         and the vertical triple at (0, 0)..(2, 0) in crush_mask without mutating
+//         board mid-scan.
+//       - clearMarkedCells zeroes all five marked cells simultaneously, leaving
+//         only (0, 1)=1, (0, 2)=2, (1, 1)=3, and (1, 2)=4 non-zero.
+//       - applyGravity compacts column 1 ([1, 3]) and column 2 ([2, 4]) down to
+//         rows 1..2 while zero-filling row 0 and keeping column 0 all zeros.
+//       - Round 2 markMatches finds no runs of 3 identical candies and returns
+//         false, returning the final board.
+//
+//   Example 3:
+//     Input:  board = [[1, 2, 1], [2, 1, 2], [1, 2, 1]]
+//     Output: [[1, 2, 1], [2, 1, 2], [1, 2, 1]]
+//     Explanation:
+//       - Allocate the 3 * 3 crush_mask initialized to 0 and invoke markMatches for
+//         Round 1.
+//       - Scanning every cell finds no horizontal triple (c >= 2) or vertical
+//         triple (r >= 2) of identical non-zero candies, so markMatches returns
+//         false immediately.
+//       - Because the while loop never executes, the already stable board is
+//         returned unmodified.
+//
 // Algorithm:
 //   Run an iterative simulation loop where each round performs two decoupled
 //   phases:

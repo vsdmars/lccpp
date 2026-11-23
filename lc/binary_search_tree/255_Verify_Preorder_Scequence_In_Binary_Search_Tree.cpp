@@ -6,6 +6,39 @@
 //   a valid preorder traversal (Root -> Left -> Right) sequence of some binary
 //   search tree (BST), and false otherwise.
 //
+// Examples:
+//   Example 1:
+//     Input:  preorder = [5, 2, 6, 1, 3]
+//     Output: false
+//     Explanation:
+//       - 5 and 2 strictly decrease and are pushed onto stack = [5, 2] with low
+//         unset.
+//       - Processing 6 > stack.back() pops 2 and 5, setting low = 5 and pushing 6
+//         (stack = [6]).
+//       - The next value 1 satisfies 1 <= *low (5), violating the right-subtree
+//         bound of ancestor 5, so false is returned immediately.
+//
+//   Example 2:
+//     Input:  preorder = [5, 2, 1, 3, 6]
+//     Output: true
+//     Explanation:
+//       - 5, 2, and 1 are pushed in decreasing order (stack = [5, 2, 1], low
+//         unset).
+//       - Value 3 pops 1 and 2, updating low = 2 and pushing 3 (stack = [5, 3]).
+//       - Value 6 exceeds low (2), pops 3 and 5 to set low = 5, pushes 6, and
+//         finishes the loop returning true.
+//
+//   Example 3:
+//     Input:  preorder = [10, 5, 2, 7, 15, 12, 9]
+//     Output: false
+//     Explanation:
+//       - 10, 5, and 2 push onto stack = [10, 5, 2], then 7 pops 2 and 5 to set low
+//         = 5 and push 7 (stack = [10, 7]).
+//       - 15 pops 7 and 10 to set low = 10 and push 15, after which 12 pushes onto
+//         stack = [15, 12].
+//       - Next element 9 violates 9 <= *low (10) in the right subtree of 10,
+//         causing an immediate return of false.
+//
 // Algorithm:
 //   Monotonic decreasing stack simulating a BST preorder walk while tracking
 //   the tightest lower bound `low` enforced by completed left subtrees:

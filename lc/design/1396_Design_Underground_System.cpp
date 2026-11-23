@@ -12,6 +12,70 @@
 //       time over all completed direct trips from `startStation` to
 //       `endStation` (directional: A -> B is distinct from B -> A).
 //
+// Examples:
+//   Example 1:
+//     Input:  ["UndergroundSystem", "checkIn", "checkIn", "checkIn", "checkOut",
+//             "checkOut", "checkOut", "getAverageTime", "getAverageTime",
+//             "checkIn", "getAverageTime", "checkOut", "getAverageTime"], [[], [45,
+//             "Leyton", 3], [32, "Paradise", 8], [27, "Leyton", 10], [45,
+//             "Waterloo", 15], [27, "Waterloo", 20], [32, "Cambridge", 22],
+//             ["Paradise", "Cambridge"], ["Leyton", "Waterloo"], [10, "Leyton",
+//             24], ["Leyton", "Waterloo"], [10, "Waterloo", 38], ["Leyton",
+//             "Waterloo"]]
+//     Output: [null, null, null, null, null, null, null, 14.0, 11.0, null, 11.0,
+//             null, 12.0]
+//     Explanation:
+//       - `checkIn` records active trips `45 -> ("Leyton", 3)`, `32 -> ("Paradise",
+//         8)`, and `27 -> ("Leyton", 10)` in `active_trips_`.
+//       - Checking out passenger 45 at `"Waterloo"` (t = 15) and passenger 27 at
+//         `"Waterloo"` (t = 20) erases both from `active_trips_` and accumulates
+//         durations `15 - 3 = 12` and `20 - 10 = 10` under `"Leyton>Waterloo"`
+//         (`total_time = 22`, `trip_count = 2`).
+//       - Checking out passenger 32 at `"Cambridge"` (t = 22) records duration `22
+//         - 8 = 14` under `"Paradise>Cambridge"` (`total_time = 14`, `trip_count =
+//         1`), so the first two queries return `14 / 1 = 14.0` and `22 / 2 = 11.0`.
+//       - `checkIn(10, "Leyton", 24)` only updates `active_trips_`, leaving
+//         `"Leyton>Waterloo"` at `11.0` until `checkOut(10, "Waterloo", 38)` adds
+//         `38 - 24 = 14` (`total_time = 36`, `trip_count = 3`) and
+//         `getAverageTime("Leyton", "Waterloo")` returns `36 / 3 = 12.0`.
+//
+//   Example 2:
+//     Input:  ["UndergroundSystem", "checkIn", "checkOut", "getAverageTime",
+//             "checkIn", "checkOut", "getAverageTime", "checkIn", "checkOut",
+//             "getAverageTime"], [[], [10, "Leyton", 3], [10, "Paradise", 8],
+//             ["Leyton", "Paradise"], [5, "Leyton", 10], [5, "Paradise", 16],
+//             ["Leyton", "Paradise"], [2, "Leyton", 21], [2, "Paradise", 30],
+//             ["Leyton", "Paradise"]]
+//     Output: [null, null, null, 5.0, null, null, 5.5, null, null, 20.0 / 3.0]
+//     Explanation:
+//       - Passenger 10 completes `"Leyton"` (t = 3) to `"Paradise"` (t = 8),
+//         setting `route_stats_["Leyton>Paradise"]` to `total_time = 5, trip_count
+//         = 1` and returning `5 / 1 = 5.0`.
+//       - Passenger 5 completes `"Leyton"` (t = 10) to `"Paradise"` (t = 16) with
+//         duration `6`, updating `"Leyton>Paradise"` to `total_time = 11,
+//         trip_count = 2` and returning `11 / 2 = 5.5`.
+//       - Passenger 2 completes `"Leyton"` (t = 21) to `"Paradise"` (t = 30) with
+//         duration `9`, updating `"Leyton>Paradise"` to `total_time = 20,
+//         trip_count = 3` and returning `20.0 / 3.0`.
+//
+//   Example 3:
+//     Input:  ["UndergroundSystem", "checkIn", "checkOut", "checkIn", "checkOut",
+//             "checkIn", "checkOut", "getAverageTime", "getAverageTime"], [[], [1,
+//             "Alpha", 0], [1, "Beta", 10], [1, "Beta", 15], [1, "Alpha", 45], [1,
+//             "Alpha", 50], [1, "Beta", 70], ["Alpha", "Beta"], ["Beta", "Alpha"]]
+//     Output: [null, null, null, null, null, null, null, 15.0, 30.0]
+//     Explanation:
+//       - Passenger 1 travels `"Alpha"` (t = 0) to `"Beta"` (t = 10), erasing ID 1
+//         from `active_trips_` on checkout and setting `"Alpha>Beta"` to
+//         `total_time = 10, trip_count = 1`.
+//       - Passenger 1 then checks in at `"Beta"` (t = 15) and out at `"Alpha"` (t =
+//         45), recording duration `30` under the separate reverse key
+//         `"Beta>Alpha"` (`total_time = 30, trip_count = 1`).
+//       - On the third trip from `"Alpha"` (t = 50) to `"Beta"` (t = 70), duration
+//         `20` updates `"Alpha>Beta"` to `total_time = 30, trip_count = 2`.
+//       - Querying `getAverageTime("Alpha", "Beta")` returns `30 / 2 = 15.0`, while
+//         `getAverageTime("Beta", "Alpha")` returns `30 / 1 = 30.0`.
+//
 // Algorithm:
 //   Maintain two hash tables:
 //     1. `active_trips_` maps each currently checked-in passenger `id` to

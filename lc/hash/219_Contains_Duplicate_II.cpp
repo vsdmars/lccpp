@@ -8,6 +8,37 @@
 //   Constraints: 1 <= nums.length <= 10^5, -10^9 <= nums[i] <= 10^9,
 //   0 <= k <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 0, 1, 1], k = 1
+//     Output: true
+//     Explanation:
+//       - With k = 1 > 0 and nums.size() = 4, max_dist = 1 and indices i = 0, 1
+//         populate last_index = {1: 0, 0: 1}.
+//       - At i = 2 (nums[2] = 1), try_emplace finds prior index 0; since 2 - 0 = 2
+//         > 1, last_index[1] updates from 0 to 2.
+//       - At i = 3 (nums[3] = 1), try_emplace finds prior index 2 and checks 3 - 2
+//         = 1 <= 1, returning true.
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 3, 1, 2, 3], k = 2
+//     Output: false
+//     Explanation:
+//       - Indices 0, 1, 2 insert last_index = {1: 0, 2: 1, 3: 2}.
+//       - At i = 3, 4, 5, each repeated value has distance 3 > 2 from its previous
+//         index (3 - 0, 4 - 1, 5 - 2), so last_index updates to {1: 3, 2: 4, 3: 5}.
+//       - After scanning all elements without finding a pair within distance 2, the
+//         function returns false.
+//
+//   Example 3:
+//     Input:  nums = [1, 1], k = 0
+//     Output: false
+//     Explanation:
+//       - The early guard checks k <= 0 || nums.size() < 2 and triggers immediately
+//         because k == 0.
+//       - Since distinct indices always satisfy |i - j| >= 1,
+//         containsNearbyDuplicate returns false without building the map.
+//
 // Algorithm:
 //   Scan `nums` left-to-right while maintaining a hash map `last_index` from
 //   each seen value to its most recent index. Because indices strictly increase

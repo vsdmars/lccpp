@@ -10,6 +10,44 @@
 //     - Face-down: If `score >= 1`, spend 1 score to gain `tokens[i]` power.
 //   Return the maximum score achievable after playing any number of tokens.
 //
+// Examples:
+//   Example 1:
+//     Input:  tokens = [100, 200, 300, 400], power = 200
+//     Output: 2
+//     Explanation:
+//       - Sort `tokens` to `[100, 200, 300, 400]` and initialize `left = 0`, `right
+//         = 4`, `score = 0`, and `max_score = 0`.
+//       - Since `power (200) >= tokens[0] (100)`, play `100` face-up to update
+//         `power = 100`, `left = 1`, `score = 1`, and `max_score = 1`.
+//       - Because `power (100) < tokens[1] (200)` and `score = 1 > 0`, play
+//         `tokens[3] = 400` face-down (`right = 3`), raising `power` to `500` and
+//         dropping `score` to `0`.
+//       - Play `tokens[1] = 200` and `tokens[2] = 300` face-up (`power: 500 -> 300
+//         -> 0`, `left = 3`, `score = 2`), updating `max_score = 2` before exiting
+//         at `left == right`.
+//
+//   Example 2:
+//     Input:  tokens = [26, 71, 55, 81], power = 54
+//     Output: 1
+//     Explanation:
+//       - Sort `tokens` to `[26, 55, 71, 81]` with `left = 0`, `right = 4`, `score
+//         = 0`, and `max_score = 0`.
+//       - Play `tokens[0] = 26` face-up (`power = 28`, `left = 1`, `score = 1`,
+//         `max_score = 1`), then sell `tokens[3] = 81` face-down (`right = 3`,
+//         `power = 109`, `score = 0`).
+//       - Play `tokens[1] = 55` face-up (`power = 54`, `left = 2`, `score = 1`,
+//         `max_score = 1`), then sell `tokens[2] = 71` face-down (`right = 2`,
+//         `power = 125`, `score = 0`), ending with `max_score = 1`.
+//
+//   Example 3:
+//     Input:  tokens = [100], power = 50
+//     Output: 0
+//     Explanation:
+//       - Sort `[100]` and enter the loop with `left = 0`, `right = 1`, `power =
+//         50`, and `score = 0`.
+//       - Since `power (50) < tokens[0] (100)` and `score == 0`, neither play is
+//         legal, so the loop hits `break` and returns `max_score = 0`.
+//
 // Algorithm:
 //   Greedy two-pointer strategy on the sorted token array.
 //   - Sort `tokens` in ascending order.

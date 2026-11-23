@@ -6,6 +6,43 @@
 //   integer less than or equal to n whose base-10 digits are monotone
 //   increasing (every pair of adjacent digits satisfies x <= y).
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 332
+//     Output: 299
+//     Explanation:
+//       - Convert 332 to digits = "332" and initialize fill_nine_from = 3.
+//       - At i = 2, digits[1] ('3') > digits[2] ('2'), so decrement digits[1] to
+//         '2' ("322") and set fill_nine_from = 2.
+//       - At i = 1, the cascaded comparison digits[0] ('3') > digits[1] ('2')
+//         triggers, decrementing digits[0] to '2' ("222") and updating
+//         fill_nine_from = 1.
+//       - Overwrite indices 1 and 2 with '9' to form "299" and parse it via
+//         std::stoi to return 299.
+//
+//   Example 2:
+//     Input:  n = 1988
+//     Output: 1899
+//     Explanation:
+//       - Convert 1988 to digits = "1988" and initialize fill_nine_from = 4.
+//       - At i = 3, digits[2] ('8') <= digits[3] ('8'), so no decrement occurs.
+//       - At i = 2, digits[1] ('9') > digits[2] ('8'), so decrement digits[1] to
+//         '8' ("1888") and set fill_nine_from = 2.
+//       - At i = 1, digits[0] ('1') <= digits[1] ('8') holds, then overwrite
+//         indices 2 and 3 with '9' to yield "1899" and return 1899.
+//
+//   Example 3:
+//     Input:  n = 100
+//     Output: 99
+//     Explanation:
+//       - Convert 100 to digits = "100" and initialize fill_nine_from = 3.
+//       - At i = 2, digits[1] ('0') <= digits[2] ('0'), so leave the string
+//         unchanged.
+//       - At i = 1, digits[0] ('1') > digits[1] ('0'), so decrement digits[0] to
+//         '0' ("000") and set fill_nine_from = 1.
+//       - Fill indices 1 and 2 with '9' to produce "099", which std::stoi parses
+//         without the leading zero as 99.
+//
 // Algorithm:
 //   Convert n into its decimal digit string and scan from right to left to
 //   find any inversion where digits[i - 1] > digits[i]. Whenever an inversion

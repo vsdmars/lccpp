@@ -5,6 +5,44 @@
 //   Given a string `s`, return the length of the longest contiguous substring
 //   that contains at most two distinct characters.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "eceba"
+//     Output: 3
+//     Explanation:
+//       - Indices right = 0..2 ("ece") fill last_pos = {'e': 2, 'c': 1} with left =
+//         0, setting max_len = 3.
+//       - At right = 3 ('b'), last_pos = {'e': 2, 'c': 1, 'b': 3} exceeds 2
+//         distinct characters, so oldest entry 'c': 1 is erased and left jumps to 1
+//         + 1 = 2 (window "eb", length 2).
+//       - At right = 4 ('a'), last_pos = {'e': 2, 'b': 3, 'a': 4} evicts oldest
+//         entry 'e': 2, setting left = 2 + 1 = 3 (window "ba", length 2) and
+//         returning max_len = 3.
+//
+//   Example 2:
+//     Input:  s = "ccaabbb"
+//     Output: 5
+//     Explanation:
+//       - Indices right = 0..3 ("ccaa") populate last_pos = {'c': 1, 'a': 3} with
+//         left = 0, updating max_len to 4.
+//       - At right = 4 ('b'), last_pos = {'c': 1, 'a': 3, 'b': 4} exceeds 2
+//         distinct characters, so oldest entry 'c': 1 is erased and left jumps to 1
+//         + 1 = 2 (window "aab", length 3).
+//       - Indices right = 5..6 ('b', 'b') update last_pos to {'a': 3, 'b': 6} while
+//         left remains 2, expanding window "aabbb" to max_len = 6 - 2 + 1 = 5.
+//
+//   Example 3:
+//     Input:  s = "aAbBcC"
+//     Output: 2
+//     Explanation:
+//       - Indices right = 0..1 ("aA") record last_pos = {'a': 0, 'A': 1} with left
+//         = 0 and max_len = 2 because uppercase and lowercase letters are distinct
+//         keys.
+//       - At right = 2 ('b'), last_pos = {'a': 0, 'A': 1, 'b': 2} evicts 'a': 0 and
+//         advances left to 1, keeping window "Ab" at length 2.
+//       - Each subsequent character ('B', 'c', 'C') evicts the oldest entry ('A':
+//         1, 'b': 2, 'B': 3) in turn, leaving max_len = 2.
+//
 // Algorithm:
 //   Variable-size sliding window `[left, right]` paired with a small hash map
 //   `last_pos` storing the rightmost index at which each active character in

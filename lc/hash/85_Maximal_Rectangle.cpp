@@ -7,6 +7,39 @@
 //   '1's and return its area.
 //   Constraints: 1 <= rows, cols <= 200; matrix[r][c] is '0' or '1'.
 //
+// Examples:
+//   Example 1:
+//     Input:  matrix = [["1", "0", "1", "0", "0"], ["1", "0", "1", "1", "1"], ["1",
+//             "1", "1", "1", "1"], ["1", "0", "0", "1", "0"]]
+//     Output: 6
+//     Explanation:
+//       - Row 0 builds heights = [1, 0, 1, 0, 0] (plus sentinel 0 at index 5) with
+//         best area 1; row 1 updates heights = [2, 0, 2, 1, 1] with best area 3
+//         across columns 2..4.
+//       - Row 2 updates heights = [3, 1, 3, 2, 2]; when the sentinel c = 5 (height
+//         0) is reached, popping column 3 (height 2) with stack top 1 gives width =
+//         5 - 1 - 1 = 3 and area = 2 * 3 = 6.
+//       - Row 3 updates heights = [4, 0, 0, 3, 0], whose largest rectangle area is
+//         4, so max_area = 6 is returned.
+//
+//   Example 2:
+//     Input:  matrix = [["1", "1", "0", "1", "1", "1"]]
+//     Output: 3
+//     Explanation:
+//       - Processing the single row sets heights = [1, 1, 0, 1, 1, 1] followed by
+//         the sentinel 0 at index 6.
+//       - At c = 2 (height 0), the stack pops columns 1 and 0 of height 1 to record
+//         area 2; at sentinel c = 6, popping column 3 above stack top 2 gives width
+//         = 6 - 2 - 1 = 3 and best area = 1 * 3 = 3.
+//
+//   Example 3:
+//     Input:  matrix = []
+//     Output: 0
+//     Explanation:
+//       - Check the initial empty-matrix guard matrix.empty() || matrix[0].empty(),
+//         which evaluates to true.
+//       - Return 0 immediately without allocating heights or stack.
+//
 // Algorithm:
 //   Reduce the 2D problem to `rows` independent instances of Largest Rectangle
 //   in Histogram (LeetCode #84). Maintain a 1D array `heights` of length

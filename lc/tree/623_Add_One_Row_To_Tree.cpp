@@ -12,6 +12,39 @@
 //     left subtree as its left child, and make the other `cur->right` with
 //     `cur`'s original right subtree as its right child.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [4, 2, 6, 3, 1, 5], val = 1, depth = 2
+//     Output: [4, 1, 1, 2, null, null, 6, 3, 1, 5]
+//     Explanation:
+//       - Since depth == 2 > 1, initialize current_level = [4] at curr_depth = 1;
+//         the BFS loop condition (curr_depth < 1) does not advance further.
+//       - Splice new nodes onto parent 4: parent->left = new TreeNode(1, 2,
+//         nullptr) and parent->right = new TreeNode(1, nullptr, 6).
+//       - Original subtrees rooted at 2 (with children 3, 1) and 6 (with left child
+//         5) stay on the outer left and right edges, producing [4, 1, 1, 2, null,
+//         null, 6, 3, 1, 5].
+//
+//   Example 2:
+//     Input:  root = [4, 2, null, 3, 1], val = 1, depth = 3
+//     Output: [4, 2, null, 1, 1, 3, null, null, 1]
+//     Explanation:
+//       - Start with current_level = [4] at curr_depth = 1, then advance one BFS
+//         step (curr_depth < 2) to collect depth-2 frontier current_level = [2].
+//       - For node 2 at depth 2, set 2->left = new TreeNode(1, 3, nullptr) and
+//         2->right = new TreeNode(1, nullptr, 1).
+//       - Level-order traversal yields [4, 2, null, 1, 1, 3, null, null, 1].
+//
+//   Example 3:
+//     Input:  root = [4, 2, 6], val = 9, depth = 1
+//     Output: [9, 4, null, 2, 6]
+//     Explanation:
+//       - Trigger the depth == 1 base case before entering the BFS loop.
+//       - Allocate new TreeNode(9, root, nullptr) so the original tree [4, 2, 6]
+//         becomes the left subtree of 9.
+//       - Return the new root 9, whose level-order serialization is [9, 4, null, 2,
+//         6].
+//
 // Algorithm:
 //   Use breadth-first search (level-order traversal) to collect all nodes at
 //   depth `depth - 1`, then perform pointer splicing on that frontier.

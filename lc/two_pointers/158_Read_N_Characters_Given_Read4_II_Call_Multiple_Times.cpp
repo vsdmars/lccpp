@@ -10,6 +10,45 @@
 //   multiple times on the same file, so leftover bytes fetched by `read4`
 //   must be preserved across calls.
 //
+// Examples:
+//   Example 1:
+//     Input:  file = "abc", calls = [read(1), read(2), read(1)]
+//     Output: ["a", "bc", ""]
+//     Explanation:
+//       - On read(1), buf_head_ == buf_tail_ == 0 triggers read4 to load "abc"
+//         (buf_tail_ = 3), then copies 'a', advances buf_head_ to 1, and returns
+//         "a".
+//       - On read(2), buf_head_ = 1 < buf_tail_ = 3 reuses internal_buf_[1..2]
+//         without calling read4, copying "bc" and advancing buf_head_ to 3.
+//       - On the final read(1), buf_head_ == buf_tail_ == 3 triggers read4 which
+//         returns 0 at EOF, breaking immediately and returning "".
+//
+//   Example 2:
+//     Input:  file = "abc", calls = [read(4), read(1)]
+//     Output: ["abc", ""]
+//     Explanation:
+//       - On read(4), read4 fetches 3 bytes ("abc", buf_tail_ = 3), which are
+//         copied into buf[0..2] while advancing buf_head_ to 3.
+//       - Because written = 3 < 4 and buf_head_ == buf_tail_, the loop calls read4
+//         again, gets 0 at EOF, and breaks to return "abc".
+//       - On read(1), buf_head_ == buf_tail_ == 3 calls read4, receives 0, and
+//         returns "".
+//
+//   Example 3:
+//     Input:  file = "abcdefghij", calls = [read(0), read(1), read(0), read(1),
+//             read(3), read(2), read(10), read(1)]
+//     Output: ["", "a", "", "b", "cde", "fg", "hij", ""]
+//     Explanation:
+//       - The first read(0) hits the n <= 0 guard and returns ""; read(1) then
+//         fetches "abcd" via read4 (buf_tail_ = 4) and consumes 'a' (buf_head_ =
+//         1).
+//       - After another no-op read(0), read(1) consumes 'b' (buf_head_ = 2), and
+//         read(3) drains 'c' and 'd', refills internal_buf_ with "efgh", and
+//         consumes 'e' (buf_head_ = 1, buf_tail_ = 4).
+//       - read(2) consumes 'f' and 'g' (buf_head_ = 3), read(10) consumes 'h',
+//         calls read4 for "ij" (buf_tail_ = 2), consumes 'i' and 'j', and stops at
+//         EOF ("hij"), and the final read(1) returns "".
+//
 // Algorithm:
 //   Maintain a persistent 4-byte internal buffer `internal_buf_` along with
 //   two cursors: `buf_head_` (index of the next unread cached byte) and

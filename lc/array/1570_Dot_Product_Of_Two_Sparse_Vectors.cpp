@@ -8,6 +8,42 @@
 //   via `dotProduct(vec)`.
 //   Follow-up: What if only one of the two vectors is sparse?
 //
+// Examples:
+//   Example 1:
+//     Input:  v1 = [1, 0, 0, 2, 3], v2 = [0, 3, 0, 4, 0]
+//     Output: 8
+//     Explanation:
+//       - Construction stores only non-zero (index, value) pairs: v1 becomes [(0,
+//         1), (3, 2), (4, 3)] and v2 becomes [(1, 3), (3, 4)].
+//       - Start two-pointer merge at i = 0, j = 0: idx1 = 0 < idx2 = 1 advances i
+//         to 1, then idx1 = 3 > idx2 = 1 advances j to 1.
+//       - At i = 1, j = 1, both pointers match at index 3, adding 2 * 4 = 8 to
+//         product and advancing to i = 2, j = 2.
+//       - Pointer j = 2 reaches v2.entries_.size(), terminating the loop and
+//         returning 8.
+//
+//   Example 2:
+//     Input:  v1 = [0, 1, 0, 0, 2, 0, 0], v2 = [1, 0, 0, 0, 3, 0, 4]
+//     Output: 6
+//     Explanation:
+//       - Construction compresses v1 into [(1, 1), (4, 2)] and v2 into [(0, 1), (4,
+//         3), (6, 4)].
+//       - At i = 0, j = 0, idx1 = 1 > idx2 = 0 advances j to 1; at i = 0, j = 1,
+//         idx1 = 1 < idx2 = 4 advances i to 1.
+//       - At i = 1, j = 1, both entries share index 4, accumulating product = 2 * 3
+//         = 6 and advancing to i = 2, j = 2.
+//       - Since i = 2 equals v1.entries_.size(), the loop exits without visiting
+//         (6, 4) and returns 6.
+//
+//   Example 3:
+//     Input:  v1 = [0, 1, 0, 0, 0], v2 = [0, 0, 0, 0, 2]
+//     Output: 0
+//     Explanation:
+//       - Construction extracts non-zero pairs [(1, 1)] for v1 and [(4, 2)] for v2.
+//       - At i = 0, j = 0, idx1 = 1 < idx2 = 4 advances i to 1 without modifying
+//         product.
+//       - With i = 1 equal to v1.entries_.size(), the loop finishes and returns 0.
+//
 // Algorithm:
 //   Compressed Non-Zero Index-Value List + Two-Pointer Merge:
 //   1. Construction: scan `nums` once and retain only `(index, value)` pairs

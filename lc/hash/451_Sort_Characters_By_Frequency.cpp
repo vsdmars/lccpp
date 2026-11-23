@@ -8,6 +8,40 @@
 //   contiguously in the output. If multiple characters share the same
 //   frequency, any valid ordering among them is accepted.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "tree"
+//     Output: "eetr"
+//     Explanation:
+//       - Tally character occurrences in freq, obtaining {'e': 2, 't': 1, 'r': 1}.
+//       - Collect (count, char) pairs into entries: [(2, 'e'), (1, 't'), (1, 'r')].
+//       - Sort entries descending with std::ranges::greater{}, ordering by count
+//         descending and breaking the count-1 tie by ASCII code ('t' = 116 before
+//         'r' = 114) to give [(2, 'e'), (1, 't'), (1, 'r')].
+//       - Append count copies of each character in sorted order into result,
+//         returning "eetr".
+//
+//   Example 2:
+//     Input:  s = "Aabb"
+//     Output: "bbaA"
+//     Explanation:
+//       - Tally character occurrences in freq, keeping uppercase and lowercase
+//         distinct: {'b': 2, 'a': 1, 'A': 1}.
+//       - Materialize entries as [(2, 'b'), (1, 'a'), (1, 'A')] and sort with
+//         std::ranges::greater{}.
+//       - Place (2, 'b') first and break the count-1 tie by descending character
+//         code ('a' = 97 before 'A' = 65), yielding [(2, 'b'), (1, 'a'), (1, 'A')].
+//       - Emit each character count times to build and return "bbaA".
+//
+//   Example 3:
+//     Input:  s = ""
+//     Output: ""
+//     Explanation:
+//       - Scan the empty input s, leaving freq empty and producing an empty entries
+//         vector.
+//       - Sort and iterate over the empty entries list without appending any
+//         characters, returning "".
+//
 // Algorithm:
 //   1. Count the frequency of every distinct character in s using an unordered
 //      hash map (std::unordered_map<char, int>).

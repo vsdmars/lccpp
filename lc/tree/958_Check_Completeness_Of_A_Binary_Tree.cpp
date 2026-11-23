@@ -8,6 +8,40 @@
 //   as possible (between 1 and 2^h nodes inclusive at the final depth h).
 //   The tree contains between 1 and 100 nodes.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, 4, 5, 6]
+//     Output: true
+//     Explanation:
+//       - BFS starts with q = [1] and seen_null = false, popping 1 and pushing 2
+//         and 3.
+//       - Popping 2 pushes 4 and 5, and popping 3 pushes 6 followed by nullptr
+//         (3->right).
+//       - Nodes 4, 5, and 6 are popped while seen_null is false, each pushing two
+//         nullptr children.
+//       - Popping the nullptr from 3->right sets seen_null = true, and all
+//         remaining queued entries are nullptr, returning true.
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, 4, 5, null, 7]
+//     Output: false
+//     Explanation:
+//       - BFS pops 1 (enqueuing 2, 3), pops 2 (enqueuing 4, 5), and pops 3
+//         (enqueuing nullptr, 7).
+//       - After popping 4 and 5, BFS pops the nullptr from 3->left and sets
+//         seen_null = true.
+//       - The very next popped entry is node 7 while seen_null == true, so
+//         isCompleteTree immediately returns false.
+//
+//   Example 3:
+//     Input:  root = [1, null, 2]
+//     Output: false
+//     Explanation:
+//       - BFS pops root 1 with seen_null == false and enqueues 1->left (nullptr)
+//         followed by 1->right (node 2).
+//       - Next, BFS pops nullptr and sets seen_null = true.
+//       - Finally, BFS pops node 2 while seen_null == true and returns false.
+//
 // Algorithm:
 //   Perform a standard breadth-first (level-order) traversal that explicitly
 //   enqueues both left and right child pointers, including nullptr children.

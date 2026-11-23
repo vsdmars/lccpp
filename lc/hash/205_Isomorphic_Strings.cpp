@@ -9,6 +9,36 @@
 //   map to the same character in `t` (a character may map to itself).
 //   Constraints: 1 <= s.length <= 5 * 10^4, t.length == s.length, valid ASCII.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "egg", t = "add"
+//     Output: true
+//     Explanation:
+//       - Initialize 256-entry tables s_to_t and t_to_s to -1.
+//       - At i = 0, 'e' and 'a' are unmapped, so s_to_t['e'] = 'a' and t_to_s['a']
+//         = 'e'; at i = 1, s_to_t['g'] = 'd' and t_to_s['d'] = 'g'.
+//       - At i = 2, s_to_t['g'] already equals 'd' and t_to_s['d'] already equals
+//         'g', so the loop finishes and returns true.
+//
+//   Example 2:
+//     Input:  s = "badc", t = "baba"
+//     Output: false
+//     Explanation:
+//       - At i = 0 and i = 1, the loop records s_to_t['b'] = 'b', t_to_s['b'] =
+//         'b', s_to_t['a'] = 'a', and t_to_s['a'] = 'a'.
+//       - At i = 2 (s[2] = 'd', t[2] = 'b'), s_to_t['d'] is -1 but t_to_s['b'] is
+//         already 'b' != 'd', violating injectivity.
+//       - The reverse-mapping conflict check triggers immediately and returns
+//         false.
+//
+//   Example 3:
+//     Input:  s = "ab", t = "a"
+//     Output: false
+//     Explanation:
+//       - The entry guard compares s.size() (2) with t.size() (1).
+//       - Because the lengths are unequal, isIsomorphic returns false immediately
+//         without scanning characters.
+//
 // Algorithm:
 //   Isomorphism requires a bijection (one-to-one and onto correspondence)
 //   between the characters occurring in `s` and those occurring in `t`.

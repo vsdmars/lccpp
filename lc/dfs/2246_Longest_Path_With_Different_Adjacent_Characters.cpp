@@ -9,6 +9,43 @@
 //   simple path in the tree such that no two adjacent nodes along the path
 //   share the same character.
 //
+// Examples:
+//   Example 1:
+//     Input:  parent = [-1, 0, 0, 1, 1, 2], s = "abacbe"
+//     Output: 3
+//     Explanation:
+//       - Building children gives 0 -> [1, 2], 1 -> [3, 4], and 2 -> [5].
+//       - At node 1 ('b'), child 3 ('c', len = 1) updates longest = 1 while child 4
+//         ('b', len = 1) is skipped because s[1] == s[4] == 'b', so global_max
+//         becomes 2 and node 1 returns 2.
+//       - At node 2 ('a'), child 5 ('e', len = 1) differs from 'a', giving longest
+//         = 1 and returning 2.
+//       - At root 0 ('a'), child 1 ('b', len = 2) sets longest = 2 while child 2
+//         ('a', len = 2) is skipped because s[0] == s[2] == 'a', updating
+//         global_max to 2 + 0 + 1 = 3.
+//
+//   Example 2:
+//     Input:  parent = [-1, 0, 0, 0], s = "aabc"
+//     Output: 3
+//     Explanation:
+//       - Root 0 ('a') has leaf children 1 ('a'), 2 ('b'), and 3 ('c'), each
+//         returning a downward length of 1.
+//       - Child 1 is skipped because s[0] == s[1] == 'a', while children 2 and 3
+//         set longest = 1 and second_longest = 1.
+//       - Combining the top two valid arms through root 0 updates global_max to 1 +
+//         1 + 1 = 3.
+//
+//   Example 3:
+//     Input:  parent = [-1, 0, 1, 1], s = "aabc"
+//     Output: 3
+//     Explanation:
+//       - DFS visits node 1 ('a') and its leaf children 2 ('b') and 3 ('c'), which
+//         each return 1 with characters distinct from s[1] = 'a'.
+//       - Node 1 combines both valid arms (longest = 1, second_longest = 1) to
+//         update global_max = 1 + 1 + 1 = 3 and returns 2.
+//       - At root 0 ('a'), edge (0, 1) is blocked because s[0] == s[1] == 'a', so
+//         root keeps longest = 0 and returns the preserved global_max = 3.
+//
 // Algorithm:
 //   Build a children adjacency list from `parent` and run a single post-order
 //   DFS (tree DP / diameter-style recursion) starting from root `0`.

@@ -9,6 +9,44 @@
 //   at any node and end at any descendant; it cannot reverse upward from child
 //   to parent. An empty tree has length 0.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, null, 3, 2, 4, null, null, null, 5]
+//     Output: 3
+//     Explanation:
+//       - Start DFS at root 1 with streak = 1 and update best = 1.
+//       - Visit right child 3: since 3 != 1 + 1, reset streak = 1 while best stays
+//         1.
+//       - Visit left child 2 of 3 (2 != 3 + 1, streak = 1), then visit right child
+//         4 of 3 (4 == 3 + 1), extending streak = 2 and updating best = 2.
+//       - Visit right child 5 of 4: since 5 == 4 + 1, extend streak = 3 and update
+//         best = 3.
+//
+//   Example 2:
+//     Input:  root = [2, null, 3, 2, null, 1]
+//     Output: 2
+//     Explanation:
+//       - Start DFS at root 2 with streak = 1 and set best = 1.
+//       - Visit right child 3: since 3 == 2 + 1, extend streak = 2 and update best
+//         = 2.
+//       - Visit left child 2 of 3: since 2 != 3 + 1, reset streak = 1.
+//       - Visit left child 1 of 2: since 1 != 2 + 1, streak remains 1, returning
+//         final best = 2.
+//
+//   Example 3:
+//     Input:  root = [2147483647, -2147483648, -3, null, null, -2, null, null, -1,
+//             0]
+//     Output: 4
+//     Explanation:
+//       - Start DFS at root 2147483647 (INT_MAX) with streak = 1 and set best = 1.
+//       - Check left child -2147483648 (INT_MIN) in 64-bit arithmetic: 2147483647LL
+//         + 1 != -2147483648LL, avoiding signed overflow wrap-around and resetting
+//         streak = 1.
+//       - Visit right child -3 (-3 != 2147483648, so streak = 1) and descend along
+//         -3 -> -2 -> -1 -> 0.
+//       - At each step (-2, -1, 0), child.val == parent.val + 1 holds, advancing
+//         streak to 2, 3, and 4 so best = 4.
+//
 // Algorithm:
 //   Use top-down Depth-First Search (both recursive and iterative stack-based
 //   variants are provided). At each node, maintain the length of the longest

@@ -9,6 +9,42 @@
 //   already sorted in non-decreasing order), return `arr` unchanged.
 //   Constraints: 1 <= arr.length <= 10^4, 1 <= arr[i] <= 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [1, 9, 4, 6, 7]
+//     Output: [1, 7, 4, 6, 9]
+//     Explanation:
+//       - Phase 1 scans right-to-left and finds the rightmost drop at index 1 where
+//         arr[1] = 9 > arr[2] = 4, setting pivot_idx = 1.
+//       - Phase 2 initializes swap_idx = 2 (value 4) and scans i = 3, 4 for larger
+//         values strictly less than arr[1] = 9.
+//       - At i = 3, arr[3] = 6 updates swap_idx = 3, and at i = 4, arr[4] = 7
+//         updates swap_idx = 4.
+//       - Swapping arr[1] (9) and arr[4] (7) produces [1, 7, 4, 6, 9].
+//
+//   Example 2:
+//     Input:  arr = [3, 1, 1, 3]
+//     Output: [1, 3, 1, 3]
+//     Explanation:
+//       - Phase 1 scans right-to-left past 1 <= 3 and 1 <= 1, finding arr[0] = 3 >
+//         arr[1] = 1 so pivot_idx = 0.
+//       - Phase 2 starts with swap_idx = 1 (value 1) and checks i = 2 (arr[2] = 1
+//         is not strictly greater than arr[swap_idx]) and i = 3 (arr[3] = 3 is not
+//         strictly less than arr[0]).
+//       - Because strict inequality preserves the leftmost tie, swap_idx stays at
+//         1.
+//       - Swapping arr[0] and arr[1] yields [1, 3, 1, 3], which is larger than [1,
+//         1, 3, 3].
+//
+//   Example 3:
+//     Input:  arr = [1, 1, 5]
+//     Output: [1, 1, 5]
+//     Explanation:
+//       - Phase 1 checks i = 2 (1 > 5 is false) and i = 1 (1 > 1 is false), so
+//         pivot_idx remains equal to n = 3.
+//       - Because pivot_idx == n indicates the array is already sorted in
+//         non-decreasing order, arr is returned unchanged as [1, 1, 5].
+//
 // Algorithm:
 //   Greedy Right-to-Left Pivot + Leftmost Best Replacement:
 //   1. Scan from right to left to find the rightmost index `pivot_idx` where

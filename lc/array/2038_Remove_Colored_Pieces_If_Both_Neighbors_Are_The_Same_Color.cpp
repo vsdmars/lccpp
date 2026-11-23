@@ -14,6 +14,43 @@
 //   Return `true` if Alice wins and `false` if Bob wins under optimal play.
 //   Constraints: 1 <= colors.size() <= 10^5; colors[i] is `'A'` or `'B'`.
 //
+// Examples:
+//   Example 1:
+//     Input:  colors = "AAABABB"
+//     Output: true
+//     Explanation:
+//       - Verify colors.size() >= 3 (7 >= 3) and initialize alice_moves = 0 and
+//         bob_moves = 0.
+//       - Scan interior indices i = 1..5: only i = 1 satisfies colors[0] ==
+//         colors[1] == colors[2] == 'A', incrementing alice_moves to 1 while
+//         bob_moves stays 0.
+//       - Compare alice_moves > bob_moves (1 > 0) and return true.
+//
+//   Example 2:
+//     Input:  colors = "ABBBBBBBAAA"
+//     Output: false
+//     Explanation:
+//       - Verify colors.size() >= 3 (11 >= 3) and initialize alice_moves = 0 and
+//         bob_moves = 0.
+//       - At interior indices i = 2..6 inside the 7-character 'B' run, colors[i -
+//         1] == colors[i] == colors[i + 1] == 'B' holds five times, raising
+//         bob_moves to 5.
+//       - At interior index i = 9 inside the trailing "AAA" run, colors[8] ==
+//         colors[9] == colors[10] == 'A' increments alice_moves to 1.
+//       - Evaluate alice_moves > bob_moves (1 > 5) and return false.
+//
+//   Example 3:
+//     Input:  colors = "AAABBB"
+//     Output: false
+//     Explanation:
+//       - Verify colors.size() >= 3 (6 >= 3) and initialize alice_moves = 0 and
+//         bob_moves = 0.
+//       - At interior index i = 1, colors[0..2] == "AAA" increments alice_moves to
+//         1, while indices i = 2 ("AAB") and i = 3 ("ABB") do not qualify.
+//       - At interior index i = 4, colors[3..5] == "BBB" increments bob_moves to 1.
+//       - Evaluate alice_moves > bob_moves (1 > 1) and return false because Alice
+//         runs out of moves first.
+//
 // Algorithm:
 //   Game-Theoretic Move Counting (Independent Runs):
 //   A crucial structural invariant makes simulation unnecessary: removing an

@@ -6,6 +6,44 @@
 //   a non-empty axis-aligned submatrix (rectangle) whose sum is <= k. It is
 //   guaranteed that at least one rectangle with sum <= k exists.
 //
+// Examples:
+//   Example 1:
+//     Input:  matrix = [[1, 0, 1], [0, -2, 3]], k = 2
+//     Output: 2
+//     Explanation:
+//       - With rows = 2 <= cols = 3, set compress_rows = true to enumerate row
+//         boundaries (outer = 2, inner = 3).
+//       - For row pair start = 0, end = 0, form strip = [1, 0, 1], whose Kadane
+//         maximum subarray sum is 2 <= k.
+//       - Because best reaches k = 2, return 2 immediately without checking
+//         remaining row pairs.
+//
+//   Example 2:
+//     Input:  matrix = [[2, 2, -1]], k = 0
+//     Output: -1
+//     Explanation:
+//       - With rows = 1 <= cols = 3, form the single-row strip [2, 2, -1]; Kadane
+//         yields 4 > 0, triggering the std::set prefix-sum scan seeded with {0}.
+//       - Process 2 (prefix = 2, lower_bound(2) = end, insert 2) and the second 2
+//         (prefix = 4, lower_bound(4) = end, insert 4), leaving prefix_sums = {0,
+//         2, 4}.
+//       - Process -1 (prefix = 3), where lower_bound(3 - 0 = 3) finds 4 and
+//         produces candidate sum 3 - 4 = -1 <= 0.
+//       - Return best = -1 as the maximum submatrix sum no larger than 0.
+//
+//   Example 3:
+//     Input:  matrix = [[5, -4], [-3, -4], [5, 1], [2, -3], [1, 4]], k = 3
+//     Output: 3
+//     Explanation:
+//       - With rows = 5 > cols = 2, set compress_rows = false to enumerate column
+//         boundaries (outer = 2, inner = 5).
+//       - For column start = 0, end = 0, form strip = [5, -3, 5, 2, 1]; Kadane
+//         yields 10 > 3, triggering the ordered prefix-sum scan.
+//       - Scan indices 0 through 3 to populate prefix_sums = {0, 2, 5, 7, 9} and
+//         update best = 2 from 2 - 0 at index 1.
+//       - At index 4 (val = 1, prefix = 10), lower_bound(10 - 3 = 7) returns 7,
+//         yielding 10 - 7 = 3 == k and returning 3 immediately.
+//
 // Algorithm:
 //   2D Strip Compression + 1D Prefix-Sum Balanced BST (with Kadane Fast Path):
 //   1. Choose the smaller dimension (`min(m, n)`) as the pair-enumeration axis

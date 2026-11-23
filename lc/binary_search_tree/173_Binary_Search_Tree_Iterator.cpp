@@ -11,6 +11,41 @@
 //   Requirements: `next()` and `hasNext()` must run in amortized O(1) time and
 //   use O(h) memory, where h is the height of the BST.
 //
+// Examples:
+//   Example 1:
+//     Input:  BSTIterator([7, 3, 15, null, null, 9, 20]), next(), next(),
+//             hasNext(), next(), hasNext(), next(), hasNext(), next(), hasNext()
+//     Output: [null, 3, 7, true, 9, true, 15, true, 20, false]
+//     Explanation:
+//       - Construction calls pushLeftSpine(7), populating stack_ with [7, 3].
+//       - The first next() pops 3 (null right child) and returns 3; the second
+//         next() pops 7 and pushes 15's left spine [15, 9], returning 7.
+//       - hasNext() returns true, next() pops 9 (null right child) returning 9,
+//         then hasNext() returns true and next() pops 15 while pushing right child
+//         20, returning 15.
+//       - hasNext() returns true, the final next() pops 20 leaving stack_ empty,
+//         and the last hasNext() returns false.
+//
+//   Example 2:
+//     Input:  BSTIterator([5, 3, 7, 2, 4, 6, 8]), drain with while (hasNext())
+//             next()
+//     Output: [2, 3, 4, 5, 6, 7, 8]
+//     Explanation:
+//       - Construction pushes the leftmost path [5, 3, 2] onto stack_.
+//       - Popping 2 yields 2, then popping 3 yields 3 and pushes its right child 4,
+//         which is popped next.
+//       - Popping 5 pushes [7, 6], yielding 6, then 7 (pushing 8), and finally 8
+//         until stack_ becomes empty.
+//
+//   Example 3:
+//     Input:  BSTIterator([42]), hasNext(), next(), hasNext()
+//     Output: [null, true, 42, false]
+//     Explanation:
+//       - Construction pushes the single node onto stack_ = [42], so hasNext()
+//         returns true.
+//       - next() pops 42, calls pushLeftSpine(nullptr) which adds nothing, returns
+//         42, and leaves stack_ empty so hasNext() returns false.
+//
 // Algorithm:
 //   Controlled iterative inorder traversal using an explicit stack holding the
 //   current left-spine path of unvisited ancestors:

@@ -11,6 +11,56 @@
 //   unless that prefix was also added as a word). Typical constraints: word
 //   length <= 25, at most 2-3 dots per query, up to 10^4 calls.
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["WordDictionary", "addWord", "addWord", "addWord",
+//             "search", "search", "search", "search", "search", "search",
+//             "search"], args = [[], ["bad"], ["dad"], ["mad"], ["pad"], ["bad"],
+//             [".ad"], ["b.."], ["..."], [".."], ["...."]]
+//     Output: [null, null, null, null, false, true, true, true, true, false, false]
+//     Explanation:
+//       - addWord inserts "bad", "dad", and "mad" into three depth-3 paths from
+//         root 0, setting is_end = true on each final 'd' node.
+//       - search("pad") sees nodes_[0].children['p' - 'a'] == kNoChild (false),
+//         while search("bad") walks 'b'->'a'->'d' to is_end = true (true).
+//       - search(".ad") branches over root 0's non-zero children and matches
+//         'b'->'a'->'d' (true), and search("b..") and search("...") similarly reach
+//         a depth-3 terminal node via wildcard branching (true).
+//       - search("..") terminates at depth 2 where is_end is false on every node
+//         (false), and search("....") hits kNoChild at depth 3 (false).
+//
+//   Example 2:
+//     Input:  operations = ["WordDictionary", "addWord", "search", "search",
+//             "search", "search", "search", "search"], args = [[], ["ru"], ["."],
+//             ["r"], [".."], ["r."], [".u"], ["..."]]
+//     Output: [null, null, false, false, true, true, true, false]
+//     Explanation:
+//       - addWord("ru") allocates node 1 ('r', is_end = false) and node 2 ('u',
+//         is_end = true) beneath root 0.
+//       - search(".") and search("r") both reach node 1 at pos == 1 and return
+//         nodes_[1].is_end (false), showing prefixes alone do not match.
+//       - search(".."), search("r."), and search(".u") all reach node 2 at pos == 2
+//         and return nodes_[2].is_end (true).
+//       - search("...") tries to advance from node 2 at pos == 2, finds all
+//         children equal to kNoChild, and returns false.
+//
+//   Example 3:
+//     Input:  operations = ["WordDictionary", "search", "search", "addWord",
+//             "addWord", "search", "search", "search", "search", "search",
+//             "search"], args = [[], ["a"], ["."], ["a"], ["ab"], ["a"], ["."],
+//             ["a."], [".b"], ["b."], ["a.."]]
+//     Output: [null, false, false, null, null, true, true, true, true, false,
+//             false]
+//     Explanation:
+//       - Before any insertions, root 0 has no children, so search("a") and
+//         search(".") return false.
+//       - addWord("a") marks node 1 ('a') with is_end = true, and addWord("ab")
+//         appends node 2 ('b', is_end = true) as a child of node 1.
+//       - search("a") and search(".") finish at node 1 (true), while search("a.")
+//         and search(".b") finish at node 2 (true).
+//       - search("b.") fails on missing 'b' at root 0 (false), and search("a..")
+//         fails at node 2 because node 2 has no children (false).
+//
 // Algorithm:
 //   Maintain an arena-backed prefix tree (`nodes_`) with node 0 as root and
 //   index 0 (`kNoChild`) as the empty-child sentinel.

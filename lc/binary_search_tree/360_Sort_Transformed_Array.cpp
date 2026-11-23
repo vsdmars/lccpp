@@ -8,6 +8,50 @@
 //   transformed values in non-decreasing sorted order. The target runtime is
 //   O(n).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [-4, -2, 2, 4], a = 1, b = 3, c = 5
+//     Output: [3, 9, 15, 33]
+//     Explanation:
+//       - Because a = 1 >= 0, initialize pointers left = 0, right = 3 and fill
+//         result from back to front (write_idx = 3 down to 0).
+//       - Step 0 compares f(-4) = 9 and f(4) = 33; since 9 < 33, write result[3] =
+//         33 and decrement right to 2.
+//       - Step 1 compares f(-4) = 9 and f(2) = 15; since 9 < 15, write result[2] =
+//         15 and decrement right to 1.
+//       - Step 2 compares f(-4) = 9 and f(-2) = 3; since 9 >= 3, write result[1] =
+//         9 and increment left to 1.
+//       - Step 3 has left = right = 1 with f(-2) = 3; 3 >= 3 writes result[0] = 3,
+//         increments left to 2, and returns [3, 9, 15, 33].
+//
+//   Example 2:
+//     Input:  nums = [-4, -2, 2, 4], a = -1, b = 3, c = 5
+//     Output: [-23, -5, 1, 7]
+//     Explanation:
+//       - Because a = -1 < 0, initialize pointers left = 0, right = 3 and fill
+//         result from front to back (write_idx = 0 up to 3).
+//       - Step 0 compares f(-4) = -23 and f(4) = 1; since -23 <= 1, write result[0]
+//         = -23 and increment left to 1.
+//       - Step 1 compares f(-2) = -5 and f(4) = 1; since -5 <= 1, write result[1] =
+//         -5 and increment left to 2.
+//       - Step 2 compares f(2) = 7 and f(4) = 1; since 7 > 1, write result[2] = 1
+//         and decrement right to 2.
+//       - Step 3 has left = right = 2 with f(2) = 7; write result[3] = 7 and return
+//         [-23, -5, 1, 7].
+//
+//   Example 3:
+//     Input:  nums = [-3, -1, 0, 2, 5], a = 0, b = -2, c = 1
+//     Output: [-9, -3, 1, 3, 7]
+//     Explanation:
+//       - Because a = 0 >= 0, fill result from index 4 down to 0 using the linear
+//         function f(x) = -2*x + 1.
+//       - Comparing endpoints left = 0 (f(-3) = 7) and right = 4 (f(5) = -9) places
+//         7 at result[4] and advances left to 1.
+//       - Subsequent comparisons against f(5) = -9 place f(-1) = 3 at result[3],
+//         f(0) = 1 at result[2], and f(2) = -3 at result[1].
+//       - Finally left = right = 4 evaluates f(5) = -9 into result[0], returning
+//         [-9, -3, 1, 3, 7].
+//
 // Algorithm:
 //   Exploit the unimodal shape of a parabola evaluated on a sorted domain:
 //   - When `a >= 0`, f(x) opens upward (or is a monotone line when `a == 0`),

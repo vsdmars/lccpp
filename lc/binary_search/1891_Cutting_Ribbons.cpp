@@ -11,6 +11,42 @@
 //   Constraints: 1 <= ribbons.length <= 10^5, 1 <= ribbons[i] <= 10^5,
 //   1 <= k <= 10^9.
 //
+// Examples:
+//   Example 1:
+//     Input:  ribbons = [9, 7, 5], k = 3
+//     Output: 5
+//     Explanation:
+//       - Initialize left = 0 and right = max(ribbons) = 9.
+//       - Test upper-mid = 5: canCut sums 9/5 + 7/5 + 5/5 = 1 + 1 + 1 = 3 >= 3, so
+//         left becomes 5.
+//       - Test upper-mid = 7: canCut sums 9/7 + 7/7 + 5/7 = 1 + 1 + 0 = 2 < 3, so
+//         right becomes 6.
+//       - Test upper-mid = 6: canCut sums 9/6 + 7/6 + 5/6 = 1 + 1 + 0 = 2 < 3, so
+//         right becomes 5 and the loop returns 5.
+//
+//   Example 2:
+//     Input:  ribbons = [7, 5, 9], k = 4
+//     Output: 4
+//     Explanation:
+//       - Initialize left = 0 and right = max(ribbons) = 9.
+//       - Test upper-mid = 5: 7/5 + 5/5 + 9/5 = 3 < 4, shrinking right to 4.
+//       - Test upper-mid = 2 (yielding >= 4 pieces after 7/2 + 5/2 = 5) and then
+//         upper-mid = 3 (yielding 2 + 1 + 3 = 6 >= 4), advancing left to 3.
+//       - Test upper-mid = 4: 7/4 + 5/4 + 9/4 = 1 + 1 + 2 = 4 >= 4, setting left =
+//         4 and returning 4.
+//
+//   Example 3:
+//     Input:  ribbons = [5, 7, 9], k = 22
+//     Output: 0
+//     Explanation:
+//       - Initialize left = 0 and right = 9, using 0 as the sentinel when no
+//         positive cut length works.
+//       - Probes at mid = 5 (3 pieces) and mid = 2 (2 + 3 + 4 = 9 pieces) both fall
+//         short of 22, narrowing right to 1.
+//       - At mid = 1, even unit cuts yield only 5 + 7 + 9 = 21 < 22 pieces,
+//         reducing right to 0.
+//       - The loop terminates with left == right == 0 and returns 0.
+//
 // Algorithm:
 //   Binary search on the target ribbon length `L`:
 //   - At length `L >= 1`, the i-th ribbon yields `floor(ribbons[i] / L)` usable

@@ -8,6 +8,42 @@
 //   text editors, and `false` otherwise. Backspacing an empty buffer leaves
 //   the buffer empty.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "ab#c", t = "ad#c"
+//     Output: true
+//     Explanation:
+//       - build_typed("ab#c") pushes 'a' and 'b', pops 'b' on '#', and pushes 'c'
+//         to produce "ac".
+//       - build_typed("ad#c") pushes 'a' and 'd', pops 'd' on '#', and pushes 'c'
+//         to produce "ac".
+//       - Comparing the two reconstructed strings ("ac" == "ac") returns true,
+//         matching backspaceCompareO1Space which scans backward and compares 'c'
+//         then 'a'.
+//
+//   Example 2:
+//     Input:  s = "a##c", t = "#a#c"
+//     Output: true
+//     Explanation:
+//       - build_typed("a##c") pushes 'a', pops 'a' on the first '#', ignores the
+//         second '#' on an empty buffer, and pushes 'c' to produce "c".
+//       - build_typed("#a#c") ignores the leading '#' on an empty buffer, pushes
+//         'a', pops 'a' on the second '#', and pushes 'c' to produce "c".
+//       - Both buffers equal "c" (and next_valid_index finds only index 3 'c' in
+//         both strings before returning -1), so both methods return true.
+//
+//   Example 3:
+//     Input:  s = "bxj##tw", t = "bxj###tw"
+//     Output: false
+//     Explanation:
+//       - build_typed("bxj##tw") pushes "bxj", pops 'j' and 'x' for the two '#'
+//         keystrokes, and appends "tw" to produce "btw".
+//       - build_typed("bxj###tw") pushes "bxj", pops 'j', 'x', and 'b' for the
+//         three '#' keystrokes, and appends "tw" to produce "tw".
+//       - Comparing "btw" against "tw" returns false (and in
+//         backspaceCompareO1Space, after matching 'w' and 't', s lands on 'b' at
+//         index 0 while t reaches j = -1).
+//
 // Algorithm:
 //   1) Stack Simulation (`backspaceCompare`):
 //      Simulate typing each string left-to-right into a character stack

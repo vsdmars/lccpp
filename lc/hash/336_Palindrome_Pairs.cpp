@@ -7,6 +7,46 @@
 //   `words[i] + words[j]` forms a palindrome. Strings in `words` may include
 //   the empty string `""`.
 //
+// Examples:
+//   Example 1:
+//     Input:  words = ["bat", "tab", "cat"]
+//     Output: [[0, 1], [1, 0]]
+//     Explanation:
+//       - Build the reversed-word map rev_to_idx = {"tab": 0, "bat": 1, "tac": 2}.
+//       - For words[0] = "bat" at cut = 0, prefix = "" is a palindrome and suffix =
+//         "bat" matches rev_to_idx["bat"] = 1, so Case 1 emits [1, 0] ("tabbat").
+//       - For words[1] = "tab" at cut = 0, prefix = "" is a palindrome and suffix =
+//         "tab" matches rev_to_idx["tab"] = 0, so Case 1 emits [0, 1] ("battab").
+//       - All splits of "cat" miss in rev_to_idx and cut == len is skipped in Case
+//         2, leaving [[0, 1], [1, 0]] after sorting.
+//
+//   Example 2:
+//     Input:  words = ["abcd", "dcba", "lls", "s", "sssll"]
+//     Output: [[0, 1], [1, 0], [2, 4], [3, 2]]
+//     Explanation:
+//       - Build rev_to_idx = {"dcba": 0, "abcd": 1, "sll": 2, "s": 3, "llsss": 4}.
+//       - At cut = 0, words[0] = "abcd" matches rev_to_idx["abcd"] = 1 to emit [1,
+//         0], and words[1] = "dcba" matches rev_to_idx["dcba"] = 0 to emit [0, 1].
+//       - For words[2] = "lls" at cut = 2, prefix = "ll" is a palindrome and suffix
+//         = "s" matches rev_to_idx["s"] = 3, emitting [3, 2] ("slls").
+//       - For words[4] = "sssll" at cut = 2, prefix = "ss" is a palindrome and
+//         suffix = "sll" matches rev_to_idx["sll"] = 2, emitting [2, 4]
+//         ("llssssll") for a sorted result of [[0, 1], [1, 0], [2, 4], [3, 2]].
+//
+//   Example 3:
+//     Input:  words = ["a", ""]
+//     Output: [[0, 1], [1, 0]]
+//     Explanation:
+//       - Build rev_to_idx = {"a": 0, "": 1}.
+//       - For words[0] = "a" at cut = 0, Case 1 skips "a" because it maps to
+//         self-index 0, while Case 2 sees palindrome suffix = "a" and matches
+//         prefix = "" to rev_to_idx[""] = 1, emitting [0, 1].
+//       - For words[0] = "a" at cut = 1, Case 1 sees palindrome prefix = "a" and
+//         matches suffix = "" to rev_to_idx[""] = 1, emitting [1, 0], while Case 2
+//         skips cut == len.
+//       - For words[1] = "" at cut = 0, suffix = "" only matches self-index 1, so
+//         no additional pairs are added and sorting yields [[0, 1], [1, 0]].
+//
 // Algorithm:
 //   Pre-index the reverse of every word (`rev(words[idx]) -> idx`) in a hash
 //   map with transparent `std::string_view` lookup so inner-loop queries

@@ -8,6 +8,40 @@
 //   has no in-order successor (i.e., `p` holds the maximum value), return
 //   `nullptr`.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [2, 1, 3], p = 1
+//     Output: 2
+//     Explanation:
+//       - Start at root 2; since p->val (1) < 2, mark node 2 as a candidate
+//         successor and recurse into node->left (node 1).
+//       - At node 1, p->val (1) < 1 is false, so recurse into node->right
+//         (nullptr), which returns nullptr.
+//       - Back at node 2, left_candidate is nullptr, so return node 2 as the
+//         inorder successor.
+//
+//   Example 2:
+//     Input:  root = [10, 5, 20, null, null, 15, 25, 12], p = 10
+//     Output: 12
+//     Explanation:
+//       - Start at root 10; since p->val (10) < 10 is false, discard 10 and its
+//         left subtree and move right to node 20.
+//       - At node 20, 10 < 20 holds, so record 20 as a candidate successor and move
+//         left to node 15.
+//       - At node 15, 10 < 15 holds, so update the candidate successor to 15 and
+//         move left to node 12.
+//       - At node 12, 10 < 12 holds, so update the candidate to 12 and move left to
+//         nullptr, returning node 12.
+//
+//   Example 3:
+//     Input:  root = [5, 3, 7, 2, 4], p = 7
+//     Output: null
+//     Explanation:
+//       - Start at root 5; since p->val (7) < 5 is false, descend right to node 7.
+//       - At node 7, 7 < 7 is false, so descend into node->right (nullptr).
+//       - Reaching nullptr indicates no key is strictly greater than 7, so return
+//         nullptr.
+//
 // Algorithm:
 //   Exploit the BST ordering property to locate the smallest key strictly
 //   greater than `p->val` without performing a full inorder traversal:

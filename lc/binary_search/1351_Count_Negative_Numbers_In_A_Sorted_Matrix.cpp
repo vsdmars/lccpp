@@ -7,6 +7,42 @@
 //   count of strictly negative numbers (`< 0`) in `grid`.
 //   Constraints: 1 <= m, n <= 100, -100 <= grid[i][j] <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[4, 3, 2, -1], [3, 2, 1, -1], [1, 1, -1, -2], [-1, -1, -2,
+//             -3]]
+//     Output: 8
+//     Explanation:
+//       - Initialize cols = 4, first_neg_col = 4, and count = 0 for the staircase
+//         walk.
+//       - Row 0 [4, 3, 2, -1] decrements first_neg_col to 3 (row[2] = 2 >= 0),
+//         adding 4 - 3 = 1 (count = 1); row 1 [3, 2, 1, -1] keeps first_neg_col = 3
+//         and adds 1 (count = 2).
+//       - Row 2 [1, 1, -1, -2] decrements first_neg_col across index 2 (-1 < 0) to
+//         2 (row[1] = 1 >= 0), adding 4 - 2 = 2 (count = 4).
+//       - Row 3 [-1, -1, -2, -3] decrements first_neg_col from 2 to 0, adding 4 - 0
+//         = 4 and returning 8.
+//
+//   Example 2:
+//     Input:  grid = [[3, 2], [1, 0]]
+//     Output: 0
+//     Explanation:
+//       - Initialize cols = 2, first_neg_col = 2, and count = 0.
+//       - In row 0 [3, 2], row[1] = 2 >= 0 leaves first_neg_col = 2 and adds 2 - 2
+//         = 0 to count.
+//       - In row 1 [1, 0], row[1] = 0 >= 0 is not strictly negative, so
+//         first_neg_col remains 2 and the total count is 0.
+//
+//   Example 3:
+//     Input:  grid = [[5, 1, 0], [-5, -5, -5]]
+//     Output: 3
+//     Explanation:
+//       - Initialize cols = 3, first_neg_col = 3, and count = 0.
+//       - In row 0 [5, 1, 0], row[2] = 0 >= 0 keeps first_neg_col = 3, contributing
+//         3 - 3 = 0 negatives.
+//       - In row 1 [-5, -5, -5], first_neg_col moves left across indices 2, 1, and
+//         0 (all -5 < 0) to 0, adding 3 - 0 = 3 and returning 3.
+//
 // Algorithm:
 //   Two clean approaches exploiting the matrix monotonicity:
 //   1. Per-Row Binary Search (`countNegatives`):

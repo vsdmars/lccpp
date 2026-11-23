@@ -7,6 +7,41 @@
 //   nested lists, return the sum of every integer multiplied by its 1-based
 //   nesting depth.
 //
+// Examples:
+//   Example 1:
+//     Input:  nestedList = [[1, 1], 2, [1, 1]]
+//     Output: 10
+//     Explanation:
+//       - Initialize frontier at depth = 1 with pointers to the three top-level
+//         elements: [1, 1], 2, and [1, 1].
+//       - At depth = 1, integer 2 adds 1 * 2 = 2 to total, while both [1, 1] lists
+//         expand their four integer children into next_frontier.
+//       - Advance to depth = 2 with frontier = [1, 1, 1, 1]; summing depth * value
+//         adds 4 * (2 * 1) = 8 to reach total = 10 before next_frontier becomes
+//         empty.
+//
+//   Example 2:
+//     Input:  nestedList = [1, [4, [6]]]
+//     Output: 27
+//     Explanation:
+//       - At depth = 1, integer 1 adds 1 * 1 = 1 to total and list [4, [6]] pushes
+//         4 and [6] into next_frontier.
+//       - At depth = 2, integer 4 adds 2 * 4 = 8 (total = 9) and list [6] pushes 6
+//         into next_frontier.
+//       - At depth = 3, integer 6 adds 3 * 6 = 18 (total = 27), next_frontier is
+//         empty, and depthSum returns 27.
+//
+//   Example 3:
+//     Input:  nestedList = [[], [[[]]]]
+//     Output: 0
+//     Explanation:
+//       - At depth = 1, frontier contains [] and [[[]]]; neither is an integer, so
+//         total remains 0 and [[[]]] pushes [[]] into next_frontier.
+//       - At depth = 2, [[]] expands its child [] into next_frontier without
+//         changing total.
+//       - At depth = 3, the innermost [] has no children, so next_frontier is empty
+//         and depthSum returns 0.
+//
 // Algorithm:
 //   We provide both BFS and DFS traversals matching the Python source:
 //   1. Level-order BFS (`depthSum`): Store non-owning pointers to the top-level

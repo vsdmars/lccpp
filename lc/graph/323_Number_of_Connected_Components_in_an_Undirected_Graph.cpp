@@ -6,6 +6,39 @@
 //   `edges[i] = [u, v]`, return the total number of connected components in the
 //   graph (including isolated vertices that have no incident edges).
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 5, edges = [[0, 1], [1, 2], [3, 4]]
+//     Output: 2
+//     Explanation:
+//       - Builds the undirected adjacency list adj: 0:[1], 1:[0, 2], 2:[1], 3:[4],
+//         4:[3], with visited initialized to 0 for all 5 nodes.
+//       - Starting at node = 0, dfs(0) visits 0 -> 1 -> 2 and marks them in
+//         visited, incrementing components to 1.
+//       - Nodes 1 and 2 are skipped because visited is 1; at node = 3, dfs(3)
+//         visits 3 -> 4 and increments components to 2.
+//       - Node 4 is already visited, so the loop terminates and returns 2.
+//
+//   Example 2:
+//     Input:  n = 4, edges = [[2, 3], [1, 2], [1, 3]]
+//     Output: 2
+//     Explanation:
+//       - Builds adj: 0:[], 1:[2, 3], 2:[3, 1], 3:[2, 1].
+//       - At node = 0, dfs(0) marks vertex 0 visited with no neighbors and
+//         increments components to 1.
+//       - At node = 1, dfs(1) traverses the cycle 1 -> 2 -> 3, skipping
+//         already-visited neighbors and incrementing components to 2.
+//       - Nodes 2 and 3 are already visited, so countComponents returns 2.
+//
+//   Example 3:
+//     Input:  n = 4, edges = []
+//     Output: 4
+//     Explanation:
+//       - With an empty edge list, every vertex 0..3 has an empty vector in adj and
+//         visited remains all 0.
+//       - Each iteration node = 0, 1, 2, 3 sees visited[node] == 0, marks only that
+//         vertex in dfs(node), and increments components, returning 4.
+//
 // Algorithm:
 //   Construct an undirected adjacency list by inserting both `u -> v` and
 //   `v -> u` for every edge. Iterate through all vertices `0..n-1`; whenever an

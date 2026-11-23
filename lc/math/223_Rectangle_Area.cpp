@@ -9,6 +9,42 @@
 //   Constraints: -10^4 <= ax1 <= ax2 <= 10^4, -10^4 <= ay1 <= ay2 <= 10^4,
 //   and identically for b.
 //
+// Examples:
+//   Example 1:
+//     Input:  ax1 = -3, ay1 = 0, ax2 = 3, ay2 = 4, bx1 = 0, by1 = -1, bx2 = 9, by2
+//             = 2
+//     Output: 45
+//     Explanation:
+//       - Compute 64-bit areas of both rectangles: area_a = (3 - (-3)) * (4 - 0) =
+//         24 and area_b = (9 - 0) * (2 - (-1)) = 27.
+//       - Compute x-axis overlap width: overlap_w = max(0, min(3, 9) - max(-3, 0))
+//         = max(0, 3 - 0) = 3.
+//       - Compute y-axis overlap height: overlap_h = max(0, min(4, 2) - max(0, -1))
+//         = max(0, 2 - 0) = 2.
+//       - Multiply overlap_w * overlap_h = 6 and apply inclusion-exclusion: (24 +
+//         27) - 6 = 45.
+//
+//   Example 2:
+//     Input:  ax1 = -2, ay1 = -2, ax2 = 2, ay2 = 2, bx1 = -2, by1 = -2, bx2 = 2,
+//             by2 = 2
+//     Output: 16
+//     Explanation:
+//       - Compute both rectangle areas: area_a = (2 - (-2)) * (2 - (-2)) = 16 and
+//         area_b = 16.
+//       - Compute axis overlaps: overlap_w = max(0, 2 - (-2)) = 4 and overlap_h =
+//         max(0, 2 - (-2)) = 4.
+//       - Subtract overlap_area = 4 * 4 = 16 from the sum: (16 + 16) - 16 = 16.
+//
+//   Example 3:
+//     Input:  ax1 = 0, ay1 = 0, ax2 = 2, ay2 = 2, bx1 = 3, by1 = 3, bx2 = 5, by2 =
+//             5
+//     Output: 8
+//     Explanation:
+//       - Compute both rectangle areas: area_a = 2 * 2 = 4 and area_b = 2 * 2 = 4.
+//       - Project onto both axes: overlap_w = max(0, min(2, 5) - max(0, 3)) =
+//         max(0, -1) = 0 and overlap_h = max(0, -1) = 0.
+//       - Compute overlap_area = 0 * 0 = 0 and return (4 + 4) - 0 = 8.
+//
 // Algorithm:
 //   Inclusion-Exclusion Principle on axis-aligned bounding boxes (AABBs):
 //       Area(A U B) = Area(A) + Area(B) - Area(A n B).

@@ -6,6 +6,36 @@
 //   you advance by either 1 step or 2 steps. Return the total number of
 //   distinct step sequences that reach step n.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 2
+//     Output: 2
+//     Explanation:
+//       - Initialize rolling states prev2 = 1 for ways(0) and prev1 = 1 for ways(1)
+//         since n > 1.
+//       - Run iteration i = 2: compute cur = prev1 + prev2 = 1 + 1 = 2, then shift
+//         prev2 = 1 and prev1 = 2.
+//       - Exit the loop and return prev1 = 2, matching the two sequences [1, 1] and
+//         [2].
+//
+//   Example 2:
+//     Input:  n = 5
+//     Output: 8
+//     Explanation:
+//       - Initialize prev2 = 1 (ways(0)) and prev1 = 1 (ways(1)).
+//       - At i = 2, compute cur = 1 + 1 = 2 and shift (prev2, prev1) to (1, 2).
+//       - At i = 3, compute cur = 2 + 1 = 3 and shift (prev2, prev1) to (2, 3).
+//       - At i = 4, compute cur = 3 + 2 = 5 and shift (prev2, prev1) to (3, 5).
+//       - At i = 5, compute cur = 5 + 3 = 8, update prev1 = 8, and return 8.
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: 1
+//     Explanation:
+//       - Evaluate the early guard if (n <= 1), which holds for n = 1.
+//       - Return 1 immediately without entering the rolling Fibonacci loop,
+//         representing the single step sequence [1].
+//
 // Algorithm:
 //   Bottom-up dynamic programming with O(1) space (rolling Fibonacci recurrence).
 //   Let ways(i) be the number of distinct sequences to reach step i. Every path

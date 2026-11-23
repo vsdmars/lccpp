@@ -7,6 +7,41 @@
 //   return the maximum amount of money that can be robbed without robbing any
 //   two adjacent houses.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3, 1]
+//     Output: 4
+//     Explanation:
+//       - Because nums.size() == 4 > 1, set sub_len = 3 and split the circular
+//         street into view.first(3) = [1, 2, 3] and view.last(3) = [2, 3, 1].
+//       - robLinear([1, 2, 3]) steps (prev, curr) through (0, 1), (1, 2), and (2,
+//         max(2, 1 + 3) = 4), returning exclude_last = 4.
+//       - robLinear([2, 3, 1]) steps (prev, curr) through (0, 2), (2, 3), and (3,
+//         max(3, 2 + 1) = 3), returning exclude_first = 3.
+//       - Returns std::max(4, 3) = 4.
+//
+//   Example 2:
+//     Input:  nums = [10, 1, 1, 10]
+//     Output: 11
+//     Explanation:
+//       - With sub_len = 3, split the cycle into exclude_last = robLinear([10, 1,
+//         1]) and exclude_first = robLinear([1, 1, 10]).
+//       - robLinear([10, 1, 1]) updates (prev, curr) through (0, 10), (10, 10), and
+//         (10, max(10, 10 + 1) = 11), yielding 11.
+//       - robLinear([1, 1, 10]) updates (prev, curr) through (0, 1), (1, 1), and
+//         (1, max(1, 1 + 10) = 11), yielding 11.
+//       - Returns std::max(11, 11) = 11, avoiding taking both circularly adjacent
+//         endpoints nums[0] and nums[3].
+//
+//   Example 3:
+//     Input:  nums = [1]
+//     Output: 1
+//     Explanation:
+//       - The input is non-empty and satisfies nums.size() == 1uz, triggering the
+//         single-house base case.
+//       - Returns nums[0] = 1 directly because there are no adjacent houses in the
+//         cycle.
+//
 // Algorithm:
 //   Reduce the circular constraint to two independent linear House Robber
 //   (#198) subproblems. Because house 0 and house n-1 cannot both be robbed,

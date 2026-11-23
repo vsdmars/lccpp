@@ -10,6 +10,47 @@
 //   travel distances to ALL buildings in the grid. Return that minimum total
 //   distance, or `-1` if no empty land can reach every building.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[1, 0, 2, 0, 1], [0, 0, 0, 0, 0], [0, 0, 1, 0, 0]]
+//     Output: 7
+//     Explanation:
+//       - Run BFS from building 0 at (0, 0) with expected_reach = 0, setting
+//         reach_count = 1 on all 11 empty cells and recording distances such as
+//         total_dist[1][2] = 3.
+//       - Run BFS from building 1 at (0, 4) with expected_reach = 1, stepping only
+//         onto reach_count == 1 cells, updating reach_count to 2, and adding 3 to
+//         total_dist[1][2] for a cumulative total of 6.
+//       - Run BFS from building 2 at (2, 2) with expected_reach = 2, updating
+//         reach_count to 3 and adding 1 to total_dist[1][2] for 7 (while nearby
+//         cells (1, 1) and (1, 3) reach 8).
+//       - Track min_total = 7 during the final building's BFS and return 7.
+//
+//   Example 2:
+//     Input:  grid = [[1, 0, 2, 0, 1], [0, 0, 0, 0, 0], [1, 0, 1, 0, 0], [1, 0, 1,
+//             0, 0]]
+//     Output: 14
+//     Explanation:
+//       - Launch pruned BFS passes sequentially from the six buildings at (0, 0),
+//         (0, 4), (2, 0), (2, 2), (3, 0), and (3, 2), incrementing reach_count from
+//         0 up to 6 on shared empty land.
+//       - Each building accumulates its shortest distance into total_dist[2][1]: 3
+//         from (0, 0), 5 from (0, 4), 1 from (2, 0), 1 from (2, 2), 2 from (3, 0),
+//         and 2 from (3, 2).
+//       - During the sixth building's BFS, (2, 1) achieves the minimum cumulative
+//         distance 3 + 5 + 1 + 1 + 2 + 2 = 14 across all cells with reach_count ==
+//         6, so shortestDistance returns 14.
+//
+//   Example 3:
+//     Input:  grid = [[0, 2, 1], [1, 0, 2], [0, 1, 0]]
+//     Output: -1
+//     Explanation:
+//       - Start BFS from building 0 at (0, 2) with expected_reach = 0.
+//       - All in-bounds neighbors of (0, 2) are obstacles (2) at (0, 1) and (1, 2),
+//         so no empty cell is enqueued and bfs_from_building returns kInf.
+//       - Seeing best_dist == kInf, shortestDistance immediately terminates and
+//         returns -1.
+//
 // Algorithm:
 //   Pruned per-building Breadth-First Search:
 //   Maintain two `m x n` grids: `total_dist` (cumulative shortest distance from

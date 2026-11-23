@@ -6,6 +6,45 @@
 //   compact a string as possible, and deserialize that string back into the
 //   exact original BST structure.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [5, 2, 6, 1, 3]
+//     Output: serialize(root) = "5 2 1 3 6", deserialize("5 2 1 3 6") = [5, 2, 6,
+//             1, 3]
+//     Explanation:
+//       - serialize performs preorder DFS (node, left, right), emitting "5", then
+//         left subtree "2 1 3", then right child "6" to produce "5 2 1 3 6".
+//       - deserialize parses preorder = [5, 2, 1, 3, 6] with idx = 0 and calls
+//         build(int64_t::min(), int64_t::max()), consuming 5 as the root.
+//       - Recursing left with (-inf, 5) consumes 2, then (-inf, 2) consumes 1
+//         (whose children fail (-inf, 1) and (1, 2) since 3 is out of range), and
+//         (2, 5) consumes 3 as 2->right.
+//       - After the left subtree finishes at idx = 4, build(5, +inf) consumes 6 as
+//         5->right, reaches idx == 5, and returns the exact BST [5, 2, 6, 1, 3].
+//
+//   Example 2:
+//     Input:  root = [5, 4, null, 3, null, 2, null, 1]
+//     Output: serialize(root) = "5 4 3 2 1", deserialize("5 4 3 2 1") = [5, 4,
+//             null, 3, null, 2, null, 1]
+//     Explanation:
+//       - serialize traverses down the left spine in preorder, emitting each value
+//         separated by spaces to produce "5 4 3 2 1".
+//       - deserialize parses [5, 4, 3, 2, 1] and chains recursive left-child calls
+//         with shrinking upper bounds: (-inf, 5) -> 4, (-inf, 4) -> 3, (-inf, 3) ->
+//         2, and (-inf, 2) -> 1.
+//       - At node 1, idx reaches 5, so 1's children and every subsequent
+//         right-child call build(val, upper) see idx >= 5 and attach nullptr,
+//         reconstructing the left-skewed BST.
+//
+//   Example 3:
+//     Input:  root = [] (nullptr)
+//     Output: serialize(nullptr) = "", deserialize("") = [] (nullptr)
+//     Explanation:
+//       - serialize checks root == nullptr and returns "" without traversing any
+//         nodes.
+//       - deserialize calls parse_values("") which produces an empty preorder
+//         vector, so it returns nullptr immediately.
+//
 // Algorithm:
 //   Unlike a general binary tree, a BST's in-order traversal is uniquely
 //   determined by sorting its keys, so preorder traversal alone (with NO null

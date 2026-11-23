@@ -9,6 +9,45 @@
 //   A sequence of `L` words forms a valid word square if for every `0 <= k < L`,
 //   the `k`-th row and `k`-th column read the exact same string.
 //
+// Examples:
+//   Example 1:
+//     Input:  words = ["area", "lead", "wall", "lady", "ball"]
+//     Output: [["ball", "area", "lead", "lady"], ["wall", "area", "lead", "lady"]]
+//     Explanation:
+//       - Build prefix_map over lengths 1..3 so "a" maps to ["area"], "le" maps to
+//         ["lead"], and "lad" maps to ["lady"].
+//       - Seed row 0 with "ball" (step = 1); column 1 yields needed_prefix = "a" ->
+//         "area", then column 2 yields "le" -> "lead", and column 3 yields "lad" ->
+//         "lady", completing ["ball", "area", "lead", "lady"] at step = 4.
+//       - Seed row 0 with "wall" and follow the same column prefixes "a", "le", and
+//         "lad" to emit ["wall", "area", "lead", "lady"], while seeds "area",
+//         "lead", and "lady" fail on missing prefixes "r" or "e".
+//
+//   Example 2:
+//     Input:  words = ["abat", "baba", "atan", "atal"]
+//     Output: [["baba", "abat", "baba", "atal"], ["baba", "abat", "baba", "atan"]]
+//     Explanation:
+//       - Index prefixes in prefix_map so "a" maps to ["abat", "atan", "atal"],
+//         "ba" maps to ["baba"], and "ata" maps to ["atan", "atal"].
+//       - Start row 0 with "baba", then at step = 1 match needed_prefix = "a" with
+//         "abat" to form ["baba", "abat"].
+//       - At step = 2, column 2 requires needed_prefix = "ba", reusing "baba" as
+//         row 2 to form ["baba", "abat", "baba"].
+//       - At step = 3, column 3 requires needed_prefix = "ata", matching both
+//         "atan" and "atal" to emit ["baba", "abat", "baba", "atan"] and ["baba",
+//         "abat", "baba", "atal"].
+//
+//   Example 3:
+//     Input:  words = ["abc", "def"]
+//     Output: []
+//     Explanation:
+//       - Build prefix_map containing only prefixes "a", "ab", "d", and "de" for
+//         word_len = 3.
+//       - Seed row 0 with "abc" (step = 1), which asks for needed_prefix = "b" and
+//         prunes immediately on a map miss.
+//       - Seed row 0 with "def" (step = 1), which asks for needed_prefix = "e" and
+//         also misses in prefix_map, returning [].
+//
 // Algorithm:
 //   Prefix-Indexed Backtracking:
 //   1. Precompute a hash map `prefix_map` mapping every non-empty prefix

@@ -7,6 +7,38 @@
 //   the maximum nesting depth of `s` (the maximum number of simultaneously open
 //   parentheses at any point in the string).
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "(1+(2*3)+((8)/4))+1"
+//     Output: 3
+//     Explanation:
+//       - Scanning '(' increments current_depth to 1 (max_depth = 1), ignoring '1+'
+//         and then scanning '(' raises current_depth to 2 (max_depth = 2) before
+//         ')' drops it back to 1.
+//       - After ignoring '+', the two consecutive '(' before '8' raise
+//         current_depth from 1 to 3 and update max_depth to 3.
+//       - The remaining ')', '/4', '))', and '+1' decrement current_depth back down
+//         to 0, leaving max_depth = 3.
+//
+//   Example 2:
+//     Input:  s = "(1)+((2))+(((3)))"
+//     Output: 3
+//     Explanation:
+//       - The first group "(1)" sets current_depth = 1, updates max_depth = 1, and
+//         returns current_depth to 0.
+//       - The second group "((2))" raises current_depth to 2, updates max_depth =
+//         2, and returns current_depth to 0.
+//       - The third group "(((3)))" raises current_depth to 3, sets max_depth = 3,
+//         and closes back to 0, returning 3.
+//
+//   Example 3:
+//     Input:  s = "1"
+//     Output: 0
+//     Explanation:
+//       - Initialize current_depth = 0 and max_depth = 0.
+//       - Scan the single character '1', which is neither '(' nor ')', so both
+//         counters remain 0 and 0 is returned.
+//
 // Algorithm:
 //   Single-Pass Depth Counter (Implicit Stack):
 //     Because `s` is guaranteed to be a valid parentheses string, the nesting

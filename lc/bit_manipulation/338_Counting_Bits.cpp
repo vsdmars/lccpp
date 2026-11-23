@@ -8,6 +8,38 @@
 //   Follow-up: solve in O(n) linear time in a single pass without built-in
 //   popcount intrinsics.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 2
+//     Output: [0, 1, 1]
+//     Explanation:
+//       - Initialize `counts = [0, 0, 0]` of size `n + 1 = 3` with base case
+//         `counts[0] = 0`.
+//       - For `i = 1` (binary `1`), compute `counts[1] = counts[1 >> 1] + (1 & 1) =
+//         counts[0] + 1 = 1`.
+//       - For `i = 2` (binary `10`), compute `counts[2] = counts[2 >> 1] + (2 & 1)
+//         = counts[1] + 0 = 1`, returning `[0, 1, 1]`.
+//
+//   Example 2:
+//     Input:  n = 5
+//     Output: [0, 1, 1, 2, 1, 2]
+//     Explanation:
+//       - Initialize `counts` of length `6` with `counts[0] = 0`, then compute
+//         `counts[1] = counts[0] + 1 = 1` and `counts[2] = counts[1] + 0 = 1`.
+//       - For `i = 3` (binary `11`), compute `counts[3] = counts[3 >> 1] + (3 & 1)
+//         = counts[1] + 1 = 2`.
+//       - For `i = 4` (binary `100`), `counts[4] = counts[2] + 0 = 1`, and for `i =
+//         5` (binary `101`), `counts[5] = counts[2] + 1 = 2`.
+//       - Return `counts = [0, 1, 1, 2, 1, 2]`.
+//
+//   Example 3:
+//     Input:  n = 0
+//     Output: [0]
+//     Explanation:
+//       - Allocate `counts` of length `0 + 1 = 1` initialized to `[0]`.
+//       - Since `limit = 0`, the loop `for (i = 1; i <= 0; ++i)` performs zero
+//         iterations and returns `[0]`.
+//
 // Algorithm:
 //   Dynamic Programming on Least Significant Bit (`i >> 1`):
 //   Right-shifting any positive integer `i` by 1 drops its least significant

@@ -9,6 +9,40 @@
 //   Return the total number of valid binary trees modulo 10^9 + 7.
 //   Constraints: 1 <= arr.length <= 1000, 2 <= arr[i] <= 10^9, all unique.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [2, 4, 5, 10]
+//     Output: 7
+//     Explanation:
+//       - Sort arr to [2, 4, 5, 10] and compute dp[2] = 1 (the single-node tree
+//         [2]).
+//       - For root = 4, divisor left = 2 has complementary factor right = 4 / 2 = 2
+//         in dp, giving dp[4] = 1 + dp[2] * dp[2] = 2.
+//       - For root = 5, no smaller element divides 5, so dp[5] = 1.
+//       - For root = 10, pairs (left = 2, right = 5) and (left = 5, right = 2)
+//         yield dp[10] = 1 + (1 * 1) + (1 * 1) = 3, and total = 1 + 2 + 1 + 3 = 7.
+//
+//   Example 2:
+//     Input:  arr = [18, 3, 6, 2]
+//     Output: 12
+//     Explanation:
+//       - Sort arr ascending to [2, 3, 6, 18] so every factor is solved before its
+//         multiples.
+//       - Set dp[2] = 1 and dp[3] = 1, then for root = 6 combine ordered pairs (2,
+//         3) and (3, 2) to get dp[6] = 1 + 1 * 1 + 1 * 1 = 3.
+//       - For root = 18, left = 2 has right = 9 (absent from dp), while (3, 6) and
+//         (6, 3) each add 1 * 3 = 3, giving dp[18] = 1 + 3 + 3 = 7 and total = 1 +
+//         1 + 3 + 7 = 12.
+//
+//   Example 3:
+//     Input:  arr = [2, 3, 5, 7, 11]
+//     Output: 5
+//     Explanation:
+//       - Keep the already-sorted array [2, 3, 5, 7, 11], where every element is
+//         prime and root % left != 0 holds for all j < i.
+//       - Assign dp[root] = 1 for each of the 5 values and sum them to return total
+//         = 5.
+//
 // Algorithm:
 //   Because every value is strictly greater than 1, any child in a valid tree
 //   must have a strictly smaller value than its parent (`left * right = root`

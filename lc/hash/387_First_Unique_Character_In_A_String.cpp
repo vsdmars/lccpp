@@ -6,6 +6,35 @@
 //   non-repeating character in it and return its 0-based index. If every
 //   character appears more than once (or the string is empty), return -1.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "loveleetcode"
+//     Output: 2
+//     Explanation:
+//       - Pass 1 tallies letter counts into freq: 'l': 2, 'o': 2, 'v': 1, 'e': 4,
+//         't': 1, 'c': 1, 'd': 1.
+//       - Pass 2 checks index 0 ('l', freq = 2) and index 1 ('o', freq = 2) and
+//         skips both because their counts exceed 1.
+//       - At index 2 ('v'), freq['v' - 'a'] equals 1, so the function immediately
+//         returns 2.
+//
+//   Example 2:
+//     Input:  s = "aabb"
+//     Output: -1
+//     Explanation:
+//       - Pass 1 increments freq['a' - 'a'] to 2 and freq['b' - 'a'] to 2, leaving
+//         all other 24 buckets at 0.
+//       - Pass 2 inspects indices 0 through 3 ('a', 'a', 'b', 'b'), finds every
+//         character has frequency 2 != 1, and returns -1.
+//
+//   Example 3:
+//     Input:  s = ""
+//     Output: -1
+//     Explanation:
+//       - Pass 1 performs zero iterations on the empty string, leaving all 26
+//         entries of freq at 0.
+//       - Pass 2 performs zero iterations since s.size() is 0 and returns -1.
+//
 // Algorithm:
 //   Two-pass fixed-alphabet frequency counting:
 //   1. Pass 1: Scan s once and increment the frequency bucket for each letter

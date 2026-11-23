@@ -10,6 +10,43 @@
 //   if the graph contains a cycle. Constraints: 1 <= n <= 10^5,
 //   0 <= edges.length <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  colors = "abaca", edges = [[0, 1], [0, 2], [2, 3], [3, 4]]
+//     Output: 3
+//     Explanation:
+//       - Initialize indegree = [0, 1, 1, 1, 1], set each node's own letter count
+//         in dp to 1 (e.g., dp[0]['a'] = 1, dp[1]['b'] = 1), and enqueue node 0.
+//       - Dequeue node 0 (best = 1) and relax edges 0 -> 1 and 0 -> 2, updating
+//         dp[1]['a'] = 1, dp[2]['a'] = 2 and enqueuing nodes 1 and 2 as their
+//         indegrees reach 0.
+//       - Dequeue node 1 (no outgoing edges) and node 2 (best = 2), relaxing 2 -> 3
+//         to set dp[3]['a'] = 2, dp[3]['c'] = 1 and enqueue node 3.
+//       - Dequeue node 3 (best = 2), relax 3 -> 4 so dp[4]['a'] = 3, then dequeue
+//         node 4 (best = 3); all 5 nodes are processed, returning 3.
+//
+//   Example 2:
+//     Input:  colors = "a", edges = [[0, 0]]
+//     Output: -1
+//     Explanation:
+//       - Build the adjacency list for edge 0 -> 0, setting indegree = [1].
+//       - No node has indegree 0, so the BFS queue starts empty and processed
+//         remains 0.
+//       - Because processed (0) != n (1), a directed cycle is detected and -1 is
+//         returned.
+//
+//   Example 3:
+//     Input:  colors = "abaa", edges = [[0, 1], [0, 2], [1, 3], [2, 3]]
+//     Output: 3
+//     Explanation:
+//       - Initialize indegree = [0, 1, 1, 2], seed each node's dp count with its
+//         own color, and enqueue node 0.
+//       - Dequeue node 0 (best = 1) and relax 0 -> 1 (dp[1]['a'] = 1, dp[1]['b'] =
+//         1) and 0 -> 2 (dp[2]['a'] = 2), enqueuing nodes 1 and 2.
+//       - Dequeue node 1 to set dp[3]['a'] = 2 (indegree[3] = 1), then dequeue node
+//         2 (best = 2) to update dp[3]['a'] = max(2, 2 + 1) = 3 and enqueue node 3.
+//       - Dequeue node 3 (best = 3); processed reaches 4 == n, so 3 is returned.
+//
 // Algorithm:
 //   Kahn's topological sort (BFS) combined with Directed Acyclic Graph (DAG)
 //   dynamic programming. Let `dp[u][c]` hold the maximum count of color `c`

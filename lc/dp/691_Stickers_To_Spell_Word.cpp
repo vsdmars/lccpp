@@ -7,6 +7,40 @@
 //   letters from stickers and rearrange them to spell `target`. Return the
 //   minimum number of stickers required, or -1 if `target` cannot be formed.
 //
+// Examples:
+//   Example 1:
+//     Input:  stickers = ["with", "example", "science"], target = "thehat"
+//     Output: 3
+//     Explanation:
+//       - Sort target to "aehhtt" and project stickers onto {a, e, h, t}: "with" ->
+//         {h:1, t:1}, "example" -> {a:1, e:2}, and "science" -> {e:2}, pruning
+//         "science" because "example" dominates it.
+//       - Call dfs("aehhtt"), pivot on 'a' (remaining[0]), and subtract "example"
+//         ({a:1, e:2}) to transition to "hhtt".
+//       - Call dfs("hhtt"), pivot on 'h', and subtract "with" ({h:1, t:1}) twice
+//         ("hhtt" -> "ht" -> "") to hit memo[""] = 0 and return 3.
+//
+//   Example 2:
+//     Input:  stickers = ["notice", "possible"], target = "basicbasic"
+//     Output: -1
+//     Explanation:
+//       - Compute target_freq = {a:2, b:2, c:2, i:2, s:2} and project stickers onto
+//         target letters: "notice" -> {c:1, i:1} and "possible" -> {b:1, i:1, s:2}.
+//       - Run canCoverAllLetters, which detects that required letter 'a' has count
+//         0 in every useful sticker and returns false.
+//       - Return -1 immediately without entering the memoized DFS.
+//
+//   Example 3:
+//     Input:  stickers = ["a", "ab", "ab", "abc", "xyz"], target = "aabbcc"
+//     Output: 2
+//     Explanation:
+//       - Filter stickers in buildUsefulStickers: "xyz" is dropped for having zero
+//         overlap with {a, b, c}, and "a" plus both "ab" entries are pruned because
+//         "abc" ({a:1, b:1, c:1}) dominates them.
+//       - Call dfs("aabbcc") with only {a:1, b:1, c:1} remaining, subtract it once
+//         to reach "abc", and subtract it again to reach "".
+//       - Return memo[""] + 2 = 2.
+//
 // Algorithm:
 //   Top-down DFS with memoization over canonical (sorted) remaining target
 //   strings. First, compress each sticker into a 26-letter frequency vector

@@ -6,6 +6,44 @@
 //   maximum length of a contiguous subarray with an equal number of `0`s
 //   and `1`s.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [0, 1, 1, 1, 0, 0, 1, 1]
+//     Output: 6
+//     Explanation:
+//       - Seed `first_seen = {0: -1}` and set `balance = 0`, `max_len = 0`.
+//       - At `i = 0` (`0`), `balance` becomes `-1` and `first_seen[-1] = 0` is
+//         stored; at `i = 1` (`1`), `balance` returns to `0` (already at `-1`),
+//         updating `max_len = 1 - (-1) = 2`.
+//       - At `i = 2` (`1`) and `i = 3` (`1`), `balance` rises to `1` and `2`,
+//         recording `first_seen[1] = 2` and `first_seen[2] = 3`.
+//       - At `i = 4` (`0`), `balance` drops to `1` (already at `2`, span `4 - 2 =
+//         2`); at `i = 5` (`0`), `balance` drops to `0` (already at `-1`), updating
+//         `max_len = 5 - (-1) = 6`.
+//       - At `i = 6` (`1`) and `i = 7` (`1`), `balance` becomes `1` and `2`
+//         (already at `2` and `3`), giving spans of `4` and leaving `max_len = 6`.
+//
+//   Example 2:
+//     Input:  nums = [0, 1, 0]
+//     Output: 2
+//     Explanation:
+//       - Seed `first_seen = {0: -1}` with `balance = 0` and `max_len = 0`.
+//       - At `i = 0` (`0`), update `balance = -1` and insert `first_seen[-1] = 0`.
+//       - At `i = 1` (`1`), update `balance = 0`; since `0` is already in
+//         `first_seen` at `-1`, set `max_len = max(0, 1 - (-1)) = 2`.
+//       - At `i = 2` (`0`), update `balance = -1`; since `-1` is already at `0`,
+//         check span `2 - 0 = 2` and return `max_len = 2`.
+//
+//   Example 3:
+//     Input:  nums = [0, 0, 0, 0]
+//     Output: 0
+//     Explanation:
+//       - Seed `first_seen = {0: -1}` with `balance = 0` and `max_len = 0`.
+//       - Each `0` at indices `0` through `3` decrements `balance` by `1`,
+//         producing strictly new prefix balances `-1`, `-2`, `-3`, and `-4`.
+//       - Because no prefix balance repeats in `first_seen`, `max_len` is never
+//         updated and `0` is returned.
+//
 // Algorithm:
 //   Transform each `0` into `-1` and keep each `1` as `+1`. Under this
 //   mapping, a contiguous subarray `nums[l..r]` has equal counts of `0`s and

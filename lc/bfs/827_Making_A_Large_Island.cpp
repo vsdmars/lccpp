@@ -8,6 +8,41 @@
 //   connected island of 1s achievable after at most one flip.
 //   Constraints: 1 <= n <= 500, grid[i][j] in {0, 1}.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[1, 0], [0, 1]]
+//     Output: 3
+//     Explanation:
+//       - Phase 1 flood-fills `(0, 0)` with ID `2` (`area = 1`) and `(1, 1)` with
+//         ID `3` (`area = 1`), producing `island_sizes = [0, 0, 1, 1]` and `best =
+//         1`.
+//       - Phase 2 evaluates water cell `(0, 1)`, whose orthogonal neighbors have
+//         distinct IDs `3` (down) and `2` (left), computing `merged_area = 1 + 1 +
+//         1 = 3` and updating `best = 3`.
+//       - Water cell `(1, 0)` similarly merges IDs `2` and `3` for area `3`, so
+//         `largestIsland` returns `3`.
+//
+//   Example 2:
+//     Input:  grid = [[1, 1, 1], [1, 0, 1], [0, 0, 0]]
+//     Output: 6
+//     Explanation:
+//       - Phase 1 flood-fills the U-shaped island of five `1`s starting at `(0, 0)`
+//         with ID `2`, recording `island_sizes = [0, 0, 5]` and `best = 5`.
+//       - Phase 2 evaluates water cell `(1, 1)`: its up, left, and right neighbors
+//         all have ID `2`, and `seen_ids` counts `2` only once so `merged_area = 1
+//         + 5 = 6`.
+//       - Remaining water cells `(2, 0)`, `(2, 1)`, and `(2, 2)` yield merged areas
+//         `6`, `1`, and `6`, so `largestIsland` returns `6`.
+//
+//   Example 3:
+//     Input:  grid = [[1, 1], [1, 1]]
+//     Output: 4
+//     Explanation:
+//       - Phase 1 flood-fills all four `1`s from `(0, 0)` with ID `2`, storing
+//         `island_sizes = [0, 0, 4]` and updating `best = 4`.
+//       - Phase 2 scans the grid for `0` cells and finds none, so no water flip is
+//         evaluated and `largestIsland` returns `4`.
+//
 // Algorithm:
 //   Two-phase connected-component labeling + boundary merge evaluation:
 //   1. Island Labeling (BFS Flood Fill): Scan the grid. Whenever an unvisited

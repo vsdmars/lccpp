@@ -7,6 +7,35 @@
 //   in the range ["A", "FXSHRXW"]), return its corresponding 1-based column
 //   number ("A" -> 1, "Z" -> 26, "AA" -> 27, "ZY" -> 701).
 //
+// Examples:
+//   Example 1:
+//     Input:  columnTitle = "AB"
+//     Output: 28
+//     Explanation:
+//       - Initialize total = 0.
+//       - Process 'A' with digit = ('A' - 'A') + 1 = 1: total = 0 * 26 + 1 = 1.
+//       - Process 'B' with digit = ('B' - 'A') + 1 = 2: total = 1 * 26 + 2 = 28,
+//         and return 28.
+//
+//   Example 2:
+//     Input:  columnTitle = "ZY"
+//     Output: 701
+//     Explanation:
+//       - Initialize total = 0.
+//       - Process 'Z' with digit = ('Z' - 'A') + 1 = 26: total = 0 * 26 + 26 = 26.
+//       - Process 'Y' with digit = ('Y' - 'A') + 1 = 25: total = 26 * 26 + 25 =
+//         701, and return 701.
+//
+//   Example 3:
+//     Input:  columnTitle = "ABV"
+//     Output: 750
+//     Explanation:
+//       - Initialize total = 0 and process 'A' (digit = 1) to set total = 0 * 26 +
+//         1 = 1.
+//       - Process 'B' (digit = 2) to update total = 1 * 26 + 2 = 28.
+//       - Process 'V' (digit = 22) to update total = 28 * 26 + 22 = 750, and return
+//         750.
+//
 // Algorithm:
 //   Bijective base-26 positional decoding via Horner's method.
 //   Scan `columnTitle` from most-significant character to least-significant

@@ -6,6 +6,47 @@
 //   where the width of each bar is 1, compute the total volume of rainwater
 //   that can be trapped between the bars after raining.
 //
+// Examples:
+//   Example 1:
+//     Input:  height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]
+//     Output: 6
+//     Explanation:
+//       - Initialize left = 0 (height 0), right = 11 (height 1), water_level = 0,
+//         and total_water = 0, advancing the shorter side inward each step.
+//       - Advancing left across indices 0..2 raises water_level to 1 (from
+//         height[11] = 1 and height[1] = 1) and traps 1 - 0 = 1 unit at index 2.
+//       - Advancing right from 10 down to 7 raises water_level to 2 at height[10] =
+//         2 and traps 2 - 1 = 1 unit at index 9 (height[9] = 1).
+//       - Stepping left from 3 to 7 against height[7] = 3 keeps water_level = 2 and
+//         adds 2 - 1 = 1, 2 - 0 = 2, and 2 - 1 = 1 units at indices 4, 5, and 6.
+//       - When left meets right at index 7, the loop ends and returns total_water =
+//         6.
+//
+//   Example 2:
+//     Input:  height = [4, 2, 0, 3, 2, 5]
+//     Output: 9
+//     Explanation:
+//       - Initialize left = 0 (height 4), right = 5 (height 5), water_level = 0,
+//         and total_water = 0.
+//       - Since height[0] = 4 < height[5] = 5, step left to 1 and set water_level =
+//         4 (adding 0 water).
+//       - Indices 1, 2, 3, and 4 all have heights (2, 0, 3, 2) strictly less than
+//         height[5] = 5, so left advances through all four while water_level stays
+//         4.
+//       - Accumulate (4 - 2) + (4 - 0) + (4 - 3) + (4 - 2) = 2 + 4 + 1 + 2 = 9
+//         before left meets right at index 5.
+//
+//   Example 3:
+//     Input:  height = [1, 2, 3, 4, 5]
+//     Output: 0
+//     Explanation:
+//       - Initialize left = 0 (height 1), right = 4 (height 5), water_level = 0,
+//         and total_water = 0.
+//       - At every iteration height[left] < height[right] (1 < 5, 2 < 5, 3 < 5, 4 <
+//         5), so left advances across indices 0..3.
+//       - Because each stepped lower height strictly increases, water_level updates
+//         to match lower and adds water_level - lower = 0 each step, returning 0.
+//
 // Algorithm:
 //   Primary (Two Pointers, O(1) space):
 //     Place pointers `left = 0` and `right = n - 1` at the two ends and track

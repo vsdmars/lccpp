@@ -7,6 +7,37 @@
 //   Note that duplicates count individually (it is the k-th largest element in
 //   sorted order, not the k-th distinct value).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 2, 1, 5, 6, 4], k = 2
+//     Output: 5
+//     Explanation:
+//       - Push 3 and 2 into min_heap (size 2), then push 1 and pop 1 since size 3 >
+//         2, keeping {2, 3}.
+//       - Push 5 and pop 2 ({3, 5}), then push 6 and pop 3 ({5, 6}).
+//       - Push 4 and pop 4, leaving {5, 6} in min_heap, and return min_heap.top() =
+//         5.
+//
+//   Example 2:
+//     Input:  nums = [3, 2, 3, 1, 2, 4, 5, 5, 6], k = 4
+//     Output: 4
+//     Explanation:
+//       - Push the first four elements 3, 2, 3, 1 to fill min_heap to size k = 4
+//         with {1, 2, 3, 3}.
+//       - Push 2, 4, 5, 5, 6 in sequence, popping the smallest element (1, 2, 2, 3,
+//         3) after each push so min_heap ends with {4, 5, 5, 6}.
+//       - Return min_heap.top() = 4, with the duplicate 5 values counted
+//         individually.
+//
+//   Example 3:
+//     Input:  nums = [-10, 5, 0, -3, 12, 8], k = 6
+//     Output: -10
+//     Explanation:
+//       - Push all 6 elements into min_heap; because k = 6 equals nums.size(),
+//         min_heap.size() never exceeds k and no pops occur.
+//       - Return min_heap.top() = -10, the minimum value in the heap and 6th
+//         largest element overall.
+//
 // Algorithm:
 //   Maintain a min-heap containing the `k` largest elements seen so far:
 //   1. Iterate through each `num` in `nums` and push it into the min-heap.

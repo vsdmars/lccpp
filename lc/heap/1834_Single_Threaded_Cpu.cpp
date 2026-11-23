@@ -11,6 +11,43 @@
 //   - Once started, a task runs to completion uninterrupted.
 //   Return the order of original task indices in which the CPU executes them.
 //
+// Examples:
+//   Example 1:
+//     Input:  tasks = [[1, 2], [2, 4], [3, 2], [4, 1]]
+//     Output: [0, 2, 3, 1]
+//     Explanation:
+//       - Sort tasks with original indices by enqueue_time: (1, 2, 0), (2, 4, 1),
+//         (3, 2, 2), (4, 1, 3).
+//       - Advance current_time from 0 to 1, admit task 0, and execute it:
+//         current_time becomes 1 + 2 = 3 and order = [0].
+//       - At current_time = 3, admit tasks 1 (4, 1) and 2 (2, 2); pop shortest task
+//         (2, 2), advancing current_time to 5 and order = [0, 2].
+//       - At current_time = 5, admit task 3 (1, 3) alongside (4, 1); pop (1, 3)
+//         (current_time = 6, order = [0, 2, 3]), then pop (4, 1) for [0, 2, 3, 1].
+//
+//   Example 2:
+//     Input:  tasks = [[7, 10], [7, 12], [7, 5], [7, 4], [7, 2]]
+//     Output: [4, 3, 2, 0, 1]
+//     Explanation:
+//       - All five tasks share enqueue_time = 7, so current_time fast-forwards from
+//         0 to 7 and admits all five into ready_heap.
+//       - ready_heap orders them by processing_time ascending: (2, 4), (4, 3), (5,
+//         2), (10, 0), (12, 1).
+//       - Popping each shortest available task in turn executes indices 4, 3, 2, 0,
+//         1, advancing current_time to 9, 13, 18, 28, and 40.
+//
+//   Example 3:
+//     Input:  tasks = [[1, 2], [100, 3], [100, 3], [100, 1]]
+//     Output: [0, 3, 1, 2]
+//     Explanation:
+//       - Advance current_time to 1, admit and run task 0 (duration 2), leaving
+//         ready_heap empty at current_time = 3 with order = [0].
+//       - Because ready_heap is empty and current_time = 3 < 100, fast-forward
+//         current_time across the idle gap to 100 and admit tasks 1, 2, and 3.
+//       - Execute shortest task 3 (duration 1) first for order = [0, 3], then break
+//         the processing_time = 3 tie between tasks 1 and 2 by smaller index to
+//         produce [0, 3, 1, 2].
+//
 // Algorithm:
 //   Event-Driven Simulation with Release-Time Sort + Shortest-Job-First Heap:
 //   1. Pair each task with its original index and sort ascending by

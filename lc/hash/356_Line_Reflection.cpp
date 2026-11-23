@@ -8,6 +8,38 @@
 //   maps the set onto itself. Note that duplicate points may appear in the
 //   input and the reflection axis c may be a half-integer (e.g., 0.5).
 //
+// Examples:
+//   Example 1:
+//     Input:  points = [[1, 1], [-1, 1]]
+//     Output: true
+//     Explanation:
+//       - Track min_x = -1 and max_x = 1 in the first pass while inserting 64-bit
+//         packed keys for (1, 1) and (-1, 1) into point_set.
+//       - Compute twice_axis = min_x + max_x = 0, corresponding to the vertical
+//         reflection line x = 0.
+//       - Check each point's mirror (0 - x, y): (1, 1) maps to (-1, 1) and (-1, 1)
+//         maps to (1, 1), both present in point_set, so return true.
+//
+//   Example 2:
+//     Input:  points = [[1, 1], [-1, -1]]
+//     Output: false
+//     Explanation:
+//       - Track min_x = -1 and max_x = 1 while inserting packed keys for (1, 1) and
+//         (-1, -1) into point_set.
+//       - Compute twice_axis = -1 + 1 = 0.
+//       - For point (1, 1), look up its mirror (0 - 1, 1) = (-1, 1) in point_set;
+//         because it is missing, std::ranges::all_of returns false.
+//
+//   Example 3:
+//     Input:  points = [[-16, 1], [16, 1], [16, 1]]
+//     Output: true
+//     Explanation:
+//       - First pass sets min_x = -16, max_x = 16 and inserts (-16, 1) and (16, 1)
+//         into point_set, deduplicating the repeated (16, 1).
+//       - Compute twice_axis = -16 + 16 = 0.
+//       - Verify mirrors in point_set: (-16, 1) mirrors to (16, 1) and both (16, 1)
+//         entries mirror to (-16, 1), all found in point_set, returning true.
+//
 // Algorithm:
 //   If a vertical reflection line x = c exists, the leftmost point (min_x) and
 //   rightmost point (max_x) must reflect into each other, which uniquely fixes

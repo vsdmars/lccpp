@@ -13,6 +13,48 @@
 //     3. Clicking an `'E'` with 0 adjacent mines replaces it with `'B'` and
 //        recursively reveals all adjacent unrevealed squares.
 //
+// Examples:
+//   Example 1:
+//     Input:  board =
+//             [['E','E','E','E','E'],['E','E','M','E','E'],['E','E','E','E','E'],['E','E','E','E','E']],
+//             click = [3, 0]
+//     Output: [['B','1','E','1','B'],['B','1','M','1','B'],['B','1','1','1','B'],['B','B','B','B','B']]
+//     Explanation:
+//       - Because board[3][0] is 'E' rather than 'M', updateBoard calls
+//         dfsReveal(board, 3, 0).
+//       - countAdjacentMines(board, 3, 0) finds 0 mines among the 8 neighbors in
+//         kDirs8, so board[3][0] becomes 'B' and dfsReveal recurses into its
+//         unrevealed neighbors.
+//       - Blank cells with 0 adjacent mines in rows 0-3 (such as (3,1)..(3,4),
+//         (2,0), (2,4), (1,0), (1,4), (0,0), and (0,4)) are marked 'B' and continue
+//         expanding.
+//       - At the 7 unrevealed neighbors surrounding the mine at (1, 2) — namely
+//         (0,1), (0,3), (1,1), (1,3), (2,1), (2,2), and (2,3) — countAdjacentMines
+//         returns 1, so each is set to '1' and stops expanding.
+//       - Cell (0, 2) is shielded by '1' frontier squares and the 'M' at (1, 2), so
+//         it is never visited and remains 'E'.
+//
+//   Example 2:
+//     Input:  board =
+//             [['B','1','E','1','B'],['B','1','M','1','B'],['B','1','1','1','B'],['B','B','B','B','B']],
+//             click = [1, 2]
+//     Output: [['B','1','E','1','B'],['B','1','X','1','B'],['B','1','1','1','B'],['B','B','B','B','B']]
+//     Explanation:
+//       - updateBoard inspects board[1][2] at the click coordinates [1, 2] and sees
+//         an unrevealed mine 'M'.
+//       - Rule 1 triggers immediately, replacing board[1][2] with 'X' and returning
+//         the board without calling dfsReveal.
+//
+//   Example 3:
+//     Input:  board = [['E','M'],['E','E']], click = [0, 0]
+//     Output: [['1','M'],['E','E']]
+//     Explanation:
+//       - Because board[0][0] is 'E', updateBoard invokes dfsReveal(board, 0, 0).
+//       - countAdjacentMines(board, 0, 0) checks valid neighbors in kDirs8 and
+//         counts 1 adjacent mine at (0, 1).
+//       - Since mines > 0, board[0][0] is written as '1' and dfsReveal returns
+//         immediately, leaving (1, 0) and (1, 1) unrevealed as 'E'.
+//
 // Algorithm:
 //   Handle the mine-click base case (`'M' -> 'X'`) immediately. Otherwise,
 //   perform 8-directional flood-fill DFS (plus an equivalent BFS variant

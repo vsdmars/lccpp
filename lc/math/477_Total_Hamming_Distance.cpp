@@ -9,6 +9,42 @@
 //   Constraints: 1 <= nums.size() <= 10^4, 0 <= nums[i] <= 10^9, and the
 //   answer is guaranteed to fit in a 32-bit signed integer.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [4, 14, 2]
+//     Output: 6
+//     Explanation:
+//       - In binary (bits 3 down to 0), the n = 3 elements are 4 = 0100, 14 = 1110,
+//         and 2 = 0010.
+//       - At bit = 0, all three elements have bit 0 (ones = 0, zeros = 3), adding 0
+//         * 3 = 0 to total_distance.
+//       - At bit = 1, 14 and 2 have bit 1 while 4 has bit 0 (ones = 2, zeros = 1),
+//         adding 2 * 1 = 2 to total_distance.
+//       - At bit = 2, 4 and 14 have bit 1 while 2 has bit 0 (ones = 2, zeros = 1),
+//         adding 2 (total_distance = 4); at bit = 3, only 14 has bit 1 (ones = 1,
+//         zeros = 2), adding 2 (total_distance = 6).
+//       - Columns bit = 4 through 31 have ones = 0 across all elements and add 0,
+//         so the function returns 6.
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 4, 8]
+//     Output: 12
+//     Explanation:
+//       - With n = 4, the binary values 1 = 0001, 2 = 0010, 4 = 0100, and 8 = 1000
+//         each have a single 1 bit in a distinct column in [0, 3].
+//       - For each of bit = 0, 1, 2, and 3, ones = 1 and zeros = 4 - 1 = 3,
+//         contributing 1 * 3 = 3 to total_distance.
+//       - Columns bit = 4 through 31 all have ones = 0 and contribute 0, resulting
+//         in total_distance = 4 * 3 = 12.
+//
+//   Example 3:
+//     Input:  nums = [7]
+//     Output: 0
+//     Explanation:
+//       - The element count n = static_cast<std::int64_t>(nums.size()) equals 1.
+//       - The guard if (n <= 1) triggers immediately because a single-element array
+//         forms no unordered pairs, returning 0.
+//
 // Algorithm:
 //   Bitwise column decomposition. Because Hamming distance sums differences
 //   independently across bit positions, evaluate each bit column b in [0, 31]

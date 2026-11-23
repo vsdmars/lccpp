@@ -10,6 +10,58 @@
 //     - `leave(int p)`: removes the student currently sitting in seat `p`.
 //   Constraints: 1 <= n <= 10^9; at most 10^4 calls to `seat()` and `leave()`.
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["ExamRoom", "seat", "seat", "seat", "seat", "leave",
+//             "seat"], args = [[10], [], [], [], [], [4], []]
+//     Output: [null, 0, 9, 4, 2, null, 5]
+//     Explanation:
+//       - ExamRoom(10) starts with seats_ = []; the first seat() sees an empty
+//         vector and places 0 (seats_ = [0]).
+//       - The second seat() compares left edge distance 0 against right edge (10 -
+//         1) - 0 = 9 and picks 9 (seats_ = [0, 9]).
+//       - The third seat() evaluates midpoint (0, 9) with dist = (9 - 0) / 2 = 4 >
+//         0, inserting 4 (seats_ = [0, 4, 9]).
+//       - The fourth seat() checks (0, 4) giving dist = 2 at seat 2, and (4, 9)
+//         giving dist = 2 at seat 6; strict > keeps lower seat 2 (seats_ = [0, 2,
+//         4, 9]).
+//       - leave(4) erases 4 leaving seats_ = [0, 2, 9], and the final seat() finds
+//         best gap (2, 9) with dist = (9 - 2) / 2 = 3 at 2 + 3 = 5 (seats_ = [0, 2,
+//         5, 9]).
+//
+//   Example 2:
+//     Input:  operations = ["ExamRoom", "seat", "seat", "seat", "seat", "leave",
+//             "leave", "seat", "seat"], args = [[4], [], [], [], [], [1], [3], [],
+//             []]
+//     Output: [null, 0, 3, 1, 2, null, null, 1, 3]
+//     Explanation:
+//       - The first two seat() calls place 0 on an empty room and 3 at the right
+//         boundary (n - 1 = 3), giving seats_ = [0, 3].
+//       - The third seat() picks midpoint 0 + (3 - 0) / 2 = 1 (seats_ = [0, 1, 3]),
+//         and the fourth picks midpoint 1 + (3 - 1) / 2 = 2 (seats_ = [0, 1, 2,
+//         3]).
+//       - leave(1) and leave(3) remove those seats via lower_bound, leaving seats_
+//         = [0, 2].
+//       - Next seat() finds dist = 1 at midpoint (0, 2) -> seat 1 and dist = 1 at
+//         right edge (3 - 2); strict > breaks the tie for lower seat 1 (seats_ =
+//         [0, 1, 2]).
+//       - The final seat() evaluates zero-distance gaps (0, 1) and (1, 2) against
+//         right edge distance 3 - 2 = 1, inserting and returning 3.
+//
+//   Example 3:
+//     Input:  operations = ["ExamRoom", "seat", "seat", "seat", "leave", "seat",
+//             "leave", "seat"], args = [[10], [], [], [], [0], [], [9], []]
+//     Output: [null, 0, 9, 4, null, 0, null, 9]
+//     Explanation:
+//       - The first three seat() calls populate seats_ = [0, 4, 9], after which
+//         leave(0) removes seat 0 to leave seats_ = [4, 9].
+//       - Next seat() starts with left-edge candidate chosen = 0 and best_dist =
+//         seats_.front() = 4; pair (4, 9) has dist = 2 (< 4) and right edge has 0,
+//         so seat 0 is reclaimed (seats_ = [0, 4, 9]).
+//       - leave(9) removes seat 9, leaving seats_ = [0, 4].
+//       - Final seat() beats left-edge best_dist = 0 with pair (0, 4) (dist = 2)
+//         and then right-edge distance (10 - 1) - 4 = 5, returning 9.
+//
 // Algorithm:
 //   Maintain a sorted list `seats_` of all currently occupied seat indices.
 //   - `seat()`:

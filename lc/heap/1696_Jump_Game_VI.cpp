@@ -8,6 +8,45 @@
 //   Your score is the sum of `nums[j]` across all visited indices `j`. Return
 //   the maximum achievable score.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, -1, -2, 4, -7, 3], k = 2
+//     Output: 7
+//     Explanation:
+//       - Initialize backward DP at index 5 with empty heap: dp[5] = nums[5] = 3
+//         and push (3, 5) into max_heap.
+//       - At index 4, heap top (3, 5) is within k = 2 steps (5 - 4 = 1), giving
+//         dp[4] = -7 + 3 = -4 and pushing (-4, 4).
+//       - At index 3, heap top (3, 5) is within range (5 - 3 = 2), giving dp[3] = 4
+//         + 3 = 7 and pushing (7, 3).
+//       - At indices 2 and 1, heap top (7, 3) stays within k = 2 steps, yielding
+//         dp[2] = -2 + 7 = 5 and dp[1] = -1 + 7 = 6.
+//       - At index 0, (7, 3) is out of range (3 - 0 = 3 > 2) and lazily popped, so
+//         next top (6, 1) yields dp[0] = 1 + 6 = 7.
+//
+//   Example 2:
+//     Input:  nums = [10, -5, -2, 4, 0, 3], k = 3
+//     Output: 17
+//     Explanation:
+//       - Process indices 5 and 4 backward: dp[5] = 3 and dp[4] = 0 + 3 = 3,
+//         leaving (3, 5) at the top of max_heap.
+//       - At index 3, nums[3] = 4 combines with top (3, 5) (5 - 3 = 2 <= 3) to give
+//         dp[3] = 7, which becomes the new heap top.
+//       - At indices 2 and 1, (7, 3) remains reachable within k = 3 steps,
+//         producing dp[2] = -2 + 7 = 5 and dp[1] = -5 + 7 = 2.
+//       - At index 0, (7, 3) is still reachable (3 - 0 = 3 <= 3), so dp[0] = 10 + 7
+//         = 17.
+//
+//   Example 3:
+//     Input:  nums = [-5, -2, -10, -1], k = 2
+//     Output: -8
+//     Explanation:
+//       - Start at index 3 with empty heap: dp[3] = -1 and push (-1, 3).
+//       - At indices 2 and 1, top (-1, 3) is within k = 2 steps, giving dp[2] = -10
+//         + (-1) = -11 and dp[1] = -2 + (-1) = -3.
+//       - At index 0, (-1, 3) expires (3 - 0 = 3 > 2) and is popped, exposing (-3,
+//         1) so dp[0] = -5 + (-3) = -8.
+//
 // Algorithm:
 //   Dynamic Programming + Lazy-Deletion Max-Heap (Backward Sweep):
 //   Let `dp[i]` be the maximum score obtainable starting at index `i` and

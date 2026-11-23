@@ -8,6 +8,47 @@
 //   translated (shifted without rotation or reflection) to match the other.
 //   Return the number of distinct island shapes in `grid`.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[1, 1, 0, 0, 0], [1, 1, 0, 0, 0], [0, 0, 0, 1, 1], [0, 0, 0,
+//             1, 1]]
+//     Output: 1
+//     Explanation:
+//       - Row-major scanning first encounters land at (0, 0) and runs
+//         dfsEncode(grid, 0, 0, 'S', sig), zeroing out the top-left 2x2 block.
+//       - Following kDirs order (R, L, D, U) from (0, 0) -> R(0, 1) -> D(1, 1) ->
+//         L(1, 0) and appending 'B' on each return produces signature "SRDLBBBB",
+//         which is inserted into signatures.
+//       - Scanning later finds (2, 3), explores the bottom-right 2x2 block in the
+//         identical relative order to build "SRDLBBBB", and inserts it into
+//         signatures with no size increase, returning 1.
+//
+//   Example 2:
+//     Input:  grid = [[1, 1, 0, 1, 1], [1, 0, 0, 0, 0], [0, 0, 0, 0, 1], [1, 1, 0,
+//             1, 1]]
+//     Output: 3
+//     Explanation:
+//       - The top-left L-shaped island at (0, 0) visits (0, 0) -> R(0, 1) and (0,
+//         0) -> D(1, 0), producing signature "SRBDBB".
+//       - The top-right 1x2 horizontal bar at (0, 3) records signature "SRBB".
+//       - The bottom-right reversed-L island at (2, 4) traverses (2, 4) -> D(3, 4)
+//         -> L(3, 3), recording "SDLBBB".
+//       - The bottom-left 1x2 horizontal bar at (3, 0) also records "SRBB", so
+//         signatures holds {"SRBDBB", "SRBB", "SDLBBB"} and returns 3.
+//
+//   Example 3:
+//     Input:  grid = [[1, 1, 0], [0, 1, 1], [0, 0, 0], [1, 1, 1], [0, 1, 0]]
+//     Output: 2
+//     Explanation:
+//       - The Z-shaped island starting at (0, 0) traverses (0, 0) -> R(0, 1) ->
+//         D(1, 1) -> R(1, 2) and unwinds four frames, generating signature
+//         "SRDRBBBB".
+//       - The T-shaped island starting at (3, 0) steps R to (3, 1), branches R to
+//         (3, 2) (backtracks with 'B'), then branches D to (4, 1) (backtracks with
+//         'B'), and unwinds to yield "SRRBDBBB".
+//       - The backtrack markers 'B' keep the two 4-cell signatures distinct in
+//         signatures, so numDistinctIslands returns 2.
+//
 // Algorithm:
 //   Scan the grid in row-major order. Whenever an unvisited land cell `1` is
 //   found, launch a deterministic 4-directional DFS that both marks visited

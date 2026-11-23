@@ -7,6 +7,41 @@
 //   node links themselves may be rewired—and the algorithm must use O(1) extra
 //   space.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3, 4]
+//     Output: [2, 1, 4, 3]
+//     Explanation:
+//       - Initialize dummy(0) pointing to node 1 and set prev = &dummy.
+//       - On the first iteration, take first = 1 and second = 2, rewire dummy -> 2
+//         -> 1 -> 3 -> 4, and advance prev to 1.
+//       - On the second iteration, take first = 3 and second = 4, rewire 1 -> 4 ->
+//         3 -> nullptr, and advance prev to 3.
+//       - Since prev->next is now nullptr, exit the loop and return dummy.next as
+//         [2, 1, 4, 3].
+//
+//   Example 2:
+//     Input:  head = [1, 2, 3, 4, 5]
+//     Output: [2, 1, 4, 3, 5]
+//     Explanation:
+//       - Initialize dummy(0) before node 1 with prev = &dummy.
+//       - Swap the first pair (1, 2) to form dummy -> 2 -> 1 -> 3 -> 4 -> 5 and
+//         advance prev to 1.
+//       - Swap the second pair (3, 4) to form dummy -> 2 -> 1 -> 4 -> 3 -> 5 and
+//         advance prev to 3.
+//       - At prev = 3, prev->next is 5 and prev->next->next is nullptr, so the loop
+//         terminates and leaves trailing node 5 in place.
+//
+//   Example 3:
+//     Input:  head = [1]
+//     Output: [1]
+//     Explanation:
+//       - Initialize dummy(0) with dummy.next pointing to node 1 and set prev =
+//         &dummy.
+//       - Evaluate the loop condition prev->next != nullptr && prev->next->next !=
+//         nullptr, which fails because prev->next->next is nullptr.
+//       - Exit immediately without rewiring and return dummy.next as [1].
+//
 // Algorithm:
 //   Iterative pairwise pointer rewiring anchored by a stack-allocated dummy
 //   sentinel `dummy` before `head`:

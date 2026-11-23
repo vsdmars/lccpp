@@ -8,6 +8,42 @@
 //   a sum. Return the 1-indexed `k`-th smallest possible sum among all n^m
 //   choices.
 //
+// Examples:
+//   Example 1:
+//     Input:  mat = [[1, 3, 11], [2, 4, 6]], k = 5
+//     Output: 7
+//     Explanation:
+//       - Initialize curr from the first min(3, 5) = 3 elements of row 0: curr =
+//         [1, 3, 11].
+//       - Call merge_top_k(curr, [2, 4, 6], 5), seeding the min-heap with PairSum
+//         entries (1+2=3, idx_a=0, idx_b=0), (3+2=5, 1, 0), and (11+2=13, 2, 0).
+//       - Pop (3, 0, 0) to record 3 and push (1+4=5, 0, 1); then pop (5, 0, 1) and
+//         (5, 1, 0), pushing (1+6=7, 0, 2) and (3+4=7, 1, 1).
+//       - Pop the next two sums (7, 0, 2) and (7, 1, 1) to complete curr = [3, 5,
+//         5, 7, 7], and return curr[k - 1] = curr[4] = 7.
+//
+//   Example 2:
+//     Input:  mat = [[1, 10, 10], [1, 4, 5], [2, 3, 6]], k = 7
+//     Output: 9
+//     Explanation:
+//       - Initialize curr = [1, 10, 10] from row 0 (min(3, 7) = 3 elements).
+//       - Merge curr with row 1 [1, 4, 5] via merge_top_k(limit=7) to obtain the 7
+//         smallest two-row sums: curr = [2, 5, 6, 11, 11, 14, 14].
+//       - Merge curr with row 2 [2, 3, 6] via merge_top_k(limit=7), extracting sums
+//         2+2=4, 2+3=5, 5+2=7, 2+6=8, 5+3=8, 6+2=8, and 6+3=9 into curr = [4, 5, 7,
+//         8, 8, 8, 9].
+//       - Return curr[k - 1] = curr[6] = 9.
+//
+//   Example 3:
+//     Input:  mat = [[4], [5], [6]], k = 1
+//     Output: 15
+//     Explanation:
+//       - Initialize curr = [4] from the first min(1, 1) = 1 element of row 0.
+//       - Merge curr with row 1 [5] using merge_top_k(limit=1), popping the single
+//         seeded pair (4+5=9, 0, 0) so curr = [9].
+//       - Merge curr with row 2 [6] using merge_top_k(limit=1), popping (9+6=15, 0,
+//         0) so curr = [15], and return curr[0] = 15.
+//
 // Algorithm:
 //   Two complementary min-heap solutions are implemented:
 //   1. Row-by-Row Top-K Min-Heap Merge (`kthSmallest`, primary):

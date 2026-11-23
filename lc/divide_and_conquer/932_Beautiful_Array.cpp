@@ -9,6 +9,38 @@
 //      mean of two elements on opposite sides of it).
 //   Given `n`, construct and return any valid beautiful array of length `n`.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 1
+//     Output: [1]
+//     Explanation:
+//       - beautifulArray initializes res = [1] and checks the loop guard res.size()
+//         < 1, which is false.
+//       - Filtering elements <= 1 into filtered keeps [1] and returns [1].
+//
+//   Example 2:
+//     Input:  n = 4
+//     Output: [1, 3, 2, 4]
+//     Explanation:
+//       - Starting from res = [1], the first while iteration maps res to odds (2 *
+//         val - 1 = [1]) followed by evens (2 * val = [2]), giving res = [1, 2].
+//       - Because res.size() = 2 < 4, the second iteration maps [1, 2] to odds [1,
+//         3] followed by evens [2, 4], producing res = [1, 3, 2, 4].
+//       - The loop terminates with res.size() = 4, and filtering values <= 4
+//         returns [1, 3, 2, 4], which has no 3-term arithmetic progression.
+//
+//   Example 3:
+//     Input:  n = 5
+//     Output: [1, 5, 3, 2, 4]
+//     Explanation:
+//       - After two doubling steps reach res = [1, 3, 2, 4] (size 4 < 5), a third
+//         iteration appends odds [1, 5, 3, 7] and evens [2, 6, 4, 8] to form res =
+//         [1, 5, 3, 7, 2, 6, 4, 8].
+//       - Now res.size() = 8 >= 5 so the loop ends, and filtering elements <= 5
+//         drops 7, 6, and 8.
+//       - The returned array [1, 5, 3, 2, 4] preserves the beautiful property
+//         across all triples because deletion cannot introduce arithmetic triples.
+//
 // Algorithm:
 //   Bottom-up divide and conquer exploiting three closure properties of
 //   beautiful arrays:

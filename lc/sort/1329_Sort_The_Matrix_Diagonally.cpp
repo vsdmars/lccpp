@@ -8,6 +8,44 @@
 //   diagonal independently in ascending order and return the resulting matrix.
 //   Constraints: `1 <= m, n <= 100`, `1 <= mat[i][j] <= 100`.
 //
+// Examples:
+//   Example 1:
+//     Input:  mat = [[3, 3, 1, 1], [2, 2, 1, 2], [1, 1, 1, 2]]
+//     Output: [[1, 1, 1, 1], [1, 2, 2, 2], [1, 2, 3, 3]]
+//     Explanation:
+//       - Phase 1 extracts and sorts diagonals starting on column 0: (0, 0), (1,
+//         0), and (2, 0).
+//       - The main diagonal from (0, 0) extracts [3, 2, 1] into buffer, sorts it to
+//         [1, 2, 3], and writes it back to (0, 0), (1, 1), and (2, 2).
+//       - Diagonal (1, 0) sorts [2, 1] to [1, 2] at (1, 0) and (2, 1), while (2, 0)
+//         keeps its single element [1].
+//       - Phase 2 sorts top-row diagonals from (0, 1), (0, 2), and (0, 3): [3, 1,
+//         2] becomes [1, 2, 3], [1, 2] stays [1, 2], and [1] stays [1], yielding
+//         [[1, 1, 1, 1], [1, 2, 2, 2], [1, 2, 3, 3]].
+//
+//   Example 2:
+//     Input:  mat = [[9, 8, 7], [6, 5, 4], [3, 2, 1]]
+//     Output: [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
+//     Explanation:
+//       - Phase 1 processes left-column starts: [9, 5, 1] from (0, 0) sorts to [1,
+//         5, 9], [6, 2] from (1, 0) sorts to [2, 6], and [3] at (2, 0) is
+//         unchanged.
+//       - Phase 2 processes remaining top-row starts: [8, 4] from (0, 1) sorts to
+//         [4, 8], and [7] at (0, 2) is unchanged.
+//       - Writing each sorted buffer back along its down-right path produces [[1,
+//         4, 7], [2, 5, 8], [3, 6, 9]].
+//
+//   Example 3:
+//     Input:  mat = [[5, 3, 1, 4, 2]]
+//     Output: [[5, 3, 1, 4, 2]]
+//     Explanation:
+//       - Phase 1 runs only for r = 0 because rows = 1, extracting [5] from (0, 0)
+//         before the diagonal exits the 1-row matrix.
+//       - Phase 2 visits columns 1 through 4 on row 0, each extracting a 1-element
+//         buffer ([3], [1], [4], [2]) that is already sorted.
+//       - Writing each single-element buffer back leaves mat unchanged as [[5, 3,
+//         1, 4, 2]].
+//
 // Algorithm:
 //   Per-diagonal extract-sort-writeback:
 //   Every main diagonal is uniquely identified by its starting cell on the top

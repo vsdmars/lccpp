@@ -10,6 +10,46 @@
 //   of the longest absolute path (joined by `'/'`) to any file, or 0 if no
 //   file exists. Required time complexity: O(n).
 //
+// Examples:
+//   Example 1:
+//     Input:  input = "dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext"
+//     Output: 20
+//     Explanation:
+//       - Initialize depth_len = [0] and max_len = 0, then process "dir" (depth =
+//         0, directory) to set depth_len[1] = 0 + 3 + 1 = 4.
+//       - "\tsubdir1" (depth = 1, directory) sets depth_len[2] = 4 + 7 + 1 = 12,
+//         and "\tsubdir2" (depth = 1, directory) overwrites depth_len[2] = 4 + 7 +
+//         1 = 12.
+//       - "\t\tfile.ext" (depth = 2, contains '.') is a file of length full_len =
+//         depth_len[2] + 8 = 12 + 8 = 20 (for "dir/subdir2/file.ext"), updating
+//         max_len = 20.
+//
+//   Example 2:
+//     Input:  input =
+//             "dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext"
+//     Output: 32
+//     Explanation:
+//       - "dir" (depth = 0) sets depth_len[1] = 4 and "\tsubdir1" (depth = 1) sets
+//         depth_len[2] = 4 + 7 + 1 = 12.
+//       - "\t\tfile1.ext" (depth = 2, file) computes full_len = 12 + 9 = 21
+//         ("dir/subdir1/file1.ext") so max_len = 21; "\t\tsubsubdir1" (depth = 2,
+//         directory) sets depth_len[3] = 12 + 10 + 1 = 23.
+//       - "\tsubdir2" (depth = 1) overwrites depth_len[2] = 4 + 7 + 1 = 12, and
+//         "\t\tsubsubdir2" (depth = 2) overwrites depth_len[3] = 12 + 10 + 1 = 23.
+//       - "\t\t\tfile2.ext" (depth = 3, file) computes full_len = depth_len[3] + 9
+//         = 23 + 9 = 32 ("dir/subdir2/subsubdir2/file2.ext"), updating max_len =
+//         32.
+//
+//   Example 3:
+//     Input:  input = "dir\n        file.txt"
+//     Output: 16
+//     Explanation:
+//       - "dir" (depth = 0, directory) sets depth_len[1] = 0 + 3 + 1 = 4.
+//       - "        file.txt" has 0 leading '\t' characters, so depth = 0 and all 8
+//         leading spaces remain part of name (name.size() = 16).
+//       - Because name contains '.', full_len = depth_len[0] + 16 = 0 + 16 = 16,
+//         returning 16 as a top-level file rather than nesting under "dir".
+//
 // Algorithm:
 //   Stream through the input line by line using `std::string_view` slices
 //   (zero copies) while maintaining a depth-indexed prefix-length stack

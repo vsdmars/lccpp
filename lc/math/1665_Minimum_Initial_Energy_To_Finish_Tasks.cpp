@@ -9,6 +9,44 @@
 //   all tasks.
 //   Constraints: 1 <= tasks.length <= 10^5, 1 <= actual_i <= minimum_i <= 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  tasks = [[1, 2], [2, 4], [4, 8]]
+//     Output: 8
+//     Explanation:
+//       - Compute buffers (minimum - actual) as 1 for [1, 2], 2 for [2, 4], and 4
+//         for [4, 8], then sort ascending into [[1, 2], [2, 4], [4, 8]].
+//       - Initialize required = 0 and process [1, 2]: required = max(0 + 1, 2) = 2.
+//       - Process [2, 4]: required = max(2 + 2, 4) = 4.
+//       - Process [4, 8]: required = max(4 + 4, 8) = 8, so the function returns 8.
+//
+//   Example 2:
+//     Input:  tasks = [[1, 3], [2, 4], [10, 11], [10, 12], [8, 9]]
+//     Output: 32
+//     Explanation:
+//       - Compute buffers (minimum - actual): [10, 11] and [8, 9] have buffer 1,
+//         while [1, 3], [2, 4], and [10, 12] have buffer 2, so buffer-1 tasks are
+//         sorted before buffer-2 tasks.
+//       - Process the two buffer-1 tasks from required = 0: regardless of tie
+//         order, required becomes max(max(0 + 10, 11) + 8, 9) = 19 (or max(max(0 +
+//         8, 9) + 10, 11) = 19).
+//       - Process the three buffer-2 tasks [1, 3], [2, 4], and [10, 12] in any tie
+//         order: since required >= 19 exceeds every task's minimum, each update
+//         adds actual (19 + 1 + 2 + 10 = 32).
+//       - Return the final accumulated required energy of 32.
+//
+//   Example 3:
+//     Input:  tasks = [[3, 3], [4, 4], [5, 5]]
+//     Output: 12
+//     Explanation:
+//       - All three tasks have buffer (minimum - actual) = 0, so sorting leaves
+//         them with equal key 0.
+//       - Starting from required = 0, processing [3, 3], [4, 4], and [5, 5] updates
+//         required via max(0 + 3, 3) = 3, max(3 + 4, 4) = 7, and max(7 + 5, 5) =
+//         12.
+//       - Return 12, which equals the sum of actual energy costs when every task
+//         has zero buffer.
+//
 // Algorithm:
 //   Greedy ordering via an exchange argument. Suppose we execute task A before
 //   task B. Starting energy required for (A, B) is `max(mA, aA + mB)`, whereas

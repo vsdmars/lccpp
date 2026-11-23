@@ -8,6 +8,45 @@
 //     nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0.
 //   Constraints: 1 <= n <= 200, -2^28 <= numsX[i] <= 2^28.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums1 = [1, 2], nums2 = [-2, -1], nums3 = [-1, 2], nums4 = [0, 2]
+//     Output: 2
+//     Explanation:
+//       - Phase 1 records all four pairwise sums from nums1 and nums2 into
+//         pair_sum_counts: 1 + (-2) = -1, 1 + (-1) = 0, 2 + (-2) = 0, and 2 + (-1)
+//         = 1, giving {-1: 1, 0: 2, 1: 1}.
+//       - Phase 2 iterates over pairs (c, d) from nums3 and nums4 and looks up
+//         target = -(c + d) in pair_sum_counts.
+//       - Pair (-1, 0) has target = 1, which hits pair_sum_counts[1] = 1
+//         (tuple_count = 1), and pair (-1, 2) has target = -1, which hits
+//         pair_sum_counts[-1] = 1 (tuple_count = 2).
+//       - Pairs (2, 0) and (2, 2) produce targets -2 and -4, neither of which is in
+//         pair_sum_counts, so fourSumCount returns 2.
+//
+//   Example 2:
+//     Input:  nums1 = [1, 1], nums2 = [-1, -1], nums3 = [0, 0], nums4 = [0, 0]
+//     Output: 16
+//     Explanation:
+//       - Phase 1 evaluates all 4 pairs (1, -1) from nums1 and nums2, each summing
+//         to 0, so pair_sum_counts becomes {0: 4}.
+//       - Phase 2 evaluates all 4 pairs (0, 0) from nums3 and nums4, each querying
+//         target = -(0 + 0) = 0 and adding pair_sum_counts[0] = 4 to tuple_count.
+//       - Accumulating 4 across all 4 pairs from nums3 x nums4 returns tuple_count
+//         = 16.
+//
+//   Example 3:
+//     Input:  nums1 = [1, 2], nums2 = [3, 4], nums3 = [5, 6], nums4 = [7, 8]
+//     Output: 0
+//     Explanation:
+//       - Phase 1 inserts the 4 pair sums from nums1 and nums2 into
+//         pair_sum_counts: 1 + 3 = 4, 1 + 4 = 5, 2 + 3 = 5, and 2 + 4 = 6, giving
+//         {4: 1, 5: 2, 6: 1}.
+//       - Phase 2 checks target = -(c + d) for pairs (5, 7), (5, 8), (6, 7), and
+//         (6, 8), yielding targets -12, -13, -13, and -14.
+//       - None of those negative targets appear in pair_sum_counts, so tuple_count
+//         remains 0.
+//
 // Algorithm:
 //   Meet-in-the-middle decomposition. Rather than enumerating all O(n^4)
 //   quadruples, rewrite the condition as:

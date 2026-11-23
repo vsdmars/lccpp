@@ -6,6 +6,38 @@
 //   after deleting at most one character from it, and `false` otherwise.
 //   Constraints: 1 <= s.size() <= 10^5, lowercase English letters.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abca"
+//     Output: true
+//     Explanation:
+//       - Initialize left = 0 ('a') and right = 3 ('a'); since s[0] == s[3],
+//         advance inward to left = 1 and right = 2.
+//       - Detect mismatch s[1] = 'b' != s[2] = 'c', so check whether s[2..2] or
+//         s[1..1] is a strict palindrome.
+//       - Call is_palindrome(s, 2, 2), which exits while (left < right) immediately
+//         and returns true.
+//
+//   Example 2:
+//     Input:  s = "abc"
+//     Output: false
+//     Explanation:
+//       - Initialize left = 0 ('a') and right = 2 ('c'), which immediately mismatch
+//         (s[0] != s[2]).
+//       - Check is_palindrome(s, 1, 2) for "bc", which finds 'b' != 'c' and returns
+//         false.
+//       - Check is_palindrome(s, 0, 1) for "ab", which finds 'a' != 'b' and returns
+//         false, so return false.
+//
+//   Example 3:
+//     Input:  s = "ab"
+//     Output: true
+//     Explanation:
+//       - Initialize left = 0 ('a') and right = 1 ('b'), which mismatch at the
+//         first comparison.
+//       - Check is_palindrome(s, 1, 1); because left < right is false, the helper
+//         returns true and validPalindrome returns true.
+//
 // Algorithm:
 //   Greedy two-pointer scan with one-shot branch on first mismatch:
 //   1. Place `left = 0` and `right = s.size() - 1` and advance both inward

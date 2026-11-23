@@ -7,6 +7,45 @@
 //   the shortest list of CIDR blocks (`"a.b.c.d/k"`) that covers the exact
 //   inclusive IP range `[ip, ip + n - 1]` with no addresses outside the range.
 //
+// Examples:
+//   Example 1:
+//     Input:  ip = "255.0.0.7", n = 10
+//     Output: ["255.0.0.7/32", "255.0.0.8/29", "255.0.0.16/32"]
+//     Explanation:
+//       - parseIp("255.0.0.7") produces cur = 0xFF000007 with remaining = 10.
+//       - Iteration 1 computes trailing_zeros = countr_zero(0xFF000007) = 0 and
+//         max_budget_exp = bit_width(10) - 1 = 3, giving exp = 0 (prefix 32); it
+//         emits "255.0.0.7/32" and advances cur to 0xFF000008 with remaining = 9.
+//       - Iteration 2 computes countr_zero(0xFF000008) = 3 and bit_width(9) - 1 =
+//         3, giving exp = 3 (block size 8, prefix 29); it emits "255.0.0.8/29" and
+//         advances cur to 0xFF000010 with remaining = 1.
+//       - Iteration 3 computes countr_zero(0xFF000010) = 4 and bit_width(1) - 1 =
+//         0, giving exp = 0 (prefix 32); it emits "255.0.0.16/32" and finishes with
+//         remaining = 0.
+//
+//   Example 2:
+//     Input:  ip = "117.145.102.62", n = 8
+//     Output: ["117.145.102.62/31", "117.145.102.64/30", "117.145.102.68/31"]
+//     Explanation:
+//       - Starting at .62 (countr_zero = 1) with remaining = 8 (max_budget_exp =
+//         3), exp = min(1, 3) = 1 emits "117.145.102.62/31" and advances 2
+//         addresses to .64 with remaining = 6.
+//       - At .64 (countr_zero = 6) with remaining = 6 (bit_width(6) - 1 = 2), exp =
+//         min(6, 2) = 2 emits "117.145.102.64/30" and advances 4 addresses to .68
+//         with remaining = 2.
+//       - At .68 (countr_zero = 2) with remaining = 2 (bit_width(2) - 1 = 1), exp =
+//         min(2, 1) = 1 emits "117.145.102.68/31" and drops remaining to 0.
+//
+//   Example 3:
+//     Input:  ip = "0.0.0.0", n = 2
+//     Output: ["0.0.0.0/31"]
+//     Explanation:
+//       - parseIp("0.0.0.0") sets cur = 0 and remaining = 2.
+//       - Because cur == 0, the zero-address guard sets trailing_zeros = 32 while
+//         max_budget_exp = bit_width(2) - 1 = 1.
+//       - Choosing exp = min(32, 1) = 1 (block size 2, prefix 31) emits
+//         "0.0.0.0/31" and finishes with remaining = 0.
+//
 // Algorithm:
 //   Convert the starting IPv4 string into a 64-bit unsigned integer `cur`
 //   (using 64 bits safely handles `0.0.0.0` with a full 32-bit block and

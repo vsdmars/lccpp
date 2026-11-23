@@ -7,6 +7,42 @@
 //   linked list.
 //   Constraints: 0 <= number of nodes <= 300, -100 <= Node.val <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 1, 2]
+//     Output: [1, 2]
+//     Explanation:
+//       - Attach dummy(0, head) with prev = &dummy and inspect cur = prev->next
+//         (first 1).
+//       - Because cur->val == cur->next->val (1 == 1), rewire cur->next =
+//         cur->next->next to bypass the duplicate 1 and link directly to 2, then
+//         advance prev to node 1.
+//       - Next, cur = prev->next is node 2 with cur->next == nullptr, so prev
+//         advances to 2, the loop terminates, and dummy.next yields [1, 2].
+//
+//   Example 2:
+//     Input:  head = [1, 1, 2, 3, 3]
+//     Output: [1, 2, 3]
+//     Explanation:
+//       - Starting with prev = &dummy, cur = 1 skips the duplicate 1 via cur->next
+//         = 2 and commits node 1 by setting prev = 1.
+//       - Next, cur = 2 has cur->next->val == 3 != 2, so no node is skipped and
+//         prev advances to 2.
+//       - Finally, cur = 3 matches cur->next->val == 3, rewires cur->next = nullptr
+//         to drop the second 3, sets prev = 3, and returns dummy.next as [1, 2, 3].
+//
+//   Example 3:
+//     Input:  head = [5, 5, 5, 5]
+//     Output: [5]
+//     Explanation:
+//       - Attach dummy(0, head) with prev = &dummy and select cur = prev->next
+//         (first 5).
+//       - The inner loop matches cur->val == cur->next->val three consecutive
+//         times, advancing cur->next past the second, third, and fourth 5 until
+//         cur->next == nullptr.
+//       - Setting prev = cur moves prev to the surviving 5 with prev->next ==
+//         nullptr, ending the outer loop and returning [5].
+//
 // Algorithm:
 //   Attach a dummy sentinel before `head` and walk the list with `prev`:
 //   1. Let `cur = prev->next` be the first representative of the next value.

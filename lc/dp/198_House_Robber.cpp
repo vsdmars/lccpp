@@ -6,6 +6,41 @@
 //   stashed at each house along a street, determine the maximum total amount of
 //   money that can be robbed in one night without robbing two adjacent houses.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 7, 9, 3, 1]
+//     Output: 12
+//     Explanation:
+//       - Initialize rolling state variables prev = 0 and curr = 0 before scanning
+//         nums.
+//       - Process houses 0 and 1: amount = 2 gives next = max(0, 0 + 2) = 2 (prev =
+//         0, curr = 2), and amount = 7 gives next = max(2, 0 + 7) = 7 (prev = 2,
+//         curr = 7).
+//       - At house 2 (amount = 9), next = max(7, 2 + 9) = 11 updates (prev, curr)
+//         to (7, 11); at house 3 (amount = 3), next = max(11, 7 + 3) = 11 updates
+//         (prev, curr) to (11, 11).
+//       - At house 4 (amount = 1), next = max(11, 11 + 1) = 12 updates curr to 12
+//         and returns 12.
+//
+//   Example 2:
+//     Input:  nums = [2, 1, 1, 2]
+//     Output: 4
+//     Explanation:
+//       - Start with prev = 0, curr = 0 and process index 0 (2) to reach prev = 0,
+//         curr = 2.
+//       - At index 1 (1), next = max(2, 0 + 1) = 2 keeps curr = 2 and sets prev =
+//         2.
+//       - At index 2 (1), next = max(2, 2 + 1) = 3 updates (prev, curr) to (2, 3).
+//       - At index 3 (2), next = max(3, 2 + 2) = 4 updates curr to 4 (robbing
+//         houses 0 and 3) and returns 4.
+//
+//   Example 3:
+//     Input:  nums = []
+//     Output: 0
+//     Explanation:
+//       - Initialize prev = 0 and curr = 0.
+//       - The range-based loop over nums runs zero iterations and returns curr = 0.
+//
 // Algorithm:
 //   Bottom-up dynamic programming with O(1) space optimization.
 //   Let dp[i] denote the maximum money obtainable from the prefix nums[0..i].

@@ -13,6 +13,47 @@
 //     - 1 <= val_i, freq_i <= 10^4
 //     - sum(freq in encoded1) == sum(freq in encoded2)
 //
+// Examples:
+//   Example 1:
+//     Input:  encoded1 = [[1, 3], [2, 3]], encoded2 = [[6, 3], [3, 3]]
+//     Output: [[6, 6]]
+//     Explanation:
+//       - At idx1 = 0 ([1, 3], rem1 = 3) and idx2 = 0 ([6, 3], rem2 = 3), overlap =
+//         min(3, 3) = 3 and prod = 1 * 6 = 6, appending [6, 3] and advancing both
+//         pointers.
+//       - At idx1 = 1 ([2, 3], rem1 = 3) and idx2 = 1 ([3, 3], rem2 = 3), overlap =
+//         3 and prod = 2 * 3 = 6; since result.back()[0] == 6, it merges into [6, 3
+//         + 3] = [6, 6].
+//       - Both streams reach the end simultaneously, returning [[6, 6]].
+//
+//   Example 2:
+//     Input:  encoded1 = [[1, 3], [2, 1], [3, 2]], encoded2 = [[2, 3], [3, 3]]
+//     Output: [[2, 3], [6, 1], [9, 2]]
+//     Explanation:
+//       - At idx1 = 0 ([1, 3]) and idx2 = 0 ([2, 3]), overlap = 3 and prod = 1 * 2
+//         = 2 append [2, 3] and advance to idx1 = 1 (rem1 = 1) and idx2 = 1 (rem2 =
+//         3).
+//       - At idx1 = 1 ([2, 1]) and idx2 = 1 ([3, 3]), overlap = min(1, 3) = 1 and
+//         prod = 2 * 3 = 6 append [6, 1]; rem1 reaches 0 so idx1 advances to 2
+//         (rem1 = 2) while rem2 becomes 2.
+//       - At idx1 = 2 ([3, 2]) and idx2 = 1 ([3, 3]), overlap = min(2, 2) = 2 and
+//         prod = 3 * 3 = 9 append [9, 2], exhausting both inputs and returning [[2,
+//         3], [6, 1], [9, 2]].
+//
+//   Example 3:
+//     Input:  encoded1 = [[1, 2], [2, 4]], encoded2 = [[6, 3], [3, 3]]
+//     Output: [[6, 2], [12, 1], [6, 3]]
+//     Explanation:
+//       - At idx1 = 0 ([1, 2], rem1 = 2) and idx2 = 0 ([6, 3], rem2 = 3), overlap =
+//         2 and prod = 6 append [6, 2]; idx1 advances to 1 ([2, 4], rem1 = 4) while
+//         rem2 drops to 1.
+//       - At idx1 = 1 and idx2 = 0, overlap = min(4, 1) = 1 and prod = 2 * 6 = 12
+//         append [12, 1]; rem1 drops to 3 and idx2 advances to 1 ([3, 3], rem2 =
+//         3).
+//       - At idx1 = 1 and idx2 = 1, overlap = min(3, 3) = 3 and prod = 2 * 3 = 6
+//         append [6, 3] (kept separate from [6, 2] by [12, 1]), returning [[6, 2],
+//         [12, 1], [6, 3]].
+//
 // Algorithm:
 //   Expanding either array can take up to 10^9 elements, so we operate
 //   directly on the compressed segments using two pointers `idx1` and `idx2`

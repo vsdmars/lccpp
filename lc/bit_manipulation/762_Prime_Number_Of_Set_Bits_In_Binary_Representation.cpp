@@ -7,6 +7,37 @@
 //   [left, right] have a prime number of set bits (1s) in their binary
 //   representation. Note that 1 is not a prime number.
 //
+// Examples:
+//   Example 1:
+//     Input:  left = 6, right = 10
+//     Output: 4
+//     Explanation:
+//       - For num = 6 (110_2) and num = 7 (111_2), std::popcount yields 2 and 3;
+//         bits 2 and 3 are set in kPrimeMask, advancing count to 2.
+//       - For num = 8 (1000_2), std::popcount yields 1, and ((kPrimeMask >> 1) &
+//         1u) is 0 because 1 is not prime, so count stays 2.
+//       - For num = 9 (1001_2) and num = 10 (1010_2), std::popcount yields 2 for
+//         each; bit 2 is set in kPrimeMask, bringing the returned count to 4.
+//
+//   Example 2:
+//     Input:  left = 10, right = 15
+//     Output: 5
+//     Explanation:
+//       - Evaluating num = 10 through 14 yields popcounts of 2 (10, 12) and 3 (11,
+//         13, 14), all of which match set bits in kPrimeMask and increment count to
+//         5.
+//       - For num = 15 (1111_2), std::popcount yields 4, and ((kPrimeMask >> 4) &
+//         1u) is 0, so count remains 5 and is returned.
+//
+//   Example 3:
+//     Input:  left = 1, right = 1
+//     Output: 0
+//     Explanation:
+//       - The loop runs once for num = 1 (1_2), computing bits = std::popcount(1u)
+//         = 1.
+//       - Checking ((kPrimeMask >> 1) & 1u) evaluates to 0u since 1 is not prime,
+//         so count stays 0 and the function returns 0.
+//
 // Algorithm:
 //   For every integer num in [left, right], compute its Hamming weight
 //   (number of 1-bits) in O(1) via C++20/23 std::popcount. Since any 32-bit

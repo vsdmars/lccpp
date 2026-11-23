@@ -8,6 +8,46 @@
 //   bottom (note that the first element of a row is not necessarily larger
 //   than the last element of the previous row).
 //
+// Examples:
+//   Example 1:
+//     Input:  matrix = [[1, 4, 7, 11, 15], [2, 5, 8, 12, 19], [3, 6, 9, 16, 22],
+//             [10, 13, 14, 17, 24], [18, 21, 23, 26, 30]], target = 5
+//     Output: true
+//     Explanation:
+//       - Start at the top-right corner (row = 0, col = 4), where matrix[0][4] =
+//         15.
+//       - Since 15 > 5, eliminate column 4 (--col to 3), then eliminate column 3
+//         (matrix[0][3] = 11 > 5) and column 2 (matrix[0][2] = 7 > 5) to reach (0,
+//         1).
+//       - At (0, 1), matrix[0][1] = 4 < 5, so eliminate row 0 by incrementing row
+//         to 1.
+//       - At (1, 1), matrix[1][1] = 5 matches target, so return true.
+//
+//   Example 2:
+//     Input:  matrix = [[1, 4, 7, 11, 15], [2, 5, 8, 12, 19], [3, 6, 9, 16, 22],
+//             [10, 13, 14, 17, 24], [18, 21, 23, 26, 30]], target = 20
+//     Output: false
+//     Explanation:
+//       - Start at (0, 4) with 15 < 20 and step down rows (++row) through (1, 4) =
+//         19 < 20 to (2, 4) = 22.
+//       - Since 22 > 20, step left to (2, 3) = 16 < 20, then step down through (3,
+//         3) = 17 < 20 to (4, 3) = 26.
+//       - At row 4, 26 > 20, 23 > 20, and 21 > 20 eliminate columns 3, 2, and 1 via
+//         --col until reaching (4, 0) = 18.
+//       - Since 18 < 20, increment row to 5, exiting the while (row < rows) loop
+//         and returning false.
+//
+//   Example 3:
+//     Input:  matrix = [[1, 3, 5, 7, 9]], target = 6
+//     Output: false
+//     Explanation:
+//       - Initialize rows = 1, cols = 5, and start at the top-right corner (row =
+//         0, col = 4) where matrix[0][4] = 9.
+//       - Since 9 > 6 and 7 > 6, decrement col twice to reach (0, 2) where
+//         matrix[0][2] = 5.
+//       - Because 5 < 6, increment row to 1, which equals rows and terminates the
+//         loop returning false.
+//
 // Algorithm:
 //   Two approaches are provided:
 //   1. Staircase Search (optimal, O(m + n) time, O(1) space):

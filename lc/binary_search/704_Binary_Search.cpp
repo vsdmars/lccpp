@@ -7,6 +7,37 @@
 //   in `nums`, or `-1` otherwise. The algorithm must run in O(log n) time.
 //   Constraints: 1 <= nums.length <= 10^4, -10^4 < nums[i], target < 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [-1, 0, 3, 5, 9, 12], target = 9
+//     Output: 4
+//     Explanation:
+//       - Initialize half-open lower-bound interval [lhs, rhs) to [0, 6).
+//       - Check mid = 3: nums[3] = 5 < 9, so advance lhs = 4; check mid = 5: 9 <=
+//         nums[5] = 12, so shrink rhs = 5.
+//       - Check mid = 4: 9 <= nums[4] = 9, so shrink rhs = 4; loop ends with lhs =
+//         4 and nums[4] == 9, returning 4.
+//
+//   Example 2:
+//     Input:  nums = [-1, 0, 3, 5, 9, 12], target = 2
+//     Output: -1
+//     Explanation:
+//       - Initialize [lhs, rhs) to [0, 6) and check mid = 3: 2 <= nums[3] = 5, so
+//         shrink rhs = 3.
+//       - Check mid = 1: nums[1] = 0 < 2, so advance lhs = 2; then mid = 2 gives 2
+//         <= nums[2] = 3, setting rhs = 2.
+//       - Loop ends at lhs = 2 where nums[2] = 3 != 2, returning -1.
+//
+//   Example 3:
+//     Input:  nums = [-1, 0, 3, 5, 9, 12], target = 13
+//     Output: -1
+//     Explanation:
+//       - Initialize [lhs, rhs) to [0, 6) and check mid = 3 (nums[3] = 5 < 13),
+//         advancing lhs = 4.
+//       - Check mid = 5 (nums[5] = 12 < 13), advancing lhs = 6.
+//       - Loop ends at lhs = 6 == nums.size(), so the bounds check fails and -1 is
+//         returned.
+//
 // Algorithm:
 //   Maintain a half-open search interval `[lhs, rhs)` initialized to `[0, n)`
 //   representing the first index where `nums[i] >= target` (lower bound).

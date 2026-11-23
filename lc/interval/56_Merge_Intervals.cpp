@@ -9,6 +9,38 @@
 //   0 <= start_i <= end_i <= 10^4 (implementation also supports negative
 //   coordinates).
 //
+// Examples:
+//   Example 1:
+//     Input:  intervals = [[1, 3], [2, 6], [8, 10], [15, 18]]
+//     Output: [[1, 6], [8, 10], [15, 18]]
+//     Explanation:
+//       - Sort intervals lexicographically (already ordered) and push [1, 3] onto
+//         merged.
+//       - For [2, 6], 2 <= merged.back()[1] (3), so extend merged.back()[1] to
+//         max(3, 6) = 6, giving [[1, 6]].
+//       - For [8, 10] (8 > 6) and [15, 18] (15 > 10), neither overlaps the back of
+//         merged, so append both to return [[1, 6], [8, 10], [15, 18]].
+//
+//   Example 2:
+//     Input:  intervals = [[4, 8], [1, 10], [2, 3]]
+//     Output: [[1, 10]]
+//     Explanation:
+//       - Sort intervals lexicographically to [[1, 10], [2, 3], [4, 8]] and push
+//         [1, 10] onto merged.
+//       - For [2, 3], 2 <= 10, so merged.back()[1] becomes max(10, 3) = 10.
+//       - For [4, 8], 4 <= 10, so merged.back()[1] stays max(10, 8) = 10, returning
+//         [[1, 10]].
+//
+//   Example 3:
+//     Input:  intervals = [[5, 6], [-1, 2], [-3, 0]]
+//     Output: [[-3, 2], [5, 6]]
+//     Explanation:
+//       - Sort intervals lexicographically to [[-3, 0], [-1, 2], [5, 6]] and push
+//         [-3, 0] onto merged.
+//       - For [-1, 2], -1 <= 0, so extend merged.back()[1] to max(0, 2) = 2,
+//         leaving merged = [[-3, 2]].
+//       - For [5, 6], 5 > 2, so append [5, 6] to produce [[-3, 2], [5, 6]].
+//
 // Algorithm:
 //   Sort-and-sweep greedy merge. Sort `intervals` lexicographically (by start
 //   ascending, then end ascending). Iterate over the sorted intervals while

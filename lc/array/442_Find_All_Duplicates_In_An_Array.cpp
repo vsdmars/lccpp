@@ -7,6 +7,41 @@
 //   array of all integers that appear twice. The algorithm must run in O(n)
 //   time and use only O(1) extra space (excluding the returned list).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [4, 3, 2, 7, 8, 2, 3, 1]
+//     Output: [2, 3]
+//     Explanation:
+//       - Process 4, 3, -2 (abs 2), -7 (abs 7), and 8 by negating their target
+//         slots nums[3], nums[2], nums[1], nums[6], and nums[7], leaving nums = [4,
+//         -3, -2, -7, 8, 2, -3, -1].
+//       - At index 5 (raw = 2), slot = 1 has nums[1] = -3 < 0, proving 2 was seen
+//         before, so append 2 to duplicates.
+//       - At index 6 (raw = -3), val = 3 maps to slot = 2 where nums[2] = -2 < 0,
+//         so append 3 to duplicates.
+//       - At index 7 (raw = -1), val = 1 negates nums[0] to -4, and the scan
+//         finishes returning [2, 3].
+//
+//   Example 2:
+//     Input:  nums = [2, 2, 1, 1]
+//     Output: [2, 1]
+//     Explanation:
+//       - At index 0 (raw = 2), slot = 1 has nums[1] = 2 > 0, so negate nums[1] to
+//         -2, giving [2, -2, 1, 1].
+//       - At index 1 (raw = -2), std::abs(-2) recovers val = 2 and finds nums[1] =
+//         -2 < 0, appending 2 to duplicates.
+//       - At index 2 (raw = 1), negate nums[0] to -2; at index 3 (raw = 1), nums[0]
+//         = -2 < 0 appends 1, returning [2, 1].
+//
+//   Example 3:
+//     Input:  nums = [1]
+//     Output: []
+//     Explanation:
+//       - At index 0 (raw = 1), val = 1 maps to slot = 0 where nums[0] = 1 > 0,
+//         negating nums[0] to -1.
+//       - No slot is encountered while already negative, so duplicates remains
+//         empty and [] is returned.
+//
 // Algorithm:
 //   Exploit the value range `[1, n]` to use the input array itself as an
 //   in-place boolean visited bitset encoded in the sign bit of each element:

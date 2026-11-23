@@ -10,6 +10,39 @@
 //        must receive strictly more candies than that neighbor.
 //   Return the minimum total number of candies required.
 //
+// Examples:
+//   Example 1:
+//     Input:  ratings = [1, 0, 2]
+//     Output: 5
+//     Explanation:
+//       - Initialize candies = [1, 1, 1] so every child has at least 1 candy.
+//       - Left-to-right pass leaves index 1 at 1 (0 <= 1) and increments index 2 (2
+//         > 0) to candies = [1, 1, 2].
+//       - Right-to-left pass leaves index 1 at 1 (0 <= 2) and updates index 0 (1 >
+//         0) to max(1, 1 + 1) = 2, giving [2, 1, 2].
+//       - Sum candies to return 2 + 1 + 2 = 5.
+//
+//   Example 2:
+//     Input:  ratings = [1, 2, 2]
+//     Output: 4
+//     Explanation:
+//       - Initialize candies = [1, 1, 1].
+//       - Left-to-right pass sets candies[1] = 2 (2 > 1) and leaves candies[2] = 1
+//         because 2 <= 2, giving [1, 2, 1].
+//       - Right-to-left pass makes no changes since neither 2 > 2 nor 1 > 2 holds,
+//         and summing [1, 2, 1] returns 4.
+//
+//   Example 3:
+//     Input:  ratings = [1, 3, 4, 5, 2]
+//     Output: 11
+//     Explanation:
+//       - Initialize candies = [1, 1, 1, 1, 1].
+//       - Left-to-right pass builds the ascending run 1 < 3 < 4 < 5 into [1, 2, 3,
+//         4, 1], leaving index 4 at 1 (2 <= 5).
+//       - Right-to-left pass checks index 3 (5 > 2) and keeps max(4, 1 + 1) = 4,
+//         preserving the peak; earlier pairs do not decrease left.
+//       - Sum [1, 2, 3, 4, 1] to return 11.
+//
 // Algorithm:
 //   Two-Pass Greedy Scan:
 //     Initialize every child with 1 candy to satisfy the baseline constraint.

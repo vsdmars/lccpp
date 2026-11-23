@@ -7,6 +7,43 @@
 //   swaps needed so that both `nums1` and `nums2` become strictly increasing.
 //   It is guaranteed that at least one valid sequence of swaps exists.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums1 = [1, 3, 5, 4], nums2 = [1, 2, 3, 7]
+//     Output: 1
+//     Explanation:
+//       - Initialize at index 0 with keep = 0 and swap = 1.
+//       - At index 1, both natural (1 < 3, 1 < 2) and crossed (1 < 2, 1 < 3)
+//         transitions hold, yielding keep = min(0, 1) = 0 and swap = min(2, 1) = 1.
+//       - At index 2, only natural ordering (3 < 5, 2 < 3) holds since 3 < 3 is
+//         false, updating keep = 0 and swap = 1 + 1 = 2.
+//       - At index 3, natural ordering fails (5 < 4 is false) and only crossed
+//         ordering (5 < 7, 3 < 4) holds, updating keep = swap = 2 and swap = keep +
+//         1 = 1.
+//       - Return min(keep, swap) = min(2, 1) = 1.
+//
+//   Example 2:
+//     Input:  nums1 = [1, 20, 3, 40, 5], nums2 = [10, 2, 30, 4, 50]
+//     Output: 2
+//     Explanation:
+//       - Initialize at index 0 with keep = 0 and swap = 1.
+//       - At index 1, only crossed ordering (1 < 2, 10 < 20) holds, updating keep =
+//         1 and swap = 0 + 1 = 1.
+//       - At index 2, only crossed ordering (20 < 30, 2 < 3) holds, updating keep =
+//         1 and swap = 1 + 1 = 2.
+//       - At index 3, only crossed ordering (3 < 4, 30 < 40) holds, updating keep =
+//         2 and swap = 1 + 1 = 2.
+//       - At index 4, only crossed ordering (40 < 50, 4 < 5) holds, updating keep =
+//         2 and swap = 2 + 1 = 3, then return min(2, 3) = 2.
+//
+//   Example 3:
+//     Input:  nums1 = [5], nums2 = [2]
+//     Output: 0
+//     Explanation:
+//       - Check the input length n = 1 against the early guard n <= 1.
+//       - Return 0 immediately without entering the DP loop because single-element
+//         sequences are already strictly increasing.
+//
 // Algorithm:
 //   Two-state linear dynamic programming (state machine DP). At each index `i`,
 //   maintain two values:

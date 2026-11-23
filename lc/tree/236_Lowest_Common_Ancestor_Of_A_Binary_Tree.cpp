@@ -7,6 +7,40 @@
 //   (LCA) — the deepest node in the tree that has both `p` and `q` as
 //   descendants (allowing a node to be a descendant of itself).
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], p = 5, q = 1
+//     Output: 3
+//     Explanation:
+//       - Start post-order DFS at root = 3 and recurse into left = 5 and right = 1.
+//       - At node 5, the base case node == p matches and returns lhs = 5 without
+//         searching below.
+//       - At node 1, the base case node == q matches and returns rhs = 1.
+//       - Back at node 3, both lhs (5) and rhs (1) are non-null, so node 3 is
+//         returned as the LCA.
+//
+//   Example 2:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], p = 5, q = 4
+//     Output: 5
+//     Explanation:
+//       - From root = 3, recurse into left = 5 where node == p triggers the base
+//         case and returns lhs = 5 immediately.
+//       - In the right subtree rooted at 1 (with children 0 and 8), neither 5 nor 4
+//         appears, so rhs returns nullptr.
+//       - At node 3, lhs != nullptr ? lhs : rhs propagates node 5 upward as the
+//         LCA.
+//
+//   Example 3:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], p = 7, q = 4
+//     Output: 2
+//     Explanation:
+//       - Traverse from 3 into 5, where left child 6 returns nullptr, and descend
+//         into node 2.
+//       - At node 2, left child 7 matches p and returns lhs = 7, while right child
+//         4 matches q and returns rhs = 4.
+//       - Because both lhs and rhs are non-null at node 2, node 2 is returned up
+//         through node 5 and node 3 (whose right subtree returns nullptr).
+//
 // Algorithm:
 //   Post-order divide-and-conquer DFS:
 //     - Base case: if `node == nullptr`, `node == p`, or `node == q`, return

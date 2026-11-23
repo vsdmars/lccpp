@@ -9,6 +9,43 @@
 //   Constraints: 1 <= nums.size() <= 20, 0 <= nums[i] <= 1000,
 //   0 <= sum(nums) <= 1000, -1000 <= target <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 1, 1, 1, 1], target = 3
+//     Output: 5
+//     Explanation:
+//       - Compute total_sum = 5 (abs(3) <= 5) and allocate memo[5][11] with offset
+//         = 5 initialized to -1.
+//       - In dfs(idx, running_sum), branch on +1 and -1 at each index until idx ==
+//         5, returning 1 when running_sum == 3 and 0 otherwise.
+//       - Memoizing (idx, running_sum + 5) reuses shared subproblems such as (2,
+//         2), (3, 1), and (4, 2) across the 4-plus/1-minus paths.
+//       - Accumulating results back to dfs(0, 0) returns 5 (matching
+//         findTargetSumWaysDp with subset_target = (5 + 3) / 2 = 4).
+//
+//   Example 2:
+//     Input:  nums = [0, 0, 1], target = 1
+//     Output: 4
+//     Explanation:
+//       - Compute total_sum = 1 (offset = 1, sum_span = 3) and begin top-down
+//         search at dfs(0, 0).
+//       - At idx = 2 (nums[2] = 1) with running_sum = 0, only the +1 branch reaches
+//         target = 1, storing memo[2][1] = 1.
+//       - At idx = 1 and idx = 0 (both 0), +0 and -0 both transition to running_sum
+//         = 0, doubling counts to memo[1][1] = 2 and memo[0][1] = 4.
+//       - Return 4 (equivalently in findTargetSumWaysDp, subset_target = 1, the two
+//         0s double dp[0] to 4, and num = 1 sets dp[1] = 4).
+//
+//   Example 3:
+//     Input:  nums = [1, 1, 1, 1, 1], target = 2
+//     Output: 0
+//     Explanation:
+//       - Compute total_sum = 5 and pass the magnitude check abs(2) <= 5.
+//       - In findTargetSumWays, five +/-1 steps always yield an odd final sum in
+//         {-5, -3, -1, 1, 3, 5}, so no leaf matches 2 and dfs(0, 0) returns 0.
+//       - In findTargetSumWaysDp, (total_sum + target) % 2 = 7 % 2 = 1 fails the
+//         parity check and returns 0 immediately.
+//
 // Algorithm:
 //   1. Top-Down Memoized DFS (`findTargetSumWays`):
 //      Explore assigning `+nums[idx]` or `-nums[idx]` at each index while

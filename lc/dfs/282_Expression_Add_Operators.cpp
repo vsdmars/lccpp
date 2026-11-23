@@ -9,6 +9,49 @@
 //   contain leading zeros (e.g., "05" is invalid, while "0" is valid), and
 //   standard operator precedence applies ('*' binds tighter than '+' and '-').
 //
+// Examples:
+//   Example 1:
+//     Input:  num = "232", target = 8
+//     Output: ["2+3*2", "2*3+2"]
+//     Explanation:
+//       - At idx = 0, end = 0 takes first operand "2" with curr = 2 and last_term =
+//         2, then recurses to idx = 1 where end = 1 parses "3".
+//       - Taking '+' gives path = "2+3", curr = 5, last_term = 3; at idx = 2 ("2"),
+//         the '*' branch computes merged_term = 3 * 2 = 6 and curr = (5 - 3) + 6 =
+//         8, recording "2+3*2".
+//       - Backtracking to idx = 1, the '*' branch computes merged_term = 2 * 3 = 6
+//         and curr = (2 - 2) + 6 = 6; at idx = 2 ("2"), '+' yields curr = 6 + 2 =
+//         8, recording "2*3+2".
+//       - Multi-digit splits such as "23" at idx = 0 or "32" at idx = 1 never
+//         evaluate to 8, so only those two expressions are emitted.
+//
+//   Example 2:
+//     Input:  num = "105", target = 5
+//     Output: ["1*0+5", "10-5"]
+//     Explanation:
+//       - At idx = 0, end = 0 selects "1" (curr = 1, last_term = 1) and recurses to
+//         idx = 1 where num[1] == '0'.
+//       - At idx = 1, end = 1 parses single-digit "0", while end = 2 hits the
+//         leading-zero guard (end > idx && num[idx] == '0') and breaks so "05" is
+//         never formed.
+//       - Under "1" then "*0", merged_term = 1 * 0 = 0 gives curr = 0, and
+//         appending "+5" at idx = 2 reaches curr = 5, recording "1*0+5".
+//       - Backtracking to idx = 0, end = 1 merges digits into "10" (curr = 10,
+//         last_term = 10), and subtracting "5" at idx = 2 yields curr = 10 - 5 = 5,
+//         recording "10-5".
+//
+//   Example 3:
+//     Input:  num = "10", target = 0
+//     Output: ["1*0"]
+//     Explanation:
+//       - At idx = 0, end = 0 selects "1" (curr = 1, last_term = 1) and recurses to
+//         idx = 1.
+//       - At idx = 1, end = 1 parses operand = 0; '+' and '-' yield curr = 1,
+//         whereas '*' computes merged_term = 1 * 0 = 0 and curr = (1 - 1) + 0 = 0,
+//         recording "1*0".
+//       - Returning to idx = 0, end = 1 parses "10" with curr = 10 != 0, so no
+//         additional expressions match target = 0.
+//
 // Algorithm:
 //   Depth-first backtracking that partitions `num` from left to right into
 //   valid integer operands and branches on the three binary operators '+', '-',

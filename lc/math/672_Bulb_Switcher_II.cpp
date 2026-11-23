@@ -12,6 +12,40 @@
 //   number of distinct bulb configurations achievable after pressing buttons
 //   exactly `presses` times (buttons may be pressed multiple times).
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 2, presses = 1
+//     Output: 3
+//     Explanation:
+//       - Check the base cases `presses == 0 || n == 0` and `n == 1`, both of which
+//         are false for `n = 2, presses = 1`.
+//       - Enter the `n == 2` branch and evaluate `presses == 1 ? 3 : 4`, returning
+//         `3`.
+//       - Starting from `[on, on]`, 1 press reaches `[off, off]` (Button 1), `[on,
+//         off]` (Button 2), or `[off, on]` (Button 3 or Button 4), yielding 3
+//         distinct states.
+//
+//   Example 2:
+//     Input:  n = 3, presses = 2
+//     Output: 7
+//     Explanation:
+//       - Skip the `presses == 0`, `n == 1`, and `n == 2` branches because `n = 3`
+//         and `presses = 2`.
+//       - In the `n >= 3` regime, skip `presses == 1` and match `presses == 2`,
+//         returning `7`.
+//       - In the 3-generator GF(2) basis `{Button 2, Button 3, Button 4}` (with
+//         `Button 1 = Button 2 XOR Button 3`), 2 presses produce 7 of the 8 states,
+//         excluding only pressing Button 4 alone (`[off, on, on]`).
+//
+//   Example 3:
+//     Input:  n = 100, presses = 0
+//     Output: 1
+//     Explanation:
+//       - Evaluate the base guard `if (presses == 0 || n == 0)` with `n = 100` and
+//         `presses = 0`.
+//       - Because `presses == 0` is true, return `1` immediately since only the
+//         initial all-on configuration is reachable without button presses.
+//
 // Algorithm:
 //   Each button is a self-inverse XOR mask on the bulb state vector, and button
 //   presses commute. Moreover, Button 1 = Button 2 XOR Button 3, so the group

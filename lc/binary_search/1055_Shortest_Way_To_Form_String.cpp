@@ -11,6 +11,47 @@
 //   Constraints: 1 <= source.length, target.length <= 1000; both strings
 //   contain only lowercase English letters `'a'..'z'`.
 //
+// Examples:
+//   Example 1:
+//     Input:  source = "abc", target = "abcbc"
+//     Output: 2
+//     Explanation:
+//       - Build char_positions from source as 'a' -> [0], 'b' -> [1], 'c' -> [2],
+//         and initialize subsequences = 1 with source_cursor = 0.
+//       - Match target[0..2] ("abc") sequentially: 'a' via lower_bound([0], 0) = 0
+//         (source_cursor = 1), 'b' at 1 (source_cursor = 2), and 'c' at 2
+//         (source_cursor = 3).
+//       - On target[3] = 'b', lower_bound([1], 3) reaches end(), so increment
+//         subsequences = 2 and wrap to the first occurrence source_cursor = 1 + 1 =
+//         2.
+//       - On target[4] = 'c', lower_bound([2], 2) finds index 2 (source_cursor =
+//         3), completing target and returning 2.
+//
+//   Example 2:
+//     Input:  source = "xyz", target = "xzyxz"
+//     Output: 3
+//     Explanation:
+//       - Build char_positions as 'x' -> [0], 'y' -> [1], 'z' -> [2], starting with
+//         subsequences = 1 and source_cursor = 0.
+//       - Match 'x' at index 0 (source_cursor = 1) and 'z' at index 2
+//         (source_cursor = 3) in the first subsequence.
+//       - For 'y', lower_bound([1], 3) returns end(), so start subsequence 2 with
+//         source_cursor = 1 + 1 = 2.
+//       - For the next 'x', lower_bound([0], 2) returns end(), so start subsequence
+//         3 with source_cursor = 0 + 1 = 1, then match 'z' at 2 and return 3.
+//
+//   Example 3:
+//     Input:  source = "abc", target = "acdbc"
+//     Output: -1
+//     Explanation:
+//       - Build char_positions as 'a' -> [0], 'b' -> [1], 'c' -> [2], leaving
+//         char_positions['d' - 'a'] empty, with subsequences = 1 and source_cursor
+//         = 0.
+//       - Match 'a' at index 0 (source_cursor = 1) and 'c' at index 2
+//         (source_cursor = 3).
+//       - On target[2] = 'd', positions.empty() is true because 'd' never occurs in
+//         source, so return -1 immediately.
+//
 // Algorithm:
 //   Greedy left-to-right matching: to minimize the number of `source` copies,
 //   each subsequence should greedily consume as long a prefix of the remaining

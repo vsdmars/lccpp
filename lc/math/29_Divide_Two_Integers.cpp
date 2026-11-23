@@ -9,6 +9,42 @@
 //   the exact quotient overflows (specifically `INT_MIN / -1`), return
 //   `INT_MAX` (2^31 - 1).
 //
+// Examples:
+//   Example 1:
+//     Input:  dividend = 10, divisor = 3
+//     Output: 3
+//     Explanation:
+//       - Record `negative = false` and convert both operands to negative form:
+//         `neg_dividend = -10`, `neg_divisor = -3`, `neg_quotient = 0`.
+//       - In the first outer iteration (`-10 <= -3`), double `value` from `-3` to
+//         `-6` (`power_of_two = -2`) since `-10 <= -6`, then stop because `-10 <=
+//         -12` is false; update `neg_dividend = -4` and `neg_quotient = -2`.
+//       - In the second outer iteration (`-4 <= -3`), `value = -3` cannot double
+//         because `-4 <= -6` is false; subtract `-3` to get `neg_dividend = -1` and
+//         update `neg_quotient = -3`.
+//       - Exit the outer loop since `-1 > -3`, and because `negative` is false,
+//         return `-neg_quotient = 3`.
+//
+//   Example 2:
+//     Input:  dividend = 7, divisor = -3
+//     Output: -2
+//     Explanation:
+//       - Record `negative = true` because the operand signs differ, and normalize
+//         to `neg_dividend = -7`, `neg_divisor = -3`, `neg_quotient = 0`.
+//       - Double `value = -3` once to `-6` (`power_of_two = -2`) since `-7 <= -6`,
+//         then update `neg_dividend = -7 - (-6) = -1` and `neg_quotient = -2`.
+//       - Exit the outer loop since `-1 > -3`, and because `negative` is true,
+//         return `neg_quotient = -2`.
+//
+//   Example 3:
+//     Input:  dividend = -2147483648, divisor = -1
+//     Output: 2147483647
+//     Explanation:
+//       - Check the overflow guard `dividend == kIntMin && divisor == -1`, which
+//         evaluates to true.
+//       - Return `kIntMax` (`2147483647`) immediately because `2147483648`
+//         overflows 32-bit signed `int`.
+//
 // Algorithm:
 //   Exponential galloping (binary long division) performed entirely in the
 //   negative 32-bit domain. Because the negative half `[-2^31, 0]` has one

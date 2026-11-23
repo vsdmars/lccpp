@@ -5,6 +5,34 @@
 //   Given an integer array `nums`, return `true` if any value appears at least
 //   twice in the array, and return `false` if every element is distinct.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3, 1]
+//     Output: true
+//     Explanation:
+//       - Initialize an empty unordered_set<int> named seen.
+//       - Insert 1, 2, and 3 in order; each seen.insert(num).second returns true,
+//         leaving seen = {1, 2, 3}.
+//       - At the fourth element 1, seen.insert(1).second returns false because 1 is
+//         already in seen, so return true immediately.
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 3, 4]
+//     Output: false
+//     Explanation:
+//       - Initialize an empty unordered_set<int> named seen.
+//       - Iterate over 1, 2, 3, and 4: every seen.insert(num).second returns true,
+//         growing seen to {1, 2, 3, 4}.
+//       - Finish the loop without encountering a collision and return false.
+//
+//   Example 3:
+//     Input:  nums = []
+//     Output: false
+//     Explanation:
+//       - Initialize an empty unordered_set<int> named seen.
+//       - The range-based loop over nums runs zero iterations because the vector is
+//         empty, so return false.
+//
 // Algorithm:
 //   Hash-Set Membership with Early Exit:
 //     Iterate through `nums` once, inserting each value into an

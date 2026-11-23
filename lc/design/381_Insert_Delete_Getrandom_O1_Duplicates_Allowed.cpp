@@ -11,6 +11,62 @@
 //     - `getRandom()`: returns a random element from the current collection
 //       with probability linearly proportional to its multiplicity.
 //
+// Examples:
+//   Example 1:
+//     Input:  ops = ["RandomizedCollection", "insert", "insert", "insert",
+//             "getRandom", "remove", "getRandom"], args = [[], [1], [1], [2], [],
+//             [1], []]
+//     Output: [null, true, false, true, 1, true, 2]
+//     Explanation:
+//       - insert(1) sees indices_[1] is empty, records index 0, appends 1 to vals_
+//         = [1], and returns true; the second insert(1) inserts index 1 into
+//         indices_[1], appends 1 to vals_ = [1, 1], and returns false.
+//       - insert(2) finds indices_[2] empty, inserts index 2, appends 2 to vals_ =
+//         [1, 1, 2], and returns true.
+//       - getRandom() samples uniformly from vals_ = [1, 1, 2] over indices [0, 2],
+//         returning 1 with probability 2/3 and 2 with probability 1/3 (e.g., 1).
+//       - remove(1) detaches one index of 1 from indices_[1], swaps the tail value
+//         2 into that slot if it was not already the last index, updates
+//         indices_[2], and pops the back to leave one 1 and one 2, returning true.
+//       - The final getRandom() draws uniformly from the two remaining entries [1,
+//         2], returning 1 or 2 with equal 1/2 probability (e.g., 2).
+//
+//   Example 2:
+//     Input:  ops = ["RandomizedCollection", "insert", "insert", "insert",
+//             "remove", "remove", "getRandom", "remove", "remove", "insert",
+//             "getRandom"], args = [[], [42], [42], [42], [42], [42], [], [42],
+//             [42], [42], []]
+//     Output: [null, true, false, false, true, true, 42, true, false, true, 42]
+//     Explanation:
+//       - The three insert(42) calls grow vals_ to [42, 42, 42] with indices_[42] =
+//         {0, 1, 2}, returning true only on the first call when indices_[42] was
+//         empty.
+//       - Two remove(42) calls each erase one index from indices_[42], relocate the
+//         back element 42 if needed, and pop the back of vals_, leaving a single 42
+//         so getRandom() returns 42.
+//       - The third remove(42) removes index 0, leaves indices_[42] empty so key 42
+//         is erased from indices_, and returns true; the fourth remove(42) misses
+//         in indices_ and returns false.
+//       - Re-calling insert(42) finds indices_[42] absent again, records index 0 in
+//         vals_ = [42], and returns true, after which getRandom() returns 42.
+//
+//   Example 3:
+//     Input:  ops = ["RandomizedCollection", "insert", "insert", "insert",
+//             "remove", "remove", "remove", "getRandom", "remove", "remove"], args
+//             = [[], [-5], [0], [-5], [-5], [-5], [-5], [], [0], [0]]
+//     Output: [null, true, true, false, true, true, false, 0, true, false]
+//     Explanation:
+//       - The three inserts produce vals_ = [-5, 0, -5] with indices_[-5] = {0, 2}
+//         and indices_[0] = {1}.
+//       - On remove(-5), remove_idx is erased from indices_[-5] before updating
+//         last_val: whether index 0 or 2 is picked, vals_ safely shrinks to one -5
+//         and one 0 without corrupting indices_[-5].
+//       - The second remove(-5) removes the remaining -5 and erases -5 from
+//         indices_, leaving vals_ = [0] and indices_[0] = {0}, so the third
+//         remove(-5) returns false and getRandom() returns 0.
+//       - remove(0) removes index 0, erases 0 from indices_, and returns true; the
+//         second remove(0) returns false.
+//
 // Algorithm:
 //   Store all elements densely in a dynamic array `vals_` (so uniform random
 //   indexing naturally weights each value by its frequency), and maintain a

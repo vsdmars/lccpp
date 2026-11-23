@@ -6,6 +6,46 @@
 //   exactly two nodes were swapped by mistake. Recover the BST in-place by
 //   restoring the two node values without changing the tree's structure.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 3, null, null, 2]
+//     Output: [3, 1, null, null, 2]
+//     Explanation:
+//       - Inorder traversal visits nodes in the order 3, 2, 1 with prev initially
+//         null.
+//       - Advancing from prev = 3 to node = 2 detects the first inversion (3 > 2),
+//         recording first = Node(3) and second = Node(2).
+//       - Advancing from prev = 2 to node = 1 detects a second inversion (2 > 1),
+//         keeping first = Node(3) and updating second = Node(1).
+//       - Swap first->val and second->val (3 and 1), restoring the tree to [3, 1,
+//         null, null, 2] with inorder sequence [1, 2, 3].
+//
+//   Example 2:
+//     Input:  root = [3, 1, 4, null, null, 2]
+//     Output: [2, 1, 4, null, null, 3]
+//     Explanation:
+//       - Inorder traversal visits node values 1, 3, 2, 4.
+//       - Moving from 1 to 3 is ascending, then moving from prev = 3 to node = 2
+//         triggers the sole inversion (3 > 2), setting first = Node(3) and second =
+//         Node(2).
+//       - Moving from prev = 2 to node = 4 is ascending (2 < 4), so first and
+//         second remain Node(3) and Node(2).
+//       - Swap first->val and second->val (3 and 2), producing [2, 1, 4, null,
+//         null, 3] with sorted inorder sequence [1, 2, 3, 4].
+//
+//   Example 3:
+//     Input:  root = [0, -5, 5, 10, null, null, -10]
+//     Output: [0, -5, 5, -10, null, null, 10]
+//     Explanation:
+//       - Inorder traversal visits 10, -5, 0, 5, -10.
+//       - At node -5, prev = 10 > -5 records the first inversion with first =
+//         Node(10) and second = Node(-5).
+//       - Visits at 0 and 5 remain strictly ascending, leaving prev = Node(5).
+//       - At node -10, prev = 5 > -10 records the second inversion, keeping first =
+//         Node(10) and updating second = Node(-10).
+//       - Swap 10 and -10 in place to restore the sorted inorder sequence [-10, -5,
+//         0, 5, 10].
+//
 // Algorithm:
 //   An inorder traversal of a valid BST visits node values in strictly
 //   ascending order. Swapping two nodes creates either:

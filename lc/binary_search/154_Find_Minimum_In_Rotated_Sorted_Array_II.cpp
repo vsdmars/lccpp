@@ -6,6 +6,38 @@
 //   and has been rotated between 1 and `n` times, return the minimum element
 //   in the array while minimizing the number of comparisons.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 2, 2, 0, 1]
+//     Output: 0
+//     Explanation:
+//       - Initialize closed search bounds left = 0 and right = 4 over nums.
+//       - At mid = 2, nums[2] = 2 > nums[4] = 1, so the rotation drop lies in [3,
+//         4] and left advances to 3.
+//       - At mid = 3, nums[3] = 0 < nums[4] = 1, so [3, 4] is non-decreasing and
+//         right shrinks to 3.
+//       - The loop terminates with left == right == 3 and returns nums[3] = 0.
+//
+//   Example 2:
+//     Input:  nums = [3, 3, 1, 3]
+//     Output: 1
+//     Explanation:
+//       - Initialize closed search bounds left = 0 and right = 3 over nums.
+//       - At mid = 1, nums[1] = 3 equals nums[3] = 3, so neither half can be
+//         eliminated and right decrements to 2 while nums[1] preserves a copy of 3.
+//       - At mid = 1 again, nums[1] = 3 > nums[2] = 1, so the minimum must lie in
+//         [2, 2] and left advances to 2.
+//       - The loop terminates with left == right == 2 and returns nums[2] = 1.
+//
+//   Example 3:
+//     Input:  nums = [-3, -3, -5, -5, -3]
+//     Output: -5
+//     Explanation:
+//       - Initialize closed search bounds left = 0 and right = 4 over nums.
+//       - At mid = 2, nums[2] = -5 < nums[4] = -3, so right shrinks to 2.
+//       - At mid = 1, nums[1] = -3 > nums[2] = -5, so left advances to mid + 1 = 2.
+//       - The loop terminates with left == right == 2 and returns nums[2] = -5.
+//
 // Algorithm:
 //   Use closed-interval binary search over `[left, right]` comparing
 //   `nums[mid]` against `nums[right]`:

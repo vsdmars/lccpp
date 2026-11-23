@@ -8,6 +8,40 @@
 //   angles), and `false` otherwise.
 //   Constraints: Each point has 2 integer coordinates in [-10^4, 10^4].
 //
+// Examples:
+//   Example 1:
+//     Input:  p1 = [0, 0], p2 = [1, 1], p3 = [1, 0], p4 = [0, 1]
+//     Output: true
+//     Explanation:
+//       - Compute the 6 pairwise squared Euclidean distances: d(p1, p2) = 2, d(p1,
+//         p3) = 1, d(p1, p4) = 1, d(p2, p3) = 1, d(p2, p4) = 1, and d(p3, p4) = 2.
+//       - Sort the array of squared distances to [1, 1, 1, 1, 2, 2].
+//       - Check dists[0] = 1 > 0, dists[0] == dists[3] (1 == 1), dists[4] ==
+//         dists[5] (2 == 2), and dists[4] == 2 * dists[0] (2 == 2 * 1), returning
+//         true.
+//
+//   Example 2:
+//     Input:  p1 = [0, 0], p2 = [2, 1], p3 = [1, 3], p4 = [-1, 2]
+//     Output: true
+//     Explanation:
+//       - Compute all 6 squared distances: d(p1, p2) = 5, d(p1, p3) = 10, d(p1, p4)
+//         = 5, d(p2, p3) = 5, d(p2, p4) = 10, and d(p3, p4) = 5.
+//       - Sort the distances into [5, 5, 5, 5, 10, 10].
+//       - Verify positive equal sides (dists[0] == dists[3] == 5), equal diagonals
+//         (dists[4] == dists[5] == 10), and right angles (10 == 2 * 5), returning
+//         true.
+//
+//   Example 3:
+//     Input:  p1 = [0, 0], p2 = [2, 0], p3 = [2, 1], p4 = [0, 1]
+//     Output: false
+//     Explanation:
+//       - Compute all 6 squared distances: d(p1, p2) = 4, d(p1, p3) = 5, d(p1, p4)
+//         = 1, d(p2, p3) = 1, d(p2, p4) = 5, and d(p3, p4) = 4.
+//       - Sort the distances into [1, 1, 4, 4, 5, 5].
+//       - Although dists[0] > 0 and dists[4] == dists[5] == 5, the equal-sides
+//         condition dists[0] == dists[3] fails (1 != 4), so validSquare returns
+//         false.
+//
 // Algorithm:
 //   Order-invariant pairwise squared-distance classification.
 //   Compute all C(4, 2) = 6 pairwise squared Euclidean distances using exact

@@ -9,6 +9,45 @@
 //   dropped, e.g., `10` rotates to `01` = `1`). Given a positive integer `n`
 //   (1 <= n <= 10^9), return the count of confusing numbers in `[1, n]`.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 20
+//     Output: 6
+//     Explanation:
+//       - Seed the DFS with non-zero rotatable digits `<= 20`: `(1, 1, 10)`, `(6,
+//         9, 10)`, `(8, 8, 10)`, and `(9, 6, 10)`.
+//       - From `(1, 1, 10)`, `1 == 1` does not increment `count`, and extending by
+//         `{0, 1, 6, 8, 9}` produces `10` (rotated `1`), `11` (rotated `11`), `16`
+//         (rotated `91`), `18` (rotated `81`), and `19` (rotated `61`).
+//       - Among those two-digit numbers, `10`, `16`, `18`, and `19` satisfy `num !=
+//         rotated` (adding `4` to `count`), and all their extensions (`>= 100`)
+//         exceed `limit = 20` and break.
+//       - Visiting seeds `(6, 9, 10)` and `(9, 6, 10)` increments `count` by `2`
+//         (`6 != 9` and `9 != 6`) while `(8, 8, 10)` adds `0`, and their children
+//         (`>= 60`) exceed `20` and break.
+//       - Return `count = 6` for `{6, 9, 10, 16, 18, 19}`.
+//
+//   Example 2:
+//     Input:  n = 5
+//     Output: 0
+//     Explanation:
+//       - Check the early-exit guard `n < 6` (`5 < 6`).
+//       - Return `0` immediately because digits `2..5` are non-rotatable and `1`
+//         rotates to itself.
+//
+//   Example 3:
+//     Input:  n = 10
+//     Output: 3
+//     Explanation:
+//       - Seed the DFS with `(1, 1, 10)`, `(6, 9, 10)`, `(8, 8, 10)`, and `(9, 6,
+//         10)` since all four are `<= 10`.
+//       - From `(1, 1, 10)`, appending `digit = 0` visits `(10, 1, 100)` (`10 !=
+//         1`, `count = 1`), and `digit = 1` yields `11 > 10` so the loop breaks.
+//       - Visiting `(6, 9, 10)` raises `count` to `2`, `(8, 8, 10)` leaves `count =
+//         2`, and `(9, 6, 10)` raises `count` to `3`, while all extensions `>= 60`
+//         exceed `10`.
+//       - Return `count = 3` for `{6, 9, 10}`.
+//
 // Algorithm:
 //   Constructive DFS over the 5-ary tree of valid rotatable numbers instead of
 //   scanning all `1..n` integers.

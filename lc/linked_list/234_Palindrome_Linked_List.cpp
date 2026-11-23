@@ -6,6 +6,42 @@
 //   node values reads the same forwards and backwards (is a palindrome), and
 //   `false` otherwise. Target O(n) time and O(1) extra space.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 2, 1]
+//     Output: true (list preserved as [1, 2, 2, 1])
+//     Explanation:
+//       - Phase 1: advance slow by 1 and fast by 2 from index 0; after 2 steps,
+//         fast reaches nullptr and slow lands at index 2 (value 2).
+//       - Phase 2: reverse_list(slow) reverses [2, 1] in-place into [1, 2],
+//         returning back_head at node(1).
+//       - Phase 3: walk front from head ([1, 2, ...]) and back from back_head ([1,
+//         2]) in lockstep, confirming 1 == 1 and 2 == 2 until back becomes nullptr.
+//       - Phase 4: reverse_list(back_head) reverses [1, 2] back to [2, 1] so the
+//         list remains [1, 2, 2, 1], and returns true.
+//
+//   Example 2:
+//     Input:  head = [1, 2, 3, 4, 2, 1]
+//     Output: false (list preserved as [1, 2, 3, 4, 2, 1])
+//     Explanation:
+//       - Phase 1: slow and fast advance 3 times from index 0 until fast reaches
+//         nullptr, placing slow at index 3 (value 4).
+//       - Phase 2: reverse_list(slow) reverses [4, 2, 1] in-place into [1, 2, 4],
+//         returning back_head at node(1).
+//       - Phase 3: compare front ([1, 2, 3, ...]) with back ([1, 2, 4]); 1 == 1 and
+//         2 == 2 match, then front->val (3) != back->val (4) sets palindrome =
+//         false and breaks.
+//       - Phase 4: reverse_list(back_head) restores [1, 2, 4] back to [4, 2, 1] to
+//         preserve [1, 2, 3, 4, 2, 1], and returns false.
+//
+//   Example 3:
+//     Input:  head = [7]
+//     Output: true (list preserved as [7])
+//     Explanation:
+//       - Evaluate the guard head == nullptr || head->next == nullptr, which is
+//         true because node(7)->next is nullptr.
+//       - Return true immediately without modifying the single-node list [7].
+//
 // Algorithm:
 //   Midpoint discovery + in-place second-half reversal + restoration:
 //   1. Find midpoint: Advance `slow` by 1 step and `fast` by 2 steps from

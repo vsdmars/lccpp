@@ -9,6 +9,43 @@
 //   Each output path must have the format "dir_path/file_name". Groups and
 //   paths within groups may be returned in any order.
 //
+// Examples:
+//   Example 1:
+//     Input:  paths = ["root/a 1.txt(abcd) 2.txt(efgh)", "root/c 3.txt(abcd)",
+//             "root/c/d 4.txt(efgh)", "root 4.txt(efgh)"]
+//     Output: [["root/a/1.txt", "root/c/3.txt"], ["root/4.txt", "root/a/2.txt",
+//             "root/c/d/4.txt"]]
+//     Explanation:
+//       - parseDirectoryEntry splits the first record into directory "root/a" and
+//         two tokens, appending "root/a/1.txt" under key "abcd" and "root/a/2.txt"
+//         under key "efgh".
+//       - Parsing the remaining three records appends "root/c/3.txt" to
+//         content_to_paths["abcd"] and appends "root/c/d/4.txt" and "root/4.txt" to
+//         content_to_paths["efgh"].
+//       - Collecting every bucket in content_to_paths with size >= 2 returns the
+//         two duplicate file groups (order-independent).
+//
+//   Example 2:
+//     Input:  paths = ["root/a 1.txt(same) 2.txt(same) 3.txt(diff)"]
+//     Output: [["root/a/1.txt", "root/a/2.txt"]]
+//     Explanation:
+//       - parseDirectoryEntry extracts directory "root/a" and parses all three
+//         tokens in the single record.
+//       - content_to_paths maps "same" -> ["root/a/1.txt", "root/a/2.txt"] and
+//         "diff" -> ["root/a/3.txt"].
+//       - Filtering for buckets of size >= 2 skips "diff" (size 1) and returns
+//         [["root/a/1.txt", "root/a/2.txt"]].
+//
+//   Example 3:
+//     Input:  paths = ["root/a 1.txt(abcd) 2.txt(efsfgh)", "root/c 3.txt(abdfcd)",
+//             "root/c/d 4.txt(efggdfh)"]
+//     Output: []
+//     Explanation:
+//       - parseDirectoryEntry inserts each of the 4 files into its own distinct
+//         content key ("abcd", "efsfgh", "abdfcd", "efggdfh") in content_to_paths.
+//       - Every bucket has size 1 (< 2), so no groups are emitted and findDuplicate
+//         returns an empty vector.
+//
 // Algorithm:
 //   1. Parse each directory record with zero-copy std::string_view slicing:
 //      extract the leading directory path (up to the first space), then parse

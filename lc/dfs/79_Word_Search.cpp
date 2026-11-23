@@ -7,6 +7,47 @@
 //   vertically adjacent cells in `board`. Each grid cell may be visited at
 //   most once within a single path.
 //
+// Examples:
+//   Example 1:
+//     Input:  board = [['A', 'B', 'C', 'E'], ['S', 'F', 'C', 'S'], ['A', 'D', 'E',
+//             'E']], word = "ABCCED"
+//     Output: true
+//     Explanation:
+//       - Outer loop starts dfs at (0, 0) where board[0][0] == 'A' == word[0],
+//         marking (0, 0) with '\0'.
+//       - Moving right in kDirs order matches 'B' at (0, 1) and 'C' at (0, 2),
+//         marking each cell as '\0'.
+//       - From (0, 2), right cell (0, 3) = 'E' fails to match 'C', so dfs moves
+//         down to (1, 2) = 'C', down to (2, 2) = 'E', and left to (2, 1) = 'D'.
+//       - At (2, 1), widx + 1 == 6 == word.size(), so dfs returns true and restores
+//         all six modified cells in board.
+//
+//   Example 2:
+//     Input:  board = [['A', 'B', 'C', 'E'], ['S', 'F', 'C', 'S'], ['A', 'D', 'E',
+//             'E']], word = "ABCB"
+//     Output: false
+//     Explanation:
+//       - Starting at (0, 0) = 'A', dfs matches "ABC" along (0, 0) -> (0, 1) -> (0,
+//         2) and sets those cells to '\0'.
+//       - At (0, 2) looking for word[3] = 'B', neighbors (0, 3) = 'E' and (1, 2) =
+//         'C' mismatch while (0, 1) holds '\0' and cannot be reused.
+//       - Backtracking restores (0, 2), (0, 1), and (0, 0); starting at (2, 0) =
+//         'A' has no adjacent 'B', so exist returns false.
+//
+//   Example 3:
+//     Input:  board = [['A', 'B', 'C', 'E'], ['S', 'F', 'E', 'S'], ['A', 'D', 'E',
+//             'E']], word = "ABCESEEEFS"
+//     Output: true
+//     Explanation:
+//       - Starting at (0, 0), dfs matches "ABCES" along (0, 0) -> (0, 1) -> (0, 2)
+//         -> (0, 3) -> (1, 3), marking each cell with '\0'.
+//       - From (1, 3), trying left first visits (1, 2) -> (2, 2) -> (2, 3) for
+//         "EEE", which dead-ends because no unvisited neighbor holds 'F'.
+//       - Backtracking to (1, 3) restores those three cells, then taking down
+//         visits (2, 3) -> (2, 2) -> (1, 2) to match "EEE".
+//       - From (1, 2), moving left reaches (1, 1) = 'F' and (1, 0) = 'S' at widx =
+//         9, completing the 10-character match and returning true.
+//
 // Algorithm:
 //   Depth-First Search (DFS) with backtracking.
 //   Iterate over every cell (r, c) in the grid as a potential starting point.

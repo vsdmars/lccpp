@@ -14,6 +14,48 @@
 //     - 1 <= m, n <= 500
 //     - box[r][c] is '#', '*', or '.'
 //
+// Examples:
+//   Example 1:
+//     Input:  box = [['#', '.', '#']]
+//     Output: [['.'], ['#'], ['#']]
+//     Explanation:
+//       - Allocate a 3 x 1 rotated grid filled with '.' and map row r = 0 into
+//         dest_col = (1 - 1) - 0 = 0 with write_row = 3.
+//       - Scan right-to-left: col = 2 ('#') decrements write_row to 2 and sets
+//         rotated[2][0] = '#'; col = 1 ('.') leaves rotated[1][0] empty.
+//       - At col = 0 ('#'), write_row decrements to 1 and sets rotated[1][0] = '#',
+//         producing [['.'], ['#'], ['#']].
+//
+//   Example 2:
+//     Input:  box = [['#', '.', '*', '.'], ['#', '#', '*', '.']]
+//     Output: [['#', '.'], ['#', '#'], ['*', '*'], ['.', '.']]
+//     Explanation:
+//       - Allocate a 4 x 2 rotated grid filled with '.'; row 0 maps to dest_col = 1
+//         and row 1 maps to dest_col = 0.
+//       - In row 0 (dest_col = 1), '*' at col = 2 writes '*' at rotated[2][1] and
+//         resets write_row = 2, so '#' at col = 0 lands at rotated[1][1].
+//       - In row 1 (dest_col = 0), '*' at col = 2 writes '*' at rotated[2][0] and
+//         resets write_row = 2, packing the stones from col = 1 and col = 0 into
+//         rotated[1][0] and rotated[0][0].
+//
+//   Example 3:
+//     Input:  box = [['#', '#', '*', '.', '*', '.'], ['#', '#', '#', '*', '.',
+//             '.'], ['#', '#', '#', '.', '#', '.']]
+//     Output: [['.', '#', '#'], ['.', '#', '#'], ['#', '#', '*'], ['#', '*', '.'],
+//             ['#', '.', '*'], ['#', '.', '.']]
+//     Explanation:
+//       - Allocate a 6 x 3 rotated grid filled with '.'; rows 0, 1, 2 write to
+//         columns 2, 1, 0 respectively.
+//       - In row 0 (dest_col = 2), obstacles at col = 4 and col = 2 place '*' at
+//         rotated[4][2] and rotated[2][2], leaving stones from col = 1 and col = 0
+//         packed at rotated[1][2] and rotated[0][2].
+//       - In row 1 (dest_col = 1), the obstacle at col = 3 places '*' at
+//         rotated[3][1] and resets write_row = 3, packing the three stones at col =
+//         2, 1, 0 into rows 2, 1, 0.
+//       - In row 2 (dest_col = 0), no obstacles are present so write_row starts at
+//         6 and packs the four stones at col = 4, 2, 1, 0 into rows 5, 4, 3, 2 of
+//         column 0.
+//
 // Algorithm:
 //   Rotating 90 degrees clockwise maps original cell (r, c) to rotated cell
 //   (c, m - 1 - r). Under this rotation, "falling down" in each column of the

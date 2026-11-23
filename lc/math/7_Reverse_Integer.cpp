@@ -8,6 +8,45 @@
 //   [-2^31, 2^31 - 1], return 0 instead. The environment is assumed not to
 //   support 64-bit integers.
 //
+// Examples:
+//   Example 1:
+//     Input:  x = 123
+//     Output: 321
+//     Explanation:
+//       - Initialize `result = 0` alongside overflow bounds `kMaxDiv10 = 214748364`
+//         (`kMaxMod10 = 7`) and `kMinDiv10 = -214748364` (`kMinMod10 = -8`).
+//       - Iteration 1 extracts `digit = 123 % 10 = 3`, updates `x = 12`, passes
+//         overflow checks, and sets `result = 0 * 10 + 3 = 3`.
+//       - Iteration 2 extracts `digit = 12 % 10 = 2`, updates `x = 1`, passes
+//         overflow checks, and sets `result = 3 * 10 + 2 = 32`.
+//       - Iteration 3 extracts `digit = 1 % 10 = 1`, updates `x = 0`, passes
+//         overflow checks, and sets `result = 32 * 10 + 1 = 321`.
+//       - Exit the loop when `x == 0` and return `321`.
+//
+//   Example 2:
+//     Input:  x = -123
+//     Output: -321
+//     Explanation:
+//       - Initialize `result = 0`; C++ truncating division toward zero produces
+//         negative digits directly without negating `x`.
+//       - Iteration 1 extracts `digit = -123 % 10 = -3`, sets `x = -12`, passes
+//         overflow checks, and updates `result = -3`.
+//       - Iteration 2 extracts `digit = -12 % 10 = -2`, sets `x = -1`, passes
+//         overflow checks, and updates `result = -3 * 10 + (-2) = -32`.
+//       - Iteration 3 extracts `digit = -1 % 10 = -1`, sets `x = 0`, passes
+//         overflow checks, and updates `result = -32 * 10 + (-1) = -321`.
+//       - Exit the loop when `x == 0` and return `-321`.
+//
+//   Example 3:
+//     Input:  x = 1534236469
+//     Output: 0
+//     Explanation:
+//       - Over the first 9 loop iterations, pop digits `9, 6, 4, 6, 3, 2, 4, 3, 5`
+//         from `1534236469`, leaving `x = 1` and accumulating `result = 964632435`.
+//       - On iteration 10, pop `digit = 1 % 10 = 1` and update `x = 0`.
+//       - Check `result > kMaxDiv10`: `964632435 > 214748364` is true, so return
+//         `0` immediately before overflow occurs.
+//
 // Algorithm:
 //   Pop the least-significant base-10 digit of `x` repeatedly via modulo 10
 //   and truncating division by 10, pushing each digit onto the right end of

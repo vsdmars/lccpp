@@ -10,6 +10,56 @@
 //     - `maximum()`: return the maximum valid price across all timestamps.
 //     - `minimum()`: return the minimum valid price across all timestamps.
 //
+// Examples:
+//   Example 1:
+//     Input:  ["StockPrice", "update", "update", "current", "maximum", "update",
+//             "maximum", "update", "minimum"], [[], [1, 10], [2, 5], [], [], [1,
+//             3], [], [4, 2], []]
+//     Output: [null, null, null, 5, 10, null, 5, null, 2]
+//     Explanation:
+//       - update(1, 10) and update(2, 5) store prices_[1] = 10 and prices_[2] = 5,
+//         advance latest_timestamp_ to 2, and push {10, 1}, {5, 2} onto both heaps.
+//       - current() returns prices_[2] = 5 in O(1), and maximum() sees top {10, 1}
+//         matches prices_[1] = 10 and returns 10.
+//       - update(1, 3) overwrites prices_[1] = 3 and pushes {3, 1} onto both heaps
+//         without removing the old {10, 1} entry.
+//       - maximum() pops stale top {10, 1} because prices_[1] == 3 != 10, then
+//         finds valid top {5, 2} matching prices_[2] = 5 and returns 5.
+//       - update(4, 2) sets prices_[4] = 2, updates latest_timestamp_ to 4, and
+//         pushes {2, 4}; minimum() finds {2, 4} at the min-heap top matching
+//         prices_[4] = 2 and returns 2.
+//
+//   Example 2:
+//     Input:  ["StockPrice", "update", "update", "update", "current", "maximum",
+//             "minimum"], [[], [10, 50], [5, 100], [2, 20], [], [], []]
+//     Output: [null, null, null, null, 50, 100, 20]
+//     Explanation:
+//       - update(10, 50) sets prices_[10] = 50 and latest_timestamp_ = 10, pushing
+//         {50, 10} to both heaps.
+//       - update(5, 100) and update(2, 20) record prices_[5] = 100 and prices_[2] =
+//         20 while keeping latest_timestamp_ = max(10, 5, 2) = 10.
+//       - current() reads prices_[10] = 50, ignoring the lower out-of-order
+//         timestamps 5 and 2.
+//       - maximum() returns 100 from top {100, 5} and minimum() returns 20 from top
+//         {20, 2}, both validated against prices_.
+//
+//   Example 3:
+//     Input:  ["StockPrice", "update", "update", "update", "maximum", "minimum",
+//             "update", "update", "update", "update", "current", "maximum",
+//             "minimum"], [[], [1, 100], [2, 1], [3, 50], [], [], [1, 90], [1, 40],
+//             [2, 10], [2, 60], [], [], []]
+//     Output: [null, null, null, null, 100, 1, null, null, null, null, 50, 60, 40]
+//     Explanation:
+//       - The first three updates record prices_ = {1: 100, 2: 1, 3: 50} with
+//         latest_timestamp_ = 3, so maximum() returns 100 and minimum() returns 1.
+//       - Four corrections update prices_[1] to 40 and prices_[2] to 60 while
+//         leaving latest_timestamp_ = 3, pushing new entries onto both heaps.
+//       - current() returns prices_[3] = 50 since timestamp 3 remains the highest
+//         timestamp.
+//       - maximum() lazily discards stale {100, 1} and {90, 1} until valid top {60,
+//         2} matches prices_[2] = 60, and minimum() discards {1, 2} and {10, 2}
+//         until valid top {40, 1} matches prices_[1] = 40.
+//
 // Algorithm:
 //   Hash Map + Dual Heaps with Lazy Deletion:
 //     - Keep an authoritative hash map `prices_[timestamp] = price` and track

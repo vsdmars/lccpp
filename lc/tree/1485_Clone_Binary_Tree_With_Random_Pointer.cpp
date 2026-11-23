@@ -8,6 +8,44 @@
 //   return an independent deep copy of the entire structure as a `NodeCopy`
 //   tree preserving all left, right, and random relationships.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [[1, null], null, [4, 2], [7, 0]] (1 -> right: 4 -> left: 7;
+//             4.random = 7, 7.random = 1)
+//     Output: Deep copy [[1, null], null, [4, 2], [7, 0]] with cloned->val = 1,
+//             cloned->right->random->val = 7, and cloned->right->left->random ==
+//             cloned
+//     Explanation:
+//       - dfs(n1) allocates copy c1(1), records clones[n1] = c1, sets c1->left =
+//         nullptr, and recurses on n1->right (n4).
+//       - dfs(n4) allocates c4(4), records clones[n4] = c4, and recurses on
+//         n4->left (n7), which allocates c7(7) and records clones[n7] = c7.
+//       - When dfs(n7) follows n7->random (n1), clones.find(n1) hits c1 so
+//         c7->random = c1 without recursing into n1 again.
+//       - Returning to dfs(n4), n4->right is nullptr and dfs(n4->random) resolves
+//         n7 via clones to c7, after which dfs(n1) sets c1->random = nullptr and
+//         returns c1.
+//
+//   Example 2:
+//     Input:  root = [[42, 0]] (single node 42 with 42.random = 42)
+//     Output: Deep copy [[42, 0]] with cloned->val = 42 and cloned->random ==
+//             cloned
+//     Explanation:
+//       - dfs(&only) allocates copy = new NodeCopy(42) and inserts clones[&only] =
+//         copy before recursing on any child or random pointer.
+//       - Calls to dfs(only.left) and dfs(only.right) receive nullptr and return
+//         nullptr.
+//       - When dfs(only.random) is invoked with &only, clones.find(&only) finds
+//         copy immediately and sets copy->random = copy, breaking the self-cycle.
+//
+//   Example 3:
+//     Input:  root = [] (nullptr)
+//     Output: nullptr
+//     Explanation:
+//       - copyRandomBinaryTree(nullptr) invokes dfs(nullptr).
+//       - The base case node == nullptr returns nullptr immediately without
+//         allocating any NodeCopy or inserting into clones.
+//
 // Algorithm:
 //   Use depth-first traversal with a memoization hash map mapping each
 //   original `const Node*` to its newly allocated `NodeCopy*`. When visiting a

@@ -6,6 +6,39 @@
 //   rotated between 1 and `n` times, return the minimum element in O(log n)
 //   time.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 4, 5, 1, 2]
+//     Output: 1
+//     Explanation:
+//       - Initialize closed bounds left = 0 and right = 4 (nums[4] = 2).
+//       - At mid = 0 + (4 - 0) / 2 = 2, nums[2] = 5 > nums[4] = 2, so the rotation
+//         drop lies strictly to the right and left becomes 3.
+//       - At mid = 3 + (4 - 3) / 2 = 3, nums[3] = 1 <= nums[4] = 2, so [3, 4] is
+//         ascending and right becomes 3.
+//       - Loop terminates with left == right == 3, returning nums[3] = 1.
+//
+//   Example 2:
+//     Input:  nums = [11, 13, 15, 17]
+//     Output: 11
+//     Explanation:
+//       - Initialize left = 0 and right = 3 (nums[3] = 17) on the unrotated
+//         ascending array.
+//       - At mid = 1, nums[1] = 13 <= nums[3] = 17, so discard the right half by
+//         setting right = 1.
+//       - At mid = 0, nums[0] = 11 <= nums[1] = 13, so set right = 0 and return
+//         nums[0] = 11.
+//
+//   Example 3:
+//     Input:  nums = [-5, -2, 0, 3, -10, -8]
+//     Output: -10
+//     Explanation:
+//       - Initialize left = 0 and right = 5 (nums[5] = -8).
+//       - At mid = 2, nums[2] = 0 > nums[5] = -8, so advance left = 3.
+//       - At mid = 4, nums[4] = -10 <= nums[5] = -8, so shrink right = 4.
+//       - At mid = 3, nums[3] = 3 > nums[4] = -10, so advance left = 4; with left
+//         == right == 4, return nums[4] = -10.
+//
 // Algorithm:
 //   Use closed-interval binary search over `[left, right]` with `right`
 //   initialized to `nums.size() - 1` so `nums[right]` is always a valid

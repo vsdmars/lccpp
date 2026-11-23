@@ -10,6 +10,39 @@
 //   account's name first followed by its unique emails sorted in ascending
 //   lexicographical order.
 //
+// Examples:
+//   Example 1:
+//     Input:  accounts = [["John", "johnsmith@mail.com", "john_newyork@mail.com"],
+//             ["John", "johnsmith@mail.com", "john00@mail.com"], ["Mary",
+//             "mary@mail.com"], ["John", "johnnybravo@mail.com"]]
+//     Output: [["John", "john00@mail.com", "john_newyork@mail.com",
+//             "johnsmith@mail.com"], ["John", "johnnybravo@mail.com"], ["Mary",
+//             "mary@mail.com"]]
+//     Explanation:
+//       - Build email_to_accts mapping "johnsmith@mail.com" to account indices [0,
+//         1] and each remaining email to its single account index.
+//       - Start DFS at account 0 (visited[0] = 1), collecting "johnsmith@mail.com"
+//         and "john_newyork@mail.com", then follow "johnsmith@mail.com" to account
+//         1 (visited[1] = 1) to collect "john00@mail.com" and sort them into
+//         ["John", "john00@mail.com", "john_newyork@mail.com",
+//         "johnsmith@mail.com"].
+//       - Skip account 1 because visited[1] == 1, then visit account 2 to produce
+//         ["Mary", "mary@mail.com"] and account 3 to produce ["John",
+//         "johnnybravo@mail.com"].
+//
+//   Example 2:
+//     Input:  accounts = [["Alex", "a@m.com", "b@m.com"], ["Alex", "c@m.com",
+//             "d@m.com"], ["Alex", "b@m.com", "c@m.com"]]
+//     Output: [["Alex", "a@m.com", "b@m.com", "c@m.com", "d@m.com"]]
+//     Explanation:
+//       - Build email_to_accts mapping "b@m.com" to [0, 2] and "c@m.com" to [1, 2],
+//         bridging accounts 0 and 1 through account 2.
+//       - Run DFS from account 0 (visited[0] = 1), collecting "a@m.com" and
+//         "b@m.com" and jumping via "b@m.com" to account 2 (visited[2] = 1).
+//       - From account 2, collect "c@m.com" and jump via "c@m.com" to account 1
+//         (visited[1] = 1) to collect "d@m.com", then sort the four emails under
+//         "Alex" and skip already-visited accounts 1 and 2.
+//
 // Algorithm:
 //   This file implements two connected-component traversal approaches:
 //     1. `accountsMerge` (Bipartite DFS): Builds an inverted map from each

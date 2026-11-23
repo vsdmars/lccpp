@@ -8,6 +8,37 @@
 //   heights[i]`). Return the 0-indexed list of all buildings with an ocean view
 //   in strictly increasing index order.
 //
+// Examples:
+//   Example 1:
+//     Input:  heights = [4, 2, 3, 1]
+//     Output: [0, 2, 3]
+//     Explanation:
+//       - Scan right-to-left starting with max_height_right = INT_MIN: index 3
+//         (height 1 > INT_MIN) appends 3 and sets max_height_right = 1.
+//       - At index 2 (height 3 > 1), append 2 and update max_height_right = 3; at
+//         index 1 (height 2 <= 3), skip because building 2 blocks its view.
+//       - At index 0 (height 4 > 3), append 0 and update max_height_right = 4, then
+//         reverse result from [3, 2, 0] to [0, 2, 3].
+//
+//   Example 2:
+//     Input:  heights = [1, 3, 2, 4]
+//     Output: [3]
+//     Explanation:
+//       - At the rightmost index 3 (height 4 > INT_MIN), append 3 to result and set
+//         max_height_right = 4.
+//       - Scanning indices 2 (height 2), 1 (height 3), and 0 (height 1), none
+//         satisfies heights[idx] > 4, so all are skipped.
+//       - Reverse result ([3]) and return [3].
+//
+//   Example 3:
+//     Input:  heights = [2, 2, 2, 2]
+//     Output: [3]
+//     Explanation:
+//       - At index 3 (height 2 > INT_MIN), append 3 and set max_height_right = 2.
+//       - At indices 2, 1, and 0, each building has height 2, which is not strictly
+//         greater than max_height_right (2), so none is added.
+//       - Return the reversed result [3].
+//
 // Algorithm:
 //   Primary (Right-to-Left Running Maximum):
 //     Scan from right to left while maintaining `max_height_right`, the tallest

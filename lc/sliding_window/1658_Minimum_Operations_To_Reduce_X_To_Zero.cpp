@@ -10,6 +10,42 @@
 //   Constraints: 1 <= nums.length <= 10^5, 1 <= nums[i] <= 10^4,
 //   1 <= x <= 10^9.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 1, 4, 2, 3], x = 5
+//     Output: 2
+//     Explanation:
+//       - Compute total_sum = 11 and middle subarray target = 11 - 5 = 6.
+//       - Expand right across indices 0..2 until window_sum = 1 + 1 + 4 = 6 ==
+//         target, recording max_middle_len = 3.
+//       - At right = 3, window_sum = 8 > 6, so advance left to 2 to leave [4, 2]
+//         with sum 6 (length 2, max_middle_len remains 3).
+//       - At right = 4, window_sum = 9 > 6 and advancing left to 3 leaves [2, 3]
+//         with sum 5, so return nums.size() - max_middle_len = 5 - 3 = 2.
+//
+//   Example 2:
+//     Input:  nums = [3, 2, 20, 1, 1, 3], x = 10
+//     Output: 5
+//     Explanation:
+//       - Compute total_sum = 30 and middle subarray target = 30 - 10 = 20.
+//       - At right = 2, window_sum reaches 3 + 2 + 20 = 25 > 20, so advance left to
+//         2 to leave [20] with sum 20 and max_middle_len = 1.
+//       - As right advances through [1, 1, 3], window_sum reaches 25 at right = 5
+//         and shrinking past index 2 drops the sum to 5 < 20.
+//       - Return nums.size() - max_middle_len = 6 - 1 = 5 (removing prefix [3, 2]
+//         and suffix [1, 1, 3]).
+//
+//   Example 3:
+//     Input:  nums = [5, 6, 7, 8, 9], x = 4
+//     Output: -1
+//     Explanation:
+//       - Compute total_sum = 35 and middle subarray target = 35 - 4 = 31.
+//       - Expanding right across indices 0..3 yields sums 5, 11, 18, and 26, all
+//         strictly below 31.
+//       - At right = 4, window_sum = 35 > 31 and advancing left to 1 subtracts 5 to
+//         leave 30 < 31, so window_sum never equals target.
+//       - Since found remains false, return -1.
+//
 // Algorithm:
 //   Reframe the problem by taking its complement: removing a prefix and a
 //   suffix whose combined sum equals `x` is equivalent to leaving behind a

@@ -9,6 +9,52 @@
 //   contain up to 3 products sharing the current typed prefix; if more than 3
 //   match, return the 3 lexicographically smallest products.
 //
+// Examples:
+//   Example 1:
+//     Input:  products = ["mobile", "mouse", "moneypot", "monitor", "mousepad"],
+//             searchWord = "mouse"
+//     Output: [["mobile", "moneypot", "monitor"], ["mobile", "moneypot",
+//             "monitor"], ["mouse", "mousepad"], ["mouse", "mousepad"], ["mouse",
+//             "mousepad"]]
+//     Explanation:
+//       - Both approaches sort products lexicographically to ["mobile", "moneypot",
+//         "monitor", "mouse", "mousepad"].
+//       - For prefixes "m" and "mo", lower_bound starts at "mobile" and collects
+//         the first 3 matching strings ["mobile", "moneypot", "monitor"].
+//       - At prefix "mou", lower_bound advances past "monitor" to "mouse" and
+//         collects up to 3 matches before products.end(), yielding ["mouse",
+//         "mousepad"].
+//       - For prefixes "mous" and "mouse", lower_bound stays on "mouse" and both
+//         entries still start with the prefix, repeating ["mouse", "mousepad"].
+//
+//   Example 2:
+//     Input:  products = ["bags", "baggage", "banner", "box", "cloths"], searchWord
+//             = "bags"
+//     Output: [["baggage", "bags", "banner"], ["baggage", "bags", "banner"],
+//             ["baggage", "bags"], ["bags"]]
+//     Explanation:
+//       - Sorting products gives ["baggage", "bags", "banner", "box", "cloths"],
+//         and in the trie each visited node caches at most 3 strings in this sorted
+//         order.
+//       - For prefixes "b" and "ba", the first 3 sorted entries ["baggage", "bags",
+//         "banner"] match and hit the kMaxSuggestions = 3 cap before "box".
+//       - At prefix "bag", "banner" no longer matches so only ["baggage", "bags"]
+//         are returned.
+//       - At prefix "bags", lower_bound advances past "baggage" to "bags" (and the
+//         trie node for 's' caches only "bags"), returning ["bags"].
+//
+//   Example 3:
+//     Input:  products = ["havana"], searchWord = "tatiana"
+//     Output: [[], [], [], [], [], [], []]
+//     Explanation:
+//       - Sorting leaves products = ["havana"], so the trie only populates the 'h'
+//         branch from root 0.
+//       - On the first character 't' (prefix "t"), lower_bound advances to
+//         products.end() and the trie finds children['t' - 'a'] == 0, setting
+//         matched = false.
+//       - Every subsequent character of "tatiana" produces an empty vector,
+//         returning 7 empty lists.
+//
 // Algorithm:
 //   Implements two approaches:
 //     1. `suggestedProducts` (Sort + Narrowing Binary Search): Sorts `products`

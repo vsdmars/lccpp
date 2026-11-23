@@ -8,6 +8,48 @@
 //   Return the minimum number of k-bit flips required so that every element in
 //   nums becomes 1, or -1 if it is impossible.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [0, 1, 0], k = 1
+//     Output: 2
+//     Explanation:
+//       - At i = 0, active_flip is 0 and nums[0] == active_flip (0 == 0), so a flip
+//         starts at index 0: active_flip becomes 1, is_flipped[0] = 1, and
+//         total_flips = 1.
+//       - At i = 1 (i >= 1), expiring is_flipped[0] updates active_flip ^= 1 to 0;
+//         nums[1] = 1 != 0, so no flip is needed.
+//       - At i = 2, expiring is_flipped[1] (0) keeps active_flip = 0, and nums[2]
+//         == active_flip triggers a flip at index 2 (2 + 1 <= 3), incrementing
+//         total_flips to 2.
+//
+//   Example 2:
+//     Input:  nums = [1, 1, 0], k = 2
+//     Output: -1
+//     Explanation:
+//       - At i = 0 and i = 1, active_flip remains 0 and both nums[0] and nums[1]
+//         equal 1 != active_flip, so neither index initiates a flip.
+//       - At i = 2 (i >= 2), expiring is_flipped[0] (0) keeps active_flip = 0, and
+//         nums[2] == active_flip (0 == 0) requires a flip, but i + window = 4 > 3
+//         so the function returns -1.
+//
+//   Example 3:
+//     Input:  nums = [0, 0, 0, 1, 0, 1, 1, 0], k = 3
+//     Output: 3
+//     Explanation:
+//       - At i = 0, nums[0] == active_flip (0 == 0) starts a flip (is_flipped[0] =
+//         1, active_flip = 1, total_flips = 1), which makes indices 1 and 2
+//         effectively 1 so no flips start there.
+//       - At i = 3, expiring is_flipped[0] flips active_flip back to 0, leaving
+//         nums[3] = 1 effectively 1; at i = 4, expiring is_flipped[1] (0) keeps
+//         active_flip = 0, so nums[4] == 0 starts a second flip (is_flipped[4] = 1,
+//         active_flip = 1, total_flips = 2).
+//       - At i = 5, expiring is_flipped[2] (0) leaves active_flip = 1 and nums[5]
+//         == active_flip (1 == 1) forces a third flip (is_flipped[5] = 1,
+//         active_flip = 0, total_flips = 3).
+//       - At i = 6, active_flip stays 0 (nums[6] = 1 is satisfied), and at i = 7
+//         expiring is_flipped[4] sets active_flip = 1 so nums[7] = 0 is satisfied,
+//         returning total_flips = 3.
+//
 // Algorithm:
 //   Greedy left-to-right sweep with sliding XOR parity tracking:
 //   - Key observation: Flip operations commute (order does not matter), and

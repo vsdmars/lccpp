@@ -7,6 +7,36 @@
 //   elements in any order. The algorithm must run in better than O(N log N)
 //   time complexity, where N = nums.size().
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 1, 1, 2, 2, 3], k = 2
+//     Output: [1, 2]
+//     Explanation:
+//       - Count element frequencies into freq = {1: 3, 2: 2, 3: 1}.
+//       - Place each unique value into buckets of size 7 indexed by count:
+//         buckets[3] = [1], buckets[2] = [2], buckets[1] = [3].
+//       - Scan count from 6 down to 1, collecting 1 from buckets[3] and 2 from
+//         buckets[2] to stop once k = 2 elements are gathered.
+//
+//   Example 2:
+//     Input:  nums = [-1, -1, 2, 2, 2, 3], k = 2
+//     Output: [2, -1]
+//     Explanation:
+//       - Count element frequencies into freq = {-1: 2, 2: 3, 3: 1}.
+//       - Populate the 7 frequency buckets with buckets[3] = [2], buckets[2] =
+//         [-1], and buckets[1] = [3].
+//       - Sweep downward from count = 6 to 1, picking 2 from buckets[3] and -1 from
+//         buckets[2] to return [2, -1] (equivalent to [-1, 2] in any-order
+//         comparison).
+//
+//   Example 3:
+//     Input:  nums = [1], k = 1
+//     Output: [1]
+//     Explanation:
+//       - Count frequencies into freq = {1: 1}.
+//       - Insert 1 into buckets[1] of the 2-element bucket vector.
+//       - Scan count = 1 down to 1 and harvest 1 from buckets[1], returning [1].
+//
 // Algorithm:
 //   Use frequency counting followed by bucket sort:
 //     1. Count each element's frequency in a hash map (`val -> count`) in O(N)

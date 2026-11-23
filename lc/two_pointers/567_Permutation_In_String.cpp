@@ -8,6 +8,39 @@
 //   Constraints: 1 <= s1.length, s2.length <= 10^4; both strings consist of
 //   lowercase English letters ('a'..'z').
 //
+// Examples:
+//   Example 1:
+//     Input:  s1 = "ab", s2 = "eidbaooo"
+//     Output: true
+//     Explanation:
+//       - Build s1_counts = {a: 1, b: 1} and seed window_counts with the first
+//         window - 1 = 1 character s2[0] = 'e' ({e: 1}).
+//       - Slide right from 1 to 3 over windows "ei", "id", and "db", incrementing
+//         the entering character and decrementing the leaving character; none
+//         equals s1_counts.
+//       - At right = 4, increment s2[4] = 'a' so window_counts represents "ba" with
+//         {a: 1, b: 1}, matching s1_counts and returning true immediately.
+//
+//   Example 2:
+//     Input:  s1 = "ab", s2 = "eidboaoo"
+//     Output: false
+//     Explanation:
+//       - Build s1_counts = {a: 1, b: 1} and seed window_counts with s2[0] = 'e'.
+//       - Slide right from 1 to 7 across the seven length-2 windows "ei", "id",
+//         "db", "bo", "oa", "ao", and "oo", evicting 'b' at right = 4 before 'a'
+//         enters at right = 5.
+//       - Finish the loop without window_counts ever matching s1_counts and return
+//         false.
+//
+//   Example 3:
+//     Input:  s1 = "abcdef", s2 = "abc"
+//     Output: false
+//     Explanation:
+//       - Verify s1 is non-empty and check the length guard s1.size() > s2.size()
+//         (6 > 3).
+//       - Return false immediately because no substring of s2 can be long enough to
+//         contain a permutation of s1.
+//
 // Algorithm:
 //   Fixed-size sliding window with 26-letter frequency signatures:
 //   1. If `s1.size() > s2.size()`, no substring of `s2` can be long enough, so

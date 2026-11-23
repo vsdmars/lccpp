@@ -9,6 +9,34 @@
 //   never appeared in `equations` or no ratio path links them. Input equations
 //   are guaranteed to be consistent and free of division by zero.
 //
+// Examples:
+//   Example 1:
+//     Input:  equations = [["a", "b"], ["b", "c"]], values = [2.0, 3.0], queries =
+//             [["a", "c"], ["b", "a"], ["a", "e"], ["a", "a"], ["x", "x"]]
+//     Output: [6.0, 0.5, -1.0, 1.0, -1.0]
+//     Explanation:
+//       - Builds weighted directed edges a -> b (2.0), b -> a (0.5), b -> c (3.0),
+//         and c -> b (1.0 / 3.0) in graph.
+//       - For ["a", "c"], dfs("a") follows a -> b (2.0) and b -> c (3.0) and
+//         multiplies weights on return to produce 2.0 * 3.0 = 6.0; for ["b", "a"],
+//         the direct reciprocal edge gives 0.5.
+//       - For ["a", "e"] and ["x", "x"], "e" and "x" are missing from graph so -1.0
+//         is pushed for each; for ["a", "a"], graph contains "a" and src == dst
+//         returns 1.0.
+//       - Collecting all query answers produces [6.0, 0.5, -1.0, 1.0, -1.0].
+//
+//   Example 2:
+//     Input:  equations = [["a", "b"], ["c", "d"]], values = [2.0, 4.0], queries =
+//             [["a", "d"], ["b", "a"], ["d", "c"]]
+//     Output: [-1.0, 0.5, 0.25]
+//     Explanation:
+//       - Builds two disconnected components in graph: a <-> b with weights 2.0 and
+//         0.5, and c <-> d with weights 4.0 and 0.25.
+//       - For ["a", "d"], both variables exist in graph, so dfs("a") explores "b",
+//         finds no path to "d", and returns -1.0.
+//       - For ["b", "a"] and ["d", "c"], DFS follows the single reciprocal edges b
+//         -> a (0.5) and d -> c (0.25), returning [-1.0, 0.5, 0.25].
+//
 // Algorithm:
 //   Model the system of ratio equations as a weighted directed graph: each
 //   equation `A / B = k` adds edge `A -> B` with weight `k` and reciprocal edge

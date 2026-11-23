@@ -9,6 +9,39 @@
 //   unique outgoing neighbors per node, and the graph is guaranteed to be a
 //   DAG.
 //
+// Examples:
+//   Example 1:
+//     Input:  graph = [[1, 2], [3], [3], []]
+//     Output: [[0, 1, 3], [0, 2, 3]]
+//     Explanation:
+//       - Set target = 4 - 1 = 3, initialize path = [0], and start dfs(0).
+//       - From graph[0], push 1 (path = [0, 1]), then push 3 from graph[1] (path =
+//         [0, 1, 3]), reach node == target to record [0, 1, 3], and pop 3 and 1.
+//       - From graph[0], push 2 (path = [0, 2]), then push 3 from graph[2] (path =
+//         [0, 2, 3]), reach node == target to record [0, 2, 3], and pop 3 and 2.
+//
+//   Example 2:
+//     Input:  graph = [[4, 3, 1], [3, 2, 4], [3], [4], []]
+//     Output: [[0, 4], [0, 3, 4], [0, 1, 3, 4], [0, 1, 2, 3, 4], [0, 1, 4]]
+//     Explanation:
+//       - Set target = 5 - 1 = 4 and start dfs(0) with path = [0], iterating
+//         graph[0] neighbors 4, 3, 1.
+//       - Visiting 4 immediately hits node == target and records [0, 4];
+//         backtracking to 0 and visiting 3 then graph[3] neighbor 4 records [0, 3,
+//         4].
+//       - Visiting 1 explores graph[1] = [3, 2, 4]: branch 1 -> 3 -> 4 records [0,
+//         1, 3, 4], branch 1 -> 2 -> 3 -> 4 records [0, 1, 2, 3, 4], and branch 1
+//         -> 4 records [0, 1, 4].
+//
+//   Example 3:
+//     Input:  graph = [[1], [], [3], []]
+//     Output: []
+//     Explanation:
+//       - Set target = 4 - 1 = 3, initialize path = [0], and call dfs(0).
+//       - Push the only neighbor 1 in graph[0] (path = [0, 1]) and call dfs(1).
+//       - Since graph[1] is empty and 1 != 3, dfs(1) pops 1 and returns, leaving
+//         result empty.
+//
 // Algorithm:
 //   Because the input graph is a DAG, no path can revisit a node (no cycles),
 //   so a visited set is unnecessary. Run backtracking DFS starting from node

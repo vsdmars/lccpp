@@ -9,6 +9,37 @@
 //   Constraints: 1 <= m, n <= 10^5, 1 <= m * n <= 10^5,
 //                1 <= x, grid[i][j] <= 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[2, 4], [6, 8]], x = 2
+//     Output: 4
+//     Explanation:
+//       - Compute base_remainder = grid[0][0] % 2 = 0 and flatten the grid into
+//         vals = [2, 4, 6, 8], verifying every element has remainder 0 modulo 2.
+//       - Compute mid = 4 / 2 = 2 and partition vals with std::ranges::nth_element
+//         so vals[2] holds median = 6.
+//       - Accumulate std::abs(val - 6) / 2 across [2, 4, 6, 8]: 4/2 + 2/2 + 0/2 +
+//         2/2 = 2 + 1 + 0 + 1 = 4 operations.
+//
+//   Example 2:
+//     Input:  grid = [[1, 2], [3, 4]], x = 2
+//     Output: -1
+//     Explanation:
+//       - Compute base_remainder = grid[0][0] % 2 = 1 and append 1 to vals.
+//       - Inspect grid[0][1] = 2 and find 2 % 2 = 0 != 1, returning -1 immediately
+//         because cells cannot share a target value via +/- 2 steps.
+//
+//   Example 3:
+//     Input:  grid = [[1, 4, 7]], x = 3
+//     Output: 2
+//     Explanation:
+//       - Set base_remainder = 1 % 3 = 1 and flatten the row into vals = [1, 4, 7],
+//         since 4 % 3 = 1 and 7 % 3 = 1.
+//       - With mid = 3 / 2 = 1, std::ranges::nth_element places median = 4 at
+//         vals[1].
+//       - Sum std::abs(val - 4) / 3 over [1, 4, 7]: 3/3 + 0/3 + 3/3 = 1 + 0 + 1 = 2
+//         operations.
+//
 // Algorithm:
 //   1. Feasibility via modular congruence: adding or subtracting `x` never
 //      changes `val % x`. Thus all grid values can converge to a common target

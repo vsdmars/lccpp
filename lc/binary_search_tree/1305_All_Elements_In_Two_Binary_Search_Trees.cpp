@@ -7,6 +7,44 @@
 //   non-decreasing (ascending) order. Either or both trees may be empty, and
 //   duplicate values may appear across the two trees.
 //
+// Examples:
+//   Example 1:
+//     Input:  root1 = [2, 1, 4], root2 = [1, 0, 3]
+//     Output: [0, 1, 1, 2, 3, 4]
+//     Explanation:
+//       - InorderIterator it1 initializes its stack with root1's left spine [2, 1]
+//         (peek = 1), while it2 initializes with root2's left spine [1, 0] (peek =
+//         0).
+//       - The merge loop compares peek values: it pops 0 from it2, then pops 1 from
+//         it1 (1 <= 1), then pops 1 from it2 and pushes its right child 3.
+//       - Comparing remaining peeks, it pops 2 from it1 and pushes right child 4,
+//         then pops 3 from it2 (3 < 4), exhausting it2.
+//       - The drain loop pops the leftover 4 from it1, returning [0, 1, 1, 2, 3,
+//         4].
+//
+//   Example 2:
+//     Input:  root1 = [0, -10, 10], root2 = [5, 1, 7, 0, 2]
+//     Output: [-10, 0, 0, 1, 2, 5, 7, 10]
+//     Explanation:
+//       - it1 starts with left spine [0, -10] (peek = -10) and it2 starts with left
+//         spine [5, 1, 0] (peek = 0).
+//       - Because -10 < 0, it1 pops -10; then 0 <= 0 pops 0 from it1 (pushing right
+//         child 10 onto it1) before 0 < 10 pops 0 from it2.
+//       - While it1.peek() stays at 10, it2 yields 1, pushes and yields 2, yields
+//         5, and pushes and yields 7, exhausting it2.
+//       - The drain loop emits 10 from it1, producing [-10, 0, 0, 1, 2, 5, 7, 10].
+//
+//   Example 3:
+//     Input:  root1 = [], root2 = [5, 1, 7, 0, 2]
+//     Output: [0, 1, 2, 5, 7]
+//     Explanation:
+//       - it1 is constructed on nullptr with an empty stack (has_next() is false),
+//         while it2 pushes [5, 1, 0].
+//       - The two-way merge loop is skipped immediately because it1.has_next() is
+//         false.
+//       - The drain loop for it2 yields its in-order sequence [0, 1, 2, 5, 7]
+//         without extra allocations.
+//
 // Algorithm:
 //   Streaming Two-Way Merge via Lazy Iterative In-Order Iterators:
 //   Mirror the Python lazy-generator + merge approach without materializing

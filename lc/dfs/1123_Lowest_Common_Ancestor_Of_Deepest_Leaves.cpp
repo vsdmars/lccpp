@@ -8,6 +8,41 @@
 //   the LCA of a set S of nodes is the deepest node whose subtree contains
 //   every node in S.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4]
+//     Output: node 2 (subtree [2, 7, 4])
+//     Explanation:
+//       - Bottom-up dfs returns {n7, 1} and {n4, 1} for leaves 7 and 4 because both
+//         null children have height 0.
+//       - At node 2, left_height == right_height == 1, so dfs returns {n2, 2} as
+//         the LCA of deepest leaves 7 and 4.
+//       - At node 5, left returns {n6, 1} and right returns {n2, 2}; since
+//         right_height > left_height, node 5 propagates {n2, 3}.
+//       - In the right subtree of 3, leaves 0 and 8 each return height 1 so node 1
+//         returns {n1, 2}.
+//       - At root 3, left_height (3) > right_height (2), so dfs returns {n2, 4} and
+//         lcaDeepestLeaves returns node 2.
+//
+//   Example 2:
+//     Input:  root = [0, 1, 3, null, 2]
+//     Output: node 2
+//     Explanation:
+//       - Leaf 2 sees two null children of height 0 and returns {n2, 1}.
+//       - At node 1, left is {nullptr, 0} and right is {n2, 1}; because
+//         right_height > left_height, node 1 returns {n2, 2}.
+//       - Leaf 3 returns {n3, 1}, so at root 0 left_height (2) > right_height (1)
+//         yields {n2, 3} and returns node 2.
+//
+//   Example 3:
+//     Input:  root = [1]
+//     Output: node 1
+//     Explanation:
+//       - dfs recurses on both null children of node 1, each returning {nullptr,
+//         0}.
+//       - Because left_height == right_height == 0, dfs returns {n1, 1} and
+//         lcaDeepestLeaves returns node 1.
+//
 // Algorithm:
 //   Run a single bottom-up (post-order) DFS returning `{lca, height}` for each
 //   subtree, where `height` is the maximum number of nodes along any downward

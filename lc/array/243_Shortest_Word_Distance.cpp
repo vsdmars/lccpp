@@ -7,6 +7,45 @@
 //   index distance `|i - j|` between any occurrence of `word1` at index `i` and
 //   any occurrence of `word2` at index `j`.
 //
+// Examples:
+//   Example 1:
+//     Input:  words_dict = ["practice", "makes", "perfect", "coding", "makes"],
+//             word1 = "coding", word2 = "practice"
+//     Output: 3
+//     Explanation:
+//       - Initialize min_dist = 5, last_word = "", and last_idx = nullopt.
+//       - At idx = 0 ("practice"), last_idx is empty, so set last_word = "practice"
+//         and last_idx = 0.
+//       - Skip idx = 1 ("makes") and idx = 2 ("perfect") because neither matches
+//         word1 or word2.
+//       - At idx = 3 ("coding"), word differs from last_word ("practice"), so
+//         update min_dist = min(5, 3 - 0) = 3 and set last_word = "coding",
+//         last_idx = 3.
+//       - Skip idx = 4 ("makes") and return min_dist = 3.
+//
+//   Example 2:
+//     Input:  words_dict = ["a", "x", "y", "b", "z", "a", "b"], word1 = "a", word2
+//             = "b"
+//     Output: 1
+//     Explanation:
+//       - Initialize min_dist = 7, last_word = "", and last_idx = nullopt; at idx =
+//         0 ("a"), set last_word = "a" and last_idx = 0.
+//       - Skip "x" (idx = 1) and "y" (idx = 2), then at idx = 3 ("b") update
+//         min_dist = min(7, 3 - 0) = 3 and set last_word = "b", last_idx = 3.
+//       - Skip "z" (idx = 4), then at idx = 5 ("a") update min_dist = min(3, 5 - 3)
+//         = 2 and set last_word = "a", last_idx = 5.
+//       - At idx = 6 ("b"), word differs from last_word ("a"), so update min_dist =
+//         min(2, 6 - 5) = 1 and return 1.
+//
+//   Example 3:
+//     Input:  words_dict = ["alpha", "beta"], word1 = "beta", word2 = "alpha"
+//     Output: 1
+//     Explanation:
+//       - Initialize min_dist = 2, last_word = "", and last_idx = nullopt.
+//       - At idx = 0 ("alpha"), record last_word = "alpha" and last_idx = 0.
+//       - At idx = 1 ("beta"), word differs from last_word ("alpha"), so update
+//         min_dist = min(2, 1 - 0) = 1 and return 1.
+//
 // Algorithm:
 //   Single-pass linear scan tracking only the most recently encountered target
 //   word (`last_word`) and its index (`last_idx`):

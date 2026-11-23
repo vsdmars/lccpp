@@ -7,6 +7,40 @@
 //   nums[i] + nums[j] + nums[k] < target. Duplicate values at distinct indices
 //   count as distinct triplets.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [-2, 0, 1, 3], target = 2
+//     Output: 2
+//     Explanation:
+//       - nums is already sorted as [-2, 0, 1, 3] and count starts at 0.
+//       - For k = 2 (nums[2] = 1) with left = 0, right = 1, sum = -2 + 0 + 1 = -1 <
+//         2 adds right - left = 1 to count and advances left to 1, ending the inner
+//         loop.
+//       - For k = 3 (nums[3] = 3) with left = 0, right = 2, sum = -2 + 1 + 3 = 2 is
+//         not < 2, so right decrements to 1.
+//       - With left = 0, right = 1, sum = -2 + 0 + 3 = 1 < 2 adds 1 - 0 = 1 to
+//         count (now 2) and advances left to 1, returning 2.
+//
+//   Example 2:
+//     Input:  nums = [-1, 1, -1, -1], target = -1
+//     Output: 1
+//     Explanation:
+//       - Sorting nums in-place produces [-1, -1, -1, 1].
+//       - For k = 2 (nums[2] = -1) with left = 0, right = 1, sum = -1 + (-1) + (-1)
+//         = -3 < -1 adds 1 - 0 = 1 to count and advances left to 1.
+//       - For k = 3 (nums[3] = 1), left = 0, right = 2 yields sum = -1 + (-1) + 1 =
+//         -1 (not < -1), decrementing right to 1; left = 0, right = 1 again yields
+//         sum = -1 and decrements right to 0, returning 1.
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 3], target = 6
+//     Output: 0
+//     Explanation:
+//       - nums = [1, 2, 3] is already sorted, leaving only k = 2 (nums[2] = 3) with
+//         left = 0 and right = 1.
+//       - The single candidate triplet gives sum = 1 + 2 + 3 = 6, which fails the
+//         strict check sum < 6 and decrements right to 0, returning count = 0.
+//
 // Algorithm:
 //   Sort `nums` in ascending order (triplet counts depend only on values, not
 //   original index ordering, because any distinct triple of indices maps

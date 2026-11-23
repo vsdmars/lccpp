@@ -11,6 +11,44 @@
 //        (but must contain at least one character whenever any alphanumeric
 //        character exists).
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "5F3Z-2e-9-w", k = 4
+//     Output: "5F3Z-2E9W"
+//     Explanation:
+//       - Scan s from right to left skipping '-', uppercasing and pushing 'W', '9',
+//         'E', and '2' until current_group_len reaches 4.
+//       - Before pushing 'Z', current_group_len == 4 triggers appending '-' and
+//         resetting current_group_len to 0, yielding "W9E2-".
+//       - Continue scanning past '-' to append 'Z', '3', 'F', and '5', forming
+//         "W9E2-Z3F5".
+//       - Reverse the buffer in place with std::ranges::reverse to return
+//         "5F3Z-2E9W".
+//
+//   Example 2:
+//     Input:  s = "2-5g-3-J", k = 2
+//     Output: "2-5G-3J"
+//     Explanation:
+//       - Scan right to left with group_size = 2, appending 'J' and '3' to form
+//         "J3" with current_group_len = 2.
+//       - On 'g', current_group_len == 2 inserts '-' before uppercased 'G', then
+//         '5' is appended to give "J3-G5" with current_group_len = 2.
+//       - On the leftmost '2', current_group_len == 2 inserts another '-' before
+//         '2', producing "J3-G5-2" with a shorter final group.
+//       - Reverse the buffer in place to return "2-5G-3J".
+//
+//   Example 3:
+//     Input:  s = "--a-a-a-a--", k = 2
+//     Output: "AA-AA"
+//     Explanation:
+//       - Reverse scan skips the trailing "--" and appends two uppercased 'A'
+//         characters so formatted = "AA" and current_group_len = 2.
+//       - When reaching the third 'a', current_group_len == 2 emits '-' before 'A',
+//         and the fourth 'a' completes "AA-AA".
+//       - The leading "--" characters are skipped without emitting a dash because
+//         no further alphanumeric characters follow, and reversing "AA-AA" yields
+//         "AA-AA".
+//
 // Algorithm:
 //   Scan `s` in a single reverse pass from right to left. Ignore dashes; for
 //   each alphanumeric character, if the current right-aligned group has

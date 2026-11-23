@@ -9,6 +9,48 @@
 //     2. After selling a share on day i, you cannot buy on day i + 1 (a
 //        mandatory 1-day cooldown).
 //
+// Examples:
+//   Example 1:
+//     Input:  prices = [1, 2, 3, 0, 2]
+//     Output: 3
+//     Explanation:
+//       - Initialize rolling states to free = 0, hold = -inf, and cool = -inf
+//         before day 0.
+//       - On day 0 (price = 1) and day 1 (price = 2), buy into hold = max(-inf, 0 -
+//         1) = -1 on day 0 and sell on day 1 to reach cool = -1 + 2 = 1 while free
+//         = 0.
+//       - On day 2 (price = 3), exiting yesterday's cooldown updates free = max(0,
+//         1) = 1 while hold stays -1 and cool becomes -1 + 3 = 2.
+//       - On day 3 (price = 0), free updates to max(1, 2) = 2 and buying from
+//         yesterday's free = 1 gives hold = max(-1, 1 - 0) = 1 with cool = -1.
+//       - On day 4 (price = 2), selling the held share produces cool = 1 + 2 = 3
+//         alongside free = 2, returning max(free, cool) = 3.
+//
+//   Example 2:
+//     Input:  prices = [1, 5, 2, 2, 8]
+//     Output: 10
+//     Explanation:
+//       - Start with free = 0, hold = -inf, cool = -inf, then buy on day 0 (price =
+//         1) to set hold = -1 and sell on day 1 (price = 5) for cool = 4.
+//       - On day 2 (price = 2), the mandatory cooldown moves yesterday's profit
+//         into free = max(0, 4) = 4 while hold remains -1 and cool becomes 1.
+//       - On day 3 (price = 2), buying from free = 4 raises hold = max(-1, 4 - 2) =
+//         2 while free stays 4 and cool stays 1.
+//       - On day 4 (price = 8), selling yields cool = 2 + 8 = 10, so max(free,
+//         cool) = max(4, 10) = 10.
+//
+//   Example 3:
+//     Input:  prices = [5, 4, 3, 2, 1]
+//     Output: 0
+//     Explanation:
+//       - Begin with free = 0, hold = -inf, and cool = -inf; buying on day 0 (price
+//         = 5) sets hold = -5.
+//       - Across days 1 through 4 (prices 4, 3, 2, 1), buying later improves hold
+//         from -5 up to -1 while every sale produces cool = -1 and free stays
+//         max(0, -1) = 0.
+//       - At the end of day 4, max(free, cool) = max(0, -1) = 0 because executing
+//         no trades beats any losing buy-and-sell pair.
+//
 // Algorithm:
 //   Bottom-up 3-state finite-state-machine DP with O(1) space.
 //   At the end of each day, any valid strategy sits in one of three mutually

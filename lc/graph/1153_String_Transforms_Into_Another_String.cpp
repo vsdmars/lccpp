@@ -7,6 +7,42 @@
 //   bulk conversions, where one conversion replaces every occurrence of a
 //   chosen character in `str1` with another lowercase English character.
 //
+// Examples:
+//   Example 1:
+//     Input:  str1 = "aabcc", str2 = "ccdee"
+//     Output: true
+//     Explanation:
+//       - Confirm equal lengths (5 == 5) and str1 != str2, then initialize mapping
+//         to '\0' and used_in_str2 to false.
+//       - Scan indices 0..4: assign mapping['a'] = 'c' (consistent at i = 0, 1),
+//         mapping['b'] = 'd' (i = 2), and mapping['c'] = 'e' (consistent at i = 3,
+//         4) with no conflicts.
+//       - Mark 'c', 'd', and 'e' in used_in_str2 so distinct_in_str2 = 3, and since
+//         3 < 26, return true.
+//
+//   Example 2:
+//     Input:  str1 = "leetcode", str2 = "codeleet"
+//     Output: false
+//     Explanation:
+//       - Confirm lengths match (8 == 8) and str1 != str2, then start scanning
+//         indices 0..7.
+//       - At i = 0, set mapping['l'] = 'c' (distinct_in_str2 = 1); at i = 1, set
+//         mapping['e'] = 'o' (distinct_in_str2 = 2).
+//       - At i = 2, str1[2] = 'e' already maps to 'o' while str2[2] = 'd', so
+//         mapping['e'] != 'd' triggers an immediate return of false.
+//
+//   Example 3:
+//     Input:  str1 = "abcdefghijklmnopqrstuvwxyz", str2 =
+//             "bcdefghijklmnopqrstuvwxyza"
+//     Output: false
+//     Explanation:
+//       - Confirm both strings have length 26 and str1 != str2, then scan i = 0..25
+//         to build a consistent shift mapping ('a' -> 'b', ..., 'z' -> 'a').
+//       - Mark every letter 'a' through 'z' as seen in str2, bringing
+//         distinct_in_str2 to 26.
+//       - Check distinct_in_str2 < 26 (26 < 26 is false) and return false because
+//         no unused temporary character exists to break the 26-letter cycle.
+//
 // Algorithm:
 //   Model the required character substitutions as a directed functional graph
 //   (each source letter has outdegree at most 1). If `str1 == str2`, zero

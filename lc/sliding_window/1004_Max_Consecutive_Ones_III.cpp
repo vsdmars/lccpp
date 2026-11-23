@@ -6,6 +6,48 @@
 //   integer `k`, return the maximum length of a contiguous subarray that
 //   contains only 1s after flipping at most `k` zeros to ones.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0], k = 2
+//     Output: 6
+//     Explanation:
+//       - Initialize left = 0 and remaining_flips = 2, then advance through indices
+//         0..4 ([1, 1, 1, 0, 0]) where the two zeros drop remaining_flips to 0 and
+//         form a valid window of length 5.
+//       - At index 5 (val = 0), remaining_flips becomes -1 < 0; since nums[0] == 1
+//         does not refund a flip, left shifts to 1 while keeping remaining_flips =
+//         -1.
+//       - At indices 6 and 7 (both 1), remaining_flips stays -1 and outgoing ones
+//         at nums[1] and nums[2] advance left to 3; at index 8 (1), outgoing
+//         nums[3] == 0 refunds remaining_flips to 0 and advances left to 4.
+//       - At index 9 (1), remaining_flips = 0 >= 0 so left stays 4 (window [4..9] =
+//         [0, 0, 1, 1, 1, 1] of width 6); at index 10 (0), remaining_flips drops to
+//         -1 and outgoing nums[4] == 0 restores it to 0 as left moves to 5.
+//       - Return nums.size() - left = 11 - 5 = 6.
+//
+//   Example 2:
+//     Input:  nums = [1, 0, 1, 1, 0, 0], k = 2
+//     Output: 5
+//     Explanation:
+//       - Initialize left = 0 and remaining_flips = 2, scanning indices 0..4 ([1,
+//         0, 1, 1, 0]) consumes both flips so remaining_flips reaches 0 with left
+//         still at 0 (window length 5).
+//       - At index 5 (val = 0), remaining_flips drops to -1 < 0, and because
+//         outgoing nums[0] == 1 does not restore a flip, left advances to 1.
+//       - Return nums.size() - left = 6 - 1 = 5.
+//
+//   Example 3:
+//     Input:  nums = [0, 0, 0, 0], k = 0
+//     Output: 0
+//     Explanation:
+//       - Start with left = 0 and remaining_flips = 0; at index 0 (0),
+//         remaining_flips becomes -1 < 0, outgoing nums[0] == 0 restores
+//         remaining_flips to 0, and left advances to 1.
+//       - At each subsequent index 1, 2, and 3 (all 0), remaining_flips drops to
+//         -1, the outgoing 0 at nums[left] refunds it to 0, and left advances to 2,
+//         3, and 4.
+//       - Return nums.size() - left = 4 - 4 = 0.
+//
 // Algorithm:
 //   Non-shrinking sliding window. Maintain a left pointer `left` and a budget
 //   `remaining_flips = k` representing how many additional zeros the current

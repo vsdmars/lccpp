@@ -7,6 +7,48 @@
 //   between i and j equals the Euclidean distance between i and k. Return the
 //   total number of boomerangs.
 //
+// Examples:
+//   Example 1:
+//     Input:  points = [[0, 0], [1, 0], [2, 0]]
+//     Output: 2
+//     Explanation:
+//       - Initialize unordered_pairs = 0 and iterate each point i as the pivot
+//         using 64-bit squared Euclidean distance dist_sq = dx*dx + dy*dy.
+//       - For pivot i = 0 at (0, 0), neighbors (1, 0) and (2, 0) give dist_sq
+//         values 1 and 4, which are distinct so dist_counts[1] = 1, dist_counts[4]
+//         = 1, and unordered_pairs stays 0.
+//       - For pivot i = 1 at (1, 0), neighbor (0, 0) sets dist_counts[1] = 1
+//         (adding 0), and neighbor (2, 0) also has dist_sq = 1 so it adds
+//         dist_counts[1] = 1 to unordered_pairs and increments dist_counts[1] to 2.
+//       - For pivot i = 2 at (2, 0), neighbors (0, 0) and (1, 0) give dist_sq
+//         values 4 and 1, contributing 0 more pairs.
+//       - Multiply unordered_pairs * 2 = 1 * 2 = 2 to count both ordered boomerangs
+//         ((1,0),(0,0),(2,0)) and ((1,0),(2,0),(0,0)).
+//
+//   Example 2:
+//     Input:  points = [[0, 0], [1, 0], [2, 0], [1, 1]]
+//     Output: 8
+//     Explanation:
+//       - For pivot i = 0 at (0, 0), squared distances to (1, 0), (2, 0), and (1,
+//         1) are 1, 4, and 2, contributing 0 pairs.
+//       - For pivot i = 1 at (1, 0), all three other points lie at dist_sq = 1, so
+//         dist_counts[1] progresses 0 -> 1 -> 2 -> 3 and adds 0 + 1 + 2 = 3 to
+//         unordered_pairs.
+//       - For pivot i = 2 at (2, 0), squared distances to (0, 0), (1, 0), and (1,
+//         1) are 4, 1, and 2, contributing 0 pairs.
+//       - For pivot i = 3 at (1, 1), squared distances to (0, 0), (1, 0), and (2,
+//         0) are 2, 1, and 2, so the two points at dist_sq = 2 add 1 to
+//         unordered_pairs (total 4).
+//       - Return unordered_pairs * 2 = 4 * 2 = 8 ordered boomerangs.
+//
+//   Example 3:
+//     Input:  points = [[0, 0], [1, 0]]
+//     Output: 0
+//     Explanation:
+//       - Check n = points.size(), which equals 2.
+//       - Since n < 3, fewer than three distinct points are available to form a
+//         tuple (i, j, k), so the early return immediately returns 0.
+//
 // Algorithm:
 //   Fix each point `i` as the boomerang's vertex (pivot) and group every other
 //   point `j != i` by its squared Euclidean distance from `i`:

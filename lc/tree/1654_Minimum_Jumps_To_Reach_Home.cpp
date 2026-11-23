@@ -13,6 +13,44 @@
 //   Constraints: 1 <= forbidden.length <= 1000; 1 <= a, b, forbidden[i] <= 2000;
 //   0 <= x <= 2000; all forbidden positions are distinct and `x` is not forbidden.
 //
+// Examples:
+//   Example 1:
+//     Input:  forbidden = [14, 4, 18, 1, 15], a = 3, b = 15, x = 9
+//     Output: 3
+//     Explanation:
+//       - The search sets upper_bound = max(9, 18) + 3 + 15 = 36, marks {1, 4, 14,
+//         15, 18} blocked in both arrival states, and pushes (pos=0,
+//         last_was_backward=false, jumps=0).
+//       - Popping (0, false, 0) skips the negative backward move -15 and enqueues
+//         forward state (3, false, 1).
+//       - Popping (3, false, 1) enqueues forward state (6, false, 2), and popping
+//         (6, false, 2) enqueues (9, false, 3).
+//       - Popping (9, false, 3) matches target pos == x = 9 and returns 3 jumps.
+//
+//   Example 2:
+//     Input:  forbidden = [1, 6, 2, 14, 5, 17, 4], a = 16, b = 9, x = 7
+//     Output: 2
+//     Explanation:
+//       - With upper_bound = max(7, 17) + 16 + 9 = 42, BFS starts at (0, false, 0)
+//         and jumps forward by +16 to enqueue (16, false, 1).
+//       - Popping (16, false, 1) enqueues forward state (32, false, 2) and, because
+//         last_was_backward is false, jumps backward by -9 to enqueue (7, true, 2).
+//       - Popping (7, true, 2) reaches pos == x = 7 and returns 2 jumps.
+//
+//   Example 3:
+//     Input:  forbidden = [12, 15], a = 5, b = 3, x = 4
+//     Output: 4
+//     Explanation:
+//       - BFS advances from (0, false, 0) to (5, false, 1), then enqueues both
+//         forward (10, false, 2) and backward (2, true, 2).
+//       - From (10, false, 2), forward jump 15 is forbidden so it jumps backward to
+//         enqueue (7, true, 3) with visited[7][1] = true, while (2, true, 2) jumps
+//         forward to enqueue (7, false, 3) with visited[7][0] = true.
+//       - Because (7, true, 3) cannot make a second consecutive backward jump to 4,
+//         only (7, false, 3) is allowed to jump backward by -3 to reach (4, true,
+//         4).
+//       - Popping (4, true, 4) matches pos == x = 4 and returns 4 jumps.
+//
 // Algorithm:
 //   State-space Breadth-First Search (BFS) on an unweighted implicit graph:
 //     - Each node in the state graph is `(pos, last_was_backward)`, because

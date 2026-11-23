@@ -11,6 +11,47 @@
 //   Constraints: 1 <= words1.length, words2.length <= 10^4,
 //   1 <= words1[i].length, words2[i].length <= 10.
 //
+// Examples:
+//   Example 1:
+//     Input:  words1 = ["amazon", "apple", "facebook", "google", "leetcode"],
+//             words2 = ["e", "o"]
+//     Output: ["facebook", "google", "leetcode"]
+//     Explanation:
+//       - count_letters builds {e: 1} for "e" and {o: 1} for "o", so taking
+//         element-wise maxima sets required['e'] = 1, required['o'] = 1, and 0
+//         elsewhere.
+//       - Checking words1 against required rejects "amazon" (e count 0 < 1) and
+//         "apple" (o count 0 < 1).
+//       - "facebook" (e: 1, o: 2), "google" (e: 1, o: 2), and "leetcode" (e: 3, o:
+//         1) all satisfy every entry in required, yielding ["facebook", "google",
+//         "leetcode"].
+//
+//   Example 2:
+//     Input:  words1 = ["amazon", "apple", "facebook", "google", "leetcode"],
+//             words2 = ["e", "oo"]
+//     Output: ["facebook", "google"]
+//     Explanation:
+//       - count_letters produces {e: 1} for "e" and {o: 2} for "oo", forming the
+//         merged lower-bound table required['e'] = 1, required['o'] = 2.
+//       - "amazon" (e: 0, o: 1), "apple" (e: 1, o: 0), and "leetcode" (e: 3, o: 1)
+//         each fail at least one threshold (specifically required['e'] = 1 or
+//         required['o'] = 2).
+//       - "facebook" (e: 1, o: 2) and "google" (e: 1, o: 2) pass satisfies() and
+//         are appended to result.
+//
+//   Example 3:
+//     Input:  words1 = ["amazon", "apple", "facebook", "google", "leetcode"],
+//             words2 = ["lo", "eo"]
+//     Output: ["google", "leetcode"]
+//     Explanation:
+//       - "lo" contributes {l: 1, o: 1} and "eo" contributes {e: 1, o: 1}, so
+//         element-wise std::max yields required = {e: 1, l: 1, o: 1} rather than
+//         requiring two 'o's.
+//       - "amazon" lacks 'e' and 'l', "apple" lacks 'o', and "facebook" lacks 'l',
+//         so satisfies() returns false for all three.
+//       - "google" (e: 1, l: 1, o: 2) and "leetcode" (e: 3, l: 1, o: 1) meet all
+//         three letter counts, producing ["google", "leetcode"].
+//
 // Algorithm:
 //   Constraint Aggregation (Multiset Union) over Fixed Alphabet:
 //   Checking every pair `(a, b)` directly takes O(|words1| * |words2|) time.

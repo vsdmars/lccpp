@@ -8,6 +8,38 @@
 //   sub-boxes. The input board contains only digits '1'-'9' and '.', is always
 //   9x9, and is guaranteed to have a single unique solution.
 //
+// Examples:
+//   Example 1:
+//     Input:  board =
+//             [["5","3",".",".","7",".",".",".","."],["6",".",".","1","9","5",".",".","."],[".","9","8",".",".",".",".","6","."],["8",".",".",".","6",".",".",".","3"],["4",".",".","8",".","3",".",".","1"],["7",".",".",".","2",".",".",".","6"],[".","6",".",".",".",".","2","8","."],[".",".",".","4","1","9",".",".","5"],[".",".",".",".","8",".",".","7","9"]]
+//     Output: [["5","3","4","6","7","8","9","1","2"],["6","7","2","1","9","5","3","4","8"],["1","9","8","3","4","2","5","6","7"],["8","5","9","7","6","1","4","2","3"],["4","2","6","8","5","3","7","9","1"],["7","1","3","9","2","4","8","5","6"],["9","6","1","5","3","7","2","8","4"],["2","8","7","4","1","9","6","3","5"],["3","4","5","2","8","6","1","7","9"]]
+//     Explanation:
+//       - Phase 1 scans the 30 initial clues into row_mask, col_mask, and box_mask
+//         and collects all 51 '.' coordinates into empty_cells, starting at (0, 2).
+//       - At idx = 0 for cell (0, 2) in box 0, used = row_mask[0] | col_mask[2] |
+//         box_mask[0] forbids {3, 5, 6, 7, 8, 9}, leaving candidates '1', '2', and
+//         '4'.
+//       - backtrack tries '1' and '2' first, clearing board[0][2] and its mask bits
+//         after downstream conflicts, before placing '4' and setting bit 3 in
+//         row_mask[0], col_mask[2], and box_mask[0].
+//       - Continuing recursively through all 51 empty cells reaches idx == 51 and
+//         returns true immediately, leaving the solved 9x9 board in place.
+//
+//   Example 2:
+//     Input:  board =
+//             [[".",".","9","7","4","8",".",".","."],["7",".",".",".",".",".",".",".","."],[".","2",".","1",".","9",".",".","."],[".",".","7",".",".",".","2","4","."],[".","6","4",".","1",".","5","9","."],[".","9","8",".",".",".","3",".","."],[".",".",".","8",".","3",".","2","."],[".",".",".",".",".",".",".",".","6"],[".",".",".","2","7","5","9",".","."]]
+//     Output: [["5","1","9","7","4","8","6","3","2"],["7","8","3","6","5","2","4","1","9"],["4","2","6","1","3","9","8","7","5"],["3","5","7","9","8","6","2","4","1"],["2","6","4","3","1","7","5","9","8"],["1","9","8","5","2","4","3","6","7"],["9","7","5","8","6","3","1","2","4"],["8","3","2","4","9","1","7","5","6"],["6","4","1","2","7","5","9","8","3"]]
+//     Explanation:
+//       - Phase 1 indexes the 27 initial clues into row_mask, col_mask, and
+//         box_mask and records all 54 empty cells starting at (0, 0).
+//       - At idx = 0 for cell (0, 0) in box 0, row_mask[0] blocks {4, 7, 8, 9},
+//         col_mask[0] blocks {7}, and box_mask[0] blocks {2, 7, 9}, leaving
+//         candidates '1', '3', '5', and '6'.
+//       - backtrack prunes invalid branches using O(1) bitwise checks, unwinding
+//         '1' and '3' on downstream dead ends before committing '5' at (0, 0).
+//       - Once all 54 empty cells are assigned without bitmask conflict, idx == 54
+//         returns true with the unique solved grid in board.
+//
 // Algorithm:
 //   Backtracking DFS accelerated by O(1) bitmask constraint tracking:
 //     1. Scan the 9x9 board once to record every pre-filled digit in three

@@ -8,6 +8,37 @@
 //   its left neighbor (`+d_0 - d_1 + d_2 - ...`). Return the resulting signed
 //   sum.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 521
+//     Output: 4
+//     Explanation:
+//       - Convert n = 521 to string "521" and initialize parity buckets sums = {0,
+//         0} with bucket = 0.
+//       - Process '5' into sums[0] = 5 (bucket -> 1), '2' into sums[1] = 2 (bucket
+//         -> 0), and '1' into sums[0] = 6 (bucket -> 1).
+//       - Subtract the buckets to return sums[0] - sums[1] = 6 - 2 = 4.
+//
+//   Example 2:
+//     Input:  n = 886996
+//     Output: 0
+//     Explanation:
+//       - Convert n = 886996 to string "886996" and initialize sums = {0, 0} and
+//         bucket = 0.
+//       - Toggling bucket after each character puts even-position digits ('8', '6',
+//         '9') into sums[0] = 8 + 6 + 9 = 23.
+//       - Odd-position digits ('8', '9', '6') accumulate into sums[1] = 8 + 9 + 6 =
+//         23.
+//       - Return sums[0] - sums[1] = 23 - 23 = 0.
+//
+//   Example 3:
+//     Input:  n = 19
+//     Output: -8
+//     Explanation:
+//       - Convert n = 19 to string "19" with sums = {0, 0} and bucket = 0.
+//       - Add '1' to sums[0] = 1, toggle bucket to 1, then add '9' to sums[1] = 9.
+//       - Return sums[0] - sums[1] = 1 - 9 = -8.
+//
 // Algorithm:
 //   Primary approach (mirrors the Python two-bucket parity accumulator):
 //     Convert `n` to its decimal string representation so digits are visited

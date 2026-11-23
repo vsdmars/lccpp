@@ -6,6 +6,41 @@
 //   return all possible unique permutations in any order.
 //   Constraints: 1 <= nums.length <= 8, -10 <= nums[i] <= 10.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 1, 2]
+//     Output: [[1, 1, 2], [1, 2, 1], [2, 1, 1]]
+//     Explanation:
+//       - Sort nums to [1, 1, 2] and initialize used = [0, 0, 0] and path = [].
+//       - At depth 0, pick index 0 (1), then explore indices 1 and 2 in remaining
+//         slots to emit [1, 1, 2] and [1, 2, 1].
+//       - Back at depth 0, skip index 1 (1) because nums[1] == nums[0] and used[0]
+//         == 0, preventing duplicate branches starting with 1.
+//       - Pick index 2 (2) at depth 0, then pick index 0 (1) and index 1 (1) to
+//         emit [2, 1, 1].
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 3]
+//     Output: [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+//     Explanation:
+//       - Nums is already sorted as [1, 2, 3] with all distinct elements, so the
+//         adjacent-duplicate guard never triggers.
+//       - At depth 0, selecting i = 0 (1) recurses over [2, 3] and [3, 2] to emit
+//         [1, 2, 3] and [1, 3, 2].
+//       - Backtracking to try i = 1 (2) and i = 2 (3) at depth 0 enumerates the
+//         remaining 4 branches, producing all 3! = 6 permutations in
+//         lexicographical order.
+//
+//   Example 3:
+//     Input:  nums = [2, 2, 2]
+//     Output: [[2, 2, 2]]
+//     Explanation:
+//       - Sort nums = [2, 2, 2] and initialize used = [0, 0, 0].
+//       - At depth 0, pick index 0 (used[0] = 1) and skip indices 1 and 2 because
+//         nums[i] == nums[i - 1] with used[i - 1] == 0.
+//       - At depth 1 pick index 1 (allowed since used[0] == 1) while skipping index
+//         2, then at depth 2 pick index 2 to emit the single permutation [2, 2, 2].
+//
 // Algorithm:
 //   1. Sorted Backtracking with Same-Level Deduplication (`permuteUnique`):
 //      First sort `nums` so identical values are adjacent. Maintain a `used`

@@ -9,6 +9,38 @@
 //   are almost equivalent, and `false` otherwise.
 //   Constraints: n == word1.length == word2.length, 1 <= n <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  word1 = "aaaa", word2 = "bccb"
+//     Output: false
+//     Explanation:
+//       - Initialize the 26-element array freq_diff to zeros and increment buckets
+//         for word1 = "aaaa", setting freq_diff[0] ('a') = 4.
+//       - Decrement buckets for word2 = "bccb", setting freq_diff[1] ('b') = -2 and
+//         freq_diff[2] ('c') = -2 while freq_diff[0] remains 4.
+//       - Evaluate std::abs(diff) <= 3 across freq_diff; since std::abs(4) > 3 at
+//         index 0, std::ranges::all_of returns false.
+//
+//   Example 2:
+//     Input:  word1 = "abcdeef", word2 = "abaaacc"
+//     Output: true
+//     Explanation:
+//       - Add 1 per character of word1 = "abcdeef", setting buckets a:1, b:1, c:1,
+//         d:1, e:2, f:1.
+//       - Subtract 1 per character of word2 = "abaaacc" (which has 4 'a's, 1 'b',
+//         and 2 'c's), leaving nonzero diffs a:-3, c:-1, d:1, e:2, f:1.
+//       - Every bucket in freq_diff has std::abs(diff) <= 3 (maximum magnitude is 3
+//         for 'a'), so std::ranges::all_of returns true.
+//
+//   Example 3:
+//     Input:  word1 = "z", word2 = "z"
+//     Output: true
+//     Explanation:
+//       - Increment freq_diff[25] ('z') to 1 while scanning word1 = "z", then
+//         decrement freq_diff[25] back to 0 while scanning word2 = "z".
+//       - All 26 entries in freq_diff equal 0 <= 3, so std::ranges::all_of returns
+//         true.
+//
 // Algorithm:
 //   Maintain a single signed frequency-difference histogram of size 26. Add 1
 //   for each character in `word1` and subtract 1 for each character in

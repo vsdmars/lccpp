@@ -7,6 +7,35 @@
 //   sell as many times as you like (holding at most one share at any time,
 //   with zero transaction fees).
 //
+// Examples:
+//   Example 1:
+//     Input:  prices = [7, 1, 5, 3, 6, 4]
+//     Output: 7
+//     Explanation:
+//       - Initialize profit = 0 and iterate i from 1 to 5, adding
+//         std::max(prices[i] - prices[i - 1], 0) at each step.
+//       - At i = 1 (1 - 7 = -6, add 0), i = 2 (5 - 1 = 4, profit = 4), and i = 3 (3
+//         - 5 = -2, add 0).
+//       - At i = 4 (6 - 3 = 3, profit = 7) and i = 5 (4 - 6 = -2, add 0), giving a
+//         final profit of 7.
+//
+//   Example 2:
+//     Input:  prices = [1, 2, 3, 4, 5]
+//     Output: 4
+//     Explanation:
+//       - Every adjacent step from i = 1 to 4 has a positive gain of +1 (2 - 1, 3 -
+//         2, 4 - 3, 5 - 4).
+//       - Accumulating these four daily increases telescopes to profit = 4,
+//         matching buying at 1 and selling at 5.
+//
+//   Example 3:
+//     Input:  prices = [7, 6, 4, 3, 1]
+//     Output: 0
+//     Explanation:
+//       - Each day-over-day difference (-1, -2, -1, -2) is negative, so
+//         std::max(diff, 0) contributes 0 on every iteration.
+//       - The accumulator stays at its initial value and returns 0.
+//
 // Algorithm:
 //   Greedy positive-slope accumulation. Because there are no transaction fees
 //   and you may sell and immediately re-buy on the same day, any rising

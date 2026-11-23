@@ -8,6 +8,37 @@
 //   enter that room. Return `true` if and only if every room `0..n-1` is
 //   reachable starting from room `0`.
 //
+// Examples:
+//   Example 1:
+//     Input:  rooms = [[1], [2], [3], []]
+//     Output: true
+//     Explanation:
+//       - Initialize visited = [0, 0, 0, 0] and visited_count = 0, then enter
+//         dfs(0) which sets visited[0] = 1 and visited_count = 1.
+//       - Follow key 1 to dfs(1) (visited_count = 2), key 2 to dfs(2)
+//         (visited_count = 3), and key 3 to dfs(3) (visited_count = 4).
+//       - Room 3 has no keys so DFS unwinds, and visited_count == 4 == rooms.size()
+//         returns true.
+//
+//   Example 2:
+//     Input:  rooms = [[1, 3], [3, 0, 1], [2], [0]]
+//     Output: false
+//     Explanation:
+//       - Enter dfs(0) (visited_count = 1), follow key 1 to dfs(1) (visited_count =
+//         2), and follow key 3 to dfs(3) (visited_count = 3).
+//       - From room 3, key 0 is skipped because visited[0] == 1; backtracking to
+//         rooms 1 and 0 also finds only already-visited keys 0, 1, and 3.
+//       - DFS finishes without ever reaching room 2, so visited_count = 3 != 4
+//         returns false.
+//
+//   Example 3:
+//     Input:  rooms = [[]]
+//     Output: true
+//     Explanation:
+//       - Call dfs(0), which sets visited[0] = 1 and increments visited_count to 1.
+//       - Room 0 contains no keys, so DFS terminates and visited_count == 1 ==
+//         rooms.size() returns true.
+//
 // Algorithm:
 //   Directed graph reachability via Depth-First Search (DFS). Model rooms as
 //   vertices and keys inside `rooms[i]` as directed edges `i -> key`. Start a

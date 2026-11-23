@@ -7,6 +7,49 @@
 //   of days you must wait after day `i` to encounter a strictly warmer
 //   temperature. If no future day is strictly warmer, set `answer[i] = 0`.
 //
+// Examples:
+//   Example 1:
+//     Input:  temperatures = [73, 74, 75, 71, 69, 72, 76, 73]
+//     Output: [1, 1, 4, 2, 1, 1, 0, 0]
+//     Explanation:
+//       - Scan right-to-left starting at index 7 (73): stack is empty so result[7]
+//         = 0, then push 7 (stack = [7]).
+//       - At index 6 (76): 76 >= 73 pops 7 leaving stack empty so result[6] = 0,
+//         then push 6 (stack = [6]).
+//       - At indices 5 (72), 4 (69), and 3 (71): index 5 sees 6 (result[5] = 1),
+//         index 4 sees 5 (result[4] = 1), and index 3 pops 4 (71 >= 69) to see 5
+//         (result[3] = 5 - 3 = 2), leaving stack = [6, 5, 3].
+//       - At index 2 (75): pop 3 (71) and 5 (72), then stack.back() = 6 (76) gives
+//         result[2] = 6 - 2 = 4 and stack becomes [6, 2].
+//       - At indices 1 (74) and 0 (73): index 1 sees 2 (result[1] = 1) and index 0
+//         sees 1 (result[0] = 1), returning [1, 1, 4, 2, 1, 1, 0, 0].
+//
+//   Example 2:
+//     Input:  temperatures = [73, 74, 75, 71, 69, 69, 72, 76, 73]
+//     Output: [1, 1, 5, 3, 2, 1, 1, 0, 0]
+//     Explanation:
+//       - Scan indices 8 (73), 7 (76), and 6 (72): result[8] = 0, index 7 pops 8 so
+//         result[7] = 0, and index 6 sees 7 so result[6] = 1 with stack = [7, 6].
+//       - At index 5 (69): stack.back() = 6 (72 > 69) gives result[5] = 6 - 5 = 1
+//         and stack becomes [7, 6, 5].
+//       - At index 4 (69): temperatures[4] >= temperatures[5] (69 >= 69) pops index
+//         5 so equal temperatures are skipped, giving result[4] = 6 - 4 = 2 and
+//         stack = [7, 6, 4].
+//       - Index 3 (71) pops 4 (result[3] = 3), index 2 (75) pops 3 and 6 (result[2]
+//         = 7 - 2 = 5), and indices 1 and 0 each wait 1 day, yielding [1, 1, 5, 3,
+//         2, 1, 1, 0, 0].
+//
+//   Example 3:
+//     Input:  temperatures = [90, 80, 70, 60]
+//     Output: [0, 0, 0, 0]
+//     Explanation:
+//       - At index 3 (60): stack is empty so result[3] = 0, then push 3 (stack =
+//         [3]).
+//       - At index 2 (70): 70 >= 60 pops 3 leaving stack empty so result[2] = 0,
+//         then push 2 (stack = [2]).
+//       - Index 1 (80) pops 2 and index 0 (90) pops 1, so every day sees an empty
+//         stack and returns [0, 0, 0, 0].
+//
 // Algorithm:
 //   Traverse `temperatures` from right to left (`n - 1` down to `0`) while
 //   maintaining a monotonic stack of future day indices whose temperatures are

@@ -8,6 +8,36 @@
 //   represents any single digit from '1' to '9' (never '0'). Return the total
 //   number of valid ways to decode `s`, modulo 10^9 + 7.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "1*"
+//     Output: 18
+//     Explanation:
+//       - Initialize prev2 = 1 and prev1 = waysSingle('1') = 1.
+//       - At i = 1 (s[1] = '*'), compute single_ways = waysSingle('*') * prev1 = 9
+//         * 1 = 9.
+//       - Compute pair_ways = waysPair('1', '*') * prev2 = 9 * 1 = 9 for
+//         "11".."19", then sum curr = (9 + 9) % kMod = 18.
+//
+//   Example 2:
+//     Input:  s = "**"
+//     Output: 96
+//     Explanation:
+//       - Initialize prev2 = 1 and prev1 = waysSingle('*') = 9.
+//       - At i = 1 (s[1] = '*'), single_ways = 9 * 9 = 81 and pair_ways =
+//         waysPair('*', '*') * 1 = 15 * 1 = 15 (for 11..19 and 21..26).
+//       - Sum curr = (81 + 15) % kMod = 96 and return prev1 = 96.
+//
+//   Example 3:
+//     Input:  s = "*0"
+//     Output: 2
+//     Explanation:
+//       - Initialize prev2 = 1 and prev1 = waysSingle('*') = 9.
+//       - At i = 1 (s[1] = '0'), single_ways = waysSingle('0') * 9 = 0 because '0'
+//         cannot be decoded alone.
+//       - Compute pair_ways = waysPair('*', '0') * prev2 = 2 * 1 = 2 (matching "10"
+//         and "20"), yielding curr = 2.
+//
 // Algorithm:
 //   Constant-space bottom-up dynamic programming scanning `s` left to right.
 //   Let dp[k] be the number of ways to decode the prefix `s[0..k)` modulo

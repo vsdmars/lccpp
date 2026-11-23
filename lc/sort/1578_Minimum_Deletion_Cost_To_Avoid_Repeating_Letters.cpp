@@ -9,6 +9,39 @@
 //   Constraints: s.length == cost.length, 1 <= s.length <= 10^5,
 //   1 <= cost[i] <= 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "abaac", cost = [1, 2, 3, 4, 5]
+//     Output: 3
+//     Explanation:
+//       - Initialize total_cost = 0 and max_in_run = cost[0] = 1, then reset
+//         max_in_run = 2 at i = 1 ('b') and max_in_run = 3 at i = 2 ('a') because
+//         s[i] != s[i - 1].
+//       - At i = 3, s[3] == s[2] == 'a', so pay min(3, 4) = 3 (total_cost = 3) and
+//         update max_in_run = max(3, 4) = 4.
+//       - At i = 4 ('c'), reset max_in_run = 5 and return total_cost = 3.
+//
+//   Example 2:
+//     Input:  s = "aabaa", cost = [1, 2, 3, 4, 1]
+//     Output: 2
+//     Explanation:
+//       - Start with total_cost = 0 and max_in_run = cost[0] = 1; at i = 1 ('a' ==
+//         'a'), add min(1, 2) = 1 to total_cost (1) and set max_in_run = 2.
+//       - Reset max_in_run = 3 at i = 2 ('b') and max_in_run = 4 at i = 3 ('a') as
+//         each starts a new character run.
+//       - At i = 4 ('a' == 'a'), add min(4, 1) = 1 to total_cost (2), keep
+//         max_in_run = 4, and return 2.
+//
+//   Example 3:
+//     Input:  s = "aaaaa", cost = [5, 1, 4, 2, 3]
+//     Output: 10
+//     Explanation:
+//       - Initialize total_cost = 0 and max_in_run = cost[0] = 5 for the first 'a'.
+//       - At i = 1 and i = 2, s[i] == 'a', so add min(5, 1) = 1 and min(5, 4) = 4
+//         (total_cost = 5) while max_in_run remains 5.
+//       - At i = 3 and i = 4, add min(5, 2) = 2 and min(5, 3) = 3, returning
+//         total_cost = 10 while retaining cost[0] = 5.
+//
 // Algorithm:
 //   Partition `s` conceptually into maximal contiguous runs of identical
 //   characters. Within any run of length k, at most one character may survive

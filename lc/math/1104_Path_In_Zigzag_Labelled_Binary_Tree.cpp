@@ -10,6 +10,46 @@
 //   (label 1) down to `label`.
 //   Constraints: 1 <= label <= 10^6.
 //
+// Examples:
+//   Example 1:
+//     Input:  label = 14
+//     Output: [1, 3, 4, 14]
+//     Explanation:
+//       - Compute level_start = std::bit_floor(14u) = 8 and start with current =
+//         14.
+//       - At level_start = 8 (level_end = 15), push 14 and compute parent (8 + (15
+//         - 14)) / 2 = 4, halving level_start to 4.
+//       - At level_start = 4 (level_end = 7), push 4 and compute parent (4 + (7 -
+//         4)) / 2 = 3, halving level_start to 2.
+//       - Push 3 at level_start = 2 (parent (2 + (3 - 3)) / 2 = 1) and 1 at
+//         level_start = 1, then reverse [14, 4, 3, 1] into [1, 3, 4, 14].
+//
+//   Example 2:
+//     Input:  label = 26
+//     Output: [1, 2, 6, 10, 26]
+//     Explanation:
+//       - Compute level_start = std::bit_floor(26u) = 16 and initialize current =
+//         26.
+//       - Push 26 at level_start = 16 (level_end = 31) and step to parent (16 + (31
+//         - 26)) / 2 = 10.
+//       - Push 10 at level_start = 8 (level_end = 15) to reach 6, then push 6 at
+//         level_start = 4 (level_end = 7) to reach 2.
+//       - Push 2 at level_start = 2 to reach 1, push 1 at level_start = 1, and
+//         reverse [26, 10, 6, 2, 1] to return [1, 2, 6, 10, 26].
+//
+//   Example 3:
+//     Input:  label = 8
+//     Output: [1, 2, 7, 8]
+//     Explanation:
+//       - Compute level_start = std::bit_floor(8u) = 8 for the power-of-two
+//         boundary label current = 8.
+//       - At level_start = 8 (level_end = 15), push 8 and reflect across the level
+//         to parent (8 + (15 - 8)) / 2 = 7.
+//       - Push 7 at level_start = 4 (level_end = 7) to get parent (4 + (7 - 7)) / 2
+//         = 2, then walk through 2 to root 1.
+//       - Reverse the collected bottom-up vector [8, 7, 2, 1] to return [1, 2, 7,
+//         8].
+//
 // Algorithm:
 //   Bottom-up parent inversion using binary-tree power-of-two level bounds.
 //   Row d (0-indexed from the root) always contains the exact contiguous range

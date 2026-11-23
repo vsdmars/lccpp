@@ -7,6 +7,46 @@
 //   that every integer in the closed interval [1, n] can be formed as the sum
 //   of some subset of elements in the array.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 3], n = 6
+//     Output: 1
+//     Explanation:
+//       - Initialize missing = 1, index = 0, and patches = 0 (achievable range is
+//         [1, 1)).
+//       - At missing = 1 <= 6, nums[0] = 1 <= 1, so consume it to advance missing =
+//         2 and index = 1 (covering [1, 2)).
+//       - At missing = 2 <= 6, nums[1] = 3 > 2, so patch 2: increment patches to 1
+//         and double missing to 4 (covering [1, 4)).
+//       - At missing = 4 <= 6, nums[1] = 3 <= 4, so consume 3 to reach missing = 7
+//         and index = 2 (covering [1, 7)).
+//       - Since missing = 7 > 6, the loop terminates and returns patches = 1.
+//
+//   Example 2:
+//     Input:  nums = [1, 5, 10], n = 20
+//     Output: 2
+//     Explanation:
+//       - Initialize missing = 1, index = 0, and patches = 0.
+//       - At missing = 1, consume nums[0] = 1 so missing = 2 and index = 1.
+//       - At missing = 2 and then missing = 4, nums[1] = 5 exceeds missing, so
+//         patch 2 (missing = 4, patches = 1) and then patch 4 (missing = 8, patches
+//         = 2).
+//       - At missing = 8, consume nums[1] = 5 to reach missing = 13 (index = 2); at
+//         missing = 13, consume nums[2] = 10 to reach missing = 23 (index = 3).
+//       - Now missing = 23 > 20, so exit the loop and return patches = 2.
+//
+//   Example 3:
+//     Input:  nums = [], n = 7
+//     Output: 3
+//     Explanation:
+//       - Initialize missing = 1, index = 0, and patches = 0 with an empty nums
+//         vector.
+//       - Because index < nums.size() is always false, each iteration takes the
+//         patch branch: patch 1 (missing = 2, patches = 1), patch 2 (missing = 4,
+//         patches = 2), and patch 4 (missing = 8, patches = 3).
+//       - Once missing = 8 > 7, all sums in [1, 7] are covered and the function
+//         returns 3.
+//
 // Algorithm:
 //   Maintain the greedy reach invariant: `missing` is the smallest positive
 //   integer not yet guaranteed to be formable, meaning every sum in the

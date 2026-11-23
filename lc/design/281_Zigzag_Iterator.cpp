@@ -7,6 +7,47 @@
 //   5, 6]). Follow-up: generalize cleanly to `k` 1D vectors traversed in
 //   cyclic round-robin order.
 //
+// Examples:
+//   Example 1:
+//     Input:  v1 = [1, 2], v2 = [3, 4, 5, 6], iterate while hasNext()
+//     Output: [1, 3, 2, 4, 5, 6]
+//     Explanation:
+//       - Construction stores `vectors_ = [[1, 2], [3, 4, 5, 6]]` and pushes
+//         initial cursors `(0, 0)` and `(1, 0)` into `active_`.
+//       - The first two `next()` calls pop `(0, 0)` to yield `1` (re-enqueuing `(0,
+//         1)`) and `(1, 0)` to yield `3` (re-enqueuing `(1, 1)`).
+//       - The third `next()` pops `(0, 1)` to yield `2` and drops vector `0`
+//         because `elem_idx + 1 = 2 == vectors_[0].size()`.
+//       - The remaining calls pop `(1, 1)`, `(1, 2)`, and `(1, 3)` in order,
+//         yielding `4`, `5`, and `6` before `active_` becomes empty and `hasNext()`
+//         returns `false`.
+//
+//   Example 2:
+//     Input:  vectors = [[1, 2, 3], [4, 5, 6, 7], [8, 9]], iterate while hasNext()
+//     Output: [1, 4, 8, 2, 5, 9, 3, 6, 7]
+//     Explanation:
+//       - Construction enqueues `(0, 0)`, `(1, 0)`, and `(2, 0)` into `active_` for
+//         the three non-empty vectors.
+//       - Round 1 pops each front cursor to yield `1`, `4`, and `8`, re-enqueuing
+//         `(0, 1)`, `(1, 1)`, and `(2, 1)`.
+//       - Round 2 yields `2`, `5`, and `9`, re-enqueuing `(0, 2)` and `(1, 2)`
+//         while dropping vector `2` since `elem_idx + 1 = 2 == vectors_[2].size()`.
+//       - Round 3 yields `3` (dropping vector `0`) and `6` (re-enqueuing `(1, 3)`),
+//         and the final `next()` pops `(1, 3)` to yield `7` until `active_` is
+//         empty.
+//
+//   Example 3:
+//     Input:  vectors = [[], [10, 20], [], [30], []], iterate while hasNext()
+//     Output: [10, 30, 20]
+//     Explanation:
+//       - The constructor skips empty rows `0`, `2`, and `4`, enqueuing only `(1,
+//         0)` and `(3, 0)` into `active_`.
+//       - The first `next()` pops `(1, 0)` to yield `10` and pushes `(1, 1)` to the
+//         back of `active_`.
+//       - The second `next()` pops `(3, 0)` to yield `30` (dropping exhausted
+//         vector `3`), and the final `next()` pops `(1, 1)` to yield `20` before
+//         `active_` becomes empty.
+//
 // Algorithm:
 //   Round-Robin Queue of Active Vector Cursors:
 //   - Store the input vectors in `vectors_` and push a cursor

@@ -6,6 +6,39 @@
 //   node of the list. If the list has an even number of nodes (hence two
 //   middle nodes), return the second middle node.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3, 4, 5]
+//     Output: [3, 4, 5] (node with val = 3)
+//     Explanation:
+//       - Initialize slow = head and fast = head at node 1 (index 0).
+//       - Iteration 1: fast (1) and fast->next (2) are non-null, so slow moves to
+//         node 2 (index 1) and fast moves to node 3 (index 2).
+//       - Iteration 2: fast (3) and fast->next (4) are non-null, so slow moves to
+//         node 3 (index 2) and fast moves to node 5 (index 4).
+//       - Stop because fast->next is nullptr at node 5, and return slow pointing to
+//         node 3 ([3, 4, 5]).
+//
+//   Example 2:
+//     Input:  head = [1, 2, 3, 4, 5, 6]
+//     Output: [4, 5, 6] (node with val = 4)
+//     Explanation:
+//       - Initialize slow = head and fast = head at node 1 (index 0).
+//       - After iteration 1 slow is at node 2 and fast is at node 3; after
+//         iteration 2 slow is at node 3 and fast is at node 5.
+//       - Iteration 3: fast (5) and fast->next (6) are non-null, so slow advances
+//         to node 4 (index 3) and fast advances to nullptr.
+//       - Stop because fast == nullptr, returning slow at the second middle node 4
+//         ([4, 5, 6]).
+//
+//   Example 3:
+//     Input:  head = [7]
+//     Output: [7] (node with val = 7)
+//     Explanation:
+//       - Initialize slow = head and fast = head at node 7.
+//       - Skip the while loop immediately because fast->next == nullptr.
+//       - Return slow pointing to node 7 ([7]).
+//
 // Algorithm:
 //   Floyd's slow-and-fast two-pointer traversal (tortoise and hare):
 //   1. Initialize both `slow` and `fast` at `head`.

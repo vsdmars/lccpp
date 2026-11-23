@@ -8,6 +8,44 @@
 //   steps outside the grid boundary, keep walking outside until it re-enters.
 //   Return the list of all `rows * cols` grid coordinates in the order visited.
 //
+// Examples:
+//   Example 1:
+//     Input:  rows = 1, cols = 4, rStart = 0, cStart = 0
+//     Output: [[0, 0], [0, 1], [0, 2], [0, 3]]
+//     Explanation:
+//       - Initialize total_cells = 4, position (r, c) = (0, 0), east direction (dr,
+//         dc) = (0, 1), and turn = 0.
+//       - Leg turn = 0 (length 1 east) records [0, 0] and moves to (0, 1); leg turn
+//         = 1 (length 1 south) records [0, 1] and steps out of bounds to (1, 1).
+//       - Legs turn = 2..4 walk outside the 1 x 4 grid through (1, 0), (1, -1), (0,
+//         -1), and (-1, -1..1); leg turn = 5 (length 3 south) re-enters at (0, 2)
+//         to record [0, 2].
+//       - Legs turn = 6..8 sweep around the bottom and left back to (-2, 3), and
+//         leg turn = 9 (length 5 south) hits (0, 3) to record [0, 3], reaching
+//         visited.size() == 4 and returning.
+//
+//   Example 2:
+//     Input:  rows = 2, cols = 2, rStart = 0, cStart = 0
+//     Output: [[0, 0], [0, 1], [1, 1], [1, 0]]
+//     Explanation:
+//       - Initialize total_cells = 4 at (0, 0) facing east (0, 1) with turn = 0.
+//       - Leg turn = 0 (length 1 east) records [0, 0], advances to (0, 1), and
+//         rotates clockwise to south (1, 0).
+//       - Leg turn = 1 (length 1 south) records [0, 1], advances to (1, 1), and
+//         rotates clockwise to west (0, -1).
+//       - Leg turn = 2 (length 2 west) records [1, 1] at step 0 and [1, 0] at step
+//         1, filling all 4 cells and terminating the loop.
+//
+//   Example 3:
+//     Input:  rows = 1, cols = 1, rStart = 0, cStart = 0
+//     Output: [[0, 0]]
+//     Explanation:
+//       - Compute total_cells = 1 and start at (0, 0) with visited empty.
+//       - In the first step of leg turn = 0 (length 1), (0, 0) is inside [0, 1) x
+//         [0, 1), so [0, 0] is pushed into visited.
+//       - The loop terminates immediately since visited.size() == 1 == total_cells,
+//         returning [[0, 0]].
+//
 // Algorithm:
 //   Simulate the expanding clockwise spiral directly:
 //   - The spiral leg lengths follow the sequence 1, 1, 2, 2, 3, 3, 4, 4, ...

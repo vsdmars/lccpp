@@ -7,6 +7,38 @@
 //   binary tree, every level except possibly the last is completely filled, and
 //   all nodes on the last level are positioned as far left as possible.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, 4, 5, 6]
+//     Output: 6
+//     Explanation:
+//       - At root 1, left_spine_depth(2) walks 2 -> 4 (left_depth = 2) and
+//         left_spine_depth(3) walks 3 -> 6 (right_depth = 2).
+//       - Because left_depth == right_depth == 2, the left subtree is perfect with
+//         2^2 - 1 = 3 nodes, so countNodes adds (1 << 2) = 4 (left subtree plus
+//         root) and recurses on node 3.
+//       - At node 3, left_depth = 1 (node 6) exceeds right_depth = 0 (nullptr),
+//         adding (1 << 0) = 1 plus countNodes(6) = 1 for a total of 4 + 1 + 1 = 6.
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, 4, 5, 6, 7, 8]
+//     Output: 8
+//     Explanation:
+//       - At root 1, left_spine_depth(2) walks 2 -> 4 -> 8 (left_depth = 3) while
+//         left_spine_depth(3) walks 3 -> 6 (right_depth = 2).
+//       - Because left_depth > right_depth, the right subtree is perfect with 2^2 -
+//         1 = 3 nodes, contributing (1 << 2) = 4 and recursing into node 2.
+//       - At node 2 (left_depth = 2, right_depth = 1), countNodes adds (1 << 1) = 2
+//         and recurses to node 4, which adds (1 << 0) + countNodes(8) = 1 + 1 = 2,
+//         totaling 4 + 2 + 2 = 8.
+//
+//   Example 3:
+//     Input:  root = [] (nullptr)
+//     Output: 0
+//     Explanation:
+//       - countNodes checks the base case root == nullptr immediately on entry.
+//       - It returns 0 without walking any spine pointers.
+//
 // Algorithm:
 //   Exploit the structural invariant of complete binary trees by comparing the
 //   leftmost depth of the left subtree (`left_depth`) with the leftmost depth

@@ -8,6 +8,44 @@
 //   longest contiguous substring containing only a single repeating letter
 //   achievable after at most k replacements.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "ABAB", k = 2
+//     Output: 4
+//     Explanation:
+//       - For right = 0..1 ("AB"), counts['A'] = 1, counts['B'] = 1, max_freq = 1,
+//         and window_len = 2 <= 1 + 2.
+//       - At right = 2 ('A'), counts['A'] = 2 updates max_freq = 2 with window_len
+//         = 3 <= 2 + 2.
+//       - At right = 3 ('B'), counts['B'] = 2 keeps max_freq = 2 and window_len = 4
+//         <= 4, so left stays 0 and the result is 4 - 0 = 4.
+//
+//   Example 2:
+//     Input:  s = "AABABBA", k = 1
+//     Output: 4
+//     Explanation:
+//       - Across right = 0..3 ("AABA"), counts['A'] reaches 3 so max_freq = 3 and
+//         window_len = 4 <= 3 + 1 keeps left = 0.
+//       - At right = 4 ('B'), window_len = 5 > 3 + 1, so decrement counts['A'] for
+//         s[0] and advance left to 1 (window "ABAB").
+//       - At right = 5 ('B') and right = 6 ('A'), counts['B'] reaches 3 (keeping
+//         max_freq = 3) while each step exceeds 3 + 1 and shifts left to 2 and then
+//         3.
+//       - Return s.size() - left = 7 - 3 = 4.
+//
+//   Example 3:
+//     Input:  s = "AABBBAA", k = 0
+//     Output: 3
+//     Explanation:
+//       - Across right = 0..1 ("AA"), counts['A'] = 2 sets max_freq = 2 and
+//         window_len = 2 <= 2 + 0.
+//       - At right = 2..3 ("BB"), window_len = 3 > 2 + 0 shifts left twice to 2
+//         while counts['B'] climbs to 2.
+//       - At right = 4 ('B'), counts['B'] = 3 sets max_freq = 3 with window_len = 3
+//         <= 3 + 0 on [2..4] ("BBB").
+//       - At right = 5..6 ("AA"), window_len = 4 > 3 + 0 shifts left to 3 and then
+//         4, returning 7 - 4 = 3.
+//
 // Algorithm:
 //   Maintain a sliding window [left, right], character frequencies inside the
 //   window (`counts[26]`), and `max_freq`, the maximum frequency of any single

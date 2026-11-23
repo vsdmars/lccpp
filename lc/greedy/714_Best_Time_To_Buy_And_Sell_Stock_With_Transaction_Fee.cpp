@@ -8,6 +8,44 @@
 //   may complete as many transactions as you like, but you may hold at most one
 //   share at a time (you must sell before buying again).
 //
+// Examples:
+//   Example 1:
+//     Input:  prices = [1, 3, 2, 8, 4, 9], fee = 2
+//     Output: 8
+//     Explanation:
+//       - Initialize hold = -1 (buy at prices[0] = 1) and cash = 0 on day 0.
+//       - On days 1 and 2 (prices 3 and 2), neither selling nor rebuying improves
+//         cash, so hold stays -1 and cash stays 0.
+//       - On day 3 (price = 8), next_cash = max(0, (-1 + 8) - 2) = 5, updating cash
+//         = 5 while hold remains -1.
+//       - On day 4 (price = 4), next_hold = max(-1, 5 - 4) = 1 (rebuy at 4 using
+//         cash 5), while cash stays 5.
+//       - On day 5 (price = 9), next_cash = max(5, (1 + 9) - 2) = 8, and return
+//         final cash = 8.
+//
+//   Example 2:
+//     Input:  prices = [1, 3, 7, 5, 10, 3], fee = 3
+//     Output: 6
+//     Explanation:
+//       - Initialize hold = -1 and cash = 0 on day 0 (price = 1).
+//       - On day 1 (price = 3), hold stays -1 and cash stays 0; on day 2 (price =
+//         7), cash updates to max(0, (-1 + 7) - 3) = 3.
+//       - On day 3 (price = 5), rebuying gives 3 - 5 = -2 < -1, so hold stays -1
+//         (preserving the day-0 purchase) and cash stays 3.
+//       - On day 4 (price = 10), next_cash = max(3, (-1 + 10) - 3) = 6, beating the
+//         split-trade profit of 5.
+//       - On day 5 (price = 3), next_hold updates to max(-1, 6 - 3) = 3 while cash
+//         remains 6, returning 6.
+//
+//   Example 3:
+//     Input:  prices = [9, 7, 5, 3, 1], fee = 1
+//     Output: 0
+//     Explanation:
+//       - Initialize hold = -9 and cash = 0 on day 0 (price = 9).
+//       - On each falling day (prices 7, 5, 3, 1), cash - price improves hold
+//         through -7, -5, -3, and -1, while (hold + price) - fee stays -3 < 0.
+//       - Since cash never rises above 0, return 0.
+//
 // Algorithm:
 //   Use a two-state space-optimized dynamic programming / greedy state machine
 //   tracking the best net profit at the end of each day `i`:

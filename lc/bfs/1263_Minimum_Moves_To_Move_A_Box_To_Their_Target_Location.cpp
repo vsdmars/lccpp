@@ -9,6 +9,52 @@
 //   non-wall cells, cannot walk through the box, and pushes the box one cell
 //   forward by standing on the opposite adjacent cell.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [["#","#","#","#","#","#"], ["#","T","#","#","#","#"],
+//             ["#",".",".","B",".","#"], ["#",".","#","#",".","#"],
+//             ["#",".",".",".","S","#"], ["#","#","#","#","#","#"]]
+//     Output: 3
+//     Explanation:
+//       - Locate box_start = (2, 3), player_start = (4, 4), and target = (1, 1),
+//         and enqueue initial state (pushes=0, player=(4, 4), box=(2, 3)).
+//       - From (2, 3), inner BFS can_reach confirms the player can walk from (4, 4)
+//         through (3, 4) to push_from = (2, 4), pushing the box left to (2, 2) and
+//         queueing (pushes=1, player=(2, 3), box=(2, 2)).
+//       - From box = (2, 2) and player = (2, 3), the player pushes left directly
+//         from (2, 3), queueing (pushes=2, player=(2, 2), box=(2, 1)).
+//       - From box = (2, 1) and player = (2, 2), can_reach routes the player around
+//         via (2, 4) -> (4, 4) -> (4, 1) -> (3, 1) to push the box up onto target
+//         (1, 1), returning pushes = 3 when popped.
+//
+//   Example 2:
+//     Input:  grid = [["#","#","#","#","#","#"], ["#","T","#","#","#","#"],
+//             ["#",".",".","B",".","#"], ["#","#","#","#",".","#"],
+//             ["#",".",".",".","S","#"], ["#","#","#","#","#","#"]]
+//     Output: -1
+//     Explanation:
+//       - Locate box_start = (2, 3), player_start = (4, 4), and target = (1, 1),
+//         and enqueue (pushes=0, player=(4, 4), box=(2, 3)).
+//       - The player walks up through (3, 4) to (2, 4) and pushes the box left to
+//         (2, 2) (pushes=1) and then to (2, 1) (pushes=2, player=(2, 2)).
+//       - Pushing the box up from (2, 1) into T = (1, 1) requires standing at
+//         push_from = (3, 1), which is a wall '#', and row 3's walls block any path
+//         around the box to push it back right.
+//       - No unvisited (next_box, dir) transitions remain, so the outer BFS queue
+//         drains and returns -1.
+//
+//   Example 3:
+//     Input:  grid = [["S", "B", "T"]]
+//     Output: 1
+//     Explanation:
+//       - Locate player_start = (0, 0), box_start = (0, 1), and target = (0, 2),
+//         and enqueue (pushes=0, player=(0, 0), box=(0, 1)).
+//       - Test pushing right along (0, 1): next_box = (0, 2) and push_from = (0, 0)
+//         are open, and can_reach returns true immediately because curr.player ==
+//         push_from.
+//       - Enqueue (pushes=1, player=(0, 1), box=(0, 2)); popping it finds curr.box
+//         == target == (0, 2) and returns 1.
+//
 // Algorithm:
 //   Nested BFS (state-space BFS with an inner reachability BFS):
 //   - Outer BFS explores states (box_pos, player_pos) level by level where

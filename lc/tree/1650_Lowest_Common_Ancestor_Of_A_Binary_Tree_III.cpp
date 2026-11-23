@@ -9,6 +9,44 @@
 //   values are unique, `p != q`, and both `p` and `q` exist in the tree (with
 //   between 2 and 10^5 nodes).
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4] (with parent
+//             pointers), p = 5, q = 1
+//     Output: 3 (Node with val 3)
+//     Explanation:
+//       - Hash-set lowestCommonAncestor climbs parent links from p = 5 (5 -> 3 ->
+//         nullptr), recording ancestors = {5, 3}.
+//       - Climbing from q = 1 checks node 1 (not in ancestors) and then parent 3
+//         (present in ancestors), returning node 3.
+//       - Equivalently, the two-pointer variant steps a from 5 to 3 and b from 1 to
+//         3 in one hop each, converging at node 3.
+//
+//   Example 2:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4] (with parent
+//             pointers), p = 5, q = 4
+//     Output: 5 (Node with val 5)
+//     Explanation:
+//       - Climbing from p = 5 populates ancestors = {5, 3}, treating p as an
+//         ancestor of itself.
+//       - Climbing from q = 4 tests 4 (miss), 2 (miss), and 5 (hit in ancestors),
+//         returning node 5.
+//       - In the two-stack variant, q_path = [3, 5, 2, 4] is trimmed to length 2
+//         ([3, 5]) to match p_path = [3, 5], immediately yielding 5.
+//
+//   Example 3:
+//     Input:  tree1 = [10, 11], tree2 = [20] (disjoint parent-linked trees), p =
+//             11, q = 20
+//     Output: nullptr
+//     Explanation:
+//       - Climbing from p = 11 inserts {11, 10} into ancestors until reaching r1's
+//         parent nullptr.
+//       - Climbing from q = 20 checks node 20 and reaches nullptr without finding
+//         any intersection in ancestors, returning nullptr.
+//       - In the two-pointer variant, a traverses 11 -> 10 -> nullptr -> 20 ->
+//         nullptr while b traverses 20 -> nullptr -> 11 -> 10 -> nullptr,
+//         terminating when both equal nullptr.
+//
 // Algorithm:
 //   Because every node exposes its `parent` pointer, each node defines a
 //   singly linked chain upward to the root, turning LCA into finding the first

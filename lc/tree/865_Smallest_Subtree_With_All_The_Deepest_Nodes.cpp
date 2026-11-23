@@ -7,6 +7,42 @@
 //   depth in the entire tree. Return the root of the smallest (i.e., deepest)
 //   subtree that contains all of the deepest nodes in the tree.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4]
+//     Output: [2, 7, 4] (node 2)
+//     Explanation:
+//       - Post-order DFS visits leaves 6, 7, 4, 0, and 8; each has left and right
+//         depth 0, so each returns {depth: 1, lca: itself}.
+//       - At node 2, left is {1, node 7} and right is {1, node 4}; equal depths (1
+//         == 1) promote node 2 as LCA, returning {2, node 2}.
+//       - At node 5, left is {1, node 6} and right is {2, node 2}; since
+//         right.depth > left.depth (2 > 1), it propagates {3, node 2}.
+//       - At node 1, left {1, node 0} and right {1, node 8} tie in depth, returning
+//         {2, node 1}.
+//       - At root 3, left {3, node 2} is deeper than right {2, node 1} (3 > 2), so
+//         dfs(root) returns {4, node 2} with subtree [2, 7, 4].
+//
+//   Example 2:
+//     Input:  root = [0, 1, 3, null, 2]
+//     Output: [2] (node 2)
+//     Explanation:
+//       - Leaf node 2 returns {depth: 1, lca: node 2} because both null children
+//         return depth 0.
+//       - At node 1, left is {0, nullptr} and right is {1, node 2}; since
+//         right.depth > left.depth (1 > 0), node 1 returns {2, node 2}.
+//       - At root 0, left {2, node 2} outweighs leaf right {1, node 3} (2 > 1), so
+//         dfs(root) returns node 2.
+//
+//   Example 3:
+//     Input:  root = [1]
+//     Output: [1] (node 1)
+//     Explanation:
+//       - dfs(root) recurses onto root->left == nullptr and root->right == nullptr,
+//         each returning {depth: 0, lca: nullptr}.
+//       - Because left.depth == right.depth (0 == 0), node 1 returns {depth: 1,
+//         lca: node 1}, so subtreeWithAllDeepest returns root.
+//
 // Algorithm:
 //   Perform a single bottom-up post-order DFS returning a `(height, lca)` pair
 //   for each subtree:

@@ -8,6 +8,38 @@
 //   string of the words in reverse order concatenated by a single space, with
 //   no leading or trailing spaces.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "the sky is blue"
+//     Output: "blue is sky the"
+//     Explanation:
+//       - Scanning right-to-left from `i = 15`, no trailing spaces exist, so the
+//         word slice `[11, 15)` (`"blue"`) is appended to `result`.
+//       - Skipping the space at index `10`, slice `[8, 10)` (`"is"`) is appended
+//         after a single `' '` so `result = "blue is"`.
+//       - Continuing left past spaces at indices `7` and `3`, slices `[4, 7)`
+//         (`"sky"`) and `[0, 3)` (`"the"`) are appended to return `"blue is sky
+//         the"`.
+//
+//   Example 2:
+//     Input:  s = "   a   b "
+//     Output: "b a"
+//     Explanation:
+//       - Starting at `i = 9`, skip the trailing space at index `8` and append word
+//         slice `[7, 8)` (`"b"`) to `result`.
+//       - Skip the three spaces at indices `6`, `5`, and `4`, then append `' '`
+//         followed by slice `[3, 4)` (`"a"`) so `result = "b a"`.
+//       - Skip the remaining leading spaces at indices `2`, `1`, and `0` until `i
+//         == 0`, exiting the loop and returning `"b a"`.
+//
+//   Example 3:
+//     Input:  s = "     "
+//     Output: ""
+//     Explanation:
+//       - Starting at `i = 5`, the inner space-skipping loop decrements `i` across
+//         all five spaces until `i == 0`.
+//       - Seeing `i == 0`, the outer loop breaks immediately and returns `""`.
+//
 // Algorithm:
 //   Scan `s` from right to left using a single cursor index `i`:
 //   1. Skip any contiguous space characters before `i`.

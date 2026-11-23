@@ -7,6 +7,39 @@
 //   non-degenerate triangle (each side strictly smaller than the sum of the
 //   other two).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 3, 5, 4]
+//     Output: 3
+//     Explanation:
+//       - Sort a local copy to sorted = [2, 3, 4, 5].
+//       - Fix k = 3 (sorted[3] = 5): with left = 0 and right = 2, 2 + 4 > 5 adds
+//         right - left = 2 and sets right = 1; then 2 + 3 <= 5 advances left to 1
+//         (count = 2).
+//       - Fix k = 2 (sorted[2] = 4): with left = 0 and right = 1, 2 + 3 > 4 adds
+//         right - left = 1 and sets right = 0, returning count = 3.
+//
+//   Example 2:
+//     Input:  nums = [2, 2, 3, 4]
+//     Output: 3
+//     Explanation:
+//       - Use the already sorted copy sorted = [2, 2, 3, 4].
+//       - Fix k = 3 (sorted[3] = 4): left = 0, right = 2 satisfies 2 + 3 > 4 to add
+//         2 triplets and decrement right to 1, then 2 + 2 <= 4 increments left to 1
+//         (count = 2).
+//       - Fix k = 2 (sorted[2] = 3): left = 0, right = 1 satisfies 2 + 2 > 3 to add
+//         1 triplet and decrement right to 0, returning count = 3.
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 3, 6, 10]
+//     Output: 0
+//     Explanation:
+//       - Keep the sorted copy sorted = [1, 2, 3, 6, 10] and start with count = 0.
+//       - For k = 4 (10), even the largest pair 3 + 6 = 9 <= 10 advances left to
+//         right = 3 without adding any triplets.
+//       - For k = 3 (6) with max pair 2 + 3 <= 6 and k = 2 (3) with 1 + 2 <= 3,
+//         every check fails strict inequality, returning 0.
+//
 // Algorithm:
 //   Sort a copy of `nums` in non-decreasing order. When three sides satisfy
 //   `a <= b <= c`, the three triangle inequalities reduce to the single check

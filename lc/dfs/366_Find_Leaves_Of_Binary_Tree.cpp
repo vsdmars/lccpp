@@ -7,6 +7,40 @@
 //   empty. Return a list of lists where index `i` contains the values of nodes
 //   removed in round `i`.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, 4, 5]
+//     Output: [[4, 5, 3], [2], [1]]
+//     Explanation:
+//       - Post-order DFS visits leaves 4 and 5 first; both have null children
+//         returning -1, so each gets height = 1 + max(-1, -1) = 0 and enters
+//         layers[0].
+//       - Unwinding to node 2 with left_h = 0 and right_h = 0 gives height = 1 +
+//         max(0, 0) = 1, placing 2 into layers[1].
+//       - Visiting root->right (node 3) yields height = 0 and appends 3 to
+//         layers[0], making layers[0] = [4, 5, 3].
+//       - At root 1, left_h = 1 and right_h = 0 give height = 1 + max(1, 0) = 2,
+//         placing 1 into layers[2] and returning [[4, 5, 3], [2], [1]].
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, 4, null, null, null, 6]
+//     Output: [[6, 3], [4], [2], [1]]
+//     Explanation:
+//       - Post-order traversal down the left spine assigns height 0 to leaf 6,
+//         height 1 to node 4, and height 2 to node 2, populating layers[0..2].
+//       - Visiting the right child 3 computes height = 0, appending 3 into
+//         layers[0] alongside 6 despite their different depths from the root.
+//       - At root 1, height = 1 + max(2, 0) = 3 appends 1 into layers[3], yielding
+//         [[6, 3], [4], [2], [1]].
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: []
+//     Explanation:
+//       - computeHeight(nullptr) immediately returns -1 without appending to
+//         layers.
+//       - findLeaves returns the empty layers vector [].
+//
 // Algorithm:
 //   Single-pass post-order DFS computing each node's bottom-up height from the
 //   deepest leaf in its subtree:

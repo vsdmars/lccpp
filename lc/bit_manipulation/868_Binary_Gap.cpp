@@ -8,6 +8,40 @@
 //   their distance is the absolute difference between their bit positions.
 //   If n contains fewer than two 1-bits, return 0.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 22
+//     Output: 2
+//     Explanation:
+//       - Initialize value = 22 (10110_2), last_one = -1, bit_pos = 0, and max_gap
+//         = 0; at bit_pos = 0 the LSB is 0, so value shifts to 11.
+//       - At bit_pos = 1 (value = 11), the first 1-bit is seen with last_one == -1,
+//         setting last_one = 1 without changing max_gap.
+//       - At bit_pos = 2 (value = 5), another 1-bit updates max_gap = max(0, 2 - 1)
+//         = 1 and sets last_one = 2.
+//       - After skipping the 0-bit at bit_pos = 3 (value = 2), bit_pos = 4 (value =
+//         1) finds the final 1-bit, updating max_gap = max(1, 4 - 2) = 2 before
+//         value shifts to 0 and returns 2.
+//
+//   Example 2:
+//     Input:  n = 9
+//     Output: 3
+//     Explanation:
+//       - At bit_pos = 0 of value = 9 (1001_2), the LSB is 1 and last_one == -1, so
+//         last_one is set to 0.
+//       - Shifting past the 0-bits at bit_pos = 1 and 2 reaches bit_pos = 3 (value
+//         = 1), where the next 1-bit updates max_gap = max(0, 3 - 0) = 3 and
+//         returns 3.
+//
+//   Example 3:
+//     Input:  n = 8
+//     Output: 0
+//     Explanation:
+//       - For value = 8 (1000_2), bit positions 0, 1, and 2 all have LSB 0, leaving
+//         last_one = -1 and max_gap = 0.
+//       - At bit_pos = 3 (value = 1), the single 1-bit sees last_one == -1, so
+//         max_gap stays 0, last_one becomes 3, and the loop finishes returning 0.
+//
 // Algorithm:
 //   Scan the bits of n from least significant to most significant while
 //   tracking the current bit index (bit_pos) and the index of the most

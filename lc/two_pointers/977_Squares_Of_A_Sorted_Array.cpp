@@ -7,6 +7,45 @@
 //   each element, also sorted in non-decreasing order.
 //   Constraints: 1 <= nums.length <= 10^4, -10^4 <= nums[i] <= 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [-4, -1, 0, 3, 10]
+//     Output: [0, 1, 9, 16, 100]
+//     Explanation:
+//       - Allocate result of size 5 and initialize left = 0, right = 5, and write =
+//         5.
+//       - At write = 4, compare (-4)^2 = 16 and 10^2 = 100; place 100 at result[4]
+//         and decrement right to 4.
+//       - At write = 3, compare (-4)^2 = 16 and 3^2 = 9; place 16 at result[3] and
+//         increment left to 1.
+//       - At write = 2, compare (-1)^2 = 1 and 3^2 = 9; place 9 at result[2] and
+//         decrement right to 3.
+//       - At write = 1, compare (-1)^2 = 1 and 0^2 = 0; place 1 at result[1] and
+//         increment left to 2.
+//       - At write = 0 (left = 2, right = 3), 0 > 0 is false, so write 0 at
+//         result[0], decrement right to 2, and return [0, 1, 9, 16, 100].
+//
+//   Example 2:
+//     Input:  nums = [-5, -3, -2, -1]
+//     Output: [1, 4, 9, 25]
+//     Explanation:
+//       - Allocate result of size 4 and initialize left = 0, right = 4, and write =
+//         4.
+//       - For write = 3, 2, and 1, left_sq exceeds right_sq (25 > 1, 9 > 1, and 4 >
+//         1), so 25, 9, and 4 are written to result[3..1] as left advances to 3.
+//       - At write = 0 (left = 3, right = 4), left_sq == right_sq == 1 so (-1)^2 =
+//         1 is placed at result[0], right becomes 3, and [1, 4, 9, 25] is returned.
+//
+//   Example 3:
+//     Input:  nums = [-10000]
+//     Output: [100000000]
+//     Explanation:
+//       - Allocate result of size 1 with left = 0, right = 1, and write = 1.
+//       - On the single iteration (write = 0), left_sq and right_sq both equal
+//         (-10000)^2 = 100000000; left_sq > right_sq is false, so result[0]
+//         receives 100000000 and right decrements to 0.
+//       - The loop ends with left == right == 0 and returns [100000000].
+//
 // Algorithm:
 //   Converging two pointers filling the output from back to front:
 //   - Because `nums` is sorted, the squares form a V-shaped (unimodal) sequence

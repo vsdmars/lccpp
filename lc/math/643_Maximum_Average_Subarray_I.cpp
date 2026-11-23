@@ -7,6 +7,39 @@
 //   and return that maximum average as a floating-point number.
 //   Constraints: 1 <= k <= n <= 10^5, -10^4 <= nums[i] <= 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 12, -5, -6, 50, 3], k = 4
+//     Output: 12.75
+//     Explanation:
+//       - Sum the initial window nums[0..3] = [1, 12, -5, -6] to get window_sum = 2
+//         and max_sum = 2.
+//       - At i = 4, add nums[4] = 50 and subtract nums[0] = 1 so window_sum becomes
+//         51 and max_sum updates to 51.
+//       - At i = 5, add nums[5] = 3 and subtract nums[1] = 12 so window_sum becomes
+//         42 while max_sum stays 51.
+//       - Divide max_sum by k = 4 once at the end to return 51.0 / 4.0 = 12.75.
+//
+//   Example 2:
+//     Input:  nums = [-1, -2, -3, -4], k = 2
+//     Output: -1.5
+//     Explanation:
+//       - Sum the initial window nums[0..1] = [-1, -2] to initialize window_sum =
+//         -3 and max_sum = -3.
+//       - Slide to i = 2 (window [-2, -3]): window_sum = -3 + (-3) - (-1) = -5,
+//         keeping max_sum = -3.
+//       - Slide to i = 3 (window [-3, -4]): window_sum = -5 + (-4) - (-2) = -7,
+//         keeping max_sum = -3 and returning -3.0 / 2.0 = -1.5.
+//
+//   Example 3:
+//     Input:  nums = [4, 2, 1, 3, 3], k = 5
+//     Output: 2.6
+//     Explanation:
+//       - Sum the initial window nums[0..4] = [4, 2, 1, 3, 3] to obtain window_sum
+//         = 13 and max_sum = 13.
+//       - Because window_len = 5 equals nums.size(), the sliding loop for i in [5,
+//         5) runs zero iterations and returns 13.0 / 5.0 = 2.6.
+//
 // Algorithm:
 //   Fixed-size sliding window. Since the divisor `k` is constant for every
 //   window, maximizing the average is equivalent to maximizing the sum of a

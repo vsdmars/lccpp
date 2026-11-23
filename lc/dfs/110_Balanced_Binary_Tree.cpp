@@ -6,6 +6,39 @@
 //   tree is height-balanced if, for every node in the tree, the heights of its
 //   left and right subtrees differ by at most 1.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 9, 20, null, null, 15, 7]
+//     Output: true
+//     Explanation:
+//       - Evaluate leaf 9: null children return {balanced: true, height: 0}, so
+//         leaf 9 returns {true, 1}.
+//       - Evaluate right subtree at 20: leaves 15 and 7 each return {true, 1},
+//         difference |1 - 1| = 0 <= 1, so node 20 returns {true, 2}.
+//       - At root 3, left height 1 and right height 2 differ by |1 - 2| = 1 <= 1,
+//         returning {true, 3} and thus true.
+//
+//   Example 2:
+//     Input:  root = [1, 2, 2, 3, 3, null, null, 4, 4]
+//     Output: false
+//     Explanation:
+//       - Under left child 2, the leftmost node 3 has two leaves 4 returning {true,
+//         1}, so that node 3 returns {true, 2}, while its sibling 3 returns {true,
+//         1}.
+//       - Left child 2 has left height 2 and right height 1 (|2 - 1| = 1 <= 1),
+//         returning {true, 3}.
+//       - Right child 2 of the root is a leaf and returns {true, 1}.
+//       - At root 1, |3 - 1| = 2 > 1 violates the balance invariant, returning
+//         {false, 0} and thus false.
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: true
+//     Explanation:
+//       - Call checkSubtree(nullptr), which immediately returns {balanced: true,
+//         height: 0}.
+//       - Return .balanced from isBalanced, yielding true for an empty tree.
+//
 // Algorithm:
 //   Single-pass bottom-up post-order Depth-First Search (DFS).
 //   A naive top-down check recomputes subtree heights at every node in O(N^2)

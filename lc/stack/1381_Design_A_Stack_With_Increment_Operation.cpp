@@ -8,6 +8,48 @@
 //     - `increment(k, val)`: adds `val` to the bottom `k` elements of the stack
 //       (or to all elements if the stack currently holds fewer than `k`).
 //
+// Examples:
+//   Example 1:
+//     Input:  ["CustomStack", "push", "push", "pop", "push", "push", "push",
+//             "increment", "increment", "pop", "pop", "pop", "pop"], [[3], [1],
+//             [2], [], [2], [3], [4], [5, 100], [2, 100], [], [], [], []]
+//     Output: [null, null, null, 2, null, null, null, null, null, 103, 202, 201,
+//             -1]
+//     Explanation:
+//       - push(1), push(2), pop() returns 2, then push(2) and push(3) leave stack_
+//         = [{1, 0}, {2, 0}, {3, 0}]; push(4) is ignored because size == max_size_
+//         (3).
+//       - increment(5, 100) adds 100 at idx = min(5, 3) - 1 = 2 ({3, 100}), and
+//         increment(2, 100) adds 100 at idx = 1 ({2, 100}).
+//       - First pop() returns 3 + 100 = 103 and propagates lazy_inc = 100 to index
+//         1, updating it to {2, 200}.
+//       - Next pop() returns 2 + 200 = 202 and propagates 200 down to index 0 ({1,
+//         200}), which pops 201, and the final pop() on the empty stack returns -1.
+//
+//   Example 2:
+//     Input:  ["CustomStack", "push", "push", "push", "increment", "increment",
+//             "pop", "push", "increment", "pop", "pop", "pop", "pop"], [[4], [10],
+//             [20], [30], [1, 5], [3, 10], [], [99], [2, 1], [], [], [], []]
+//     Output: [null, null, null, null, null, null, 40, null, null, 99, 31, 26, -1]
+//     Explanation:
+//       - Push 10, 20, and 30, then apply increment(1, 5) to stack_[0] ({10, 5})
+//         and increment(3, 10) to stack_[2] ({30, 10}).
+//       - pop() returns 30 + 10 = 40 and propagates lazy_inc = 10 to stack_[1]
+//         ({20, 10}).
+//       - push(99) appends {99, 0} at index 2 without inheriting earlier deltas,
+//         and increment(2, 1) adds 1 to stack_[1] ({20, 11}).
+//       - Remaining pops return 99 + 0 = 99, 20 + 11 = 31 (cascading 11 to
+//         stack_[0] for lazy_inc = 16), 10 + 16 = 26, and -1.
+//
+//   Example 3:
+//     Input:  ["CustomStack", "pop", "increment", "push", "pop", "pop"], [[2], [],
+//             [5, 50], [7], [], []]
+//     Output: [null, -1, null, null, 7, -1]
+//     Explanation:
+//       - Initial pop() sees stack_.empty() and returns -1.
+//       - increment(5, 50) returns early on an empty stack so no delta is stored.
+//       - push(7) inserts {7, 0}, pop() returns 7, and the final pop() returns -1.
+//
 // Algorithm:
 //   Lazy Propagation on Stack Elements:
 //     Instead of eagerly iterating over the bottom `k` elements during

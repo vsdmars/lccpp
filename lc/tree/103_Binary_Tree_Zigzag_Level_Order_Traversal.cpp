@@ -7,6 +7,47 @@
 //   left, level 2 from left to right, and alternating for each subsequent
 //   level. An empty tree returns an empty 2D vector.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 9, 20, null, null, 15, 7]
+//     Output: [[3], [20, 9], [15, 7]]
+//     Explanation:
+//       - Initialize the BFS queue frontier with root node 3 and set left_to_right
+//         = true.
+//       - At depth 0 (level_size = 1, left_to_right = true), pop 3 into level[0],
+//         enqueue children 9 and 20, push [3] to result, and flip left_to_right to
+//         false.
+//       - At depth 1 (level_size = 2, left_to_right = false), pop 9 (i = 0) into
+//         target_idx = 1 and pop 20 (i = 1) into target_idx = 0 while enqueuing 15
+//         and 7, producing [20, 9] and flipping left_to_right to true.
+//       - At depth 2 (level_size = 2, left_to_right = true), pop 15 into level[0]
+//         and 7 into level[1] with no further children, producing [15, 7] and
+//         returning [[3], [20, 9], [15, 7]].
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, 4, null, null, 5, 6, 7]
+//     Output: [[1], [3, 2], [4, 5], [7, 6]]
+//     Explanation:
+//       - At depth 0 (left_to_right = true), pop 1 into level[0], enqueue 2 and 3,
+//         and flip left_to_right to false.
+//       - At depth 1 (level_size = 2, left_to_right = false), pop 2 to level[1]
+//         (enqueuing 4) and 3 to level[0] (enqueuing 5), producing [3, 2] and
+//         flipping left_to_right to true.
+//       - At depth 2 (level_size = 2, left_to_right = true), pop 4 to level[0]
+//         (enqueuing 6 and 7) and 5 to level[1], producing [4, 5] and flipping
+//         left_to_right to false.
+//       - At depth 3 (level_size = 2, left_to_right = false), pop 6 (i = 0) into
+//         level[1] and 7 (i = 1) into level[0], yielding [7, 6] and final output
+//         [[1], [3, 2], [4, 5], [7, 6]].
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: []
+//     Explanation:
+//       - Check root == nullptr at the start of zigzagLevelOrder.
+//       - Return the empty result vector [] immediately without initializing the
+//         BFS queue.
+//
 // Algorithm:
 //   Level-by-level Breadth-First Search (BFS) with indexed placement.
 //   Keep the BFS queue strictly in standard left-to-right order across every

@@ -7,6 +7,38 @@
 //   (LIS) of `nums`. The answer is guaranteed to fit in a 32-bit signed
 //   integer.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 3, 5, 4, 7]
+//     Output: 2
+//     Explanation:
+//       - Initialize length = [1, 1, 1, 1, 1] and count = [1, 1, 1, 1, 1].
+//       - For i = 1 (3) and i = 2 (5), strictly smaller predecessors extend
+//         length[1] = 2 (count 1) and length[2] = 3 (count 1).
+//       - At i = 3 (4), predecessors j = 0 (1) and j = 1 (3) update length[3] =
+//         length[1] + 1 = 3 with count[3] = 1, while j = 2 (5) is skipped.
+//       - At i = 4 (7), j = 2 (5) sets length[4] = 4 and count[4] = 1, and j = 3
+//         (4) ties length 4 to add count[3] = 1 so count[4] = 2.
+//       - The global maximum length is max_len = 4 at index 4 alone, so summing
+//         count[i] for length[i] == 4 returns 2.
+//
+//   Example 2:
+//     Input:  nums = [2, 2, 2, 2, 2]
+//     Output: 5
+//     Explanation:
+//       - Initialize length = [1, 1, 1, 1, 1] and count = [1, 1, 1, 1, 1].
+//       - Every pair j < i has nums[j] >= nums[i] (2 >= 2), so no inner transition
+//         fires and all length[i] and count[i] stay 1.
+//       - With max_len = 1, all five indices match length[i] == 1, summing
+//         count[0..4] to return 5.
+//
+//   Example 3:
+//     Input:  nums = []
+//     Output: 0
+//     Explanation:
+//       - Check nums.empty() at the start of findNumberOfLIS.
+//       - Return 0 immediately because an empty input contains no subsequences.
+//
 // Algorithm:
 //   Bottom-up dynamic programming tracking both the best length and the
 //   multiplicity at every ending index.

@@ -10,6 +10,46 @@
 //     3) Each of the nine 3 x 3 sub-boxes contains digits 1-9 without
 //        repetition.
 //
+// Examples:
+//   Example 1:
+//     Input:  board =
+//             [['5','3','.','.','7','.','.','.','.'],['6','.','.','1','9','5','.','.','.'],['.','9','8','.','.','.','.','6','.'],['8','.','.','.','6','.','.','.','3'],['4','.','.','8','.','3','.','.','1'],['7','.','.','.','2','.','.','.','6'],['.','6','.','.','.','.','2','8','.'],['.','.','.','4','1','9','.','.','5'],['.','.','.','.','8','.','.','7','9']]
+//     Output: true
+//     Explanation:
+//       - Initializes three 9-element bitmask arrays row_masks, col_masks, and
+//         box_masks to 0 and scans each cell (r, c) once, skipping '.' cells.
+//       - For each digit ch, computes bit = 1U << (ch - '1') and box = (r / 3) * 3
+//         + (c / 3); for instance, (0, 0) = '5' sets bit 4 (16) in row_masks[0],
+//         col_masks[0], and box_masks[0].
+//       - Across all 30 filled cells, (row_masks[r] | col_masks[c] |
+//         box_masks[box]) & bit is always 0, so the loop completes and returns
+//         true.
+//
+//   Example 2:
+//     Input:  board = same valid 9x9 board above except board[0][0] = '8'
+//     Output: false
+//     Explanation:
+//       - At (0, 0) = '8', bit = 1U << 7 (128) is recorded in row_masks[0],
+//         col_masks[0], and box_masks[0].
+//       - Scanning proceeds until (2, 2) = '8', which maps to box = (2 / 3) * 3 +
+//         (2 / 3) = 0.
+//       - Because bit 7 is already set in box_masks[0], (row_masks[2] |
+//         col_masks[2] | box_masks[0]) & (1U << 7) is non-zero and isValidSudoku
+//         returns false immediately.
+//
+//   Example 3:
+//     Input:  board = 9x9 empty '.' grid with board[3][3] = '2' and board[5][5] =
+//             '2'
+//     Output: false
+//     Explanation:
+//       - Cell (3, 3) = '2' sets bit 1 (1U << 1 = 2) in row_masks[3], col_masks[3],
+//         and box_masks[4] since (3 / 3) * 3 + (3 / 3) = 4.
+//       - All intermediate '.' cells are skipped until (5, 5) = '2', which shares
+//         neither row nor column with (3, 3) but maps to the same box = (5 / 3) * 3
+//         + (5 / 3) = 4.
+//       - Checking (row_masks[5] | col_masks[5] | box_masks[4]) & 2 detects the bit
+//         already set in box_masks[4] and returns false.
+//
 // Algorithm:
 //   Single-Pass Bitmask Validation:
 //   - Maintain three 9-element bitmask arrays: `row_masks`, `col_masks`, and

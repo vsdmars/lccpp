@@ -7,6 +7,41 @@
 //   into two non-empty trees with equal sums of node values by removing
 //   exactly one edge from the original tree.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [5, 10, 10, null, null, 2, 3]
+//     Output: true
+//     Explanation:
+//       - Post-order DFS compute_sum evaluates left child 10, right subtree leaves
+//         2 and 3, node 10 (10 + 2 + 3 = 15), and root 5 (5 + 10 + 15 = 30),
+//         recording subtree_sums = [10, 2, 3, 15, 30].
+//       - pop_back() removes the root sum 30, leaving proper subtree sums [10, 2,
+//         3, 15] and total_sum = 30.
+//       - Because total_sum = 30 is even and target = 30 / 2 = 15 appears in [10,
+//         2, 3, 15], checkEqualTree returns true.
+//
+//   Example 2:
+//     Input:  root = [1, 2, 10, null, null, 2, 20]
+//     Output: false
+//     Explanation:
+//       - Post-order compute_sum records left child 2, right subtree sums 2, 20,
+//         and 32 (10 + 2 + 20), and root sum 35 (1 + 2 + 32), giving subtree_sums =
+//         [2, 2, 20, 32, 35].
+//       - pop_back() removes root sum 35 so total_sum = 35.
+//       - Since total_sum % 2 != 0, no single edge can partition the tree into two
+//         equal integer sums, returning false.
+//
+//   Example 3:
+//     Input:  root = [0, -1, 1]
+//     Output: false
+//     Explanation:
+//       - Post-order compute_sum records left child -1, right child 1, and root 0 +
+//         (-1) + 1 = 0, producing subtree_sums = [-1, 1, 0].
+//       - pop_back() excludes the root's own sum 0 so cutting above the root is
+//         disallowed, leaving proper subtree sums [-1, 1].
+//       - Even though total_sum = 0 is even with target = 0 / 2 = 0,
+//         std::ranges::find does not find 0 in [-1, 1] and returns false.
+//
 // Algorithm:
 //   Removing a single edge above any proper (non-root) node u splits the tree
 //   into u's subtree and the rest of the tree. Both halves have equal sum if

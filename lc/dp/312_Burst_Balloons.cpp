@@ -9,6 +9,46 @@
 //   the currently adjacent surviving balloons (with virtual boundary balloons
 //   `nums[-1] = nums[n] = 1` that cannot be burst).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 1, 5, 8]
+//     Output: 167
+//     Explanation:
+//       - Pad the array with sentinel 1s at both ends to form padded = [1, 3, 1, 5,
+//         8, 1] of length m = 6.
+//       - For span len = 2 single-balloon intervals, compute dp[0][2] = 3, dp[1][3]
+//         = 15, dp[2][4] = 40, and dp[3][5] = 40.
+//       - For span len = 3, burst k = 1 last in (0, 3) for dp[0][3] = 1*3*5 + 0 +
+//         15 = 30, burst k = 3 last in (1, 4) for dp[1][4] = 3*5*8 + 15 + 0 = 135,
+//         and burst k = 4 last in (2, 5) for dp[2][5] = 48.
+//       - For span len = 4, choosing k = 1 last in (0, 4) gives dp[0][4] = 1*3*8 +
+//         0 + 135 = 159, and choosing k = 4 last in (1, 5) gives dp[1][5] = 3*8*1 +
+//         135 + 0 = 159.
+//       - For the full interval (0, 5), choosing k = 4 (balloon 8) as the last
+//         burst maximizes 1*8*1 + dp[0][4] + dp[4][5] = 8 + 159 + 0 = 167.
+//
+//   Example 2:
+//     Input:  nums = [1, 5]
+//     Output: 10
+//     Explanation:
+//       - Pad nums to padded = [1, 1, 5, 1] with virtual boundary balloons at
+//         indices 0 and 3.
+//       - Compute span len = 2 base intervals: dp[0][2] = 1 * 1 * 5 = 5 and
+//         dp[1][3] = 1 * 5 * 1 = 5.
+//       - For interval (0, 3), trying k = 1 gives 1*1*1 + 0 + 5 = 6 while trying k
+//         = 2 gives 1*5*1 + 5 + 0 = 10, so dp[0][3] = 10.
+//
+//   Example 3:
+//     Input:  nums = [3, 0, 5]
+//     Output: 20
+//     Explanation:
+//       - Pad nums to padded = [1, 3, 0, 5, 1]; all span len = 2 intervals score 0
+//         because each multiplies by the zero-value balloon at index 2.
+//       - For len = 3, dp[0][3] = 1*3*5 + 0 + 0 = 15 (bursting 0 then 3) and
+//         dp[1][4] = 3*5*1 + 0 + 0 = 15 (bursting 0 then 5).
+//       - For interval (0, 4), choosing k = 3 (value 5) last yields 1*5*1 +
+//         dp[0][3] + dp[3][4] = 5 + 15 + 0 = 20, beating k = 1 (18) and k = 2 (0).
+//
 // Algorithm:
 //   Interval Dynamic Programming (reverse-time framing). Thinking about which
 //   balloon to burst *first* couples the left and right subproblems because

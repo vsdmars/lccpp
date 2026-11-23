@@ -10,6 +10,50 @@
 //   timestamp marks the end of that unit (so `[start, end]` spans
 //   `end - start + 1` units). Functions may call themselves recursively.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 2, logs = ["0:start:0", "1:start:2", "1:end:5", "0:end:6"]
+//     Output: [3, 4]
+//     Explanation:
+//       - Process "0:start:0" and "1:start:2" by pushing frames {id: 0, start_time:
+//         0} and {id: 1, start_time: 2} onto stack, with result = [0, 0].
+//       - On "1:end:5", pop {1, 2}, compute duration = (5 - 2) + 1 = 4, add 4 to
+//         result[1], and subtract 4 from caller result[0], giving [-4, 4].
+//       - On "0:end:6", pop {0, 0} with an empty stack, compute duration = (6 - 0)
+//         + 1 = 7, and add 7 to result[0], yielding [-4 + 7, 4] = [3, 4].
+//
+//   Example 2:
+//     Input:  n = 1, logs = ["0:start:0", "0:start:2", "0:end:5", "0:start:6",
+//             "0:end:6", "0:end:7"]
+//     Output: [8]
+//     Explanation:
+//       - Push frames {0, 0} and {0, 2} onto stack for the first two start logs
+//         while result = [0].
+//       - On "0:end:5", pop {0, 2} with duration = (5 - 2) + 1 = 4, add 4 to
+//         result[0] and subtract 4 from the remaining caller frame 0, keeping
+//         result = [0].
+//       - Push {0, 6} and pop it at "0:end:6" with duration = (6 - 6) + 1 = 1,
+//         adding 1 and subtracting 1 from the outer frame 0 so result stays [0].
+//       - On "0:end:7", pop the outermost {0, 0} with duration = (7 - 0) + 1 = 8
+//         and an empty stack, adding 8 to result[0] for [8].
+//
+//   Example 3:
+//     Input:  n = 5, logs = ["0:start:3", "1:start:4", "2:start:6", "2:end:7",
+//             "1:end:8", "3:start:9", "3:end:10", "0:end:11", "4:start:12",
+//             "4:end:19", "0:start:20", "0:end:22"]
+//     Output: [5, 3, 2, 2, 8]
+//     Explanation:
+//       - After pushing 0, 1, and 2, "2:end:7" records duration 2 for function 2
+//         (result[2] = 2) and deducts 2 from caller 1; "1:end:8" adds 5 to
+//         result[1] (net 3) and deducts 5 from caller 0.
+//       - "3:start:9" and "3:end:10" add 2 to result[3] and deduct 2 from caller 0
+//         (result[0] = -7), then "0:end:11" adds (11 - 3) + 1 = 9 to bring
+//         result[0] to 2.
+//       - "4:start:12" and "4:end:19" run with no caller on the stack, adding (19 -
+//         12) + 1 = 8 to result[4].
+//       - "0:start:20" and "0:end:22" add (22 - 20) + 1 = 3 to result[0], producing
+//         final exclusive times [5, 3, 2, 2, 8].
+//
 // Algorithm:
 //   Simulate the CPU call stack as each log entry arrives:
 //     - On a `start` event `(id, timestamp)`, push `{id, timestamp}` onto the

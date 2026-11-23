@@ -9,6 +9,38 @@
 //   Constraints: 2 <= letters.length <= 10^4, `letters` contains at least 2
 //   unique lowercase letters and is sorted in non-decreasing order.
 //
+// Examples:
+//   Example 1:
+//     Input:  letters = ['c', 'f', 'j'], target = 'c'
+//     Output: 'f'
+//     Explanation:
+//       - Initialize the half-open search range to lhs = 0 and rhs = 3.
+//       - Compute mid = 1 where letters[1] = 'f' > 'c', so shrink the search
+//         interval to [0, 1) by setting rhs = 1.
+//       - Compute mid = 0 where letters[0] = 'c' <= 'c', so advance lhs = mid + 1 =
+//         1.
+//       - The loop terminates with lhs == rhs == 1 < 3, returning letters[1] = 'f'.
+//
+//   Example 2:
+//     Input:  letters = ['c', 'f', 'j'], target = 'j'
+//     Output: 'c'
+//     Explanation:
+//       - Initialize the half-open search range to lhs = 0 and rhs = 3.
+//       - At mid = 1, letters[1] = 'f' <= 'j', so set lhs = 2; at mid = 2,
+//         letters[2] = 'j' <= 'j', so set lhs = 3.
+//       - Because lhs == letters.size() == 3, no character exceeds 'j', so wrap
+//         around and return letters[0] = 'c'.
+//
+//   Example 3:
+//     Input:  letters = ['c', 'c', 'f', 'f', 'j', 'j'], target = 'c'
+//     Output: 'f'
+//     Explanation:
+//       - Initialize lhs = 0 and rhs = 6 over the duplicate-containing array.
+//       - At mid = 3, letters[3] = 'f' > 'c' narrows rhs to 3; at mid = 1,
+//         letters[1] = 'c' <= 'c' advances lhs to 2.
+//       - At mid = 2, letters[2] = 'f' > 'c' narrows rhs to 2, ending the loop at
+//         lhs = 2 and returning letters[2] = 'f'.
+//
 // Algorithm:
 //   Perform an upper-bound binary search over the half-open index range
 //   `[0, n)` to find the first position `lhs` where `letters[lhs] > target`:

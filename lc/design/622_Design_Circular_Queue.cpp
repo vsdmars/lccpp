@@ -14,6 +14,53 @@
 //     - isEmpty(): Return whether the queue holds zero elements.
 //     - isFull(): Return whether the queue has reached capacity `k`.
 //
+// Examples:
+//   Example 1:
+//     Input:  MyCircularQueue(3); isEmpty(); isFull(); Front(); Rear(); enQueue(1);
+//             enQueue(2); enQueue(3); enQueue(4); Rear(); isFull(); deQueue();
+//             enQueue(4); Rear(); Front()
+//     Output: [true, false, -1, -1, true, true, true, false, 3, true, true, true,
+//             4, 2]
+//     Explanation:
+//       - Initially head_ = 0 and size_ = 0 with capacity_ = 3, so isEmpty() is
+//         true, isFull() is false, and Front()/Rear() return -1.
+//       - Three enQueue calls fill buf_[0..2] = [1, 2, 3] with size_ = 3, so
+//         enQueue(4) sees isFull() and returns false while Rear() returns buf_[2] =
+//         3.
+//       - deQueue() advances head_ to (0 + 1) % 3 = 1 and decrements size_ to 2.
+//       - enQueue(4) writes at tail = (1 + 2) % 3 = 0 (buf_[0] = 4, size_ = 3),
+//         making Rear() return buf_[(1 + 3 - 1) % 3] = 4 and Front() return buf_[1]
+//         = 2.
+//
+//   Example 2:
+//     Input:  MyCircularQueue(4); enQueue(3); Front(); isFull(); enQueue(7);
+//             enQueue(2); enQueue(5); isFull(); deQueue(); enQueue(4); enQueue(2);
+//             isEmpty(); Front(); Rear()
+//     Output: [true, 3, false, true, true, true, true, true, true, false, false, 7,
+//             4]
+//     Explanation:
+//       - enQueue(3), enQueue(7), enQueue(2), and enQueue(5) populate buf_[0..3] =
+//         [3, 7, 2, 5] with head_ = 0 and size_ = 4, making isFull() true.
+//       - deQueue() advances head_ from 0 to 1 and reduces size_ to 3, freeing
+//         buf_[0].
+//       - enQueue(4) wraps tail = (1 + 3) % 4 = 0 to store 4 at buf_[0] with size_
+//         = 4, so the subsequent enQueue(2) returns false.
+//       - Front() reads buf_[1] = 7 and Rear() reads buf_[(1 + 4 - 1) % 4] =
+//         buf_[0] = 4.
+//
+//   Example 3:
+//     Input:  MyCircularQueue(1); enQueue(42); isFull(); Front(); Rear();
+//             enQueue(99); deQueue(); isEmpty(); enQueue(99); Front(); Rear()
+//     Output: [true, true, 42, 42, false, true, true, true, 99, 99]
+//     Explanation:
+//       - enQueue(42) places 42 at tail = (0 + 0) % 1 = 0 with size_ = 1, so
+//         isFull() is true, Front() and Rear() return 42, and enQueue(99) fails
+//         with false.
+//       - deQueue() sets head_ = (0 + 1) % 1 = 0 and size_ = 0, making isEmpty()
+//         true.
+//       - enQueue(99) writes 99 into buf_[0] with size_ = 1, so both Front() and
+//         Rear() return 99.
+//
 // Algorithm:
 //   Back the queue with a contiguous fixed-size array of length `k`, tracking
 //   the index `head_` of the front element and the active element count

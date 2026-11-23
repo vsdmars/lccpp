@@ -11,6 +11,49 @@
 //       parent node's value (or -1 if the tree was initially empty).
 //     - `TreeNode* get_root() const`: returns the root of the tree.
 //
+// Examples:
+//   Example 1:
+//     Input:  CBTInserter([1, 2]), insert(3), insert(4), get_root()
+//     Output: insert(3) -> 1, insert(4) -> 2, get_root() -> [1, 2, 3, 4]
+//     Explanation:
+//       - Constructor BFS visits 1 (missing right child) and 2 (missing both
+//         children), initializing incomplete_parents_ = [1, 2].
+//       - insert(3) inspects front parent 1, attaches 3 to 1->right, pops full node
+//         1, pushes 3 to incomplete_parents_ ([2, 3]), and returns 1.
+//       - insert(4) inspects front parent 2, attaches 4 to 2->left (keeping 2 at
+//         front because 2->right is null), pushes 4 ([2, 3, 4]), and returns 2.
+//       - get_root() returns node 1, whose level-order traversal is [1, 2, 3, 4].
+//
+//   Example 2:
+//     Input:  CBTInserter([10, 20, 30]), insert(40), insert(50), insert(60),
+//             get_root()
+//     Output: insert(40) -> 20, insert(50) -> 20, insert(60) -> 30, get_root() ->
+//             [10, 20, 30, 40, 50, 60]
+//     Explanation:
+//       - Constructor BFS skips full root 10 and enqueues incomplete nodes 20 and
+//         30 into incomplete_parents_ = [20, 30].
+//       - insert(40) attaches 40 as 20->left, keeps 20 at the front, pushes 40
+//         ([20, 30, 40]), and returns 20.
+//       - insert(50) attaches 50 as 20->right, pops full node 20, pushes 50 ([30,
+//         40, 50]), and returns 20.
+//       - insert(60) attaches 60 as 30->left and returns 30, producing level-order
+//         [10, 20, 30, 40, 50, 60].
+//
+//   Example 3:
+//     Input:  CBTInserter([]), get_root(), insert(3), insert(4), insert(5),
+//             insert(6), get_root()
+//     Output: get_root() -> nullptr, insert(3) -> -1, insert(4) -> 3, insert(5) ->
+//             3, insert(6) -> 4, get_root() -> [3, 4, 5, 6]
+//     Explanation:
+//       - Constructor sees root_ == nullptr and leaves incomplete_parents_ empty,
+//         so the initial get_root() returns nullptr.
+//       - insert(3) sees root_ == nullptr, sets root_ to node 3, pushes 3 onto
+//         incomplete_parents_ ([3]), and returns -1.
+//       - insert(4) and insert(5) attach 4 to 3->left and 5 to 3->right, popping 3
+//         and leaving incomplete_parents_ = [4, 5], each returning 3.
+//       - insert(6) attaches 6 to 4->left and returns 4, leaving get_root() with
+//         level-order [3, 4, 5, 6].
+//
 // Algorithm:
 //   During construction, run a BFS level-order traversal over the initial tree
 //   and enqueue every node that has at least one missing child (`left ==

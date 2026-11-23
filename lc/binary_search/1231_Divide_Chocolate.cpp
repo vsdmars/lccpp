@@ -10,6 +10,45 @@
 //   get when cutting optimally.
 //   Constraints: 0 <= k < sweetness.length <= 10^4, 1 <= sweetness[i] <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  sweetness = [1, 2, 3, 4, 5, 6, 7, 8, 9], k = 5
+//     Output: 6
+//     Explanation:
+//       - Set required_pieces = 6, left = min(sweetness) = 1, total_sweetness = 45,
+//         and right = 45 / 6 = 7.
+//       - Test upper-mid = 7 - (7 - 1) / 2 = 4; canDivide greedily cuts 6 pieces
+//         ([1,2,3], [4], [5], [6], [7], [8]), so set left = 4.
+//       - Test mid = 7 - (7 - 4) / 2 = 6; canDivide cuts 6 pieces of sums >= 6
+//         ([1,2,3]=6, [4,5]=9, [6]=6, [7]=7, [8]=8, [9]=9), so set left = 6.
+//       - Test mid = 7 - (7 - 6) / 2 = 7; canDivide produces only 5 pieces
+//         ([1,2,3,4]=10, [5,6]=11, [7]=7, [8]=8, [9]=9), so set right = 6 and
+//         return 6.
+//
+//   Example 2:
+//     Input:  sweetness = [1, 2, 2, 1, 2, 2, 1, 2, 2], k = 2
+//     Output: 5
+//     Explanation:
+//       - Set required_pieces = 3, left = 1, total_sweetness = 15, and right = 15 /
+//         3 = 5.
+//       - At mid = 3, canDivide cuts [1,2]=3, [2,1]=3, [2,2]=4 (3 pieces), updating
+//         left = 3.
+//       - At mid = 4, canDivide cuts [1,2,2]=5, [1,2,2]=5, [1,2,2]=5 (3 pieces),
+//         updating left = 4.
+//       - At mid = 5, canDivide again forms three pieces of sum 5 ([1,2,2],
+//         [1,2,2], [1,2,2]), setting left = 5 and returning 5.
+//
+//   Example 3:
+//     Input:  sweetness = [1, 2, 3, 4], k = 0
+//     Output: 10
+//     Explanation:
+//       - Set required_pieces = 1, left = 1, total_sweetness = 10, and right = 10 /
+//         1 = 10.
+//       - For each upper-mid probe (6, 8, 9, and 10), canDivide sums all chunks to
+//         10 >= mid and closes 1 piece >= required_pieces.
+//       - All probes succeed up to mid = 10, converging left = right = 10 and
+//         returning 10.
+//
 // Algorithm:
 //   Binary search on the answer (the target minimum piece sweetness `target`):
 //   - Feasibility is monotonic: if we can partition `sweetness` into at least

@@ -13,6 +13,51 @@
 //     2. Every word in the dictionary sharing that abbreviation is equal to
 //        `word` itself.
 //
+// Examples:
+//   Example 1:
+//     Input:  ["ValidWordAbbr", "isUnique", "isUnique", "isUnique", "isUnique",
+//             "isUnique", "isUnique"], [[["deer", "door", "cake", "card"]],
+//             ["dear"], ["cart"], ["cane"], ["make"], ["cake"], ["door"]]
+//     Output: [null, false, true, false, true, true, false]
+//     Explanation:
+//       - Constructor abbreviates "deer" and "door" both to "d2r" so
+//         abbr_to_word_["d2r"] resets to std::nullopt, while storing "c2e" ->
+//         "cake" and "c2d" -> "card".
+//       - isUnique("dear") computes "d2r", finds std::nullopt in abbr_to_word_, and
+//         returns false.
+//       - isUnique("cart") ("c2t") and isUnique("make") ("m2e") find no entry in
+//         abbr_to_word_ and return true.
+//       - isUnique("cane") computes "c2e" and finds "cake" != "cane" (returns
+//         false), whereas isUnique("cake") matches "cake" (returns true).
+//       - isUnique("door") computes "d2r" and sees std::nullopt from the
+//         "deer"/"door" collision, returning false.
+//
+//   Example 2:
+//     Input:  ["ValidWordAbbr", "isUnique", "isUnique", "isUnique"], [[["cake",
+//             "cake", "a", "a"]], ["cake"], ["cane"], ["a"]]
+//     Output: [null, true, false, true]
+//     Explanation:
+//       - Constructor maps "c2e" -> "cake" on the first "cake", and the second
+//         "cake" matches *it->second == "cake" so it does not reset the entry to
+//         std::nullopt.
+//       - Both occurrences of "a" have size <= 2, so abbreviate returns "a" and
+//         abbr_to_word_["a"] keeps "a".
+//       - isUnique("cake") matches "c2e" -> "cake" (true), isUnique("cane") sees
+//         "c2e" -> "cake" != "cane" (false), and isUnique("a") matches "a" -> "a"
+//         (true).
+//
+//   Example 3:
+//     Input:  ["ValidWordAbbr", "isUnique", "isUnique", "isUnique", "isUnique"],
+//             [[["a", "", "it"]], ["a"], [""], ["it"], ["is"]]
+//     Output: [null, true, true, true, true]
+//     Explanation:
+//       - Because every dictionary word has size <= 2, abbreviate returns each word
+//         unchanged, storing "a" -> "a", "" -> "", and "it" -> "it" as populated
+//         std::optional values.
+//       - Queries "a", "", and "it" each look up their verbatim key and match the
+//         stored string, returning true.
+//       - Query "is" is absent from abbr_to_word_, so isUnique("is") returns true.
+//
 // Algorithm:
 //   Precompute each dictionary word's abbreviation in the constructor and
 //   store a single representative word per abbreviation in a hash map. If two

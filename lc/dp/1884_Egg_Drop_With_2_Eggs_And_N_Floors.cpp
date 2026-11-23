@@ -10,6 +10,41 @@
 //   worst case to determine `f` with certainty.
 //   Constraints: 1 <= n <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 2
+//     Output: 2
+//     Explanation:
+//       - Initialize memo = [0, 1, -1] for floor counts 0 through 2 and evaluate
+//         dfs(2) with initial upper bound best = 2.
+//       - At drop = 1, the break branch needs drop - 1 = 0 linear moves below and
+//         the survive branch evaluates dfs(2 - 1) = memo[1] = 1 move above.
+//       - Compute worst_case = 1 + max(0, 1) = 2, store memo[2] = 2, and return 2
+//         (matching twoEggDropMath(2), where max_floors reaches 1 + 2 = 3 >= 2 at
+//         moves = 2).
+//
+//   Example 2:
+//     Input:  n = 100
+//     Output: 14
+//     Explanation:
+//       - In dfs(100), testing drop = 14 gives a break branch of drop - 1 = 13
+//         linear drops and a survive subproblem of dfs(100 - 14) = dfs(86).
+//       - Because 13 * 14 / 2 = 91 >= 86 > 78 = 12 * 13 / 2, dfs(86) evaluates to
+//         13, yielding 1 + max(13, 13) = 14 worst-case moves.
+//       - Any drop <= 13 leaves >= 87 > 78 floors (requiring >= 13 more moves,
+//         total >= 14), and any drop >= 15 has break cost >= 14 (total >= 15), so
+//         memo[100] = 14.
+//       - Equivalently, twoEggDropMath(100) accumulates 1 + 2 + ... + 14 = 105 >=
+//         100 at moves = 14 and returns 14.
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: 1
+//     Explanation:
+//       - Initialize the DP base cases memo[0] = 0 and memo[1] = 1.
+//       - Calling dfs(1) hits memo[1] != -1 immediately and returns 1 without
+//         looping.
+//
 // Algorithm:
 //   Minimax Dynamic Programming (top-down memoized DFS):
 //   1. Let `dfs(floors)` be the minimum worst-case number of moves needed with

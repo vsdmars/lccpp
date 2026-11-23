@@ -8,6 +8,46 @@
 //   with |x - h| <= r. Return the minimum non-negative radius `r` required so
 //   that every house is covered by at least one heater.
 //
+// Examples:
+//   Example 1:
+//     Input:  houses = [1, 2, 3, 4], heaters = [1, 4]
+//     Output: 1
+//     Explanation:
+//       - Both houses and heaters are already sorted; initialize heater_idx = 0
+//         (heater 1) and min_radius = 0.
+//       - For house = 1 and house = 2, 2 * house (2 and 4) is less than 1 + 4 = 5,
+//         so heater_idx stays at 0 (heater 1), yielding distances 0 and 1 and
+//         min_radius = 1.
+//       - For house = 3, 2 * 3 = 6 >= 5 advances heater_idx to 1 (heater 4), giving
+//         distance |4 - 3| = 1.
+//       - For house = 4, heater_idx = 1 gives distance |4 - 4| = 0, so min_radius
+//         remains 1.
+//
+//   Example 2:
+//     Input:  houses = [1, 5], heaters = [2]
+//     Output: 3
+//     Explanation:
+//       - Sort houses = [1, 5] and heaters = [2], and initialize heater_idx = 0
+//         with min_radius = 0.
+//       - Because only one heater exists, heater_idx stays at 0 (heater 2) for all
+//         houses.
+//       - House 1 gives distance |2 - 1| = 1 (min_radius = 1), and house 5 gives
+//         distance |2 - 5| = 3, updating min_radius to 3.
+//
+//   Example 3:
+//     Input:  houses = [10, 2, 7, 1], heaters = [5, 5, 1, 5]
+//     Output: 5
+//     Explanation:
+//       - Sort houses to [1, 2, 7, 10] and heaters to [1, 5, 5, 5], starting at
+//         heater_idx = 0 (heater 1).
+//       - For house = 1 and house = 2, 2 * house < 1 + 5 = 6 keeps heater_idx = 0,
+//         updating min_radius to max(0, 1) = 1.
+//       - For house = 7, 2 * 7 = 14 >= 1 + 5 advances heater_idx to 1 (heater 5)
+//         and then 14 >= 5 + 5 advances past duplicate 5s to heater_idx = 3 (heater
+//         5), giving distance |5 - 7| = 2.
+//       - For house = 10, heater_idx = 3 (heater 5) gives distance |5 - 10| = 5,
+//         updating min_radius to 5.
+//
 // Algorithm:
 //   Sort both `houses` and `heaters` in ascending order, then sweep through
 //   the houses with a monotonic two-pointer index `heater_idx` into `heaters`:

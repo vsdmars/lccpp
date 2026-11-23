@@ -6,6 +6,42 @@
 //   left and right subtrees of every node, and return the root. The tree has
 //   between 0 and 100 nodes with values in [-100, 100].
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [4, 2, 7, 1, 3, 6, 9]
+//     Output: [4, 7, 2, 9, 6, 3, 1]
+//     Explanation:
+//       - invertTree pushes root node 4 onto FIFO queue q.
+//       - Popping 4 swaps its left and right pointers so 4->left = 7 and 4->right =
+//         2, then enqueues 7 and 2.
+//       - Popping 7 swaps its children to 9 (left) and 6 (right) and enqueues them,
+//         and popping 2 swaps its children to 3 (left) and 1 (right) and enqueues
+//         them.
+//       - Popping leaf nodes 9, 6, 3, and 1 swaps their nullptr children with no
+//         new nodes enqueued, leaving the level-order tree [4, 7, 2, 9, 6, 3, 1].
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, null, 4, null, 5]
+//     Output: [1, 3, 2, 5, null, 4]
+//     Explanation:
+//       - invertTree pushes root node 1 onto q and pops it, swapping left child 2
+//         and right child 3 so 1->left = 3 and 1->right = 2 before enqueuing 3 and
+//         2.
+//       - Popping 3 swaps its left (nullptr) and right (5) pointers so 3->left = 5
+//         and 3->right = nullptr, then enqueues 5.
+//       - Popping 2 swaps its left (nullptr) and right (4) pointers so 2->left = 4
+//         and 2->right = nullptr, then enqueues 4.
+//       - Popping leaves 5 and 4 finishes the queue, producing the serialized
+//         level-order result [1, 3, 2, 5, null, 4].
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: []
+//     Explanation:
+//       - invertTree checks if (root == nullptr) upon entry.
+//       - Because root is nullptr, it immediately returns nullptr (empty tree [])
+//         without allocating or using a queue.
+//
 // Algorithm:
 //   We provide two linear-time traversal approaches:
 //   1. Iterative BFS (`invertTree`): Push `root` onto a FIFO queue. While the

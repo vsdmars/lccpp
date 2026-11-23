@@ -10,6 +10,46 @@
 //   you are never allowed to purchase more of any item than needed. Return the
 //   lowest total price to acquire the exact `needs`.
 //
+// Examples:
+//   Example 1:
+//     Input:  price = [2, 5], special = [[3, 0, 5], [1, 2, 10]], needs = [3, 2]
+//     Output: 14
+//     Explanation:
+//       - Pre-filtering keeps both offers in useful_offers because 5 < 3*2 + 0*5 =
+//         6 for [3, 0, 5] and 10 < 1*2 + 2*5 = 12 for [1, 2, 10].
+//       - At dfs([3, 2]), directPurchaseCost sets the baseline best = 3*2 + 2*5 =
+//         16.
+//       - Applying [3, 0, 5] gives next_needs = [0, 2], where neither offer fits
+//         and dfs([0, 2]) returns 2*5 = 10, yielding total 5 + 10 = 15.
+//       - Applying [1, 2, 10] gives next_needs = [2, 0], where neither offer fits
+//         and dfs([2, 0]) returns 2*2 = 4, yielding total 10 + 4 = 14.
+//       - dfs caches memo[[3, 2]] = min(16, 15, 14) = 14 and returns 14.
+//
+//   Example 2:
+//     Input:  price = [2, 3, 4], special = [[1, 1, 0, 4], [2, 2, 1, 9]], needs =
+//             [1, 2, 1]
+//     Output: 11
+//     Explanation:
+//       - Pre-filtering retains [1, 1, 0, 4] (4 < 2 + 3 = 5) and [2, 2, 1, 9] (9 <
+//         4 + 6 + 4 = 14) in useful_offers.
+//       - At dfs([1, 2, 1]), directPurchaseCost computes a baseline of 1*2 + 2*3 +
+//         1*4 = 12.
+//       - tryApplyOffer rejects [2, 2, 1, 9] because offer[0] = 2 exceeds needs[0]
+//         = 1, while [1, 1, 0, 4] succeeds with next_needs = [0, 1, 1].
+//       - In dfs([0, 1, 1]), no offer fits (both need at least 1 unit of item 0),
+//         so it returns 1*3 + 1*4 = 7, updating best = min(12, 4 + 7) = 11.
+//
+//   Example 3:
+//     Input:  price = [2, 3], special = [[0, 0, 0], [1, 1, 10], [3, 0, 1]], needs =
+//             [2, 1]
+//     Output: 7
+//     Explanation:
+//       - Pre-filtering discards [0, 0, 0] (total_items == 0) and [1, 1, 10] (offer
+//         price 10 >= direct cost 5), keeping only [3, 0, 1] (1 < 6).
+//       - At dfs([2, 1]), directPurchaseCost sets baseline best = 2*2 + 1*3 = 7.
+//       - tryApplyOffer rejects [3, 0, 1] since offer[0] = 3 > needs[0] = 2, so no
+//         offer applies and dfs returns 7.
+//
 // Algorithm:
 //   First pre-filter `special` to keep only strictly beneficial non-empty
 //   offers (those supplying at least one item at a price strictly lower than

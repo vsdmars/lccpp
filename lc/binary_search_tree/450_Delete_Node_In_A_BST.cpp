@@ -8,6 +8,43 @@
 //   reference. The required time complexity is O(h), where h is the tree
 //   height.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [5, 3, 6, 2, 4, null, 7], key = 3
+//     Output: [5, 2, 6, null, 4, null, 7] (in-order [2, 4, 5, 6, 7])
+//     Explanation:
+//       - At root 5, since 5 > 3, recurse on root->left (node 3) and reassign
+//         root->left to the returned subtree root.
+//       - At node 3 (matching key = 3), both children 2 and 4 exist, so walk to the
+//         rightmost node in the left subtree (predecessor = 2).
+//       - Attach predecessor->right = 4 (node 3's right child) and return node 2 to
+//         replace node 3.
+//       - Node 5 receives root->left = 2, producing a valid BST with in-order
+//         traversal [2, 4, 5, 6, 7].
+//
+//   Example 2:
+//     Input:  root = [5, 3, 6, 2, 4, null, 7], key = 5
+//     Output: [3, 2, 4, null, null, null, 6, null, 7] (in-order [2, 3, 4, 6, 7])
+//     Explanation:
+//       - At root 5 (matching key = 5), both left subtree (rooted at 3) and right
+//         subtree (rooted at 6) are non-null.
+//       - Starting from root->left (3), follow right pointers to find the in-order
+//         predecessor node 4.
+//       - Set 4->right = 6 (attaching the entire right subtree containing 6 and 7)
+//         and return 3 as the new root.
+//       - The resulting tree remains a valid BST with in-order values [2, 3, 4, 6,
+//         7].
+//
+//   Example 3:
+//     Input:  root = [5, 3, 6, 2, 4, null, 7], key = 99
+//     Output: [5, 3, 6, 2, 4, null, 7] (in-order [2, 3, 4, 5, 6, 7])
+//     Explanation:
+//       - Compare key = 99 down the right spine: 5 < 99 recurses to 6, 6 < 99
+//         recurses to 7, and 7 < 99 recurses to nullptr.
+//       - The nullptr base case returns nullptr without modifying any node.
+//       - Each recursive frame reattaches its unchanged child pointer and returns
+//         the original root 5 with in-order [2, 3, 4, 5, 6, 7].
+//
 // Algorithm:
 //   Use recursive BST search-and-splice in two phases:
 //   1. Search: Compare `key` with `node->val`. Recurse right when

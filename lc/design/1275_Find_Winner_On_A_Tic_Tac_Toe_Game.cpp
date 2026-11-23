@@ -8,6 +8,42 @@
 //   completed any row, column, or diagonal of length 3; `"Draw"` if all 9
 //   squares are filled with no winner; or `"Pending"` if moves remain.
 //
+// Examples:
+//   Example 1:
+//     Input:  moves = [[0, 0], [2, 0], [1, 1], [2, 1], [2, 2]]
+//     Output: "A"
+//     Explanation:
+//       - Move 0 [0, 0] (player +1) sets rows[0] = 1, cols[0] = 1, and diag = 1;
+//         move 1 [2, 0] (player -1) sets rows[2] = -1, cols[0] = 0, and anti_diag =
+//         -1.
+//       - Move 2 [1, 1] (player +1) updates rows[1] = 1, cols[1] = 1, diag = 2, and
+//         anti_diag = 0; move 3 [2, 1] (player -1) sets rows[2] = -2 and cols[1] =
+//         0.
+//       - Move 4 [2, 2] (player +1) satisfies r == c and increments diag to 3;
+//         std::abs(diag) == 3 triggers an immediate return of "A".
+//
+//   Example 2:
+//     Input:  moves = [[0, 0], [1, 1], [2, 0], [1, 0], [1, 2], [2, 1], [0, 1], [0,
+//             2], [2, 2]]
+//     Output: "Draw"
+//     Explanation:
+//       - Processing all 9 alternating +1/-1 moves updates row, column, diag, and
+//         anti_diag counters without any counter ever reaching magnitude 3.
+//       - After move 8 [2, 2], the final counter values are rows = [1, -1, 1], cols
+//         = [1, -1, 1], diag = 1, and anti_diag = -1.
+//       - Since the loop completes with moves.size() == 9 (kMaxMoves), the function
+//         returns "Draw".
+//
+//   Example 3:
+//     Input:  moves = [[0, 0], [1, 1]]
+//     Output: "Pending"
+//     Explanation:
+//       - Move 0 [0, 0] (player +1) sets rows[0] = 1, cols[0] = 1, and diag = 1,
+//         while move 1 [1, 1] (player -1) sets rows[1] = -1, cols[1] = -1, diag =
+//         0, and anti_diag = -1.
+//       - No line counter has absolute value 3 and moves.size() == 2 is less than
+//         9, so the function returns "Pending".
+//
 // Algorithm:
 //   Track signed net counts for every winning line (3 rows, 3 columns, main
 //   diagonal `r == c`, and anti-diagonal `r + c == 2`). Assign player A weight

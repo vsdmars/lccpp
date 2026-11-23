@@ -7,6 +7,41 @@
 //   rooted at that node (including the node itself). If multiple sums share
 //   the highest frequency, return all of them in any order.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [5, 2, -3]
+//     Output: [-3, 2, 4] (sorted; any order accepted)
+//     Explanation:
+//       - Post-order compute_sum visits left leaf 2, recording subtree_sum = 2,
+//         freq[2] = 1, and max_freq = 1.
+//       - It then visits right leaf -3, recording subtree_sum = -3 and freq[-3] = 1
+//         with max_freq remaining 1.
+//       - At root 5, it sums 5 + 2 + (-3) = 4, setting freq[4] = 1, and the final
+//         scan collects all sums with count == 1 to return {2, -3, 4} (sorted to
+//         [-3, 2, 4]).
+//
+//   Example 2:
+//     Input:  root = [5, 2, -5]
+//     Output: [2]
+//     Explanation:
+//       - Post-order compute_sum visits left leaf 2 (freq[2] = 1, max_freq = 1) and
+//         right leaf -5 (freq[-5] = 1, max_freq = 1).
+//       - At root 5, it computes 5 + 2 + (-5) = 2, incrementing freq[2] to 2 and
+//         raising max_freq to 2.
+//       - Iterating over freq collects only keys with count == 2, returning [2].
+//
+//   Example 3:
+//     Input:  root = [100, 10, 20, 1, 2, 1, 2]
+//     Output: [1, 2] (sorted; any order accepted)
+//     Explanation:
+//       - The left subtree computes leaf sums 1 (freq[1] = 1) and 2 (freq[2] = 1),
+//         then node 10 sums 10 + 1 + 2 = 13 (freq[13] = 1) with max_freq = 1.
+//       - The right subtree visits leaves 1 and 2, incrementing freq[1] = 2 and
+//         freq[2] = 2 (raising max_freq to 2), then node 20 sums 20 + 1 + 2 = 23
+//         (freq[23] = 1).
+//       - Root 100 computes 100 + 13 + 23 = 136 (freq[136] = 1), and the final pass
+//         gathers every sum with count == 2, yielding [1, 2].
+//
 // Algorithm:
 //   Perform a single post-order DFS traversal to compute each node's subtree
 //   sum from the bottom up: subtree_sum(u) = u->val + subtree_sum(u->left) +

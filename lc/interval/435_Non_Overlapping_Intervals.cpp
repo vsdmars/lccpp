@@ -9,6 +9,38 @@
 //   Constraints: 1 <= intervals.size() <= 10^5, -5*10^4 <= start_i < end_i
 //   <= 5*10^4 (empty input returns 0).
 //
+// Examples:
+//   Example 1:
+//     Input:  intervals = [[1, 2], [2, 3], [3, 4], [1, 3]]
+//     Output: 1
+//     Explanation:
+//       - Sort spans by end coordinate ascending to get [1, 2] first, initializing
+//         kept = 1 and last_end = 2.
+//       - Keep [2, 3] since start = 2 >= last_end (2), updating kept = 2 and
+//         last_end = 3, and skip [1, 3] since start = 1 < 3.
+//       - Keep [3, 4] since start = 3 >= last_end (3), yielding kept = 3 and
+//         spans.size() - kept = 4 - 3 = 1 removal.
+//
+//   Example 2:
+//     Input:  intervals = [[1, 2], [2, 3], [3, 4], [1, 100]]
+//     Output: 1
+//     Explanation:
+//       - Sort spans by end ascending to [1, 2], [2, 3], [3, 4], [1, 100], starting
+//         with [1, 2] (kept = 1, last_end = 2).
+//       - Accept [2, 3] (2 >= 2, kept = 2, last_end = 3) and [3, 4] (3 >= 3, kept =
+//         3, last_end = 4).
+//       - Skip [1, 100] because start = 1 < last_end (4), and return 4 - 3 = 1.
+//
+//   Example 3:
+//     Input:  intervals = [[-5, -2], [-3, 0], [0, 2], [-2, 1]]
+//     Output: 2
+//     Explanation:
+//       - Sort spans by end ascending to [-5, -2], [-3, 0], [-2, 1], [0, 2],
+//         initializing kept = 1 and last_end = -2.
+//       - Skip [-3, 0] since -3 < -2, then keep [-2, 1] because -2 >= -2 (kept = 2,
+//         last_end = 1).
+//       - Skip [0, 2] since 0 < 1, and return spans.size() - kept = 4 - 2 = 2.
+//
 // Algorithm:
 //   Greedy earliest-finish interval scheduling. Minimizing removals is
 //   equivalent to maximizing the number of mutually compatible intervals kept.

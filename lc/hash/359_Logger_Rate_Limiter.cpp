@@ -10,6 +10,54 @@
 //   Implement `shouldPrintMessage(timestamp, message)` returning true if the
 //   message should be printed and false otherwise.
 //
+// Examples:
+//   Example 1:
+//     Input:  operations = ["Logger", "shouldPrintMessage", "shouldPrintMessage",
+//             "shouldPrintMessage", "shouldPrintMessage", "shouldPrintMessage",
+//             "shouldPrintMessage"], args = [[], [1, "foo"], [2, "bar"], [3,
+//             "foo"], [8, "bar"], [10, "foo"], [11, "foo"]]
+//     Output: [null, true, true, false, false, false, true]
+//     Explanation:
+//       - shouldPrintMessage(1, "foo") finds "foo" absent in next_allowed_time_,
+//         records next_allowed_time_["foo"] = 1 + 10 = 11, and returns true.
+//       - shouldPrintMessage(2, "bar") finds "bar" absent in next_allowed_time_,
+//         records next_allowed_time_["bar"] = 2 + 10 = 12, and returns true.
+//       - shouldPrintMessage(3, "foo"), (8, "bar"), and (10, "foo") satisfy 3 < 11,
+//         8 < 12, and 10 < 11 respectively, so each returns false without modifying
+//         next_allowed_time_.
+//       - shouldPrintMessage(11, "foo") finds 11 < 11 is false, updates
+//         next_allowed_time_["foo"] = 11 + 10 = 21, and returns true.
+//
+//   Example 2:
+//     Input:  operations = ["Logger", "shouldPrintMessage", "shouldPrintMessage",
+//             "shouldPrintMessage"], args = [[], [5, "warn"], [14, "warn"], [15,
+//             "warn"]]
+//     Output: [null, true, false, true]
+//     Explanation:
+//       - shouldPrintMessage(5, "warn") inserts next_allowed_time_["warn"] = 5 + 10
+//         = 15 and returns true.
+//       - shouldPrintMessage(14, "warn") sees 14 < 15, returns false, and leaves
+//         next_allowed_time_["warn"] unchanged at 15.
+//       - shouldPrintMessage(15, "warn") sees 15 < 15 is false, updates
+//         next_allowed_time_["warn"] = 15 + 10 = 25, and returns true.
+//
+//   Example 3:
+//     Input:  operations = ["Logger", "shouldPrintMessage", "shouldPrintMessage",
+//             "shouldPrintMessage", "shouldPrintMessage", "shouldPrintMessage",
+//             "shouldPrintMessage"], args = [[], [0, "init"], [0, "init"], [9,
+//             "init"], [10, "init"], [19, "init"], [20, "init"]]
+//     Output: [null, true, false, false, true, false, true]
+//     Explanation:
+//       - shouldPrintMessage(0, "init") records next_allowed_time_["init"] = 0 + 10
+//         = 10 and returns true.
+//       - shouldPrintMessage(0, "init") and (9, "init") both check timestamp < 10
+//         and return false while keeping next_allowed_time_["init"] = 10.
+//       - shouldPrintMessage(10, "init") reaches the exact boundary where 10 < 10
+//         is false, updates next_allowed_time_["init"] = 20, and returns true.
+//       - shouldPrintMessage(19, "init") returns false (19 < 20), and
+//         shouldPrintMessage(20, "init") updates next_allowed_time_["init"] = 30
+//         and returns true.
+//
 // Algorithm:
 //   Maintain a hash map storing, for each previously printed message, the
 //   earliest next timestamp at which it is allowed to be printed again

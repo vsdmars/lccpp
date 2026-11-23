@@ -8,6 +8,36 @@
 //     - `getNext()`: returns a pointer to the next node (or `nullptr`).
 //   Print all node values in reverse order without modifying the list.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3, 4]
+//     Output: [4, 3, 2, 1]
+//     Explanation:
+//       - Traverse the list from head via getNext(), pushing node pointers for 1,
+//         2, 3, and 4 onto stack.
+//       - Stop when cur reaches nullptr, leaving node 4 at stack.back().
+//       - Pop pointers from stack in LIFO order and call printValue(), outputting
+//         4, 3, 2, 1.
+//
+//   Example 2:
+//     Input:  head = [0, -4, -1, 3, -5]
+//     Output: [-5, 3, -1, -4, 0]
+//     Explanation:
+//       - Walk all five nodes via getNext(), pushing pointers for 0, -4, -1, 3, and
+//         -5 onto stack (or checkpointing indices 0 and 3 with block_size = 3 in
+//         the sqrt-space variant).
+//       - Pop each node from stack and invoke printValue() to emit -5, 3, -1, -4,
+//         and 0 in reverse traversal order.
+//
+//   Example 3:
+//     Input:  head = [42]
+//     Output: [42]
+//     Explanation:
+//       - Push the single head pointer (42) onto stack before getNext() returns
+//         nullptr.
+//       - Pop the lone node pointer from stack and call printValue(), emitting
+//         [42].
+//
 // Algorithm:
 //   Primary (Explicit Stack):
 //     Traverse the list from head to tail via `getNext()`, pushing each node

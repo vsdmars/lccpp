@@ -8,6 +8,43 @@
 //   can be picked at most once. Return the maximum cherries collectible, or 0
 //   if no valid round-trip path exists.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[0, 1, -1], [1, 0, -1], [1, 1, 1]]
+//     Output: 5
+//     Explanation:
+//       - Verify start (0, 0) and end (2, 2) are not thorns (-1) and call dfs(grid,
+//         memo, 0, 0, 0).
+//       - At step 1, split the walkers to (r1, c1) = (1, 0) and (r2, c2) = (0, 1),
+//         collecting grid[1][0] + grid[0][1] = 2 cherries.
+//       - At step 2, advance to (2, 0) and (1, 1) (avoiding the -1 thorns at column
+//         2) to collect grid[2][0] + grid[1][1] = 1 + 0 = 1 cherry.
+//       - At step 3 both walkers converge at (2, 1) (crediting grid[2][1] = 1
+//         once), then hit the base case at (2, 2) for grid[2][2] = 1, returning
+//         std::max(0, 5) = 5.
+//
+//   Example 2:
+//     Input:  grid = [[1, 1, -1], [1, -1, 1], [-1, 1, 1]]
+//     Output: 0
+//     Explanation:
+//       - Pass the endpoint check (grid[0][0] = 1 and grid[2][2] = 1) and invoke
+//         dfs(grid, memo, 0, 0, 0).
+//       - At step 1, explore moving walkers to (0, 1) or (1, 0), the only non-thorn
+//         cells reachable from (0, 0).
+//       - At step 2, every cell with r + c = 2 is a thorn (grid[0][2] = -1,
+//         grid[1][1] = -1, grid[2][0] = -1), so all four transitions return
+//         kImpossible (-1).
+//       - Propagate kImpossible back to (0, 0, 0) and return std::max(0, -1) = 0.
+//
+//   Example 3:
+//     Input:  grid = [[1]]
+//     Output: 1
+//     Explanation:
+//       - Verify n = 1 and grid[0][0] = 1 != -1, then call dfs(grid, memo, 0, 0,
+//         0).
+//       - Hit the base case r1 == n - 1 && c1 == n - 1 at (0, 0), returning
+//         grid[0][0] = 1 so cherryPickup returns std::max(0, 1) = 1.
+//
 // Algorithm:
 //   A round trip (down/right then up/left) is equivalent to two walkers
 //   simultaneously traversing from (0, 0) to (N - 1, N - 1) moving only down

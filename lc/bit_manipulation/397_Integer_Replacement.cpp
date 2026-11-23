@@ -7,6 +7,37 @@
 //     - If `n` is odd, replace `n` with either `n + 1` or `n - 1`.
 //   Return the minimum number of operations required for `n` to become `1`.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 8
+//     Output: 3
+//     Explanation:
+//       - Initialize `val = 8` (`1000_2`) and `steps = 0`.
+//       - Each iteration sees `(val & 1) == 0` and halves `val`: `8 -> 4` (`steps =
+//         1`), `4 -> 2` (`steps = 2`), and `2 -> 1` (`steps = 3`).
+//       - The loop exits when `val == 1` and returns `3`.
+//
+//   Example 2:
+//     Input:  n = 7
+//     Output: 4
+//     Explanation:
+//       - Initialize `val = 7` (`111_2`) and `steps = 0`; since `val != 3` and `(7
+//         & 3) == 3`, increment to `val = 8` (`steps = 1`).
+//       - Now `val = 8` is even, so three consecutive halvings (`8 -> 4 -> 2 -> 1`)
+//         advance `steps` from `1` to `4`.
+//       - The loop exits when `val == 1` and returns `4`.
+//
+//   Example 3:
+//     Input:  n = 2147483647
+//     Output: 32
+//     Explanation:
+//       - Widen `n = 2147483647` (`2^31 - 1`) to 64-bit `val = 2147483647ULL` with
+//         `steps = 0`.
+//       - Because `val != 3` and `(val & 3) == 3`, increment `val` to `2147483648`
+//         (`2^31`, `steps = 1`) without signed 32-bit overflow.
+//       - Repeatedly halve the even power of two (`2^31 -> 2^30 -> ... -> 1`)
+//         across 31 shifts, reaching `val == 1` with `steps = 32`.
+//
 // Algorithm:
 //   Greedy bit-level reduction using `std::uint64_t` (preventing signed 32-bit
 //   overflow when `n == INT_MAX` and we increment `n + 1`).

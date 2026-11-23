@@ -12,6 +12,40 @@
 //       (e.g., "10:02").
 //   Constraints: 0 <= turned_on <= 10.
 //
+// Examples:
+//   Example 1:
+//     Input:  turned_on = 1
+//     Output: ["0:01", "0:02", "0:04", "0:08", "0:16", "0:32", "1:00", "2:00",
+//             "4:00", "8:00"]
+//     Explanation:
+//       - Call backtrack(0, 1, 0, 0, results) to pick 1 LED from kLedWeights = [8,
+//         4, 2, 1, 32, 16, 8, 4, 2, 1].
+//       - For indices i = 0..3 (hour LEDs), add kLedWeights[i] to hour with minute
+//         = 0, reaching remaining == 0 and formatting "8:00", "4:00", "2:00", and
+//         "1:00".
+//       - For indices i = 4..9 (minute LEDs), add kLedWeights[i] to minute with
+//         hour = 0 and format "0:32", "0:16", "0:08", "0:04", "0:02", and "0:01"
+//         with two-digit zero-padded minutes.
+//
+//   Example 2:
+//     Input:  turned_on = 0
+//     Output: ["0:00"]
+//     Explanation:
+//       - Pass the 0 <= turned_on <= 8 check and invoke backtrack(0, 0, 0, 0,
+//         results).
+//       - With hour = 0 <= 11, minute = 0 <= 59, and remaining == 0, hit the base
+//         case immediately and record format_time(0, 0) = "0:00".
+//
+//   Example 3:
+//     Input:  turned_on = 9
+//     Output: []
+//     Explanation:
+//       - Check the early guard turned_on < 0 || turned_on > 8, which evaluates to
+//         true for turned_on = 9.
+//       - Return [] immediately because valid hours (0..11) use at most 3 lit LEDs
+//         and valid minutes (0..59) use at most 5 lit LEDs, making 9 lit LEDs
+//         impossible.
+//
 // Algorithm:
 //   1. Backtracking Over LED Combinations (`readBinaryWatch`):
 //      Treat all 10 LEDs as an ordered array (indices 0..3 for hours, 4..9 for

@@ -7,6 +7,42 @@
 //   of distinct ways to decode s into letters. Leading zeros (e.g., "06") are
 //   invalid and cannot decode to 'F'. The answer fits in a 32-bit signed int.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "226"
+//     Output: 3
+//     Explanation:
+//       - Verify s is non-empty and s[0] = '2' != '0', then initialize rolling
+//         states prev2 = 1 and prev1 = 1.
+//       - At i = 1 (s[1] = '2'), single-digit '2' adds prev1 = 1 and two-digit 22
+//         in [10, 26] adds prev2 = 1, giving cur = 2 and rolling to prev2 = 1,
+//         prev1 = 2.
+//       - At i = 2 (s[2] = '6'), single-digit '6' adds prev1 = 2 and two-digit 26
+//         in [10, 26] adds prev2 = 1, giving cur = 3 and rolling to prev2 = 2,
+//         prev1 = 3.
+//       - Return prev1 = 3 for the three valid decodings "BBF", "BZ", and "VF".
+//
+//   Example 2:
+//     Input:  s = "2101"
+//     Output: 1
+//     Explanation:
+//       - Initialize prev2 = 1 and prev1 = 1 after confirming s[0] = '2' != '0'.
+//       - At i = 1 (s[1] = '1'), single-digit '1' and two-digit 21 are both valid,
+//         giving cur = 1 + 1 = 2 and rolling to prev2 = 1, prev1 = 2.
+//       - At i = 2 (s[2] = '0'), single-digit '0' contributes 0 while two-digit 10
+//         in [10, 26] adds prev2 = 1, giving cur = 1 and rolling to prev2 = 2,
+//         prev1 = 1.
+//       - At i = 3 (s[3] = '1'), single-digit '1' adds prev1 = 1 while two-digit 01
+//         is outside [10, 26], giving cur = 1 and returning prev1 = 1.
+//
+//   Example 3:
+//     Input:  s = "06"
+//     Output: 0
+//     Explanation:
+//       - Inspect the first character s[0] against '0' before running the DP loop.
+//       - Return 0 immediately because a leading '0' cannot decode to any letter
+//         and "06" is invalid.
+//
 // Algorithm:
 //   Bottom-up dynamic programming with O(1) space. Let dp[k] be the number of
 //   valid decodings of prefix s[0..k), with dp[0] = 1 (empty prefix). For each

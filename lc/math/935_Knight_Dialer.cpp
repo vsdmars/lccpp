@@ -11,6 +11,40 @@
 //   landing on '*' or '#'), pressing `n` digits in total (1 <= n <= 5000).
 //   Return the number of distinct `n`-digit numbers dialable, modulo 10^9 + 7.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 1
+//     Output: 10
+//     Explanation:
+//       - Initialize dp[0..9] to 1, representing one valid 1-digit sequence ending
+//         at each keypad key.
+//       - Because n = 1, the hop loop (for step = 1; step < n; ++step) executes
+//         zero times.
+//       - Sum all 10 entries of dp to return 10.
+//
+//   Example 2:
+//     Input:  n = 2
+//     Output: 20
+//     Explanation:
+//       - Start with length-1 counts dp = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}.
+//       - On hop step = 1, sum incoming knight moves per key: next[0] = next[1] =
+//         next[2] = next[3] = next[7] = next[8] = next[9] = 2, next[4] = next[6] =
+//         3, and next[5] = 0.
+//       - Sum next[0..9] (2*7 + 3*2 + 0) to obtain 20.
+//
+//   Example 3:
+//     Input:  n = 3
+//     Output: 46
+//     Explanation:
+//       - After hop 1, dp = {2, 2, 2, 2, 3, 0, 3, 2, 2, 2}.
+//       - On hop step = 2, compute next[0] = dp[4] + dp[6] = 6, next[1] = dp[6] +
+//         dp[8] = 5, next[2] = dp[7] + dp[9] = 4, next[3] = dp[4] + dp[8] = 5, and
+//         next[4] = dp[0] + dp[3] + dp[9] = 6.
+//       - Compute the remaining keys: next[5] = 0, next[6] = dp[0] + dp[1] + dp[7]
+//         = 6, next[7] = dp[2] + dp[6] = 5, next[8] = dp[1] + dp[3] = 4, and
+//         next[9] = dp[2] + dp[4] = 5.
+//       - Sum next[0..9] (6 + 5 + 4 + 5 + 6 + 0 + 6 + 5 + 4 + 5) to return 46.
+//
 // Algorithm:
 //   1. Bottom-up rolling Dynamic Programming (`knightDialer`):
 //      Let `dp[d]` be the number of valid sequences of the current length ending

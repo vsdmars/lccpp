@@ -7,6 +7,40 @@
 //   times as it shows in both arrays (i.e., `min(count1[x], count2[x])`), and
 //   the result may be returned in any order.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums1 = [1, 2, 2, 1], nums2 = [2, 2]
+//     Output: [2, 2]
+//     Explanation:
+//       - Select nums2 (size 2 <= 4) as smaller and nums1 as larger to minimize
+//         hash map space.
+//       - Build counts = {2: 2} from smaller = [2, 2].
+//       - Stream through nums1: 1 is absent, the two 2s each find counts[2] > 0 and
+//         decrement it (2 -> 1 -> 0) while appending 2 twice, and the final 1 is
+//         absent, returning [2, 2].
+//
+//   Example 2:
+//     Input:  nums1 = [4, 9, 5], nums2 = [9, 4, 9, 8, 4]
+//     Output: [9, 4]
+//     Explanation:
+//       - Select nums1 (size 3 <= 5) as smaller and build counts = {4: 1, 9: 1, 5:
+//         1}.
+//       - Probe larger = [9, 4, 9, 8, 4]: the first 9 and 4 match with count 1,
+//         appending 9 and 4 and decrementing counts[9] and counts[4] to 0.
+//       - The remaining 9, 8, and 4 either have remaining count 0 or are absent
+//         from counts, returning [9, 4] (same multiset as [4, 9]).
+//
+//   Example 3:
+//     Input:  nums1 = [-1, -1, 0, 3], nums2 = [-1, -1, -1, 5]
+//     Output: [-1, -1]
+//     Explanation:
+//       - Since both arrays have size 4, choose nums1 as smaller and build counts =
+//         {-1: 2, 0: 1, 3: 1}.
+//       - Scan nums2: the first two -1 entries decrement counts[-1] from 2 to 0 and
+//         append -1 twice.
+//       - The third -1 sees counts[-1] == 0 and 5 is absent from counts, capping
+//         the output at [-1, -1].
+//
 // Algorithm:
 //   Select the smaller input array to build a frequency hash map, keeping
 //   auxiliary memory bounded by O(min(M, N)). Then stream through the larger

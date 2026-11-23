@@ -8,6 +8,45 @@
 //   the largest element; otherwise, return `-1`.
 //   Constraints: 1 <= nums.size() <= 50; 0 <= nums[i] <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 6, 1, 0]
+//     Output: 1
+//     Explanation:
+//       - Initialize largest = INT_MIN, second_largest = INT_MIN, and largest_idx =
+//         0.
+//       - At idx = 0 (value = 3), 3 >= largest updates second_largest = INT_MIN,
+//         largest = 3, and largest_idx = 0.
+//       - At idx = 1 (value = 6), 6 >= 3 demotes second_largest = 3 and updates
+//         largest = 6 and largest_idx = 1.
+//       - At idx = 2 (value = 1) and idx = 3 (value = 0), neither exceeds
+//         second_largest = 3, so all trackers remain unchanged.
+//       - Verify 6 >= 2 * 3 holds in 64-bit arithmetic, and return largest_idx = 1.
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 3, 4]
+//     Output: -1
+//     Explanation:
+//       - Initialize largest = INT_MIN, second_largest = INT_MIN, and largest_idx =
+//         0.
+//       - Scan idx = 0 (1) and idx = 1 (2), leaving largest = 2, second_largest =
+//         1, and largest_idx = 1.
+//       - Scan idx = 2 (3) and idx = 3 (4), demoting previous maxima so largest =
+//         4, second_largest = 3, and largest_idx = 3.
+//       - Verify 4 < 2 * 3 in 64-bit arithmetic, so return -1.
+//
+//   Example 3:
+//     Input:  nums = [5, 1, 5]
+//     Output: -1
+//     Explanation:
+//       - At idx = 0 (value = 5), set largest = 5, second_largest = INT_MIN, and
+//         largest_idx = 0.
+//       - At idx = 1 (value = 1), since 1 < largest and 1 > second_largest, update
+//         second_largest = 1.
+//       - At idx = 2 (value = 5), 5 >= largest triggers demotion so second_largest
+//         = 5, largest = 5, and largest_idx = 2.
+//       - Since 5 < 2 * 5, the duplicate maximum fails the 2x check and returns -1.
+//
 // Algorithm:
 //   The maximum element is at least twice every other element if and only if
 //   it is at least twice the second-largest element. In a single linear pass,

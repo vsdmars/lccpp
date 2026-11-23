@@ -8,6 +8,42 @@
 //   that the first `k` slots of `nums` hold the deduplicated values. Extra
 //   memory must be O(1).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 1, 2]
+//     Output: k = 2, nums[0..1] = [1, 2]
+//     Explanation:
+//       - Initialize write_idx = 0 so nums[0..0] = [1] holds the first unique
+//         value.
+//       - At read_idx = 1, nums[1] == nums[0] (1 == 1), so the duplicate is skipped
+//         without advancing write_idx.
+//       - At read_idx = 2, nums[2] = 2 != nums[0] = 1, so write_idx increments to 1
+//         and nums[1] is overwritten with 2.
+//       - Return write_idx + 1 = 2 with the deduplicated prefix nums[0..1] = [1,
+//         2].
+//
+//   Example 2:
+//     Input:  nums = [-3, -3, -1, 0, 0, 2]
+//     Output: k = 4, nums[0..3] = [-3, -1, 0, 2]
+//     Explanation:
+//       - Start with write_idx = 0 (nums[0] = -3); at read_idx = 1, duplicate -3
+//         matches nums[0] and is skipped.
+//       - At read_idx = 2, nums[2] = -1 != -3 increments write_idx to 1 and writes
+//         nums[1] = -1.
+//       - At read_idx = 3, nums[3] = 0 != -1 increments write_idx to 2 and writes
+//         nums[2] = 0; at read_idx = 4, duplicate 0 is skipped.
+//       - At read_idx = 5, nums[5] = 2 != 0 increments write_idx to 3 and writes
+//         nums[3] = 2, returning 4 with nums[0..3] = [-3, -1, 0, 2].
+//
+//   Example 3:
+//     Input:  nums = [5, 5, 5, 5]
+//     Output: k = 1, nums[0..0] = [5]
+//     Explanation:
+//       - Initialize write_idx = 0 with nums[0] = 5.
+//       - For read_idx = 1, 2, and 3, every element equals nums[write_idx] = 5 and
+//         is skipped by continue.
+//       - Return write_idx + 1 = 1 with the single unique element nums[0] = 5.
+//
 // Algorithm:
 //   Slow/fast two pointers. Keep `write_idx` pointing to the last confirmed
 //   unique element (initially 0) while `read_idx` scans from 1 to `n - 1`.

@@ -6,6 +6,39 @@
 //   it into a height-balanced Binary Search Tree (BST), where the depths of
 //   the two subtrees of every node never differ by more than 1.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [-10, -3, 0, 5, 9]
+//     Output: [0, -3, 9, -10, null, 5]
+//     Explanation:
+//       - Call build(0, 5), selecting mid = 0 + (5 - 0) / 2 = 2 so nums[2] = 0
+//         becomes the root.
+//       - Recurse left on [0, 2): mid = 1 chooses nums[1] = -3 as 0->left, and its
+//         left call [0, 1) chooses nums[0] = -10 while its right call [2, 2)
+//         returns nullptr.
+//       - Recurse right on [3, 5): mid = 4 chooses nums[4] = 9 as 0->right, and its
+//         left call [3, 4) chooses nums[3] = 5 while its right call [5, 5) returns
+//         nullptr.
+//       - The resulting height-balanced BST has level-order [0, -3, 9, -10, null,
+//         5] and inorder [-10, -3, 0, 5, 9].
+//
+//   Example 2:
+//     Input:  nums = [1, 3]
+//     Output: [3, 1]
+//     Explanation:
+//       - Call build(0, 2), computing mid = 0 + (2 - 0) / 2 = 1 so nums[1] = 3
+//         becomes the root.
+//       - Recurse left on [0, 1) where mid = 0 creates 3->left = 1, while right
+//         call build(2, 2) returns nullptr, yielding [3, 1].
+//
+//   Example 3:
+//     Input:  nums = []
+//     Output: []
+//     Explanation:
+//       - Invoke build(0, 0) for the empty input vector.
+//       - Because left >= right (0 >= 0), return nullptr immediately, representing
+//         an empty tree [].
+//
 // Algorithm:
 //   Divide-and-conquer midpoint selection over half-open index ranges
 //   `[left, right)`. Because `nums` is sorted:

@@ -10,6 +10,36 @@
 //   - 0 <= strs[i].length <= 200
 //   - strs[i] consists of only lowercase English letters (if non-empty)
 //
+// Examples:
+//   Example 1:
+//     Input:  strs = ["flower", "flow", "flight"]
+//     Output: "fl"
+//     Explanation:
+//       - Set `first = "flower"` and scan column `col = 0`: `expected = 'f'`
+//         matches `strs[1][0] = 'f'` and `strs[2][0] = 'f'`.
+//       - At `col = 1`, `expected = 'l'` matches `strs[1][1] = 'l'` and `strs[2][1]
+//         = 'l'`.
+//       - At `col = 2`, `expected = 'o'` matches `strs[1][2] = 'o'`, but
+//         `strs[2][2] = 'i' != 'o'`, returning `first.substr(0, 2) = "fl"`.
+//
+//   Example 2:
+//     Input:  strs = ["dog", "racecar", "car"]
+//     Output: ""
+//     Explanation:
+//       - Set `first = "dog"` and begin vertical scan at `col = 0` with `expected =
+//         'd'`.
+//       - Checking `row = 1` (`"racecar"`) immediately finds `strs[1][0] = 'r' !=
+//         'd'`, returning `first.substr(0, 0) = ""`.
+//
+//   Example 3:
+//     Input:  strs = ["abab", "aba", "aba"]
+//     Output: "aba"
+//     Explanation:
+//       - Set `first = "abab"`; columns `col = 0` (`'a'`), `col = 1` (`'b'`), and
+//         `col = 2` (`'a'`) match across `strs[1]` and `strs[2]`.
+//       - At `col = 3`, `row = 1` satisfies `col == strs[1].size() == 3`,
+//         terminating early and returning `first.substr(0, 3) = "aba"`.
+//
 // Algorithm:
 //   Vertical column-by-column scanning (the direct O(1)-extra-space equivalent
 //   of Python's `zip(*strs)`):

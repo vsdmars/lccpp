@@ -11,6 +11,43 @@
 //   Constraints: 1 <= strings.length <= 200, 1 <= strings[i].length <= 50,
 //   lowercase English letters only.
 //
+// Examples:
+//   Example 1:
+//     Input:  strings = ["abc", "bcd", "acef", "xyz", "az", "ba", "a", "z"]
+//     Output: [["a", "z"], ["abc", "bcd", "xyz"], ["acef"], ["az", "ba"]]
+//     Explanation:
+//       - Compute `shiftKey` for each string relative to its first character modulo
+//         26: `"abc"`, `"bcd"`, and `"xyz"` all normalize to `"abc"` (offsets `0,
+//         1, 2`).
+//       - `"acef"` maps to `"acef"` (offsets `0, 2, 4, 5`), while `"a"` and `"z"`
+//         both map to `"a"` (offset `0`).
+//       - `"az"` maps to `"az"` (`('z' - 'a' + 26) % 26 = 25`), and `"ba"` also
+//         maps to `"az"` (`('a' - 'b' + 26) % 26 = 25`).
+//       - Move the four `buckets` vectors into `result`, forming the equivalence
+//         groups `["a", "z"]`, `["abc", "bcd", "xyz"]`, `["acef"]`, and `["az",
+//         "ba"]` (shown sorted).
+//
+//   Example 2:
+//     Input:  strings = ["az", "ba"]
+//     Output: [["az", "ba"]]
+//     Explanation:
+//       - For `"az"`, `shiftKey` uses `base = 'a'` to compute offsets `(0, 25)` and
+//         canonical key `"az"`.
+//       - For `"ba"`, `shiftKey` uses `base = 'b'` to compute `(('b' - 'b' + 26) %
+//         26 = 0, ('a' - 'b' + 26) % 26 = 25)`, producing the same key `"az"`.
+//       - Both strings append to `buckets["az"]`, returning the single group
+//         `[["az", "ba"]]`.
+//
+//   Example 3:
+//     Input:  strings = ["ab", "ab", "cd"]
+//     Output: [["ab", "ab", "cd"]]
+//     Explanation:
+//       - `shiftKey("ab")` produces `"ab"` (offsets `0, 1`), and `shiftKey("cd")`
+//         also produces `"ab"` (offsets `0, 1`).
+//       - All three input strings—including the duplicate `"ab"`—are appended to
+//         `buckets["ab"]`.
+//       - Moving `buckets["ab"]` into `result` yields `[["ab", "ab", "cd"]]`.
+//
 // Algorithm:
 //   Two strings belong to the same shift equivalence class iff they have the
 //   same length and identical cyclic character offsets relative to their first

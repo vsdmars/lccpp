@@ -10,6 +10,50 @@
 //   Constraints: 0 <= firstList.length, secondList.length <= 1000,
 //   0 <= start_i <= end_i <= 10^9.
 //
+// Examples:
+//   Example 1:
+//     Input:  firstList = [[0, 2], [5, 10], [13, 23], [24, 25]], secondList = [[1,
+//             5], [8, 12], [15, 24], [25, 26]]
+//     Output: [[1, 2], [5, 5], [8, 10], [15, 23], [24, 24], [25, 25]]
+//     Explanation:
+//       - Start with i = 0 ([0, 2]) and j = 0 ([1, 5]); lo = max(0, 1) = 1 and hi =
+//         min(2, 5) = 2 satisfy lo <= hi, so append [1, 2] and advance i = 1 since
+//         2 < 5.
+//       - At i = 1 ([5, 10]) and j = 0 ([1, 5]), compute [lo, hi] = [5, 5], append
+//         the point intersection [5, 5], and advance j = 1 since 10 < 5 is false.
+//       - At i = 1 ([5, 10]) and j = 1 ([8, 12]), append [8, 10] and advance i = 2;
+//         then at i = 2 ([13, 23]) and j = 1 ([8, 12]), lo = 13 > hi = 12 produces
+//         no overlap and advances j = 2.
+//       - At i = 2 ([13, 23]) and j = 2 ([15, 24]), append [15, 23] and advance i =
+//         3; at i = 3 ([24, 25]) and j = 2 ([15, 24]), append [24, 24] and advance
+//         j = 3.
+//       - At i = 3 ([24, 25]) and j = 3 ([25, 26]), append [25, 25] and advance i =
+//         4 (25 < 26), ending the loop with all six intersections.
+//
+//   Example 2:
+//     Input:  firstList = [[3, 5], [9, 20]], secondList = [[4, 5], [7, 10], [11,
+//             12], [14, 15], [16, 20]]
+//     Output: [[4, 5], [9, 10], [11, 12], [14, 15], [16, 20]]
+//     Explanation:
+//       - At i = 0 ([3, 5]) and j = 0 ([4, 5]), lo = 4 and hi = 5 yield [4, 5];
+//         because 5 < 5 is false, advance j = 1.
+//       - At i = 0 ([3, 5]) and j = 1 ([7, 10]), lo = 7 > hi = 5 means no overlap,
+//         so advance i = 1 since 5 < 10.
+//       - While i stays at 1 ([9, 20]), j walks through [7, 10], [11, 12], [14,
+//         15], and [16, 20] (each ending at or before 20), appending [9, 10], [11,
+//         12], [14, 15], and [16, 20] before j reaches 5 and ends the scan.
+//
+//   Example 3:
+//     Input:  firstList = [[0, 1], [4, 5]], secondList = [[2, 3], [6, 7]]
+//     Output: []
+//     Explanation:
+//       - At i = 0 ([0, 1]) and j = 0 ([2, 3]), lo = max(0, 2) = 2 > hi = min(1, 3)
+//         = 1, so nothing is appended and i advances to 1.
+//       - At i = 1 ([4, 5]) and j = 0 ([2, 3]), lo = 4 > hi = 3 skips appending and
+//         advances j to 1 since 5 < 3 is false.
+//       - At i = 1 ([4, 5]) and j = 1 ([6, 7]), lo = 6 > hi = 5 skips appending and
+//         advances i to 2, terminating the loop with [].
+//
 // Algorithm:
 //   Two-pointer merge scan ("inchworm" sweep over both sorted lists):
 //   - Maintain indices `i = 0` into `firstList` and `j = 0` into `secondList`.

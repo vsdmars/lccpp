@@ -11,6 +11,39 @@
 //     3. Append `i` copies of the letter 'a' to the i-th word (1-indexed).
 //   Return the resulting space-separated sentence.
 //
+// Examples:
+//   Example 1:
+//     Input:  sentence = "I speak Goat Latin"
+//     Output: "Imaa peaksmaaa oatGmaaaa atinLmaaaaa"
+//     Explanation:
+//       - Word 1 ("I") starts with vowel 'I', so append "I", "ma", and 1 'a' to
+//         produce "Imaa".
+//       - Word 2 ("speak") starts with consonant 's', so move 's' after "peak",
+//         append "ma" and 2 'a's to produce "peaksmaaa".
+//       - Word 3 ("Goat") moves 'G' to the end and appends "ma" plus 3 'a's ->
+//         "oatGmaaaa", and Word 4 ("Latin") moves 'L' and appends "ma" plus 4 'a's
+//         -> "atinLmaaaaa".
+//
+//   Example 2:
+//     Input:  sentence = "Each Apple In Over Under"
+//     Output: "Eachmaa Applemaaa Inmaaaa Overmaaaaa Undermaaaaaa"
+//     Explanation:
+//       - Check each word's leading character ('E', 'A', 'I', 'O', 'U') against
+//         kVowels = "aeiouAEIOU"; all five match as vowels.
+//       - Append each word intact followed by "ma" and word_index copies of 'a' for
+//         indices 1 through 5.
+//       - Join the five transformed words with single spaces to return "Eachmaa
+//         Applemaaa Inmaaaa Overmaaaaa Undermaaaaaa".
+//
+//   Example 3:
+//     Input:  sentence = "b"
+//     Output: "bmaa"
+//     Explanation:
+//       - Extract the single word "b" (pos = 0, end = 1) with word_index = 1 and no
+//         leading space since result is empty.
+//       - Since 'b' is not in kVowels, append word.substr(1) (empty), push 'b',
+//         then append "ma" and 1 'a' to return "bmaa".
+//
 // Algorithm:
 //   Scan `sentence` with two indices to extract each word as a zero-copy
 //   `std::string_view`, maintaining a 1-based `word_index`. For each word,

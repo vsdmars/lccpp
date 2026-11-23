@@ -12,6 +12,41 @@
 //   Constraints: 1 <= cpdomains.length <= 100, 1 <= cpdomains[i].length <= 100,
 //   1 <= rep <= 10^4, lowercase English letters and dots.
 //
+// Examples:
+//   Example 1:
+//     Input:  cpdomains = ["9001 discuss.leetcode.com"]
+//     Output: ["9001 com", "9001 discuss.leetcode.com", "9001 leetcode.com"]
+//     Explanation:
+//       - Split "9001 discuss.leetcode.com" at the space (index 4) and parse visits
+//         = 9001 with std::from_chars.
+//       - Add 9001 to counts["discuss.leetcode.com"], strip up to the first dot to
+//         add 9001 to counts["leetcode.com"], and strip again to add 9001 to
+//         counts["com"].
+//       - Format each entry in counts as "<total> <subdomain>", producing the three
+//         domain strings (shown sorted; any order is valid).
+//
+//   Example 2:
+//     Input:  cpdomains = ["900 google.mail.com", "50 yahoo.com", "1
+//             intel.mail.com", "5 wiki.org"]
+//     Output: ["1 intel.mail.com", "5 org", "5 wiki.org", "50 yahoo.com", "900
+//             google.mail.com", "901 mail.com", "951 com"]
+//     Explanation:
+//       - Process "900 google.mail.com" and "50 yahoo.com", setting google.mail.com
+//         = 900, mail.com = 900, yahoo.com = 50, and com = 950.
+//       - Process "1 intel.mail.com", setting intel.mail.com = 1 while incrementing
+//         mail.com to 901 and com to 951.
+//       - Process "5 wiki.org" to record wiki.org = 5 and org = 5, then serialize
+//         all 7 entries from counts into "<total> <subdomain>" strings.
+//
+//   Example 3:
+//     Input:  cpdomains = ["10 a.b.com", "20 a.b.com"]
+//     Output: ["30 a.b.com", "30 b.com", "30 com"]
+//     Explanation:
+//       - Parse "10 a.b.com" and initialize counts["a.b.com"] = 10, counts["b.com"]
+//         = 10, and counts["com"] = 10.
+//       - Parse "20 a.b.com" and add 20 to the same three subdomain keys,
+//         accumulating 30 for each before formatting the output vector.
+//
 // Algorithm:
 //   1. Maintain a hash map `counts` keyed by `std::string_view` pointing
 //      directly into the suffixes of each input entry (zero string copies

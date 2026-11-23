@@ -9,6 +9,44 @@
 //        been played since its previous occurrence.
 //   Return the number of valid playlists modulo 10^9 + 7 (`0 <= k < n <= goal <= 100`).
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3, goal = 3, k = 1
+//     Output: 6
+//     Explanation:
+//       - Initialize prev = [1, 0, 0, 0] for an empty playlist of length 0 with 0
+//         distinct songs.
+//       - At i = 1, only j = 1 is reachable by picking a new song, giving curr[1] =
+//         prev[0] * 3 = 3 and prev = [0, 3, 0, 0].
+//       - At i = 2, j = 1 gets 0 (since 1 > 1 is false) and j = 2 adds a second new
+//         song in prev[1] * 2 = 6 ways, giving prev = [0, 0, 6, 0].
+//       - At i = 3, curr[3] = prev[2] * (3 - 3 + 1) = 6 * 1 = 6 while j = 2 replays
+//         in prev[2] * (2 - 1) = 6 ways, so prev[3] = 6 is returned.
+//
+//   Example 2:
+//     Input:  n = 3, goal = 4, k = 1
+//     Output: 18
+//     Explanation:
+//       - Advance through lengths i = 1..3 as above to reach prev = [0, 0, 6, 6].
+//       - At i = 4 and j = 2, no new-song transition exists (prev[1] = 0) and
+//         replaying outside the last k = 1 song gives curr[2] = prev[2] * (2 - 1) =
+//         6.
+//       - At i = 4 and j = 3, picking the third song from j = 2 adds prev[2] * 1 =
+//         6 and replaying one of 3 - 1 = 2 eligible songs adds prev[3] * 2 = 12,
+//         giving curr[3] = 18.
+//       - Swap prev and curr and return prev[3] = 18.
+//
+//   Example 3:
+//     Input:  n = 1, goal = 5, k = 0
+//     Output: 1
+//     Explanation:
+//       - Initialize prev = [1, 0] for n = 1 and k = 0.
+//       - At i = 1 and j = 1, Case 1 picks the single song in prev[0] * 1 = 1 way,
+//         setting prev = [0, 1].
+//       - For each subsequent length i = 2..5 at j = 1, Case 2 is enabled (1 > 0)
+//         and contributes prev[1] * (1 - 0) = 1, keeping prev[1] = 1 until
+//         returning 1.
+//
 // Algorithm:
 //   Bottom-up combinatorial dynamic programming. Let `dp[i][j]` be the number
 //   of valid playlists of length `i` containing exactly `j` distinct songs,

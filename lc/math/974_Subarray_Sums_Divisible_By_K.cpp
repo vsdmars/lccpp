@@ -8,6 +8,47 @@
 //   Constraints: 1 <= nums.length <= 30000, -10000 <= nums[i] <= 10000,
 //   2 <= k <= 10000.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [4, 5, 0, -2, -3, 1], k = 5
+//     Output: 7
+//     Explanation:
+//       - Initialize remainder_counts = [1, 0, 0, 0, 0], rem = 0, and
+//         total_subarrays = 0.
+//       - For num = 4, rem becomes 4; add remainder_counts[4] = 0 (total = 0) and
+//         increment remainder_counts[4] to 1.
+//       - For num = 5 and then num = 0, rem stays 4 twice, adding
+//         remainder_counts[4] = 1 and then 2 (total = 3) while remainder_counts[4]
+//         reaches 3.
+//       - For num = -2, rem normalizes to (((4 - 2) % 5) + 5) % 5 = 2; add
+//         remainder_counts[2] = 0 and set remainder_counts[2] = 1.
+//       - For num = -3, rem normalizes to (((2 - 3) % 5) + 5) % 5 = 4; add
+//         remainder_counts[4] = 3 (total = 6) and set remainder_counts[4] = 4.
+//       - For num = 1, rem becomes (4 + 1) % 5 = 0; add remainder_counts[0] = 1 to
+//         reach total_subarrays = 7 and return 7.
+//
+//   Example 2:
+//     Input:  nums = [-1, 2, 9], k = 2
+//     Output: 2
+//     Explanation:
+//       - Initialize remainder_counts = [1, 0], rem = 0, and total_subarrays = 0.
+//       - For num = -1, normalize rem = (((0 - 1) % 2) + 2) % 2 = 1; add
+//         remainder_counts[1] = 0 and set remainder_counts[1] = 1.
+//       - For num = 2, rem = (((1 + 2) % 2) + 2) % 2 = 1; add remainder_counts[1] =
+//         1 (total = 1) and set remainder_counts[1] = 2.
+//       - For num = 9, rem = (((1 + 9) % 2) + 2) % 2 = 0; add remainder_counts[0] =
+//         1 (total = 2) and return 2.
+//
+//   Example 3:
+//     Input:  nums = [5], k = 9
+//     Output: 0
+//     Explanation:
+//       - Initialize remainder_counts of size 9 with remainder_counts[0] = 1 and
+//         all other entries 0.
+//       - Process num = 5 to get rem = (((0 + 5) % 9) + 9) % 9 = 5.
+//       - Add remainder_counts[5] = 0 to total_subarrays, increment
+//         remainder_counts[5] to 1, and return 0.
+//
 // Algorithm:
 //   Prefix sums modulo k with frequency counting.
 //   Let P[i] be the sum of the first i elements (with P[0] = 0). A contiguous

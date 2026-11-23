@@ -7,6 +7,39 @@
 //   the count `k` of remaining elements such that the first `k` slots of
 //   `nums` contain the elements not equal to `val` (in any order).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 2, 2, 3], val = 3
+//     Output: 2, nums[0..1] = [2, 2]
+//     Explanation:
+//       - Initialize write_idx = 0 and scan nums from left to right.
+//       - Skip index 0 (3 == val), then copy index 1 (2 != 3) to nums[0] and
+//         increment write_idx to 1.
+//       - Copy index 2 (2 != 3) to nums[1] and increment write_idx to 2, then skip
+//         index 3 (3 == val).
+//       - Return write_idx = 2 with the first 2 slots holding [2, 2].
+//
+//   Example 2:
+//     Input:  nums = [0, 1, 2, 2, 3, 0, 4, 2], val = 2
+//     Output: 5, nums[0..4] = [0, 1, 3, 0, 4]
+//     Explanation:
+//       - Start with write_idx = 0; indices 0 and 1 hold 0 and 1 (both != 2), so
+//         nums[0..1] stay [0, 1] and write_idx becomes 2.
+//       - Skip indices 2 and 3 because both equal val = 2, leaving write_idx = 2.
+//       - Read index 4 (3 != 2) and index 5 (0 != 2), copying them into nums[2] and
+//         nums[3] and advancing write_idx to 4.
+//       - Copy index 6 (4 != 2) into nums[4] to reach write_idx = 5, skip index 7
+//         (2 == val), and return 5.
+//
+//   Example 3:
+//     Input:  nums = [2, 2, 2], val = 2
+//     Output: 0 (nums[0..k - 1] is empty)
+//     Explanation:
+//       - Initialize write_idx = 0 and iterate through all three elements of nums.
+//       - Every element equals val = 2, so the check num != val is never satisfied
+//         and write_idx stays 0.
+//       - Return write_idx = 0, leaving zero retained elements.
+//
 // Algorithm:
 //   Slow/fast two pointers (equivalent to `std::remove`). Maintain a write
 //   cursor `write_idx` starting at 0 while scanning every element `num` in

@@ -7,6 +7,48 @@
 //   node values at level x is maximal.
 //   Constraints: 1 to 10^4 nodes; -10^5 <= Node.val <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 7, 0, 7, -8, null, null]
+//     Output: 2
+//     Explanation:
+//       - Initialize best_sum to INT64_MIN, best_level to 1, level to 1, and
+//         current_level to [node 1].
+//       - At level 1, sum node 1 (level_sum = 1) and queue children [7, 0] into
+//         next_level; since 1 > INT64_MIN, set best_sum = 1 and best_level = 1.
+//       - At level 2, sum 7 + 0 (level_sum = 7) and queue children [7, -8] into
+//         next_level; since 7 > 1, update best_sum = 7 and best_level = 2.
+//       - At level 3, sum 7 + (-8) (level_sum = -1) with empty next_level; since -1
+//         > 7 is false, keep best_sum = 7 and best_level = 2, then exit the loop
+//         and return 2.
+//
+//   Example 2:
+//     Input:  root = [989, null, 10250, 98693, -89388, null, null, null, -32127]
+//     Output: 2
+//     Explanation:
+//       - At level 1, visit [989] giving level_sum = 989 (> INT64_MIN), so best_sum
+//         becomes 989, best_level becomes 1, and next_level collects [10250].
+//       - At level 2, visit [10250] giving level_sum = 10250 (> 989), so best_sum
+//         updates to 10250, best_level updates to 2, and next_level collects
+//         [98693, -89388].
+//       - At level 3, visit [98693, -89388] giving level_sum = 9305 (< 10250),
+//         keeping best_level = 2 and queueing [-32127] into next_level.
+//       - At level 4, visit [-32127] giving level_sum = -32127 (< 10250) with an
+//         empty next_level, ending the BFS and returning 2.
+//
+//   Example 3:
+//     Input:  root = [-100, -20, -30, -20, -5, -10, null]
+//     Output: 3
+//     Explanation:
+//       - Initialize best_sum = INT64_MIN so negative level sums can still improve
+//         it, starting at level 1 with current_level = [-100].
+//       - At level 1, level_sum = -100 > INT64_MIN sets best_sum = -100 and
+//         best_level = 1, queueing [-20, -30] for level 2.
+//       - At level 2, level_sum = -20 + (-30) = -50 > -100 updates best_sum = -50
+//         and best_level = 2, queueing [-20, -5, -10] for level 3.
+//       - At level 3, level_sum = -20 + (-5) + (-10) = -35 > -50 updates best_sum =
+//         -35 and best_level = 3 with empty next_level, then returns 3.
+//
 // Algorithm:
 //   Traverse the tree level by level with BFS. For each level, sum the values
 //   of all nodes currently in the level frontier into a 64-bit accumulator

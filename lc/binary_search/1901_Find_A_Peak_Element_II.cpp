@@ -8,6 +8,37 @@
 //   cells outside the matrix perimeter as -1) and return its coordinates [i, j]
 //   in O(m log n) or O(n log m) time.
 //
+// Examples:
+//   Example 1:
+//     Input:  mat = [[1, 4], [3, 2]]
+//     Output: [0, 1]
+//     Explanation:
+//       - Initialize row search bounds low = 0 and high = 1.
+//       - At mid = 0, compare row_max(mat[0]) = 4 against row_max(mat[1]) = 3;
+//         since 4 < 3 is false, set high = 0.
+//       - The loop ends at low == high == 0, and std::ranges::max_element selects 4
+//         at column 1, returning [0, 1].
+//
+//   Example 2:
+//     Input:  mat = [[10, 20, 15], [21, 30, 14], [7, 16, 32]]
+//     Output: [2, 2]
+//     Explanation:
+//       - Initialize row search bounds low = 0 and high = 2.
+//       - At mid = 1, row_max(mat[1]) = 30 is strictly less than row_max(mat[2]) =
+//         32, so low advances to mid + 1 = 2.
+//       - The loop ends at low == high == 2, and the maximum in row 2 is 32 at
+//         column 2, returning [2, 2] (strictly greater than neighbors 14 and 16).
+//
+//   Example 3:
+//     Input:  mat = [[10, 1], [1, 10]]
+//     Output: [0, 0]
+//     Explanation:
+//       - Initialize row search bounds low = 0 and high = 1.
+//       - At mid = 0, row_max(mat[0]) = 10 equals row_max(mat[1]) = 10, so
+//         row_max(mat[0]) < row_max(mat[1]) is false and high becomes 0.
+//       - At row 0, the maximum element 10 sits at column 0, returning [0, 0] which
+//         strictly exceeds its adjacent cells (1 below and 1 to the right).
+//
 // Algorithm:
 //   Binary search on the row index range [low, high]. At each midpoint row
 //   `mid`, compute the maximum value in row `mid` and in row `mid + 1`.

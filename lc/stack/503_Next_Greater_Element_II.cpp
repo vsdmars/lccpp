@@ -8,6 +8,45 @@
 //   when traversing forward circularly from index `i`, or `-1` if no strictly
 //   greater number exists in `nums`.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 1]
+//     Output: [2, -1, 2]
+//     Explanation:
+//       - Pre-seed stack with nums in reverse ([1, 2, 1], top 1) and initialize
+//         result = [-1, -1, -1].
+//       - At i = 2 (current = 1), pop 1 (1 >= 1) to expose top 2, set result[2] =
+//         2, and push 1 (stack = [1, 2, 1]).
+//       - At i = 1 (current = 2), pop 1, 2, and 1 until stack is empty, keep
+//         result[1] = -1, and push 2 (stack = [2]).
+//       - At i = 0 (current = 1), top 2 > 1 remains, so set result[0] = 2 and
+//         return [2, -1, 2].
+//
+//   Example 2:
+//     Input:  nums = [8, 1, 9, 7]
+//     Output: [9, 9, -1, 8]
+//     Explanation:
+//       - Pre-seed stack in reverse with [7, 9, 1, 8] (top 8) and initialize result
+//         = [-1, -1, -1, -1].
+//       - At i = 3 (current = 7), top 8 > 7 gives result[3] = 8, and pushing 7
+//         gives stack = [7, 9, 1, 8, 7].
+//       - At i = 2 (current = 9), pop 7, 8, 1, 9, and 7 (all <= 9), leaving stack
+//         empty so result[2] = -1, then push 9 (stack = [9]).
+//       - At i = 1 (current = 1), top 9 > 1 sets result[1] = 9 and pushes 1 (stack
+//         = [9, 1]).
+//       - At i = 0 (current = 8), pop 1 (8 >= 1) to expose top 9, set result[0] =
+//         9, and return [9, 9, -1, 8].
+//
+//   Example 3:
+//     Input:  nums = [3, 3, 3]
+//     Output: [-1, -1, -1]
+//     Explanation:
+//       - Pre-seed stack = [3, 3, 3] and initialize result = [-1, -1, -1].
+//       - At i = 2 (current = 3), the condition current >= stack.back() pops all
+//         three 3s, leaving stack empty so result[2] = -1 before pushing 3.
+//       - At i = 1 and i = 0, current = 3 pops the single 3 on top each time,
+//         keeping result[1] = -1 and result[0] = -1 to return [-1, -1, -1].
+//
 // Algorithm:
 //   Simulate concatenating a second copy of `nums` after itself (`[nums][nums]`)
 //   without materializing the doubled array. Pre-seed a monotonic stack with

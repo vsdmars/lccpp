@@ -7,6 +7,40 @@
 //     nums[0] < nums[1] > nums[2] < nums[3] > ...
 //   Every input is guaranteed to have at least one valid wiggle ordering.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 5, 1, 1, 6, 4]
+//     Output: [1, 6, 1, 5, 1, 4]
+//     Explanation:
+//       - Sort a copy to sorted = [1, 1, 1, 4, 5, 6] with n = 6, half = (6 + 1) / 2
+//         = 3, small_idx = 3, and large_idx = 6.
+//       - Fill even indices 0, 2, 4 backward from the lower half: nums[0] =
+//         sorted[2] = 1, nums[2] = sorted[1] = 1, nums[4] = sorted[0] = 1.
+//       - Fill odd indices 1, 3, 5 backward from the upper half: nums[1] =
+//         sorted[5] = 6, nums[3] = sorted[4] = 5, nums[5] = sorted[3] = 4.
+//       - The resulting array [1, 6, 1, 5, 1, 4] satisfies 1 < 6 > 1 < 5 > 1 < 4.
+//
+//   Example 2:
+//     Input:  nums = [4, 5, 5, 6]
+//     Output: [5, 6, 4, 5]
+//     Explanation:
+//       - Sort a copy to sorted = [4, 5, 5, 6] with n = 4 and half = (4 + 1) / 2 =
+//         2.
+//       - Write even indices backward from sorted[0..1] (nums[0] = 5, nums[2] = 4)
+//         and odd indices backward from sorted[2..3] (nums[1] = 6, nums[3] = 5).
+//       - Reversing both halves places the duplicate medians (5) at indices 0 and
+//         3, producing [5, 6, 4, 5] with 5 < 6 > 4 < 5.
+//
+//   Example 3:
+//     Input:  nums = [-5, -1, -5, 0, 2, -1]
+//     Output: [-1, 2, -5, 0, -5, -1]
+//     Explanation:
+//       - Sort a copy to sorted = [-5, -5, -1, -1, 0, 2] with n = 6 and half = 3.
+//       - Populate even positions (0, 2, 4) backward from sorted[2], sorted[1],
+//         sorted[0] to get -1, -5, -5.
+//       - Populate odd positions (1, 3, 5) backward from sorted[5], sorted[4],
+//         sorted[3] to get 2, 0, -1, yielding [-1, 2, -5, 0, -5, -1].
+//
 // Algorithm:
 //   1. Sort-and-reversed-half interleave (primary, mirrors Python solution):
 //      Sort a copy of nums and split it at half = (n + 1) / 2 into a smaller

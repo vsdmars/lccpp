@@ -7,6 +7,42 @@
 //   the resulting string, leaving all non-vowel characters in their original
 //   positions.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "hello"
+//     Output: "holle"
+//     Explanation:
+//       - Initialize result = "hello", left = 0, and right = 4.
+//       - Advance left past 'h' to index 1 ('e') while right stays on index 4
+//         ('o').
+//       - Swap result[1] and result[4] to form "holle", then advance inward to left
+//         = 2 and right = 3.
+//       - Advance left past 'l' to index 3, where left == right == 3 ends the loop
+//         and returns "holle".
+//
+//   Example 2:
+//     Input:  s = "IceCreAm"
+//     Output: "AceCreIm"
+//     Explanation:
+//       - Initialize result = "IceCreAm", left = 0 ('I'), and right = 7 ('m').
+//       - Move right past 'm' to index 6 ('A'), swap result[0] and result[6] to
+//         produce "AceCreIm", and advance to left = 1, right = 5.
+//       - Advance left past 'c' to index 2 ('e') with right already at index 5
+//         ('e'), swap them (leaving "AceCreIm"), and advance to left = 3, right =
+//         4.
+//       - Advance left past 'C' to index 4, meeting right = 4 so the loop
+//         terminates and returns "AceCreIm".
+//
+//   Example 3:
+//     Input:  s = "rhythm"
+//     Output: "rhythm"
+//     Explanation:
+//       - Initialize result = "rhythm", left = 0, and right = 5.
+//       - Because 'y' is not in kVowels ("aeiouAEIOU"), is_vowel returns false for
+//         every character in "rhythm".
+//       - The inner left scan advances left from 0 to 5 until left < right is
+//         false, performing no swaps and returning "rhythm".
+//
 // Algorithm:
 //   Converging two pointers from both ends of a mutable copy of `s`:
 //     - Initialize `left = 0` and `right = n - 1`.

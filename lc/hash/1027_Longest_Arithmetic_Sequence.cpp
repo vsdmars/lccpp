@@ -10,6 +10,47 @@
 //   Constraints: 2 <= nums.length <= 1000, 0 <= nums[i] <= 500 (the algorithm
 //   handles arbitrary signed 32-bit integers).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 6, 9, 12]
+//     Output: 4
+//     Explanation:
+//       - Initialize dp with 4 empty maps and best = 2.
+//       - At right = 1 (val 6), left = 0 (val 3) yields diff = 3; dp[0] has no key
+//         3, so dp[1][3] = 2 and best = 2.
+//       - At right = 2 (val 9), left = 0 sets dp[2][6] = 2, and left = 1 (val 6)
+//         yields diff = 3, extending dp[1][3] = 2 to dp[2][3] = 3 with best = 3.
+//       - At right = 3 (val 12), left = 2 (val 9) yields diff = 3, extending
+//         dp[2][3] = 3 to dp[3][3] = 4 and updating best = 4.
+//
+//   Example 2:
+//     Input:  nums = [20, 1, 15, 3, 10, 5, 8]
+//     Output: 4
+//     Explanation:
+//       - At right = 2 (val 15), left = 0 (val 20) computes diff = -5 and records
+//         dp[2][-5] = 2.
+//       - At right = 4 (val 10), left = 2 (val 15) computes diff = -5 and extends
+//         dp[2][-5] = 2 to dp[4][-5] = 3, raising best to 3.
+//       - At right = 5 (val 5), left = 4 (val 10) computes diff = -5 and extends
+//         dp[4][-5] = 3 to dp[5][-5] = 4, raising best to 4 for [20, 15, 10, 5].
+//       - At right = 6 (val 8), none of the differences against indices 0..5 match
+//         prior keys in dp[0..5], so every candidate has length 2 and best remains
+//         4.
+//
+//   Example 3:
+//     Input:  nums = [1, 4, 7, 4, 10]
+//     Output: 4
+//     Explanation:
+//       - At right = 1 (val 4), left = 0 (val 1) sets dp[1][3] = 2; at right = 2
+//         (val 7), left = 1 extends diff = 3 to dp[2][3] = 3 and sets best = 3.
+//       - At right = 3 (val 4), pairing with indices 0, 1, 2 records dp[3][3] = 2,
+//         dp[3][0] = 2, and dp[3][-3] = 2 without disrupting dp[2][3] = 3.
+//       - At right = 4 (val 10), left = 2 (val 7) yields diff = 3 and extends
+//         dp[2][3] = 3 to dp[4][3] = 4, while left = 3 (val 4) only starts dp[4][6]
+//         = 2.
+//       - The global maximum best updates to 4 for the subsequence [1, 4, 7, 10]
+//         and is returned.
+//
 // Algorithm:
 //   2D Dynamic Programming Indexed by `(end_index, common_difference)`:
 //   Let `dp[right][diff]` be the length of the longest arithmetic subsequence

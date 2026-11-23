@@ -13,6 +13,60 @@
 //       historical sentences starting with that prefix, ranked by hotness
 //       descending and then ASCII lexicographical order ascending.
 //
+// Examples:
+//   Example 1:
+//     Input:  AutocompleteSystem(["i love you", "island", "ironman", "i love
+//             leetcode"], [5, 3, 2, 2]); input('i'), input(' '), input('a'),
+//             input('#'), input('i'), input(' '), input('a'), input('#'),
+//             input('i'), input(' '), input('#')
+//     Output: [["i love you", "island", "i love leetcode"], ["i love you", "i love
+//             leetcode"], [], [], ["i love you", "island", "i love leetcode"], ["i
+//             love you", "i love leetcode", "i a"], ["i a"], [], ["i love you",
+//             "island", "i a"], ["i love you", "i a", "i love leetcode"], []]
+//     Explanation:
+//       - Constructor inserts the four sentences with hotness 5, 3, 2, 2 and sets
+//         cur_node_ to root 0.
+//       - Query 1 ("i a#"): input('i') collects all four sentences and partial_sort
+//         returns top 3 ["i love you" (5), "island" (3), "i love leetcode" (2)]
+//         (beating "ironman" lexicographically); input(' ') narrows to ["i love
+//         you", "i love leetcode"], input('a') hits no child and sets cur_node_ =
+//         nullopt (returning []), and input('#') saves "i a" with hot = 1 and
+//         resets cur_node_ = 0.
+//       - Query 2 ("i a#"): input(' ') now includes "i a" (hot = 1) as the third
+//         result, input('a') returns ["i a"], and input('#') increments "i a" to
+//         hot = 2.
+//       - Query 3 ("i #"): because "i a" (hot = 2) precedes "i love leetcode" (hot
+//         = 2) lexicographically, input('i') returns ["i love you", "island", "i
+//         a"] and input(' ') returns ["i love you", "i a", "i love leetcode"].
+//
+//   Example 2:
+//     Input:  AutocompleteSystem(["a", "ab", "abc", "abd"], [1, 2, 3, 2]);
+//             input('a'), input('b'), input('c'), input('#')
+//     Output: [["abc", "ab", "abd"], ["abc", "ab", "abd"], ["abc"], []]
+//     Explanation:
+//       - Constructor inserts "a" (1), "ab" (2), "abc" (3), and "abd" (2) along
+//         nested nodes in the trie.
+//       - input('a') advances cur_node_ to 'a' and collect gathers all four
+//         terminal nodes in its subtree, including "a" itself and its longer
+//         descendants.
+//       - partial_sort ranks by hot descending then sentence ascending, selecting
+//         ["abc" (3), "ab" (2), "abd" (2)] on both 'a' and 'b', while input('c')
+//         narrows to ["abc"] and input('#') commits the sentence.
+//
+//   Example 3:
+//     Input:  AutocompleteSystem([], []); input('h'), input('i'), input('#'),
+//             input('h'), input('#')
+//     Output: [[], [], [], ["hi"], []]
+//     Explanation:
+//       - Constructor initializes an empty trie containing only root node 0 with
+//         cur_node_ = 0.
+//       - First input('h') finds no child edge from root and sets cur_node_ =
+//         nullopt (returning []), so input('i') returns [] immediately while
+//         current_input_ accumulates "hi".
+//       - input('#') calls add_sentence("hi", 1) and resets cur_node_ = 0, so the
+//         next input('h') walks to 'h' and returns ["hi"] before input('#') commits
+//         "h".
+//
 // Algorithm:
 //   Arena-Backed Trie with Stateful Incremental Cursor + Subtree Top-K Sort:
 //   - Map `'a'-'z'` to indices `0..25` and `' '` to index `26` (`kSpaceIndex`).

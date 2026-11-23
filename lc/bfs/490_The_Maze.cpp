@@ -9,6 +9,47 @@
 //   in one of the four cardinal directions (up, down, left, right) and cannot
 //   change direction or stop until it hits a wall or the maze boundary.
 //
+// Examples:
+//   Example 1:
+//     Input:  maze = [[0, 0, 1, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 1, 0], [1, 1, 0,
+//             1, 1], [0, 0, 0, 0, 0]], start = [0, 4], destination = [4, 4]
+//     Output: true
+//     Explanation:
+//       - Mark start cell (0, 4) visited and enqueue it into frontier.
+//       - Pop (0, 4): rolling left hits the wall at (0, 2) to stop at (0, 3) and
+//         rolling down hits the wall at (3, 4) to stop at (2, 4), enqueuing both.
+//       - Pop (0, 3) and roll down to stop at (1, 3); popping (1, 3) rolls left to
+//         (1, 0), which rolls down to (2, 0), and (2, 0) rolls right to (2, 2).
+//       - Pop (2, 2) and roll down to stop at the bottom border cell (4, 2).
+//       - Pop (4, 2) and roll right to the right border at (4, 4), which matches
+//         destination and returns true immediately.
+//
+//   Example 2:
+//     Input:  maze = [[0, 0, 1, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 1, 0], [1, 1, 0,
+//             1, 1], [0, 0, 0, 0, 0]], start = [0, 4], destination = [3, 2]
+//     Output: false
+//     Explanation:
+//       - Start BFS from (0, 4), marking visited stopping cells and expanding
+//         through (0, 3), (2, 4), (1, 3), (1, 0), (2, 0), and (2, 2).
+//       - When rolling down from (2, 2) or up from (4, 2) along column 2,
+//         roll_until_wall passes straight through (3, 2) because (3, 2) is open
+//         vertically, stopping only at (4, 2) or (1, 2).
+//       - Because walls at (3, 1) and (3, 3) also prevent entering (3, 2)
+//         horizontally, every reachable stopping position is visited without
+//         stopped == (3, 2) and hasPath returns false.
+//
+//   Example 3:
+//     Input:  maze = [[0, 0, 0], [0, 0, 0], [0, 0, 0]], start = [0, 0], destination
+//             = [1, 1]
+//     Output: false
+//     Explanation:
+//       - Mark (0, 0) visited and enqueue it; rolling right and down reaches
+//         corners (0, 2) and (2, 0).
+//       - From (0, 2) and (2, 0), every unobstructed roll travels until hitting the
+//         outer grid boundary, discovering only the remaining corner (2, 2).
+//       - Center cell (1, 1) is never a stopping position, so frontier empties once
+//         all four corners are visited and hasPath returns false.
+//
 // Algorithm:
 //   Model the maze as an implicit directed graph whose vertices are valid
 //   stopping positions and whose edges connect each stopping position to the

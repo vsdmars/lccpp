@@ -9,6 +9,41 @@
 //   Constraints: 1 <= number of nodes <= 500, 0 <= node.val <= 500 (unique),
 //   0 <= k <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], target = 5, k = 2
+//     Output: [1, 7, 4]
+//     Explanation:
+//       - `buildGraph` converts the tree into undirected adjacency lists, e.g.,
+//         `adj[5] = [3, 6, 2]`, `adj[3] = [5, 1]`, and `adj[2] = [5, 7, 4]`.
+//       - Initialize `frontier = [5]` and `visited = {5}`.
+//       - At `step = 0` (distance 1), expand `5` to its unvisited neighbors to form
+//         `frontier = [3, 6, 2]` and `visited = {5, 3, 6, 2}`.
+//       - At `step = 1` (distance 2), expand `3` to `1`, `6` to nothing new, and
+//         `2` to `7` and `4`, returning `frontier = [1, 7, 4]`.
+//
+//   Example 2:
+//     Input:  root = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4], target = 7, k = 5
+//     Output: [0, 8]
+//     Explanation:
+//       - `buildGraph` creates bidirectional parent-child edges and BFS starts with
+//         `frontier = [7]` and `visited = {7}`.
+//       - Steps `0` through `3` traverse `7 -> 2 -> 5 -> 3 -> 1` (also visiting `4`
+//         at distance 1 and `6` at distance 2), leaving `frontier = [1]` at
+//         distance 4.
+//       - At `step = 4` (distance 5), expanding `1` adds its unvisited children `0`
+//         and `8` while skipping visited `3`, returning `[0, 8]`.
+//
+//   Example 3:
+//     Input:  root = [1], target = 1, k = 3
+//     Output: []
+//     Explanation:
+//       - `buildGraph` inspects node `1`, finds no children, and leaves `adj`
+//         empty.
+//       - Initialize `frontier = [1]` and `visited = {1}`.
+//       - On `step = 0`, `adj.find(1)` finds no neighbors so `frontier` becomes
+//         `[]`, terminating the loop early and returning `[]`.
+//
 // Algorithm:
 //   Convert the directed parent->child tree into an undirected graph, then run
 //   level-by-level BFS from `target`:

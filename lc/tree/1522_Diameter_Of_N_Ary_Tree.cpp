@@ -7,6 +7,41 @@
 //   The longest path may or may not pass through the root.
 //   Constraints: depth <= 1000; total number of nodes in [1, 10^4].
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, null, 3, 2, 4, null, 5, 6]
+//     Output: 3
+//     Explanation:
+//       - Post-order dfs visits leaves 5, 6, 2, and 4, each returning downward
+//         height 0.
+//       - At node 3 (children 5 and 6), both child depths equal 0 + 1 = 1, so top1
+//         = 1, top2 = 1, best_diameter updates to 1 + 1 = 2, and dfs(3) returns 1.
+//       - At root 1 (children 3, 2, 4), child 3 yields depth 1 + 1 = 2 while 2 and
+//         4 each yield 0 + 1 = 1, setting top1 = 2 and top2 = 1.
+//       - best_diameter updates to max(2, 2 + 1) = 3 along path 5-3-1-2 (or
+//         5-3-1-4), and diameter returns 3.
+//
+//   Example 2:
+//     Input:  root = [1, null, 2, null, 3, 4, null, 5, null, 6]
+//     Output: 4
+//     Explanation:
+//       - Leaves 5 and 6 return 0, so nodes 3 and 4 each obtain top1 = 1, top2 = 0,
+//         set best_diameter = 1, and return 1.
+//       - At node 2 (children 3 and 4), both branches contribute depth 1 + 1 = 2,
+//         setting top1 = 2 and top2 = 2 and updating best_diameter to max(1, 2 + 2)
+//         = 4.
+//       - At root 1 (only child 2), top1 = 2 + 1 = 3 and top2 = 0, leaving
+//         best_diameter = 4 unchanged and returning 4.
+//
+//   Example 3:
+//     Input:  root = [1]
+//     Output: 0
+//     Explanation:
+//       - dfs(1) sees an empty children vector, so the child iteration loop
+//         executes zero times.
+//       - Both top1 and top2 stay 0, updating best_diameter = max(0, 0 + 0) = 0 and
+//         returning 0.
+//
 // Algorithm:
 //   Use post-order DFS returning the maximum downward height (in edges) from
 //   the current node to any leaf in its subtree (a leaf returns 0). While

@@ -7,6 +7,45 @@
 //   valid dictionary word. Dictionary words may be reused any number of times.
 //   Return all such sentences in any order.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "catsanddog", wordDict = ["cat", "cats", "and", "sand", "dog"]
+//     Output: ["cat sand dog", "cats and dog"]
+//     Explanation:
+//       - From start = 0, dfs(0) checks prefixes up to max_word_len = 4 and matches
+//         "cat" (end = 3) and "cats" (end = 4).
+//       - dfs(3) matches "sand" (end = 7) and calls dfs(7), which matches "dog"
+//         (end = 10), caching memo[7] = {"dog"} and memo[3] = {"sand dog"}.
+//       - dfs(4) matches "and" (end = 7) and reuses cached memo[7] = {"dog"} to
+//         store memo[4] = {"and dog"}.
+//       - Prepending "cat" and "cats" to their suffix lists returns ["cat sand
+//         dog", "cats and dog"].
+//
+//   Example 2:
+//     Input:  s = "pineapplepenapple", wordDict = ["apple", "pen", "applepen",
+//             "pine", "pineapple"]
+//     Output: ["pine apple pen apple", "pine applepen apple", "pineapple pen
+//             apple"]
+//     Explanation:
+//       - At start = 0, prefixes "pine" (end = 4) and "pineapple" (end = 9) match
+//         in dict.
+//       - From start = 4, "apple" reaches start = 9 while "applepen" jumps directly
+//         to start = 12, where dfs(12) caches memo[12] = {"apple"}.
+//       - dfs(9) matches "pen" to reuse memo[12] and caches memo[9] = {"pen
+//         apple"}, which serves both the "pine" -> "apple" branch and the
+//         "pineapple" branch to form all three sentences.
+//
+//   Example 3:
+//     Input:  s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+//     Output: []
+//     Explanation:
+//       - From start = 0, "cat" transitions to start = 3 ("sandog") and "cats"
+//         transitions to start = 4 ("andog").
+//       - dfs(3) matches "sand" and dfs(4) matches "and", both converging on start
+//         = 7 ("og").
+//       - At start = 7, neither "o" nor "og" is in dict, so memo[7] caches {} (and
+//         can_break[0] is false in wordBreakBacktrack), returning [].
+//
 // Algorithm:
 //   Primary (Top-Down DFS with Memoization):
 //     Store `wordDict` in a hash set of `std::string_view` and record

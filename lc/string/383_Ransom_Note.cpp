@@ -7,6 +7,39 @@
 //   `magazine`, where each character in `magazine` may be used at most once;
 //   otherwise return `false`.
 //
+// Examples:
+//   Example 1:
+//     Input:  ransom_note = "aa", magazine = "aab"
+//     Output: true
+//     Explanation:
+//       - Check the length guard ransom_note.size() > magazine.size() (2 > 3 is
+//         false), then tally magazine = "aab" so available['a' - 'a'] = 2 and
+//         available['b' - 'a'] = 1.
+//       - Consume the first 'a' of ransom_note: available[0] is 2 != 0, so
+//         decrement it to 1.
+//       - Consume the second 'a' of ransom_note: available[0] is 1 != 0, so
+//         decrement it to 0.
+//       - Return true after all characters in ransom_note are matched.
+//
+//   Example 2:
+//     Input:  ransom_note = "aa", magazine = "ab"
+//     Output: false
+//     Explanation:
+//       - Pass the length check (2 > 2 is false) and tally magazine = "ab" into
+//         available['a' - 'a'] = 1 and available['b' - 'a'] = 1.
+//       - Consume the first 'a' of ransom_note, decrementing available[0] from 1 to
+//         0.
+//       - On the second 'a', available[0] == 0, so fail fast and return false.
+//
+//   Example 3:
+//     Input:  ransom_note = "a", magazine = ""
+//     Output: false
+//     Explanation:
+//       - Evaluate the length guard ransom_note.size() > magazine.size(), which is
+//         1 > 0 (true).
+//       - Return false immediately without scanning or populating the 26-letter
+//         frequency array.
+//
 // Algorithm:
 //   First apply an O(1) length guard: if `ransom_note.size() > magazine.size()`,
 //   construction is impossible. Next, count the frequency of each lowercase

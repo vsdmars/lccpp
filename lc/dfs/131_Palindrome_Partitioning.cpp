@@ -7,6 +7,41 @@
 //   partition is a palindrome. Return all possible valid palindrome
 //   partitionings of `s`.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "aab"
+//     Output: [["a", "a", "b"], ["aa", "b"]]
+//     Explanation:
+//       - Starting at start = 0, dfs takes palindromic prefix "a" (end = 1), then
+//         "a" at start = 1 (end = 2), then "b" at start = 2 (end = 3), reaching
+//         start == 3 and recording ["a", "a", "b"].
+//       - Backtracking to start = 1 tests end = 3 ("ab"), which fails isPalindrome
+//         and is skipped.
+//       - Backtracking to start = 0 tests end = 2 ("aa"), which passes
+//         isPalindrome, recurses to start = 2, takes "b", and records ["aa", "b"].
+//       - Trying end = 3 ("aab") at start = 0 fails isPalindrome, so partition
+//         returns [["a", "a", "b"], ["aa", "b"]].
+//
+//   Example 2:
+//     Input:  s = "efe"
+//     Output: [["e", "f", "e"], ["efe"]]
+//     Explanation:
+//       - From start = 0, dfs takes "e" (end = 1), recurses through "f" (start = 1,
+//         end = 2) and "e" (start = 2, end = 3), and records ["e", "f", "e"], while
+//         "fe" at start = 1 fails isPalindrome.
+//       - Backtracking to start = 0 skips non-palindrome "ef" (end = 2) and accepts
+//         "efe" (end = 3), reaching start == 3 and recording ["efe"].
+//
+//   Example 3:
+//     Input:  s = "a"
+//     Output: [["a"]]
+//     Explanation:
+//       - At start = 0, dfs extracts prefix "a" (end = 1), confirms
+//         isPalindrome("a") is true, pushes "a" onto current, and recurses to start
+//         = 1.
+//       - Because start == s.size() (1 == 1), ["a"] is appended to result and
+//         returned.
+//
 // Algorithm:
 //   Depth-First Search (DFS) backtracking over split indices.
 //   At recursion index `start`, iterate over every candidate prefix

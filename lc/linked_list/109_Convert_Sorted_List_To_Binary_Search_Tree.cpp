@@ -8,6 +8,44 @@
 //   differ by at most 1.
 //   Constraints: 0 <= number of nodes <= 2 * 10^4, -10^5 <= Node.val <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [-10, -3, 0, 5, 9]
+//     Output: [0, -10, 5, null, -3, null, 9]
+//     Explanation:
+//       - Flatten the linked list into `values = [-10, -3, 0, 5, 9]` and call
+//         `build_from_slice(values, 0, 5)` (or split via slow/fast pointers at node
+//         `0`).
+//       - Select left-biased midpoint `mid = 0 + (5 - 0 - 1) / 2 = 2`, making
+//         `values[2] = 0` the root node.
+//       - Recurse on left slice `[0, 2)` to pick `mid = 0` (`-10`) with right child
+//         `[1, 2)` (`-3`), producing left subtree `[-10, null, -3]`.
+//       - Recurse on right slice `[3, 5)` to pick `mid = 3` (`5`) with right child
+//         `[4, 5)` (`9`), producing right subtree `[5, null, 9]`.
+//       - Combine subtrees under root `0` to obtain the height-balanced BST `[0,
+//         -10, 5, null, -3, null, 9]` with inorder `[-10, -3, 0, 5, 9]`.
+//
+//   Example 2:
+//     Input:  head = [1, 2, 3, 4]
+//     Output: [2, 1, 3, null, null, null, 4]
+//     Explanation:
+//       - Copy the list into `values = [1, 2, 3, 4]` and pick `mid = 0 + (4 - 0 -
+//         1) / 2 = 1` (`2`) as the root.
+//       - Recurse on `[0, 1)` to create left leaf `1` (`mid = 0`).
+//       - Recurse on `[2, 4)` to pick `mid = 2 + (4 - 2 - 1) / 2 = 2` (`3`) with
+//         right leaf `[3, 4)` (`4`).
+//       - Return the balanced BST `[2, 1, 3, null, null, null, 4]` whose subtree
+//         heights differ by at most 1.
+//
+//   Example 3:
+//     Input:  head = []
+//     Output: []
+//     Explanation:
+//       - Check `head == nullptr` at the entry of `sortedListToBST` and
+//         `build_by_splitting`.
+//       - Return `nullptr` (`[]`), an empty tree with height `0` and inorder
+//         sequence `[]`.
+//
 // Algorithm:
 //   Two complementary divide-and-conquer methods (matching both approaches in
 //   the source solution):

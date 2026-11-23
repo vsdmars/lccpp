@@ -8,6 +8,40 @@
 //   without using the division operator. Follow-up: use O(1) extra space
 //   (excluding the returned output array).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3, 4]
+//     Output: [24, 12, 8, 6]
+//     Explanation:
+//       - Allocate result = [1, 1, 1, 1].
+//       - In Pass 1 (idx = 1..3), fill prefix products: result[1] = 1 * 1 = 1,
+//         result[2] = 1 * 2 = 2, and result[3] = 2 * 3 = 6, giving [1, 1, 2, 6].
+//       - In Pass 2 starting with suffix_product = 1, at idx = 3 set suffix_product
+//         = 4 and result[2] = 2 * 4 = 8; at idx = 2 set suffix_product = 12 and
+//         result[1] = 1 * 12 = 12; at idx = 1 set suffix_product = 24 and result[0]
+//         = 1 * 24 = 24.
+//       - Return result = [24, 12, 8, 6].
+//
+//   Example 2:
+//     Input:  nums = [3, 0, 2, 1]
+//     Output: [0, 6, 0, 0]
+//     Explanation:
+//       - Allocate result = [1, 1, 1, 1].
+//       - In Pass 1 (idx = 1..3), compute prefix products: result[1] = 1 * 3 = 3,
+//         result[2] = 3 * 0 = 0, and result[3] = 0 * 2 = 0, yielding [1, 3, 0, 0].
+//       - In Pass 2, at idx = 3 (suffix_product = 1) result[2] remains 0; at idx =
+//         2 (suffix_product = 2) result[1] becomes 3 * 2 = 6; at idx = 1
+//         (suffix_product = 2 * 0 = 0) result[0] becomes 1 * 0 = 0.
+//       - Return result = [0, 6, 0, 0].
+//
+//   Example 3:
+//     Input:  nums = [42]
+//     Output: [1]
+//     Explanation:
+//       - Since n = 1 is non-zero, allocate result(1, 1) = [1].
+//       - Both Pass 1 (idx = 1 < 1) and Pass 2 (idx = 0 > 0) execute zero
+//         iterations, so return [1].
+//
 // Algorithm:
 //   Two-pass prefix and suffix product accumulation directly inside the output
 //   array:

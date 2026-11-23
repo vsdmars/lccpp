@@ -9,6 +9,40 @@
 //   Constraints: 1 <= m, n <= 50; 0 <= image[i][j], color < 2^16;
 //   0 <= sr < m; 0 <= sc < n.
 //
+// Examples:
+//   Example 1:
+//     Input:  image = [[1, 1, 1], [1, 1, 0], [1, 0, 1]], sr = 1, sc = 1, color = 2
+//     Output: [[2, 2, 2], [2, 2, 0], [2, 0, 1]]
+//     Explanation:
+//       - floodFill reads original_color = image[1][1] = 1, sees 1 != 2, and starts
+//         dfs(1, 1), setting image[1][1] = 2.
+//       - From (1, 1), kDirs explores (1, 2) (0 != 1, stops), (1, 0) (recolored to
+//         2, reaching (2, 0) and (0, 0)), (2, 1) (0 != 1, stops), and (0, 1)
+//         (recolored to 2, reaching (0, 2)).
+//       - Because pixel (2, 2) is separated from the component by 0s at (1, 2) and
+//         (2, 1), it remains 1, returning [[2, 2, 2], [2, 2, 0], [2, 0, 1]].
+//
+//   Example 2:
+//     Input:  image = [[0, 0, 0], [0, 1, 1]], sr = 1, sc = 1, color = 1
+//     Output: [[0, 0, 0], [0, 1, 1]]
+//     Explanation:
+//       - floodFill reads original_color = image[1][1] = 1.
+//       - Since original_color == color (1 == 1), the early-return guard exits
+//         immediately without invoking dfs.
+//       - The unmodified grid [[0, 0, 0], [0, 1, 1]] is returned.
+//
+//   Example 3:
+//     Input:  image = [[1, 0, 1], [0, 1, 0], [1, 0, 1]], sr = 1, sc = 1, color = 3
+//     Output: [[1, 0, 1], [0, 3, 0], [1, 0, 1]]
+//     Explanation:
+//       - floodFill reads original_color = image[1][1] = 1 != 3 and starts dfs(1,
+//         1), updating image[1][1] = 3.
+//       - kDirs inspects only the four orthogonal neighbors (1, 2), (1, 0), (2, 1),
+//         and (0, 1), all holding 0 != 1, so each recursive call returns
+//         immediately.
+//       - The four diagonally adjacent 1s at the corners remain untouched, yielding
+//         [[1, 0, 1], [0, 3, 0], [1, 0, 1]].
+//
 // Algorithm:
 //   Record `original_color = image[sr][sc]`. If `original_color == color`,
 //   return `image` immediately because no pixel changes and recursing would

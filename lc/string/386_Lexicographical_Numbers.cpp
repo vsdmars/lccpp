@@ -7,6 +7,40 @@
 //   should run in O(n) time and use O(1) extra space (excluding the output
 //   vector).
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 13
+//     Output: [1, 10, 11, 12, 13, 2, 3, 4, 5, 6, 7, 8, 9]
+//     Explanation:
+//       - Start at current = 1 with descent threshold n / 10 = 1, emit 1, and
+//         descend via current *= 10 to 10 since 1 <= 1.
+//       - Emit 10, 11, 12, and 13 by incrementing ++current at each step because
+//         current > 1, current % 10 != 9, and current + 1 <= 13 holds before 13.
+//       - After emitting 13, ascend out of the exhausted subtree because 13 + 1 >
+//         13 triggers current /= 10 to 1, then increment to sibling 2.
+//       - Emit 2 through 9 via ++current across the remaining 8 iterations since
+//         2..9 exceed n / 10 = 1 and finish all 13 values.
+//
+//   Example 2:
+//     Input:  n = 2
+//     Output: [1, 2]
+//     Explanation:
+//       - Set n / 10 = 0 and start at current = 1, emitting 1 on the first
+//         iteration.
+//       - Skip descending since 1 > 0, increment ++current to 2 because 1 % 10 != 9
+//         and 1 + 1 <= 2, and emit 2 on the second iteration.
+//
+//   Example 3:
+//     Input:  n = 10
+//     Output: [1, 10, 2, 3, 4, 5, 6, 7, 8, 9]
+//     Explanation:
+//       - Start at current = 1 with n / 10 = 1, emit 1, and descend via current *=
+//         10 to 10.
+//       - Emit 10, then climb via current /= 10 back to 1 because 10 + 1 > 10, and
+//         increment to sibling 2.
+//       - Emit 2 through 9 consecutively via ++current since each satisfies current
+//         > 1, completing all 10 iterations.
+//
 // Algorithm:
 //   The integers `[1, n]` in lexicographical order correspond exactly to a
 //   preorder traversal of a 10-ary (denary) prefix tree rooted at digits

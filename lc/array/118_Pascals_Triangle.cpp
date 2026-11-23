@@ -7,6 +7,36 @@
 //   `r + 1`, begins and ends with 1, and every interior entry is the sum of
 //   the two entries directly above it in row `r - 1`.
 //
+// Examples:
+//   Example 1:
+//     Input:  numRows = 5
+//     Output: [[1], [1, 1], [1, 2, 1], [1, 3, 3, 1], [1, 4, 6, 4, 1]]
+//     Explanation:
+//       - Rows r = 0 and r = 1 have no interior columns (c < r does not execute),
+//         yielding [1] and [1, 1].
+//       - For r = 2, row starts as [1, 1, 1] and interior entry row[1] becomes
+//         triangle[1][0] + triangle[1][1] = 1 + 1 = 2, producing [1, 2, 1].
+//       - For r = 3, interior entries c = 1, 2 sum adjacent pairs from [1, 2, 1] to
+//         compute 1 + 2 = 3 and 2 + 1 = 3, giving [1, 3, 3, 1].
+//       - For r = 4, interior entries c = 1, 2, 3 sum adjacent pairs from [1, 3, 3,
+//         1] to compute 4, 6, and 4, completing [1, 4, 6, 4, 1].
+//
+//   Example 2:
+//     Input:  numRows = 1
+//     Output: [[1]]
+//     Explanation:
+//       - With num_rows = 1 > 0, the outer loop runs once for r = 0 and allocates a
+//         row of size r + 1 = 1 initialized to 1.
+//       - The interior loop (1 < 0) does not execute, so [1] is pushed to triangle
+//         and returned.
+//
+//   Example 3:
+//     Input:  numRows = 0
+//     Output: []
+//     Explanation:
+//       - The initial guard num_rows <= 0 matches num_rows = 0 immediately.
+//       - The function returns an empty 2D vector [] without allocating any rows.
+//
 // Algorithm:
 //   Bottom-up dynamic programming using Pascal's identity:
 //     C(r, 0) = C(r, r) = 1

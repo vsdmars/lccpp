@@ -6,6 +6,48 @@
 //   allowed) that has been rotated at an unknown pivot index, and an integer
 //   `target`, return `true` if `target` is in `nums`, or `false` otherwise.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 5, 6, 0, 0, 1, 2], target = 3
+//     Output: false
+//     Explanation:
+//       - Initialize the half-open search range left = 0 and right = 7.
+//       - At mid = 3, nums[3] = 0 != 3 and nums[0] = 2 > nums[3] = 0 gives
+//         mid_in_left = false while target_in_left = (3 >= 2) = true, so set right
+//         = 3.
+//       - At mid = 1, nums[1] = 5 != 3 and nums[0] = 2 < nums[1] = 5 gives
+//         mid_in_left = true while target_in_left = true; since 3 < 5, set right =
+//         1.
+//       - At mid = 0, nums[0] = 2 != 3 and nums[left] == nums[mid] triggers ++left
+//         to 1, ending the loop and returning false.
+//
+//   Example 2:
+//     Input:  nums = [1, 3, 1, 1], target = 3
+//     Output: true
+//     Explanation:
+//       - Initialize left = 0 and right = 4.
+//       - At mid = 2, nums[2] = 1 != 3 and nums[0] == nums[2] == 1 cannot identify
+//         the sorted half, so increment left to 1.
+//       - At mid = 2 with left = 1 and right = 4, nums[1] = 3 > nums[2] = 1 sets
+//         mid_in_left = false while target_in_left = (3 >= 3) = true, so set right
+//         = 2.
+//       - At mid = 1 with left = 1 and right = 2, nums[1] = 3 == target, returning
+//         true.
+//
+//   Example 3:
+//     Input:  nums = [5, 5, 5, 5, 5, 5, 1, 2, 3, 5], target = 2
+//     Output: true
+//     Explanation:
+//       - Initialize left = 0 and right = 10.
+//       - On the first two iterations (mid = 5, then mid = 5 again), nums[left] ==
+//         nums[mid] == 5 != 2 advances left from 0 to 2.
+//       - At left = 2, right = 10, mid = 6 has nums[6] = 1 < nums[2] = 5
+//         (mid_in_left = false) and target_in_left = (2 >= 5) = false; since 2 > 1,
+//         set left = 7.
+//       - At left = 7, right = 10, mid = 8 has nums[8] = 3 > 2 on the sorted [7,
+//         10) segment so right = 8; then mid = 7 finds nums[7] = 2 == target and
+//         returns true.
+//
 // Algorithm:
 //   Extend LeetCode #33's half-open binary search over `[left, right)` to
 //   handle duplicate values. At each step:

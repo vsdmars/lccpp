@@ -7,6 +7,41 @@
 //   node becomes the new root, every node has no left child (`left == nullptr`),
 //   and every node has at most one right child pointing to the next larger node.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [5, 1, 7]
+//     Output: [1, null, 5, null, 7]
+//     Explanation:
+//       - push_left_spine(5) pushes 5 and 1 onto stack = [5, 1], with tail pointing
+//         to sentinel dummy.
+//       - Pop 1, clear 1->left = nullptr, attach dummy.right = 1, advance tail = 1,
+//         and observe 1->right is null.
+//       - Pop 5, clear 5->left = nullptr, attach 1->right = 5, advance tail = 5,
+//         and call push_left_spine(7) so stack = [7].
+//       - Pop 7, clear 7->left = nullptr, attach 5->right = 7, set 7->right =
+//         nullptr, and return dummy.right ([1, null, 5, null, 7]).
+//
+//   Example 2:
+//     Input:  root = [3, 2, 4, 1]
+//     Output: [1, null, 2, null, 3, null, 4]
+//     Explanation:
+//       - push_left_spine(3) seeds stack = [3, 2, 1].
+//       - Pop 1 then 2, clearing each left pointer and linking dummy -> 1 -> 2
+//         (neither has a right child).
+//       - Pop 3, clear 3->left = nullptr, attach 2->right = 3, and push 3->right
+//         (4) onto the stack.
+//       - Pop 4, attach 3->right = 4, terminate 4->right = nullptr, and return the
+//         chain 1 -> 2 -> 3 -> 4.
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: []
+//     Explanation:
+//       - push_left_spine(nullptr) pushes nothing, leaving stack empty and tail =
+//         &dummy.
+//       - The main while loop is skipped, tail->right = nullptr sets dummy.right =
+//         nullptr, and returning dummy.right yields [].
+//
 // Algorithm:
 //   Iterative In-Order Traversal with Sentinel Tail Rewiring:
 //   Use an explicit stack to visit nodes in ascending BST in-order without

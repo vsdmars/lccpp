@@ -10,6 +10,43 @@
 //   Constraints: 2 <= position.length <= 10^5, 1 <= position[i] <= 10^9,
 //   all positions are distinct, 2 <= m <= position.length.
 //
+// Examples:
+//   Example 1:
+//     Input:  position = [1, 2, 3, 4, 7], m = 3
+//     Output: 3
+//     Explanation:
+//       - Copy and sort position into [1, 2, 3, 4, 7], and initialize bounds left =
+//         1 and right = (7 - 1) / (3 - 1) = 3.
+//       - Test upper-mid = 2: canPlaceBalls places balls at 1, 3, and 7 (all gaps
+//         >= 2), so left rises to 2.
+//       - Test upper-mid = 3: canPlaceBalls places balls at 1, 4, and 7 (all gaps
+//         >= 3), so left rises to 3.
+//       - The loop ends with left == right == 3 and returns 3.
+//
+//   Example 2:
+//     Input:  position = [79, 74, 57, 22], m = 4
+//     Output: 5
+//     Explanation:
+//       - Sort position into [22, 57, 74, 79] and set bounds left = 1 and right =
+//         (79 - 22) / (4 - 1) = 19.
+//       - Test upper-mid = 10: greedy placement picks 22, 57, and 74, then skips 79
+//         since 79 - 74 = 5 < 10 (only 3 balls placed), so right becomes 9.
+//       - Test upper-mid = 5: all 4 baskets at 22, 57, 74, and 79 satisfy pairwise
+//         spacing >= 5, so left becomes 5.
+//       - Subsequent probes at mid = 7 and mid = 6 both fail at the gap 79 - 74 =
+//         5, shrinking right to 5 and returning 5.
+//
+//   Example 3:
+//     Input:  position = [5, 4, 3, 2, 1, 1000000000], m = 2
+//     Output: 999999999
+//     Explanation:
+//       - Sort position into [1, 2, 3, 4, 5, 1000000000] and initialize bounds left
+//         = 1 and right = (1000000000 - 1) / (2 - 1) = 999999999.
+//       - First probe at mid = 500000000 succeeds immediately by placing balls at 1
+//         and 1000000000 (gap 999999999 >= 500000000), raising left to 500000000.
+//       - Upper-mid binary search keeps raising left until mid = 999999999 succeeds
+//         with balls at 1 and 1000000000, converging at 999999999.
+//
 // Algorithm:
 //   Sort `position` ascending, then binary search on the minimum separation
 //   distance `d`:

@@ -9,6 +9,38 @@
 //   - -2^31 <= x <= 2^31 - 1
 //   - Follow-up: solve without converting the integer into a string.
 //
+// Examples:
+//   Example 1:
+//     Input:  x = 121
+//     Output: true
+//     Explanation:
+//       - x = 121 passes the initial guard (x >= 0 and 121 % 10 != 0), with
+//         reversed_half initialized to 0.
+//       - Iteration 1 pops digit 1: reversed_half = 1, x = 12; iteration 2 pops
+//         digit 2: reversed_half = 12, x = 1, stopping because x <= reversed_half.
+//       - Check x == reversed_half || x == reversed_half / 10; 1 == 12 / 10 holds,
+//         returning true.
+//
+//   Example 2:
+//     Input:  x = 1221
+//     Output: true
+//     Explanation:
+//       - x = 1221 passes the entry guard and enters the half-reversal loop with
+//         reversed_half = 0.
+//       - Iteration 1 sets reversed_half = 1 and x = 122; iteration 2 sets
+//         reversed_half = 12 and x = 12, terminating the loop since x <=
+//         reversed_half.
+//       - The even-digit comparison x == reversed_half (12 == 12) evaluates to
+//         true.
+//
+//   Example 3:
+//     Input:  x = 10
+//     Output: false
+//     Explanation:
+//       - The entry guard evaluates x < 0 || (x % 10 == 0 && x != 0).
+//       - Because 10 % 10 == 0 and 10 != 0, a non-zero integer ending in '0' cannot
+//         have a matching leading '0', so return false immediately.
+//
 // Algorithm:
 //   Half-number arithmetic reversal (satisfies the O(1)-space follow-up without
 //   string conversion or overflow risk):

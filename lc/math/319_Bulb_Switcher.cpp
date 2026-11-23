@@ -7,6 +7,32 @@
 //   and on bulbs off). Return the number of bulbs that remain on after all n
 //   rounds.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3
+//     Output: 1
+//     Explanation:
+//       - Check `n <= 0`; since `3 > 0`, compute
+//         `static_cast<int>(std::sqrt(3.0))`.
+//       - Truncate `sqrt(3.0) ≈ 1.732` to `1`, counting the single perfect square
+//         `1^2 = 1` in `[1, 3]`, and return `1`.
+//
+//   Example 2:
+//     Input:  n = 9
+//     Output: 3
+//     Explanation:
+//       - Check `n <= 0`; since `9 > 0`, compute
+//         `static_cast<int>(std::sqrt(9.0))`.
+//       - Evaluate `sqrt(9.0) = 3.0`, counting the three perfect-square bulbs (`1`,
+//         `4`, `9`) that receive an odd number of toggles, and return `3`.
+//
+//   Example 3:
+//     Input:  n = 0
+//     Output: 0
+//     Explanation:
+//       - Check the edge-case guard `n <= 0`, which is true for `n = 0`.
+//       - Return `0` immediately because no bulbs exist.
+//
 // Algorithm:
 //   Label the bulbs 1 through n. Bulb k is toggled in round d if and only if d
 //   divides k, so the final state of bulb k is ON if and only if k has an odd

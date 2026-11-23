@@ -9,6 +9,46 @@
 //   multiple valid itineraries exist, return the lexicographically smallest one
 //   when read as a sequence of airport codes.
 //
+// Examples:
+//   Example 1:
+//     Input:  tickets = [["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR",
+//             "SFO"]]
+//     Output: ["JFK", "MUC", "LHR", "SFO", "SJC"]
+//     Explanation:
+//       - Builds adj with descending-sorted destinations: JFK:["MUC"], MUC:["LHR"],
+//         LHR:["SFO"], SFO:["SJC"].
+//       - dfs("JFK") follows the unique outgoing edges through "MUC", "LHR", and
+//         "SFO" down to "SJC", which has no outgoing edges.
+//       - Post-order unwinding pushes "SJC", "SFO", "LHR", "MUC", and "JFK" onto
+//         route, and reversing route yields ["JFK", "MUC", "LHR", "SFO", "SJC"].
+//
+//   Example 2:
+//     Input:  tickets = [["JFK", "SFO"], ["JFK", "ATL"], ["SFO", "ATL"], ["ATL",
+//             "JFK"], ["ATL", "SFO"]]
+//     Output: ["JFK", "ATL", "JFK", "SFO", "ATL", "SFO"]
+//     Explanation:
+//       - Builds adj sorted descending: JFK:["SFO", "ATL"], ATL:["SFO", "JFK"],
+//         SFO:["ATL"].
+//       - Popping from the back of each vector visits the lexically smallest
+//         remaining destination at each step: "JFK" -> "ATL" -> "JFK" -> "SFO" ->
+//         "ATL" -> "SFO".
+//       - At the second "SFO" no edges remain, so post-order unwinding pushes
+//         ["SFO", "ATL", "SFO", "JFK", "ATL", "JFK"].
+//       - Reversing route returns ["JFK", "ATL", "JFK", "SFO", "ATL", "SFO"].
+//
+//   Example 3:
+//     Input:  tickets = [["JFK", "KUL"], ["JFK", "NRT"], ["NRT", "JFK"]]
+//     Output: ["JFK", "NRT", "JFK", "KUL"]
+//     Explanation:
+//       - Builds adj sorted descending: JFK:["NRT", "KUL"], NRT:["JFK"].
+//       - dfs("JFK") pops "KUL" first from the back of adj["JFK"]; because "KUL"
+//         has no outgoing flights, post-order immediately pushes "KUL" onto route.
+//       - Resuming at "JFK", the while loop pops "NRT", which traverses "NRT" ->
+//         "JFK", and post-order pushes "JFK", "NRT", and "JFK" to form route =
+//         ["KUL", "JFK", "NRT", "JFK"].
+//       - Reversing route places the dead-end branch "KUL" at the end: ["JFK",
+//         "NRT", "JFK", "KUL"].
+//
 // Algorithm:
 //   Implements Hierholzer's algorithm for finding a directed Eulerian path in
 //   both recursive (`findItinerary`) and iterative (`review`) forms.

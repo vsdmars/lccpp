@@ -5,6 +5,46 @@
 //   Given an m x n integer matrix, if an element is 0, set its entire row and
 //   entire column to 0. Perform the modification in-place.
 //
+// Examples:
+//   Example 1:
+//     Input:  matrix = [[1, 1, 1], [1, 0, 1], [1, 1, 1]]
+//     Output: [[1, 0, 1], [0, 0, 0], [1, 0, 1]]
+//     Explanation:
+//       - Check row 0 and column 0 before Phase 1, recording first_row_zero = false
+//         and first_col_zero = false.
+//       - Phase 1 scans interior cells (1..2, 1..2), detects matrix[1][1] == 0, and
+//         writes markers matrix[1][0] = 0 and matrix[0][1] = 0.
+//       - Phase 2 zeros every interior cell where matrix[r][0] == 0 or matrix[0][c]
+//         == 0, setting (1, 1), (1, 2), and (2, 1) to 0 while leaving (2, 2) = 1.
+//       - Phase 3 leaves row 0 and column 0 untouched because both boundary flags
+//         are false, producing [[1, 0, 1], [0, 0, 0], [1, 0, 1]].
+//
+//   Example 2:
+//     Input:  matrix = [[0, 1, 2, 0], [3, 4, 5, 2], [1, 3, 1, 5]]
+//     Output: [[0, 0, 0, 0], [0, 4, 5, 0], [0, 3, 1, 0]]
+//     Explanation:
+//       - Initial boundary scan detects zeros at (0, 0) and (0, 3), setting both
+//         first_row_zero = true and first_col_zero = true.
+//       - Phase 1 scans interior cells (1..2, 1..3) and finds no zeros, leaving all
+//         row-0 and col-0 markers unchanged.
+//       - Phase 2 reads matrix[0][3] == 0 and zeros interior cells (1, 3) and (2,
+//         3), while preserving (1, 1)=4, (1, 2)=5, (2, 1)=3, and (2, 2)=1.
+//       - Phase 3 fills row 0 with 0s (first_row_zero) and sets matrix[0..2][0] = 0
+//         (first_col_zero), yielding [[0, 0, 0, 0], [0, 4, 5, 0], [0, 3, 1, 0]].
+//
+//   Example 3:
+//     Input:  matrix = [[1, 2, 3], [0, 5, 6], [7, 8, 9]]
+//     Output: [[0, 2, 3], [0, 0, 0], [0, 8, 9]]
+//     Explanation:
+//       - Initial boundary scan finds no zeros in row 0 (first_row_zero = false)
+//         and detects matrix[1][0] == 0 in column 0 (first_col_zero = true).
+//       - Phase 1 finds no zeros in the interior submatrix (1..2, 1..2), leaving
+//         row 0 and column 0 markers unchanged.
+//       - Phase 2 sees matrix[1][0] == 0 and zeros interior cells (1, 1) and (1,
+//         2), while keeping (2, 1)=8 and (2, 2)=9.
+//       - Phase 3 leaves row 0 intact and sets column 0 to 0 across all rows,
+//         producing [[0, 2, 3], [0, 0, 0], [0, 8, 9]].
+//
 // Algorithm:
 //   A naive single-pass zeroing corrupts later cells because newly written
 //   zeros are indistinguishable from original zeros. We provide two approaches:

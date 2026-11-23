@@ -13,6 +13,53 @@
 //   Constraints: 1 <= length <= 50000, at most 50000 total calls to `set`,
 //   `snap`, and `get`, 0 <= index < length, 0 <= val <= 10^9.
 //
+// Examples:
+//   Example 1:
+//     Input:  ["SnapshotArray", "set", "snap", "set", "get", "snap", "get", "get"],
+//             [[3], [0, 5], [], [0, 6], [0, 0], [], [0, 1], [1, 1]]
+//     Output: [null, null, 0, null, 5, 1, 6, 0]
+//     Explanation:
+//       - SnapshotArray(3) allocates 3 empty version vectors in history_ and
+//         initializes snap_id_ = 0.
+//       - set(0, 5) appends {0, 5} to history_[0], snap() returns 0 and increments
+//         snap_id_ to 1, and set(0, 6) appends {1, 6} to history_[0].
+//       - get(0, 0) runs upper_bound for 0 on [{0, 5}, {1, 6}], landing on {1, 6}
+//         and returning std::prev(it)->value = 5.
+//       - snap() returns 1 (snap_id_ becomes 2), get(0, 1) lands at end() and
+//         returns std::prev(it)->value = 6, and get(1, 1) hits history_[1].begin()
+//         and returns the default 0.
+//
+//   Example 2:
+//     Input:  ["SnapshotArray", "set", "set", "set", "snap", "set", "set", "snap",
+//             "get", "get"], [[4], [2, 10], [2, 25], [2, 0], [], [2, 99], [2, 42],
+//             [], [2, 0], [2, 1]]
+//     Output: [null, null, null, null, 0, null, null, 1, 0, 42]
+//     Explanation:
+//       - SnapshotArray(4) initializes 4 empty logs with snap_id_ = 0; set(2, 10)
+//         appends {0, 10} to history_[2], and set(2, 25) then set(2, 0) overwrite
+//         versions.back() in place because versions.back().snap_id == 0.
+//       - snap() returns 0 and advances snap_id_ to 1; set(2, 99) appends {1, 99}
+//         and set(2, 42) overwrites it in place to leave history_[2] = [{0, 0}, {1,
+//         42}], then snap() returns 1.
+//       - get(2, 0) uses upper_bound(0) to locate {1, 42} and return
+//         std::prev(it)->value = 0, while get(2, 1) reaches end() and returns
+//         std::prev(it)->value = 42.
+//
+//   Example 3:
+//     Input:  ["SnapshotArray", "snap", "set", "set", "snap", "snap", "snap",
+//             "get", "get", "get", "get", "get", "get"], [[2], [], [1, 17], [0,
+//             20], [], [], [], [0, 0], [1, 0], [0, 1], [1, 1], [0, 3], [1, 3]]
+//     Output: [null, 0, null, null, 1, 2, 3, 0, 0, 20, 17, 20, 17]
+//     Explanation:
+//       - SnapshotArray(2) initializes 2 empty logs and snap_id_ = 0; the initial
+//         snap() returns 0 and increments snap_id_ to 1 before any writes.
+//       - set(1, 17) appends {1, 17} to history_[1] and set(0, 20) appends {1, 20}
+//         to history_[0], followed by three snap() calls returning 1, 2, and 3.
+//       - For get(0, 0) and get(1, 0), upper_bound(0) returns begin() because all
+//         recorded snap_ids are 1 > 0, so both return the default 0.
+//       - For get(0, 1), get(1, 1), get(0, 3), and get(1, 3), upper_bound returns
+//         end(), so std::prev(it)->value returns 20, 17, 20, and 17.
+//
 // Algorithm:
 //   Per-Index Versioned History with Binary Search:
 //   Copying the whole array on every `snap()` requires O(length * snaps) time

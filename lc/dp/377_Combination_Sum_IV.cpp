@@ -8,6 +8,37 @@
 //   times, and different orderings are counted as distinct combinations (the
 //   final answer is guaranteed to fit in a 32-bit signed integer).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3], target = 4
+//     Output: 7
+//     Explanation:
+//       - Sort nums to [1, 2, 3] and initialize dp = [1, 0, 0, 0, 0] with base case
+//         dp[0] = 1.
+//       - Compute dp[1] = dp[0] = 1 (loop stops when 2 > 1) and dp[2] = dp[1] +
+//         dp[0] = 2.
+//       - Compute dp[3] = dp[2] + dp[1] + dp[0] = 2 + 1 + 1 = 4.
+//       - Compute dp[4] = dp[3] + dp[2] + dp[1] = 4 + 2 + 1 = 7, returning 7.
+//
+//   Example 2:
+//     Input:  nums = [9], target = 3
+//     Output: 0
+//     Explanation:
+//       - Initialize dp = [1, 0, 0, 0] with sorted_nums = [9].
+//       - For t = 1, 2, and 3, the first element 9 exceeds t, causing the inner
+//         loop to break immediately without updating dp[t].
+//       - Return dp[3] = 0 since no ordered combination sums to 3.
+//
+//   Example 3:
+//     Input:  nums = [2, 4, 6], target = 7
+//     Output: 0
+//     Explanation:
+//       - Initialize dp = [1, 0, 0, 0, 0, 0, 0, 0] with sorted_nums = [2, 4, 6].
+//       - Even sums accumulate positive counts: dp[2] = 1, dp[4] = dp[2] + dp[0] =
+//         2, and dp[6] = dp[4] + dp[2] + dp[0] = 4.
+//       - Odd sums t = 1, 3, 5, and 7 only reference earlier odd indices (all 0),
+//         so dp[7] stays 0 and 0 is returned.
+//
 // Algorithm:
 //   Bottom-Up 1D Dynamic Programming (Ordered Unbounded Knapsack). Define
 //   `dp[t]` as the number of ordered sequences summing to `t`, with base case

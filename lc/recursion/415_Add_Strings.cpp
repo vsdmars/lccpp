@@ -8,6 +8,44 @@
 //   Built-in arbitrary-precision integer libraries (e.g. BigInteger) and
 //   converting the entire inputs directly to integers are disallowed.
 //
+// Examples:
+//   Example 1:
+//     Input:  num1 = "456", num2 = "77"
+//     Output: "533"
+//     Explanation:
+//       - Initialize `i = 3`, `j = 2`, `carry = 0`, and `result = ""`.
+//       - Decrement to `i = 2` ('6') and `j = 1` ('7'), compute `sum = 0 + 6 + 7 =
+//         13`, append `'3'` (`result = "3"`), and set `carry = 1`.
+//       - Decrement to `i = 1` ('5') and `j = 0` ('7'), compute `sum = 1 + 5 + 7 =
+//         13`, append `'3'` (`result = "33"`), and set `carry = 1`.
+//       - With `j == 0`, decrement only `i = 0` ('4'), compute `sum = 1 + 4 = 5`,
+//         append `'5'` (`result = "335"`), and set `carry = 0`.
+//       - Exit the loop since `i == 0`, `j == 0`, and `carry == 0`, then reverse
+//         `"335"` to return `"533"`.
+//
+//   Example 2:
+//     Input:  num1 = "999", num2 = "1"
+//     Output: "1000"
+//     Explanation:
+//       - Initialize `i = 3`, `j = 1`, `carry = 0`, and `result = ""`.
+//       - Decrement to `i = 2` ('9') and `j = 0` ('1'), compute `sum = 0 + 9 + 1 =
+//         10`, append `'0'` (`result = "0"`), and set `carry = 1`.
+//       - With `j == 0`, process `i = 1` ('9') and then `i = 0` ('9') with `carry =
+//         1`, yielding `sum = 10` each time and appending two more `'0'`s (`result
+//         = "000"`, `carry = 1`).
+//       - Run one final iteration because `carry != 0`, compute `sum = 1`, append
+//         `'1'` (`result = "0001"`), set `carry = 0`, and reverse to return
+//         `"1000"`.
+//
+//   Example 3:
+//     Input:  num1 = "0", num2 = "0"
+//     Output: "0"
+//     Explanation:
+//       - Initialize `i = 1`, `j = 1`, `carry = 0`, and `result = ""`.
+//       - Decrement to `i = 0` ('0') and `j = 0` ('0'), compute `sum = 0 + 0 + 0 =
+//         0`, append `'0'` (`result = "0"`), and set `carry = 0`.
+//       - Terminate the loop and reverse `"0"` to return `"0"`.
+//
 // Algorithm:
 //   Implements both an iterative (`addStrings`) and a recursive
 //   (`addStringsRecursive`) elementary-school digit-by-digit addition from

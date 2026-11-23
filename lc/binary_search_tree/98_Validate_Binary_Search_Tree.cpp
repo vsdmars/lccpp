@@ -9,6 +9,43 @@
 //   - Both left and right subtrees are themselves valid BSTs.
 //   Node values span the full 32-bit signed integer range [INT_MIN, INT_MAX].
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [2, 1, 3]
+//     Output: true
+//     Explanation:
+//       - Start DFS at root 2 with initial 64-bit open bounds (INT64_MIN,
+//         INT64_MAX); 2 satisfies the bounds.
+//       - Check left child 1 against tightened bounds (INT64_MIN, 2), which holds
+//         and whose null children return true.
+//       - Check right child 3 against tightened bounds (2, INT64_MAX), which holds
+//         and whose null children return true.
+//       - Both subtrees return true, confirming the tree is a valid BST.
+//
+//   Example 2:
+//     Input:  root = [5, 4, 6, null, null, 3, 7]
+//     Output: false
+//     Explanation:
+//       - Root 5 passes (INT64_MIN, INT64_MAX) and left child 4 passes (INT64_MIN,
+//         5).
+//       - Right child 6 passes (5, INT64_MAX) and passes the tightened interval (5,
+//         6) to its left child.
+//       - At node 3 (the left child of 6), 3 <= 5 violates the lower bound
+//         inherited from ancestor 5.
+//       - The check returns false immediately without needing to validate further
+//         subtrees.
+//
+//   Example 3:
+//     Input:  root = [2147483647, -2147483648, null]
+//     Output: true
+//     Explanation:
+//       - Root 2147483647 (INT_MAX) is promoted to int64_t and lies strictly inside
+//         (INT64_MIN, INT64_MAX).
+//       - Left child -2147483648 (INT_MIN) is checked against (INT64_MIN,
+//         2147483647), avoiding 32-bit comparison overflow and passing strictly.
+//       - All remaining null child pointers return true, so isValidBST returns
+//         true.
+//
 // Algorithm:
 //   Depth-First Search (DFS) with top-down strict value bounds (low, high).
 //   Starting from (-infinity, +infinity) represented in 64-bit signed integers

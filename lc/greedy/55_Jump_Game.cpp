@@ -7,6 +7,40 @@
 //   may jump anywhere from `0` to `nums[i]` steps forward). Determine whether
 //   it is possible to reach the last index (`nums.size() - 1`).
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 3, 1, 1, 4]
+//     Output: true
+//     Explanation:
+//       - Set target = 4 (nums.size() - 1) and initialize farthest = 0.
+//       - At i = 0 (0 <= farthest), nums[0] = 2 updates farthest = max(0, 0 + 2) =
+//         2.
+//       - At i = 1 (1 <= farthest), nums[1] = 3 updates farthest = max(2, 1 + 3) =
+//         4.
+//       - Since farthest (4) >= target (4), short-circuit immediately and return
+//         true.
+//
+//   Example 2:
+//     Input:  nums = [3, 2, 1, 0, 4]
+//     Output: false
+//     Explanation:
+//       - Set target = 4 and initialize farthest = 0.
+//       - At i = 0, nums[0] = 3 expands farthest to max(0, 0 + 3) = 3.
+//       - At i = 1, 2, and 3, i + nums[i] equals 1 + 2 = 3, 2 + 1 = 3, and 3 + 0 =
+//         3, so farthest remains 3.
+//       - At i = 4, i (4) > farthest (3) triggers the unreachable check and returns
+//         false.
+//
+//   Example 3:
+//     Input:  nums = [0, 1]
+//     Output: false
+//     Explanation:
+//       - Since nums.size() = 2 > 1, initialize target = 1 and farthest = 0.
+//       - At i = 0 (0 <= 0), nums[0] = 0 keeps farthest = max(0, 0 + 0) = 0, which
+//         does not reach target (1).
+//       - At i = 1, i (1) > farthest (0) fails the reachability check and returns
+//         false.
+//
 // Algorithm:
 //   Single-pass greedy farthest-reach tracking.
 //   - Maintain `farthest`, the maximum index reachable from any position in the

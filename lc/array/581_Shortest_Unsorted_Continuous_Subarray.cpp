@@ -7,6 +7,38 @@
 //   becomes sorted in non-decreasing order. Return the length of the shortest
 //   such subarray, or 0 if `nums` is already sorted.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 6, 4, 8, 10, 9, 15]
+//     Output: 5
+//     Explanation:
+//       - Phase 1 advances left from 0 to 1 (2 <= 6, then 6 > 4), and Phase 2
+//         retreats right from 6 to 5 (9 <= 15, then 10 > 9).
+//       - Phase 3 scans nums[1..5] = [6, 4, 8, 10, 9] to compute sub_min = 4 and
+//         sub_max = 10.
+//       - Phase 4 keeps left = 1 because nums[0] = 2 <= 4, and Phase 5 keeps right
+//         = 5 because nums[6] = 15 >= 10, returning 5 - 1 + 1 = 5.
+//
+//   Example 2:
+//     Input:  nums = [1, 3, 2, 2, 2]
+//     Output: 4
+//     Explanation:
+//       - Phase 1 stops at left = 1 (1 <= 3, then 3 > 2), and Phase 2 retreats
+//         right from 4 across equal 2s to stop at right = 2 (3 > 2).
+//       - Phase 3 inspects nums[1..2] = [3, 2], giving sub_min = 2 and sub_max = 3.
+//       - Phase 4 keeps left = 1 (nums[0] = 1 <= 2), while Phase 5 expands right
+//         from 2 to 4 because nums[3] = 2 < 3 and nums[4] = 2 < 3, returning 4 - 1
+//         + 1 = 4.
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 3, 4]
+//     Output: 0
+//     Explanation:
+//       - Phase 1 advances left from 0 through 1 and 2 to 3 because 1 <= 2 <= 3 <=
+//         4.
+//       - Because left == n - 1 (3 == 3), the entire array is already
+//         non-decreasing and the function returns 0 immediately.
+//
 // Algorithm:
 //   1. Optimal Two-Pointer Boundary Expansion (O(n) time, O(1) space):
 //      - Advance `left` from the start while `nums[left] <= nums[left + 1]` to

@@ -8,6 +8,44 @@
 //   reordering the remaining characters; return 0 if no common subsequence
 //   exists.
 //
+// Examples:
+//   Example 1:
+//     Input:  text1 = "abcde", text2 = "ace"
+//     Output: 3
+//     Explanation:
+//       - Initialize the 6 x 4 table dp with all zeros so row 0 and column 0
+//         represent empty prefixes.
+//       - For i = 0 (text1[0] = 'a'), matching text2[0] = 'a' sets dp[1][1] =
+//         dp[0][0] + 1 = 1, which propagates to dp[1][2] = 1 and dp[1][3] = 1; row
+//         2 for 'b' copies [0, 1, 1, 1].
+//       - For i = 2 (text1[2] = 'c'), matching text2[1] = 'c' sets dp[3][2] =
+//         dp[2][1] + 1 = 2 and dp[3][3] = 2; row 4 for 'd' copies [0, 1, 2, 2].
+//       - For i = 4 (text1[4] = 'e'), matching text2[2] = 'e' sets dp[5][3] =
+//         dp[4][2] + 1 = 3, and dp[5][3] = 3 is returned.
+//
+//   Example 2:
+//     Input:  text1 = "abg", text2 = "adbeh"
+//     Output: 2
+//     Explanation:
+//       - Initialize the 4 x 6 table dp to 0 for all prefix pairs.
+//       - For i = 0 ('a'), matching text2[0] = 'a' sets dp[1][1] = 1, and
+//         mismatches for j = 1..4 carry 1 across row 1 to dp[1][5] = 1.
+//       - For i = 1 ('b'), dp[2][1] and dp[2][2] stay 1 until j = 2 ('b' == 'b')
+//         sets dp[2][3] = dp[1][2] + 1 = 2, which propagates to dp[2][5] = 2.
+//       - For i = 2 ('g'), 'g' matches no character in "adbeh", so every cell takes
+//         max(dp[2][j + 1], dp[3][j]) and dp[3][5] = 2 is returned.
+//
+//   Example 3:
+//     Input:  text1 = "abc", text2 = "def"
+//     Output: 0
+//     Explanation:
+//       - Initialize the 4 x 4 table dp with zeros along row 0, column 0, and all
+//         interior cells.
+//       - For every i in 0..2 and j in 0..2, text1[i] != text2[j] because "abc" and
+//         "def" share no characters.
+//       - Each transition takes max(dp[i][j + 1], dp[i + 1][j]) = 0, leaving
+//         dp[3][3] = 0 as the returned LCS length.
+//
 // Algorithm:
 //   Bottom-up 2D dynamic programming over prefixes of both strings. Let
 //   `dp[i][j]` be the LCS length of `text1[0..i-1]` and `text2[0..j-1]`, with

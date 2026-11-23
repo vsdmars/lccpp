@@ -11,6 +11,37 @@
 //   - 0 <= digits.length <= 4
 //   - digits[i] is a digit in the range `['2', '9']`
 //
+// Examples:
+//   Example 1:
+//     Input:  digits = "23"
+//     Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]
+//     Explanation:
+//       - Because digits is non-empty, initialize combinations = [""].
+//       - For digit '2', look up kDigitToLetters[0] = "abc" and append each letter
+//         to "", updating combinations to ["a", "b", "c"].
+//       - For digit '3', look up kDigitToLetters[1] = "def" and expand each of the
+//         3 prefixes into next with reserved capacity 3 * 3 = 9, producing ["ad",
+//         "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+//       - After consuming all digits, return combinations containing all 9 strings.
+//
+//   Example 2:
+//     Input:  digits = "7"
+//     Output: ["p", "q", "r", "s"]
+//     Explanation:
+//       - Initialize combinations = [""] since digits is non-empty.
+//       - For digit '7', compute key = '7' - '2' = 5 and fetch kDigitToLetters[5] =
+//         "pqrs".
+//       - Expand the single empty prefix "" with each of the 4 characters into next
+//         = ["p", "q", "r", "s"] and return combinations.
+//
+//   Example 3:
+//     Input:  digits = ""
+//     Output: []
+//     Explanation:
+//       - Check digits.empty(), which evaluates to true.
+//       - Return an empty vector {} immediately without allocating any frontier
+//         layer.
+//
 // Algorithm:
 //   Iterative level-by-level breadth-first (Cartesian product) expansion:
 //   1. If `digits` is empty, return `{}` immediately.

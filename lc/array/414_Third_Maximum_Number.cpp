@@ -6,6 +6,41 @@
 //   number in the array. If fewer than three distinct numbers exist, return
 //   the overall maximum number instead. The solution must run in O(n) time.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 2, 3, 1]
+//     Output: 1
+//     Explanation:
+//       - Start with first, second, and third empty (std::nullopt); seeing 2 sets
+//         first = 2.
+//       - The second 2 matches *first, so already_tracked is true and the duplicate
+//         is skipped.
+//       - Seeing 3 > *first (2) shifts ranks downward to first = 3, second = 2, and
+//         third = nullopt.
+//       - Seeing 1 (< *second) populates the empty third slot with 1, and since
+//         third.has_value() is true, return 1.
+//
+//   Example 2:
+//     Input:  nums = [1, 2]
+//     Output: 2
+//     Explanation:
+//       - Seeing 1 sets first = 1 while second and third remain empty.
+//       - Seeing 2 > *first (1) shifts first down to second = 1 and sets first = 2.
+//       - The loop ends with third still empty, so return *first = 2 as fewer than
+//         three distinct values exist.
+//
+//   Example 3:
+//     Input:  nums = [1, 2, -2147483648]
+//     Output: -2147483648
+//     Explanation:
+//       - Seeing 1 sets first = 1, and seeing 2 > 1 updates first = 2 and second =
+//         1.
+//       - Seeing -2147483648 (INT_MIN) fails equality checks against *first and
+//         *second and populates the empty third slot with -2147483648.
+//       - Because std::optional<int> distinguishes a stored -2147483648 from an
+//         unset slot, third.has_value() is true and *third = -2147483648 is
+//         returned.
+//
 // Algorithm:
 //   Maintain three `std::optional<int>` slots (`first`, `second`, `third`)
 //   representing the largest, second-largest, and third-largest distinct

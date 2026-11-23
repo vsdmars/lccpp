@@ -5,6 +5,50 @@
 //   Given a non-empty integer array `nums`, find the contiguous non-empty
 //   subarray with the largest sum and return its sum.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+//     Output: 6
+//     Explanation:
+//       - Initialize `prefix_sum = 0`, `min_prefix = 0`, and `best` to the lowest
+//         64-bit integer.
+//       - At index 0 (`-2`), `prefix_sum` becomes `-2`, `best` updates to `-2 - 0 =
+//         -2`, and `min_prefix` updates to `-2`.
+//       - At indices 1 and 2 (`1`, `-3`), `prefix_sum` becomes `-1` then `-4`,
+//         updating `best` to `-1 - (-2) = 1` and `min_prefix` to `-4`.
+//       - At indices 3 through 6 (`4`, `-1`, `2`, `1`), `prefix_sum` reaches `0`,
+//         `-1`, `1`, and `2`, updating `best` via `prefix_sum - min_prefix` (`2 -
+//         (-4) = 6`) while `min_prefix` stays `-4`.
+//       - At indices 7 and 8 (`-5`, `4`), `prefix_sum` becomes `-3` then `1`,
+//         giving candidate sums `1` and `5` without exceeding `best = 6`, so `6` is
+//         returned.
+//
+//   Example 2:
+//     Input:  nums = [5, 4, -1, 7, 8]
+//     Output: 23
+//     Explanation:
+//       - Initialize `prefix_sum = 0`, `min_prefix = 0`, and `best` to the lowest
+//         64-bit integer.
+//       - At indices 0 through 2 (`5`, `4`, `-1`), `prefix_sum` becomes `5`, `9`,
+//         and `8` while `min_prefix` remains `0`, updating `best` to `9`.
+//       - At indices 3 and 4 (`7`, `8`), `prefix_sum` increases to `15` and `23`,
+//         updating `best` to `15 - 0 = 15` and finally returning `23`.
+//
+//   Example 3:
+//     Input:  nums = [-5, -2, -8, -1, -4]
+//     Output: -1
+//     Explanation:
+//       - Initialize `prefix_sum = 0`, `min_prefix = 0`, and `best` to the lowest
+//         64-bit integer.
+//       - At index 0 (`-5`), `prefix_sum = -5` updates `best = -5 - 0 = -5` before
+//         `min_prefix` updates to `-5`; at index 1 (`-2`), `prefix_sum = -7`
+//         improves `best` to `-7 - (-5) = -2` and sets `min_prefix = -7`.
+//       - At index 2 (`-8`), `prefix_sum = -15` leaves `best = -2` and updates
+//         `min_prefix = -15`.
+//       - At index 3 (`-1`), `prefix_sum = -16` updates `best` to `-16 - (-15) =
+//         -1` and `min_prefix` to `-16`; index 4 (`-4`) yields `-20 - (-16) = -4`,
+//         so `-1` is returned.
+//
 // Algorithm:
 //   1. Prefix-sum minimum tracking (`maxSubArray`, equivalent to Kadane's
 //      algorithm): the sum of any subarray `nums[l..r]` equals

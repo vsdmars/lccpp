@@ -8,6 +8,44 @@
 //   If multiple values tie for the maximum frequency, return all of them in
 //   any order.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, null, 2, 2]
+//     Output: [2]
+//     Explanation:
+//       - In-order DFS visits node 1 first (no left child), setting prev_val = 1,
+//         current_count = 1, max_count = 1, and modes = [1].
+//       - DFS then descends right to 2 and left to leaf 2; since 2 != 1, it sets
+//         prev_val = 2 and current_count = 1 == max_count, making modes = [1, 2].
+//       - Returning to parent 2, node->val == *prev_val increments current_count to
+//         2 > max_count = 1.
+//       - Update max_count = 2, clear modes, and record 2, returning [2].
+//
+//   Example 2:
+//     Input:  root = [6, 2, 8, 0, 4, 7, 9, null, null, 2, 6]
+//     Output: [2, 6]
+//     Explanation:
+//       - In-order DFS visits the BST nodes in non-decreasing sequence: [0, 2, 2,
+//         4, 6, 6, 7, 8, 9].
+//       - Node 0 sets max_count = 1 and modes = [0], then the two consecutive 2s
+//         raise current_count to 2, updating max_count = 2 and modes = [2].
+//       - Node 4 resets current_count = 1 < 2, then the two consecutive 6s reach
+//         current_count = 2 == max_count, appending 6 to modes = [2, 6].
+//       - Nodes 7, 8, and 9 each have current_count = 1 < 2, so the returned modes
+//         are [2, 6].
+//
+//   Example 3:
+//     Input:  root = [-3, -5, -2, -5, null, -2]
+//     Output: [-5, -2]
+//     Explanation:
+//       - In-order DFS traverses the tree in sorted order: [-5, -5, -3, -2, -2].
+//       - The first two -5 nodes reach current_count = 2, setting max_count = 2 and
+//         modes = [-5].
+//       - Node -3 resets prev_val = -3 and current_count = 1 < 2, leaving modes
+//         unchanged.
+//       - The two -2 nodes reach current_count = 2 == max_count, appending -2 and
+//         returning [-5, -2].
+//
 // Algorithm:
 //   An in-order traversal (left -> node -> right) of a BST visits all node
 //   values in non-decreasing sorted order, which groups every occurrence of

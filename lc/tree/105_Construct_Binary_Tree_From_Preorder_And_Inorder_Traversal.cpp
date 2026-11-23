@@ -7,6 +7,44 @@
 //   traversal (left, root, right) of the same binary tree with unique node
 //   values, reconstruct and return the binary tree.
 //
+// Examples:
+//   Example 1:
+//     Input:  preorder = [3, 9, 20, 15, 7], inorder = [9, 3, 15, 20, 7]
+//     Output: [3, 9, 20, null, null, 15, 7]
+//     Explanation:
+//       - Build inorder_index = {9: 0, 3: 1, 15: 2, 20: 3, 7: 4} and call build(0,
+//         5) with preorder_pos = 0.
+//       - Consume preorder[0] = 3 (split = 1), allocate root 3, and recurse left on
+//         [0, 1) before right on [2, 5).
+//       - On [0, 1), consume preorder[1] = 9 (split = 0) to create 3->left = 9
+//         whose child calls [0, 0) and [1, 1) return nullptr.
+//       - On [2, 5), consume preorder[2] = 20 (split = 3) for 3->right, then
+//         recurse left on [2, 3) to consume 15 and right on [4, 5) to consume 7,
+//         yielding [3, 9, 20, null, null, 15, 7].
+//
+//   Example 2:
+//     Input:  preorder = [1, 2, 3], inorder = [3, 2, 1]
+//     Output: [1, 2, null, 3]
+//     Explanation:
+//       - Build inorder_index = {3: 0, 2: 1, 1: 2} and call build(0, 3) with
+//         preorder_pos = 0.
+//       - Consume preorder[0] = 1 (split = 2) to create root 1 and recurse left on
+//         [0, 2) before the empty right range [3, 3).
+//       - On [0, 2), consume preorder[1] = 2 (split = 1) for 1->left, then recurse
+//         left on [0, 1) to consume preorder[2] = 3 (split = 0) for 2->left.
+//       - All remaining subranges [0, 0), [1, 1), [2, 2), and [3, 3) satisfy
+//         in_left >= in_right and return nullptr, producing [1, 2, null, 3].
+//
+//   Example 3:
+//     Input:  preorder = [-1], inorder = [-1]
+//     Output: [-1]
+//     Explanation:
+//       - Build inorder_index = {-1: 0} and invoke build(0, 1) with preorder_pos =
+//         0.
+//       - Consume preorder[0] = -1 (split = 0) to allocate TreeNode(-1).
+//       - Both recursive calls build(0, 0) and build(1, 1) hit in_left >= in_right
+//         and return nullptr, leaving single-node tree [-1].
+//
 // Algorithm:
 //   Divide-and-conquer reconstruction using a hash map for O(1) inorder pivot
 //   lookup. Because every node value is unique:

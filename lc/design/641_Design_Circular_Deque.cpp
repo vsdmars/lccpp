@@ -13,6 +13,58 @@
 //       empty.
 //     - isEmpty() / isFull(): Check whether the deque is empty or full.
 //
+// Examples:
+//   Example 1:
+//     Input:  MyCircularDeque(3), isEmpty(), getFront(), getRear(), insertLast(1),
+//             insertLast(2), insertFront(3), insertFront(4), getRear(), isFull(),
+//             deleteLast(), insertFront(4), getFront(), getRear()
+//     Output: [null, true, -1, -1, true, true, true, false, 2, true, true, true, 4,
+//             1]
+//     Explanation:
+//       - MyCircularDeque(3) allocates buf_ of size 3 with head_ = 0 and size_ = 0,
+//         so isEmpty() returns true and getFront()/getRear() return -1.
+//       - insertLast(1) and insertLast(2) write at (0 + 0) % 3 = 0 and (0 + 1) % 3
+//         = 1, leaving size_ = 2 and buf_ = [1, 2, 0].
+//       - insertFront(3) wraps head_ from 0 to 2 and writes 3 at buf_[2] with size_
+//         = 3, causing insertFront(4) to return false because isFull() is true.
+//       - getRear() reads index (2 + 3 - 1) % 3 = 1 (value 2), then deleteLast()
+//         decrements size_ to 2 and drops 2 from the rear.
+//       - insertFront(4) decrements head_ from 2 to 1 and sets buf_[1] = 4 (size_ =
+//         3), so getFront() returns buf_[1] = 4 and getRear() reads (1 + 3 - 1) % 3
+//         = 0 (value 1).
+//
+//   Example 2:
+//     Input:  MyCircularDeque(3), insertFront(10), insertFront(20),
+//             insertFront(30), isFull(), getFront(), getRear(), deleteFront(),
+//             getFront(), deleteLast(), getFront(), getRear(), deleteFront(),
+//             isEmpty(), deleteFront(), deleteLast()
+//     Output: [null, true, true, true, true, 30, 10, true, 20, true, 20, 20, true,
+//             true, false, false]
+//     Explanation:
+//       - Three insertFront calls wrap head_ from 0 -> 2 -> 1 -> 0, storing 10 at
+//         buf_[2], 20 at buf_[1], and 30 at buf_[0] with size_ = 3 (isFull() =
+//         true, getFront() = 30, getRear() = 10).
+//       - deleteFront() advances head_ to (0 + 1) % 3 = 1 and sets size_ = 2,
+//         making getFront() return buf_[1] = 20.
+//       - deleteLast() decrements size_ to 1, leaving only buf_[1] = 20 so both
+//         getFront() and getRear() read index 1 and return 20.
+//       - deleteFront() advances head_ to 2 and sets size_ = 0, so isEmpty()
+//         returns true and subsequent deleteFront()/deleteLast() calls return
+//         false.
+//
+//   Example 3:
+//     Input:  MyCircularDeque(1), insertFront(7), isFull(), insertLast(8),
+//             getFront(), getRear(), deleteLast(), isEmpty(), insertLast(9),
+//             getFront(), getRear()
+//     Output: [null, true, true, false, 7, 7, true, true, true, 9, 9]
+//     Explanation:
+//       - insertFront(7) wraps head_ from 0 to capacity_ - 1 = 0 and writes buf_[0]
+//         = 7 with size_ = 1, so isFull() is true and insertLast(8) returns false.
+//       - getFront() and getRear() both read index 0 and return 7, then
+//         deleteLast() sets size_ = 0 so isEmpty() becomes true.
+//       - insertLast(9) computes tail = (0 + 0) % 1 = 0 and writes buf_[0] = 9 with
+//         size_ = 1, so getFront() and getRear() both return 9.
+//
 // Algorithm:
 //   Store elements in a contiguous fixed-size circular array (`std::vector`)
 //   of length `k`, tracked by the front index `head_` and active count `size_`.

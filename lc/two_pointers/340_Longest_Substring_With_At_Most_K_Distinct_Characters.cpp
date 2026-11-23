@@ -5,6 +5,43 @@
 //   Given a string `s` and an integer `k`, return the length of the longest
 //   contiguous substring of `s` that contains at most `k` distinct characters.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "eceba", k = 2
+//     Output: 3
+//     Explanation:
+//       - At right = 0 ('e') and right = 1 ('c'), last_pos stores {'e': 0, 'c': 1}
+//         with left = 0, raising max_len to 2.
+//       - At right = 2 ('e'), last_pos['e'] updates to 2 so the window "ece" stays
+//         within k = 2 distinct characters and max_len becomes 3.
+//       - At right = 3 ('b'), last_pos becomes {'e': 2, 'c': 1, 'b': 3} (size 3 >
+//         2), so oldest entry 'c' (index 1) is erased and left jumps to 1 + 1 = 2
+//         (window "eb", length 2).
+//       - At right = 4 ('a'), last_pos becomes {'e': 2, 'b': 3, 'a': 4} (size 3 >
+//         2), so oldest entry 'e' (index 2) is erased and left jumps to 3 (window
+//         "ba", length 2), returning max_len = 3.
+//
+//   Example 2:
+//     Input:  s = "abaccc", k = 2
+//     Output: 4
+//     Explanation:
+//       - Across right = 0..2 ("aba"), last_pos updates to {'a': 2, 'b': 1} with
+//         left = 0, giving max_len = 3.
+//       - At right = 3 ('c'), adding 'c' gives size 3 > 2, so the algorithm evicts
+//         oldest entry 'b' (index 1) and jumps left to 2 (window "ac", length 2).
+//       - At right = 4 and right = 5 ('c', 'c'), last_pos['c'] updates to 4 then 5
+//         while keeping size 2 ({'a': 2, 'c': 5}), extending window "accc" ([2..5])
+//         to max_len = 4.
+//
+//   Example 3:
+//     Input:  s = "eceba", k = 0
+//     Output: 0
+//     Explanation:
+//       - Check the upfront guard `k <= 0 || s.empty()` before allocating
+//         `last_pos` or entering the loop.
+//       - Because k = 0 satisfies `k <= 0`, no non-empty window can satisfy at most
+//         0 distinct characters, so return 0 immediately.
+//
 // Algorithm:
 //   Sliding window tracking the rightmost occurrence index of each character
 //   currently inside the window [left, right]:

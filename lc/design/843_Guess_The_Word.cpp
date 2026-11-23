@@ -8,6 +8,46 @@
 //   character and index (0..6, or -1 if `word` is not in the original list).
 //   Identify `secret` within the allowed guess budget (typically 10 guesses).
 //
+// Examples:
+//   Example 1:
+//     Input:  secret = "acckzz", words = ["acckzz", "ccbazz", "eiowzz", "abcczz"]
+//             (plus Master::guess("aaaaaa"))
+//     Output: "acckzz" found in 1 guess (passed = true); Master::guess("aaaaaa")
+//             returns -1
+//     Explanation:
+//       - Master::guess("aaaaaa") checks wordlist_.contains("aaaaaa"), finds it
+//         absent, and returns -1.
+//       - selectMinimaxCandidate partitions the remaining 3 words per candidate:
+//         "acckzz" yields buckets {2: 1, 3: 1, 4: 1} with worst_case = 1, beating
+//         "ccbazz" (2), "eiowzz" (3), and "abcczz" (2).
+//       - findSecretWord guesses "acckzz", receives matches = 6 from Master::guess,
+//         sets found_ = true in 1 guess, and terminates.
+//
+//   Example 2:
+//     Input:  secret = "abcdef", words = ["abcdef"]
+//     Output: "abcdef" found in 1 guess (passed = true)
+//     Explanation:
+//       - With a single candidate, selectMinimaxCandidate leaves all match buckets
+//         at 0 and picks "abcdef".
+//       - master.guess("abcdef") returns 6 matches, completing findSecretWord with
+//         guessesMade() = 1 and passed() = true.
+//
+//   Example 3:
+//     Input:  secret = "cbzzzz", words = ["aazzzz", "abzzzz", "aczzzz", "bazzzz",
+//             "bbzzzz", "bczzzz", "cazzzz", "cbzzzz", "cczzzz", "ddzzzz"]
+//     Output: "cbzzzz" found in 4 guesses (<= 10 allowed, passed = true)
+//     Explanation:
+//       - Every pair shares suffix "zzzz" (4 or 5 matches); selectMinimaxCandidate
+//         picks "aazzzz" (worst_case = 5 vs 9 for "ddzzzz"), which gets 4 matches
+//         and prunes candidates to ["bbzzzz", "bczzzz", "cbzzzz", "cczzzz",
+//         "ddzzzz"].
+//       - Round 2 picks "bbzzzz" (worst_case = 2), receives 5 matches against
+//         "cbzzzz", and prunes candidates to ["bczzzz", "cbzzzz"].
+//       - Round 3 picks "bczzzz" (worst_case = 1), receives 4 matches, and leaves
+//         only ["cbzzzz"].
+//       - Round 4 guesses "cbzzzz", receives 6 matches, and finishes with
+//         guessesMade() = 4 <= 10.
+//
 // Algorithm:
 //   Use deterministic 1-step Minimax candidate elimination (generalizing the
 //   0-match heuristic to all 6 non-winning match buckets):

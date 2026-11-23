@@ -8,6 +8,39 @@
 //   An empty string is valid.
 //   Constraints: 1 <= s.size() <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "(*)"
+//     Output: true
+//     Explanation:
+//       - Initialize feasible unmatched '(' bounds to min_open = 0 and max_open =
+//         0.
+//       - Read '(' to update bounds to [1, 1], then read '*' to widen bounds to [0,
+//         2] (--min_open, ++max_open).
+//       - Read ')' to update bounds to [-1, 1] and clamp min_open = max(0, -1) = 0,
+//         giving [0, 1].
+//       - Finish the scan with min_open == 0, so return true.
+//
+//   Example 2:
+//     Input:  s = ")(*"
+//     Output: false
+//     Explanation:
+//       - Initialize feasible bounds to min_open = 0 and max_open = 0.
+//       - Read ')' at index 0, decrementing both bounds to min_open = -1 and
+//         max_open = -1.
+//       - Since max_open < 0, immediately return false because no wildcard
+//         assignment can balance the leading ')'.
+//
+//   Example 3:
+//     Input:  s = "**("
+//     Output: false
+//     Explanation:
+//       - Initialize feasible bounds to min_open = 0 and max_open = 0.
+//       - Process the first '*' to reach [-1, 1] clamped to [0, 1], and the second
+//         '*' to reach [-1, 2] clamped to [0, 2].
+//       - Process the trailing '(' to increment both bounds to [1, 3], then return
+//         false because min_open == 1 != 0.
+//
 // Algorithm:
 //   Greedy feasible-balance interval `[min_open, max_open]`:
 //   At every prefix of `s`, the set of achievable unmatched `'('` counts

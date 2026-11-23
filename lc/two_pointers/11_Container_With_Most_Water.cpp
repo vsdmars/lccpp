@@ -8,6 +8,41 @@
 //   amount of water `min(height[i], height[j]) * (j - i)`. The container may
 //   not be slanted.
 //
+// Examples:
+//   Example 1:
+//     Input:  height = [1, 8, 6, 2, 5, 4, 8, 3, 7]
+//     Output: 49
+//     Explanation:
+//       - Initialize left = 0 (height 1), right = 8 (height 7), and max_area = 0.
+//       - Iteration 1 computes min_height = min(1, 7) = 1 and width = 8, setting
+//         max_area = 8, then advances left past height[0] = 1 to index 1 (height
+//         8).
+//       - Iteration 2 computes min_height = min(8, 7) = 7 and width = 7, updating
+//         max_area = max(8, 49) = 49, then retreats right past indices 8 (7) and 7
+//         (3) to index 6 (height 8).
+//       - Iteration 3 evaluates indices 1 and 6 (8 * 5 = 40 <= 49), and the inner
+//         loops advance/retreat past all remaining heights <= 8 until left >=
+//         right, returning 49.
+//
+//   Example 2:
+//     Input:  height = [4, 3, 2, 1, 4]
+//     Output: 16
+//     Explanation:
+//       - Initialize left = 0 (height 4), right = 4 (height 4), and max_area = 0.
+//       - Compute min_height = min(4, 4) = 4 and width = 4 - 0 = 4, updating
+//         max_area = 4 * 4 = 16.
+//       - The inner while loop skips all lines with height[left] <= 4 (4, 3, 2, 1)
+//         until left reaches 4 == right, ending the search and returning 16.
+//
+//   Example 3:
+//     Input:  height = [0, 0, 0]
+//     Output: 0
+//     Explanation:
+//       - Initialize left = 0, right = 2, and max_area = 0.
+//       - min_height = min(0, 0) = 0 with width = 2 keeps max_area = 0.
+//       - The inner loop advances left past every element <= 0 until left == 2 ==
+//         right, exiting the loop and returning 0.
+//
 // Algorithm:
 //   Greedy opposite-direction two pointers. Start with the widest possible
 //   container at `left = 0` and `right = n - 1`. At each step, the limiting

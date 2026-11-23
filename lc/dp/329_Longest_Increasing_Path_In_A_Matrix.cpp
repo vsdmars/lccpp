@@ -6,6 +6,45 @@
 //   increasing path. From each cell you may move in four orthogonal directions
 //   (left, right, up, down) without wrapping around or moving diagonally.
 //
+// Examples:
+//   Example 1:
+//     Input:  matrix = [[9, 9, 4], [6, 6, 8], [2, 1, 1]]
+//     Output: 4
+//     Explanation:
+//       - Memoize cells with no strictly greater orthogonal neighbors first:
+//         memo[0][0] = 1 (9), memo[0][1] = 1 (9), and memo[1][2] = 1 (8).
+//       - Propagate backward into smaller neighbors: memo[0][2] = 1 + memo[1][2] =
+//         2 (4 -> 8), memo[1][0] = 1 + memo[0][0] = 2 (6 -> 9), and memo[1][1] = 2
+//         (6 -> 9 or 8).
+//       - Cell (2, 0) (value 2) transitions to (1, 0) (value 6) to cache memo[2][0]
+//         = 1 + 2 = 3.
+//       - Cell (2, 1) (value 1) transitions to (2, 0) (value 2) to achieve
+//         memo[2][1] = 1 + memo[2][0] = 4 along path 1 -> 2 -> 6 -> 9, setting
+//         global_best = 4.
+//
+//   Example 2:
+//     Input:  matrix = [[7, 6, 1, 1], [2, 7, 6, 0], [1, 3, 5, 1], [6, 6, 3, 2]]
+//     Output: 7
+//     Explanation:
+//       - Cell (1, 1) (value 7) has no strictly greater neighbors so memo[1][1] =
+//         1, and stepping from (1, 2) (value 6) yields memo[1][2] = 2.
+//       - Continuing backward along strictly increasing edges gives memo[2][2] = 3
+//         (value 5), memo[3][2] = 4 (value 3), and memo[3][3] = 5 (value 2).
+//       - Cell (2, 3) (value 1) advances to (3, 3) for memo[2][3] = 6, and (1, 3)
+//         (value 0) advances to (2, 3) for memo[1][3] = 7.
+//       - All other cells reach shorter chains, so global_best = 7 along 0 -> 1 ->
+//         2 -> 3 -> 5 -> 6 -> 7.
+//
+//   Example 3:
+//     Input:  matrix = [[5, 5], [5, 5]]
+//     Output: 1
+//     Explanation:
+//       - At (0, 0) (value 5), orthogonal neighbors (0, 1) and (1, 0) also hold 5
+//         and fail the strict matrix[ur][uc] > matrix[r][c] check, leaving
+//         memo[0][0] = 1.
+//       - Every remaining cell (0, 1), (1, 0), and (1, 1) likewise finds no
+//         strictly greater neighbor and caches 1, returning global_best = 1.
+//
 // Algorithm:
 //   Top-Down Depth-First Search with Memoization (DAG Longest Path). Model the
 //   grid as a directed graph with an edge `(r, c) -> (nr, nc)` whenever the

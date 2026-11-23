@@ -7,6 +7,39 @@
 //   resulting 32-bit unsigned integer.
 //   Follow-up: optimize when called repeatedly.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 43261596 (0b00000010100101000001111010011100)
+//     Output: 964176192 (0b00111001011110000010100101000000)
+//     Explanation:
+//       - Initialize result = 0 and loop i from 0 to 31 in reverseBits.
+//       - In the first 8 iterations, extract the lowest byte 10011100 bit by bit
+//         via (n & 1) and shift it into result as 00111001 (0x39).
+//       - Across the remaining 24 iterations, shift the upper 24 bits 00000010
+//         10010100 00011110 into result as 01111000 00101001 01000000.
+//       - After 32 iterations, return result = 0x39782940 = 964176192.
+//
+//   Example 2:
+//     Input:  n = 4294967293 (0xFFFFFFFD)
+//     Output: 3221225471 (0xBFFFFFFF)
+//     Explanation:
+//       - Initialize result = 0 with n = 0xFFFFFFFD (all bits 1 except bit 1 which
+//         is 0).
+//       - Iteration i = 0 shifts n & 1 = 1 into result (1), and iteration i = 1
+//         shifts n & 1 = 0 into result (0b10).
+//       - Iterations i = 2 through 31 shift thirty consecutive 1 bits into result,
+//         pushing the sole 0 bit from position 1 to position 30.
+//       - Return result = 0xBFFFFFFF = 3221225471.
+//
+//   Example 3:
+//     Input:  n = 1 (0x00000001)
+//     Output: 2147483648 (0x80000000)
+//     Explanation:
+//       - Iteration i = 0 reads n & 1 = 1 into result = 1 and shifts n right to 0.
+//       - Iterations i = 1 through 31 shift result left 31 times while n & 1
+//         remains 0, moving the 1 bit from position 0 to position 31.
+//       - Return result = 0x80000000 = 2147483648.
+//
 // Algorithm:
 //   1. Shift-and-Accumulate (`reverseBits`):
 //      Iterate exactly 32 times. On each step, shift `result` left by 1 to

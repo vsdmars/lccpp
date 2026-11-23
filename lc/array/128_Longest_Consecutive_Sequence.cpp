@@ -7,6 +7,41 @@
 //   consecutive integers (`x, x+1, ..., x+k-1`) whose values appear anywhere
 //   in `nums`. The algorithm must run in O(n) time.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [100, 4, 200, 1, 3, 2]
+//     Output: 4
+//     Explanation:
+//       - Insert all elements into remaining = {100, 4, 200, 1, 3, 2} and
+//         initialize best = 0.
+//       - At num = 100, erase 100 (length = 1); neither 101 nor 99 exists in
+//         remaining, so best becomes 1.
+//       - At num = 4, erase 4 (length = 1); 5 is absent, while downward expansion
+//         erases 3, 2, and 1 to reach length = 4, updating best = 4.
+//       - At num = 200, erase 200 (length = 1); subsequent values 1, 3, and 2 fail
+//         remaining.erase and are skipped, returning best = 4.
+//
+//   Example 2:
+//     Input:  nums = [0, 3, 7, 2, 5, 8, 4, 6, 0, 1]
+//     Output: 9
+//     Explanation:
+//       - Insert nums into remaining = {0, 1, 2, 3, 4, 5, 6, 7, 8} (deduplicating
+//         the repeated 0) with best = 0.
+//       - At num = 0, erase 0 (length = 1) and expand upward erasing 1 through 8
+//         (length = 9); -1 is absent, so best becomes 9.
+//       - All remaining elements (3, 7, 2, 5, 8, 4, 6, 0, 1) are already erased
+//         from remaining and skipped, returning 9.
+//
+//   Example 3:
+//     Input:  nums = [-3, 10, -1, 0, -2, 1, 50]
+//     Output: 5
+//     Explanation:
+//       - Populate remaining = {-3, -2, -1, 0, 1, 10, 50} and initialize best = 0.
+//       - At num = -3, erase -3 and expand upward through -2, -1, 0, and 1 (length
+//         = 5); -4 is absent, updating best = 5.
+//       - At num = 10 and num = 50, each forms an isolated length-1 component while
+//         -1, 0, -2, and 1 are skipped, returning 5.
+//
 // Algorithm:
 //   Hash-set bidirectional expansion with eager erasure:
 //   1. Insert all elements of `nums` into an `std::unordered_set<int>` called

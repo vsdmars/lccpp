@@ -6,6 +6,43 @@
 //   3 * 10^4), return the length of the longest contiguous substring that forms
 //   a well-formed (balanced) parentheses expression.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = ")()())"
+//     Output: 4
+//     Explanation:
+//       - Initialize dp = [0, 0, 0, 0, 0, 0] and skip i = 1 since s[1] == '('.
+//       - At i = 2 (s[2] == ')', s[1] == '('), Case 1 sets dp[2] = dp[0] + 2 = 2.
+//       - Skip i = 3 ('('), then at i = 4 (s[4] == ')', s[3] == '('), Case 1
+//         extends dp[2] to give dp[4] = dp[2] + 2 = 4.
+//       - At i = 5 (s[5] == ')', s[4] == ')'), Case 2 checks open_idx = 5 - dp[4] -
+//         1 = 0 where s[0] == ')' != '(', leaving dp[5] = 0 and max_len = 4.
+//
+//   Example 2:
+//     Input:  s = "()(()())"
+//     Output: 8
+//     Explanation:
+//       - At i = 1 (s[1] == ')', s[0] == '('), Case 1 sets dp[1] = 2; opening
+//         parens at indices 2 and 3 keep dp[2] = dp[3] = 0.
+//       - At i = 4 (s[4] == ')', s[3] == '('), Case 1 sets dp[4] = dp[2] + 2 = 2,
+//         and index 5 ('(') stays dp[5] = 0.
+//       - At i = 6 (s[6] == ')', s[5] == '('), Case 1 merges with dp[4] to compute
+//         dp[6] = dp[4] + 2 = 4.
+//       - At i = 7 (s[7] == ')', s[6] == ')'), Case 2 uses inner_len = dp[6] = 4 to
+//         match s[open_idx] = s[2] == '(' and merges dp[1] = 2, yielding dp[7] = 4
+//         + 2 + 2 = 8.
+//
+//   Example 3:
+//     Input:  s = "(()(((()"
+//     Output: 2
+//     Explanation:
+//       - Initialize dp of length 8 to all zeros; i = 1 ('(') stays 0, and i = 2
+//         (')' matching '(' at 1) sets dp[2] = dp[0] + 2 = 2.
+//       - Indices 3 through 6 are all '(' characters, so dp[3] = dp[4] = dp[5] =
+//         dp[6] = 0.
+//       - At i = 7 (s[7] == ')', s[6] == '('), Case 1 sets dp[7] = dp[5] + 2 = 2
+//         without reaching dp[2], returning max_len = 2.
+//
 // Algorithm:
 //   Bottom-up 1D dynamic programming. Let dp[i] be the length of the longest
 //   valid parentheses substring that ends exactly at index i. Any index with

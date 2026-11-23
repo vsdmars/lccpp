@@ -12,6 +12,44 @@
 //   croaks), return -1.
 //   Constraints: 1 <= croakOfFrogs.length <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  croakOfFrogs = "croakcroak"
+//     Output: 1
+//     Explanation:
+//       - For the first "croak", 'c' increments stage_counts[0] and active_frogs to
+//         1 (max_frogs = 1), then 'r', 'o', 'a' advance that frog through stages 1,
+//         2, 3.
+//       - The first 'k' transfers stage_counts[3] to stage_counts[4] and decrements
+//         active_frogs back to 0.
+//       - The second "croak" reuses an idle frog by raising active_frogs to 1 and
+//         back to 0, leaving active_frogs == 0 and returning max_frogs = 1.
+//
+//   Example 2:
+//     Input:  croakOfFrogs = "crcoakroak"
+//     Output: 2
+//     Explanation:
+//       - At indices 0 and 1 ("cr"), one frog starts at 'c' and advances to 'r',
+//         giving stage_counts = [0, 1, 0, 0, 0] and active_frogs = 1.
+//       - At index 2 ('c'), a second concurrent frog begins, updating stage_counts
+//         = [1, 1, 0, 0, 0], active_frogs = 2, and max_frogs = 2.
+//       - At indices 3-5 ("oak"), the first frog advances through stages 2, 3, and
+//         4, decrementing active_frogs to 1 on 'k' while the second frog stays at
+//         stage 0.
+//       - At indices 6-9 ("roak"), the second frog advances from stage 0 through
+//         stage 4, bringing active_frogs to 0 and returning max_frogs = 2.
+//
+//   Example 3:
+//     Input:  croakOfFrogs = "croakcrook"
+//     Output: -1
+//     Explanation:
+//       - The prefix "croak" completes one valid croak, returning active_frogs to 0
+//         with stage_counts[0..3] all zero.
+//       - The next three characters "cro" advance one frog through stages 0, 1, and
+//         2, leaving stage_counts = [0, 0, 1, 0, 1] and active_frogs = 1.
+//       - At the second 'o' (stage 2), stage_counts[1] is 0 (no frog is waiting at
+//         'r'), so the function immediately returns -1.
+//
 // Algorithm:
 //   Model each in-progress frog as a state machine advancing through the five
 //   stages 0:'c' -> 1:'r' -> 2:'o' -> 3:'a' -> 4:'k'. Maintain `stage_counts`,

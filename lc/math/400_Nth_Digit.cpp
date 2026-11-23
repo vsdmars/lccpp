@@ -6,6 +6,40 @@
 //   n-th digit (1-indexed) of the infinite integer sequence formed by
 //   concatenating all positive integers in order: "12345678910111213...".
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3
+//     Output: 3
+//     Explanation:
+//       - Initialize remaining = 3, digits = 1, count = 9, and start = 1.
+//       - Since remaining (3) does not exceed count * digits (9), Phase 1 exits
+//         without skipping any digit-length block.
+//       - Compute zero_based = 3 - 1 = 2, target_number = 1 + 2 / 1 = 3, and
+//         digit_index = 2 % 1 = 0, returning digit 3 from "3".
+//
+//   Example 2:
+//     Input:  n = 11
+//     Output: 0
+//     Explanation:
+//       - Initialize remaining = 11, digits = 1, count = 9, and start = 1.
+//       - Since 11 > 9 * 1, subtract the 1-digit block to get remaining = 2, digits
+//         = 2, count = 90, and start = 10.
+//       - Now 2 <= 90 * 2, so compute zero_based = 2 - 1 = 1, target_number = 10 +
+//         1 / 2 = 10, and digit_index = 1 % 2 = 1.
+//       - Extract index 1 of the decimal string "10", returning '0' - '0' = 0.
+//
+//   Example 3:
+//     Input:  n = 191
+//     Output: 0
+//     Explanation:
+//       - Skip the 1-digit block (9 * 1 = 9 digits) because 191 > 9, leaving
+//         remaining = 182 with digits = 2, count = 90, and start = 10.
+//       - Skip the 2-digit block (90 * 2 = 180 digits) because 182 > 180, leaving
+//         remaining = 2 with digits = 3, count = 900, and start = 100.
+//       - Since 2 <= 900 * 3, compute zero_based = 2 - 1 = 1, target_number = 100 +
+//         1 / 3 = 100, and digit_index = 1 % 3 = 1.
+//       - Return index 1 of "100", which is digit 0.
+//
 // Algorithm:
 //   Partition the positive integers by their decimal digit length d = 1, 2, ...:
 //     - d = 1: 9 numbers (1..9), contributing 9 * 1 = 9 digits.

@@ -10,6 +10,55 @@
 //     - `release(number)`: recycle `number` back into the available pool (safe
 //       no-op if already available or out of range).
 //
+// Examples:
+//   Example 1:
+//     Input:  ops = ["PhoneDirectory", "get", "get", "check", "get", "check",
+//             "get", "release", "check", "get", "check"], args = [[3], [], [], [2],
+//             [], [2], [], [2], [2], [], [2]]
+//     Output: [null, 0, 1, true, 2, false, -1, null, true, 2, false]
+//     Explanation:
+//       - PhoneDirectory(3) sets max_numbers_ = 3, next_fresh_ = 0, available_ =
+//         [1, 1, 1], and recycled_ = [].
+//       - The first two get() calls find recycled_ empty, dispense next_fresh_ = 0
+//         then 1, advance next_fresh_ to 2, and set available_[0] = available_[1] =
+//         0.
+//       - check(2) reads available_[2] == 1 and returns true; the third get()
+//         assigns next_fresh_ = 2, sets available_[2] = 0, and increments
+//         next_fresh_ to 3, so check(2) returns false and the fourth get() returns
+//         -1.
+//       - release(2) sees available_[2] == 0, sets available_[2] = 1, and pushes 2
+//         onto recycled_, so check(2) returns true.
+//       - The final get() pops 2 from recycled_, sets available_[2] = 0, and
+//         returns 2, leaving check(2) equal to false.
+//
+//   Example 2:
+//     Input:  ops = ["PhoneDirectory", "get", "get", "get", "release", "release",
+//             "release", "release", "release", "get", "get", "check"], args = [[2],
+//             [], [], [], [0], [0], [0], [-1], [2], [], [], [1]]
+//     Output: [null, 0, 1, -1, null, null, null, null, null, 0, -1, false]
+//     Explanation:
+//       - PhoneDirectory(2) initializes available_ = [1, 1] and next_fresh_ = 0;
+//         the first two get() calls return 0 and 1, setting available_ = [0, 0] and
+//         next_fresh_ = 2, so the third get() returns -1.
+//       - The first release(0) flips available_[0] from 0 to 1 and pushes 0 onto
+//         recycled_, while the next two release(0) calls see available_[0] == 1 and
+//         ignore the duplicate release.
+//       - release(-1) and release(2) fail the [0, 2) bounds check and are no-ops.
+//       - get() pops the single 0 from recycled_ and marks available_[0] = 0, after
+//         which the next get() finds recycled_ empty and next_fresh_ == 2 so it
+//         returns -1, and check(1) returns false.
+//
+//   Example 3:
+//     Input:  ops = ["PhoneDirectory", "get", "check"], args = [[0], [], [0]]
+//     Output: [null, -1, false]
+//     Explanation:
+//       - PhoneDirectory(0) sets max_numbers_ = 0, next_fresh_ = 0, available_ =
+//         [], and recycled_ = [].
+//       - get() sees recycled_ is empty and next_fresh_ < max_numbers_ (0 < 0) is
+//         false, so it returns -1.
+//       - check(0) fails the number >= max_numbers_ bounds check (0 >= 0) and
+//         returns false.
+//
 // Algorithm:
 //   Combine a monotonic high-water mark (`next_fresh_`) with a free-list stack
 //   (`recycled_`) and a direct-indexed availability bitmap (`available_`):

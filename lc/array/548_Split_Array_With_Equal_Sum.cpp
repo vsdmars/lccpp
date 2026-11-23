@@ -10,6 +10,42 @@
 //        `nums[0..i-1]`, `nums[i+1..j-1]`, `nums[j+1..k-1]`, and
 //        `nums[k+1..n-1]` are all equal.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 1, 2, 1, 2, 1]
+//     Output: true
+//     Explanation:
+//       - With n = 7, build prefix = [0, 1, 3, 4, 6, 7, 9, 10] and iterate middle
+//         cut j over [3, 3].
+//       - At j = 3, collectLeftEqualSums tests i = 1: first = prefix[1] - prefix[0]
+//         = 1 and second = prefix[3] - prefix[2] = 1, inserting 1 into left_sums.
+//       - hasMatchingRightSplit tests k = 5: third = prefix[5] - prefix[4] = 1 and
+//         fourth = prefix[7] - prefix[6] = 1, which matches left_sums = {1} and
+//         returns true.
+//
+//   Example 2:
+//     Input:  nums = [1, -1, 1, -1, 1, -1, 1]
+//     Output: true
+//     Explanation:
+//       - Build prefix = [0, 1, 0, 1, 0, 1, 0, 1] for n = 7 and evaluate the sole
+//         middle cut j = 3.
+//       - For i = 1, first = prefix[1] - prefix[0] = 1 equals second = prefix[3] -
+//         prefix[2] = 1, so left_sums becomes {1}.
+//       - For k = 5, third = prefix[5] - prefix[4] = 1 equals fourth = prefix[7] -
+//         prefix[6] = 1 and exists in left_sums, returning true.
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 1, 2, 1, 2, 2]
+//     Output: false
+//     Explanation:
+//       - Build prefix = [0, 1, 3, 4, 6, 7, 9, 11] for n = 7 and evaluate the only
+//         valid middle cut j = 3.
+//       - collectLeftEqualSums checks i = 1 and finds first = 1 equals second = 4 -
+//         3 = 1, inserting 1 into left_sums.
+//       - hasMatchingRightSplit checks k = 5 and gets third = 7 - 6 = 1 and fourth
+//         = 11 - 9 = 2; because third != fourth and no other j exists, return
+//         false.
+//
 // Algorithm:
 //   Meet-in-the-middle decomposition anchored on the middle cut `j` combined
 //   with a precomputed prefix-sum array:

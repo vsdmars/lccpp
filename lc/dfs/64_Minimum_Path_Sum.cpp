@@ -8,6 +8,40 @@
 //   move only either down or right.
 //   Constraints: 1 <= m, n <= 200, 0 <= grid[i][j] <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[1, 3, 1], [1, 5, 1], [4, 2, 1]]
+//     Output: 7
+//     Explanation:
+//       - dfs starts at (0, 0) and explores down and right moves toward the base
+//         case dfs(2, 2) = grid[2][2] = 1, caching results in memo.
+//       - Boundary cells only move in one direction: dfs(2, 1) = 2 + 1 = 3, dfs(2,
+//         0) = 4 + 3 = 7, dfs(1, 2) = 1 + 1 = 2, and dfs(0, 2) = 1 + 2 = 3.
+//       - Interior cells take grid[r][c] + min(down, right): dfs(1, 1) = 5 + min(3,
+//         2) = 7, dfs(1, 0) = 1 + min(7, 7) = 8, and dfs(0, 1) = 3 + min(7, 3) = 6.
+//       - At (0, 0), dfs(0, 0) = 1 + min(dfs(1, 0), dfs(0, 1)) = 1 + min(8, 6) = 7
+//         along path 1 -> 3 -> 1 -> 1 -> 1 (matching minPathSumDp).
+//
+//   Example 2:
+//     Input:  grid = [[1, 2, 3], [4, 5, 6]]
+//     Output: 12
+//     Explanation:
+//       - Base case returns dfs(1, 2) = 6, so bottom-row states evaluate to dfs(1,
+//         1) = 5 + 6 = 11 and dfs(1, 0) = 4 + 11 = 15.
+//       - Along row 0, dfs(0, 2) = 3 + 6 = 9 and dfs(0, 1) = 2 + min(dfs(1, 1),
+//         dfs(0, 2)) = 2 + min(11, 9) = 11.
+//       - At the origin, dfs(0, 0) = 1 + min(15, 11) = 12 along path 1 -> 2 -> 3 ->
+//         6.
+//
+//   Example 3:
+//     Input:  grid = [[2, 4, 1, 3]]
+//     Output: 10
+//     Explanation:
+//       - With rows = 1 and cols = 4, r + 1 < rows is always false, so dfs only
+//         recurses rightward via c + 1 < cols.
+//       - Base case dfs(0, 3) returns 3, and unwinding rightward accumulates dfs(0,
+//         2) = 1 + 3 = 4, dfs(0, 1) = 4 + 4 = 8, and dfs(0, 0) = 2 + 8 = 10.
+//
 // Algorithm:
 //   Because moves are restricted to right and down, the grid forms a Directed
 //   Acyclic Graph (DAG) with optimal substructure and overlapping subproblems:

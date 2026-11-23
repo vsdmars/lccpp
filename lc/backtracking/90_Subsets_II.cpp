@@ -7,6 +7,43 @@
 //   duplicate subsets and may be returned in any order.
 //   Constraints: 1 <= nums.length <= 10, -10 <= nums[i] <= 10.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 2]
+//     Output: [[], [1], [1, 2], [1, 2, 2], [2], [2, 2]]
+//     Explanation:
+//       - Sort `nums` to `[1, 2, 2]` and call `dfs(0)` with `path = []`, pushing
+//         `[]`.
+//       - At `i = 0`, push `1` and call `dfs(1)`, which pushes `[1]`, recurses on
+//         `i = 1` to push `[1, 2]` and `[1, 2, 2]`, and skips `i = 2` since `i > 1
+//         && nums[2] == nums[1]`.
+//       - Back at `dfs(0)`, `i = 1` pushes `2` and `dfs(2)` records `[2]` and `[2,
+//         2]` because `i == start == 2` allows the second `2` at deeper depth.
+//       - At `dfs(0)`, `i = 2` is skipped (`i > 0 && nums[2] == nums[1]`),
+//         returning all 6 unique subsets.
+//
+//   Example 2:
+//     Input:  nums = [4, 4, 4, 1, 4]
+//     Output: [[], [1], [1, 4], [1, 4, 4], [1, 4, 4, 4], [1, 4, 4, 4, 4], [4], [4,
+//             4], [4, 4, 4], [4, 4, 4, 4]]
+//     Explanation:
+//       - Sort `nums` into `[1, 4, 4, 4, 4]` so all four `4`s are contiguous and
+//         `dfs(0)` records `[]`.
+//       - Choosing `1` at `i = 0` lets deeper calls append 0 to 4 copies of `4`
+//         (recording `[1]` through `[1, 4, 4, 4, 4]`) while skipping duplicate `4`
+//         branches at the same frame.
+//       - Back at `dfs(0)`, `i = 1` picks the first `4` to generate `[4]` through
+//         `[4, 4, 4, 4]`, and `i = 2..4` are skipped as same-level duplicates,
+//         yielding `2 * 5 = 10` subsets.
+//
+//   Example 3:
+//     Input:  nums = []
+//     Output: [[]]
+//     Explanation:
+//       - Sort the empty `nums` vector (`n = 0`) and invoke `dfs(0)` with `path =
+//         []`.
+//       - Push `[]` to `results` and skip the `i < 0` loop, returning `[[]]`.
+//
 // Algorithm:
 //   1. Sorted Backtracking with Same-Level Duplicate Skipping (`subsetsWithDup`):
 //      Sort `nums` so duplicate values are contiguous. At each DFS frame

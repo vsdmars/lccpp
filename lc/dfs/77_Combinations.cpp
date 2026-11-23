@@ -7,6 +7,39 @@
 //   in any order.
 //   Constraints: 1 <= n <= 20, 1 <= k <= n.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 4, k = 2
+//     Output: [[1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]]
+//     Explanation:
+//       - Start dfs(start = 1, remaining = 2) with current = [] and max_start = (4
+//         - 2) + 1 = 3.
+//       - Pick num = 1 (current = [1]) and call dfs(2, 1) with max_start = 4, which
+//         hits remaining == 0 to record [1, 2], [1, 3], and [1, 4].
+//       - Backtrack and pick num = 2 (current = [2]), calling dfs(3, 1) to record
+//         [2, 3] and [2, 4].
+//       - Pick num = 3 (current = [3]) and call dfs(4, 1) to record [3, 4], then
+//         stop because 4 exceeds max_start = 3.
+//
+//   Example 2:
+//     Input:  n = 3, k = 3
+//     Output: [[1, 2, 3]]
+//     Explanation:
+//       - At dfs(1, 3), max_start = (3 - 3) + 1 = 1, so only num = 1 is pushed into
+//         current = [1].
+//       - At dfs(2, 2), max_start = (3 - 2) + 1 = 2, so only num = 2 is pushed into
+//         current = [1, 2].
+//       - At dfs(3, 1), max_start = (3 - 1) + 1 = 3 pushes 3, then dfs(4, 0)
+//         reaches remaining == 0 and records [1, 2, 3].
+//
+//   Example 3:
+//     Input:  n = 3, k = 4
+//     Output: []
+//     Explanation:
+//       - The entry guard checks (n < 0 || k < 0 || k > n), which is true since k =
+//         4 > n = 3.
+//       - combine immediately returns {} without running dfs.
+//
 // Algorithm:
 //   Backtracking DFS with upper-bound branch pruning:
 //     - Maintain `current` (strictly increasing chosen integers) and recurse

@@ -7,6 +7,44 @@
 //   `target`. Two submatrices are distinct if any of their four boundary
 //   coordinates `(r1, c1, r2, c2)` differ.
 //
+// Examples:
+//   Example 1:
+//     Input:  matrix = [[0, 1, 0], [1, 1, 1], [0, 1, 0]], target = 0
+//     Output: 4
+//     Explanation:
+//       - Build 1-indexed row_prefix: row 0 -> [0, 0, 1, 1], row 1 -> [0, 1, 2, 3],
+//         row 2 -> [0, 0, 1, 1].
+//       - For column slice [0, 0], the compressed column sums are [0, 1, 0];
+//         sweeping rows with prefix_counts initialized to {0: 1} yields running
+//         sums 0, 1, 1 and finds 2 subarrays summing to 0.
+//       - Column slices [0, 1], [0, 2], [1, 1], and [1, 2] produce compressed sums
+//         [1, 2, 1], [1, 3, 1], [1, 1, 1], and [1, 2, 1], all strictly positive
+//         with 0 matches for target = 0.
+//       - For column slice [2, 2], the compressed sums [0, 1, 0] again yield 2
+//         matches, bringing total_count to 2 + 2 = 4.
+//
+//   Example 2:
+//     Input:  matrix = [[1, -1], [-1, 1]], target = 0
+//     Output: 5
+//     Explanation:
+//       - Build 1-indexed row_prefix: row 0 -> [0, 1, 0] and row 1 -> [0, -1, 0].
+//       - Column slice [0, 0] has row sums [1, -1] (running sums 1, 0 -> 1 match),
+//         and column slice [1, 1] has row sums [-1, 1] (running sums -1, 0 -> 1
+//         match).
+//       - Column slice [0, 1] has row sums [0, 0]; with prefix_counts = {0: 1}, row
+//         0 adds 1 match (prefix_counts[0] = 2) and row 1 adds 2 matches, totaling
+//         3 for this slice.
+//       - Summing across all three column slices returns 1 + 3 + 1 = 5.
+//
+//   Example 3:
+//     Input:  matrix = [[904]], target = 0
+//     Output: 0
+//     Explanation:
+//       - Build row_prefix = [[0, 904]] and test the single column slice [0, 0]
+//         with prefix_counts = {0: 1}.
+//       - Row 0 sets running_sum = 904; looking up running_sum - target = 904 finds
+//         no match in prefix_counts, returning 0.
+//
 // Algorithm:
 //   2D-to-1D reduction via row prefix sums + 1D prefix-sum hash map:
 //     1. Precompute 1-indexed horizontal prefix sums for every row so that

@@ -7,6 +7,43 @@
 //   Title Case capitalization (e.g., 12345 -> "Twelve Thousand Three Hundred
 //   Forty Five", 0 -> "Zero").
 //
+// Examples:
+//   Example 1:
+//     Input:  num = 12345
+//     Output: "Twelve Thousand Three Hundred Forty Five"
+//     Explanation:
+//       - appendWords(12345, tokens) scans kScales and matches divisor 1000
+//         ("Thousand").
+//       - It recurses on 12345 / 1000 = 12 (< 20) to push kBelowTwenty[12] =
+//         "Twelve", then pushes "Thousand".
+//       - Recursing on 12345 % 1000 = 345 matches divisor 100 ("Hundred"), pushes
+//         kBelowTwenty[3] = "Three" from 345 / 100 = 3, and pushes "Hundred".
+//       - Recursing on 345 % 100 = 45 (< 100) pushes kTens[4] = "Forty", then
+//         recurses on 45 % 10 = 5 to push kBelowTwenty[5] = "Five".
+//       - joinWithSpaces joins ["Twelve", "Thousand", "Three", "Hundred", "Forty",
+//         "Five"] with single spaces.
+//
+//   Example 2:
+//     Input:  num = 1000010
+//     Output: "One Million Ten"
+//     Explanation:
+//       - appendWords(1000010, tokens) matches the 1000000 ("Million") scale in
+//         kScales.
+//       - Recursing on 1000010 / 1000000 = 1 pushes kBelowTwenty[1] = "One",
+//         followed by the scale label "Million".
+//       - Recursing on 1000010 % 1000000 = 10 hits n < 20 and pushes
+//         kBelowTwenty[10] = "Ten" without emitting "Thousand" or "Hundred".
+//       - joinWithSpaces combines ["One", "Million", "Ten"] into "One Million Ten".
+//
+//   Example 3:
+//     Input:  num = 0
+//     Output: "Zero"
+//     Explanation:
+//       - numberToWords(0) hits the early guard if (num == 0) before calling
+//         appendWords.
+//       - It returns "Zero" directly so appendWords's n == 0 no-op only suppresses
+//         trailing zero remainders in positive numbers.
+//
 // Algorithm:
 //   Top-down recursive decomposition by English place-value scales:
 //   - Special case: num == 0 immediately returns "Zero".

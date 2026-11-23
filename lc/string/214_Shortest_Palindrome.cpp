@@ -6,6 +6,41 @@
 //   the shortest palindrome that can be formed by prepending zero or more
 //   characters in front of `s`.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "aacecaaa"
+//     Output: "aaacecaaa"
+//     Explanation:
+//       - Build rev = "aaacecaa" and concatenate s + '#' + rev to form combined =
+//         "aacecaaa#aaacecaa" of length 17.
+//       - Compute the KMP prefix function lps across combined, ending at
+//         pal_prefix_len = lps.back() = 7 because the prefix "aacecaa" matches the
+//         last 7 characters of rev.
+//       - Compute prepend_len = s.size() - pal_prefix_len = 8 - 7 = 1 and prepend
+//         rev[0..1) = "a" to s, returning "aaacecaaa".
+//
+//   Example 2:
+//     Input:  s = "abcd"
+//     Output: "dcbabcd"
+//     Explanation:
+//       - Build rev = "dcba" and form combined = "abcd#dcba" of length 9.
+//       - Compute the KMP table lps = [0, 0, 0, 0, 0, 0, 0, 0, 1], giving
+//         pal_prefix_len = lps.back() = 1 (only the single-character prefix "a"
+//         matches).
+//       - Compute prepend_len = 4 - 1 = 3 and prepend rev[0..3) = "dcb" to "abcd",
+//         returning "dcbabcd".
+//
+//   Example 3:
+//     Input:  s = "abbacd"
+//     Output: "dcabbacd"
+//     Explanation:
+//       - Build rev = "dcabba" and form combined = "abbacd#dcabba" of length 13.
+//       - Computing lps tracks matches at the trailing suffix "abba" (indices 9
+//         through 12 incrementing matched from 1 to 4), yielding pal_prefix_len =
+//         lps.back() = 4.
+//       - Compute prepend_len = 6 - 4 = 2 and prepend rev[0..2) = "dc" to "abbacd",
+//         returning "dcabbacd".
+//
 // Algorithm:
 //   Finding the shortest string to prepend to `s` is equivalent to finding the
 //   longest palindromic prefix of `s`: once the longest prefix `s[0..L-1]` that

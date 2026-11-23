@@ -5,6 +5,43 @@
 //   Given an m x n binary matrix filled with characters '0' and '1', find the
 //   largest square containing only '1's and return its area (side_length^2).
 //
+// Examples:
+//   Example 1:
+//     Input:  matrix = [["1", "0", "1", "0", "0"], ["1", "0", "1", "1", "1"], ["1",
+//             "1", "1", "1", "1"], ["1", "0", "0", "1", "0"]]
+//     Output: 4
+//     Explanation:
+//       - Initialize 1-indexed rolling row dp = [0, 0, 0, 0, 0, 0] and max_side =
+//         0.
+//       - Row 0 updates dp to [0, 1, 0, 1, 0, 0] and max_side to 1; row 1 updates
+//         dp to [0, 1, 0, 1, 1, 1] with max_side still 1.
+//       - On row 2, cells at c = 3 and c = 4 each have left, top, and prev_diag
+//         equal to at least 1, updating dp to [0, 1, 1, 1, 2, 2] and raising
+//         max_side to 2.
+//       - Row 3 updates dp to [0, 1, 0, 0, 1, 0], leaving max_side = 2, and
+//         maximalSquare returns max_side * max_side = 4.
+//
+//   Example 2:
+//     Input:  matrix = [["0", "1"], ["1", "0"]]
+//     Output: 1
+//     Explanation:
+//       - Initialize dp = [0, 0, 0] and max_side = 0.
+//       - Row 0 sees '0' at c = 0 (dp[1] = 0) and '1' at c = 1 (dp[2] = 1 + min(0,
+//         0, 0) = 1), setting max_side = 1.
+//       - Row 1 sees '1' at c = 0 (dp[1] = 1 + min(0, 0, 0) = 1) and '0' at c = 1
+//         (dp[2] = 0), keeping max_side = 1 and returning 1 * 1 = 1.
+//
+//   Example 3:
+//     Input:  matrix = [["1", "1", "1"], ["1", "0", "1"], ["1", "1", "1"]]
+//     Output: 1
+//     Explanation:
+//       - Row 0 fills dp = [0, 1, 1, 1] and sets max_side = 1.
+//       - Row 1 sets dp[1] = 1, resets dp[2] = 0 for the center '0' at (1, 1), and
+//         sets dp[3] = 1 + min(0, 1, 1) = 1.
+//       - On row 2, dp[2] = 1 + min(1, 0, 1) = 1 and dp[3] = 1 + min(1, 1, 0) = 1
+//         because prev_diag from (1, 1) is 0, so max_side remains 1 and the
+//         returned area is 1.
+//
 // Algorithm:
 //   Bottom-up dynamic programming with 1D rolling-row space optimization.
 //   Let dp(r, c) be the side length of the largest all-'1' square whose

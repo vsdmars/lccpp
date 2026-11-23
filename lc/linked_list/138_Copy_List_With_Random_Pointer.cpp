@@ -8,6 +8,40 @@
 //   the list without mutating the original list's final structure.
 //   Constraints: 0 <= n <= 1000, -10^4 <= Node.val <= 10^4.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [[7, null], [13, 0], [11, 4], [10, 2], [1, 0]]
+//     Output: [[7, null], [13, 0], [11, 4], [10, 2], [1, 0]]
+//     Explanation:
+//       - Pass 1 allocates a clone after each original node, weaving `7 -> 7' -> 13
+//         -> 13' -> 11 -> 11' -> 10 -> 10' -> 1 -> 1'`.
+//       - Pass 2 wires `copy->random = cur->random->next` for non-null randoms:
+//         `7'` stays `null`, `13'` points to `7'`, `11'` to `1'`, `10'` to `11'`,
+//         and `1'` to `7'`.
+//       - Pass 3 unweaves the chain into `copy_dummy.next` (`7' -> 13' -> 11' ->
+//         10' -> 1'`) while restoring `7 -> 13 -> 11 -> 10 -> 1` in the original
+//         list.
+//       - Return `copy_dummy.next`, producing a pointer-disjoint deep copy matching
+//         all values and random indices.
+//
+//   Example 2:
+//     Input:  head = [[1, 1], [2, 1]]
+//     Output: [[1, 1], [2, 1]]
+//     Explanation:
+//       - Pass 1 interleaves clones to form `1 -> 1' -> 2 -> 2'`.
+//       - Pass 2 sets `1'->random = node(2)->next = 2'` and `2'->random =
+//         node(2)->next = 2'` (a self-loop on index 1 of the copy).
+//       - Pass 3 detaches `1' -> 2'` from `1 -> 2` and sets `copy_tail->next =
+//         nullptr`, returning `[[1, 1], [2, 1]]`.
+//
+//   Example 3:
+//     Input:  head = []
+//     Output: []
+//     Explanation:
+//       - Check `head == nullptr` at the start of `copyRandomList`.
+//       - Return `nullptr` (`[]`) immediately without allocating nodes or running
+//         the three passes.
+//
 // Algorithm:
 //   Three-pass in-place node interleaving (O(1) extra space, no hash map):
 //   1. Interleave clones: for every original node `cur`, allocate its clone

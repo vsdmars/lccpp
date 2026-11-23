@@ -9,6 +9,42 @@
 //   `org`, and no other permutation of `1..n` may also contain all sequences
 //   in `seqs` as subsequences.
 //
+// Examples:
+//   Example 1:
+//     Input:  org = [1, 2, 3], seqs = [[1, 2], [1, 3]]
+//     Output: false
+//     Explanation:
+//       - Build the inverse position table pos = [-1, 0, 1, 2] for n = 3 so value 1
+//         is at index 0, 2 at index 1, and 3 at index 2.
+//       - Process [1, 2]: mark 1 and 2 as seen (seen_count = 2) and record
+//         consecutive edge index 0 for (1, 2) (matched_count = 1).
+//       - Process [1, 3]: mark 3 as seen (seen_count = 3) and verify pos[1] (0) <
+//         pos[3] (2), but 0 + 1 != 2 so matched_edge[1] stays 0.
+//       - Return false because matched_count (1) != n - 1 (2), leaving the adjacent
+//         edge (2, 3) unconfirmed and allowing [1, 3, 2].
+//
+//   Example 2:
+//     Input:  org = [1, 2, 3], seqs = [[1, 2], [1, 3], [2, 3]]
+//     Output: true
+//     Explanation:
+//       - Build pos = [-1, 0, 1, 2] for n = 3.
+//       - Process [1, 2] to set seen_count = 2 and match edge index 0 for (1, 2)
+//         (matched_count = 1).
+//       - Process [1, 3] to set seen_count = 3 and confirm pos[1] (0) < pos[3] (2)
+//         without matching an adjacent edge.
+//       - Process [2, 3] to match edge index 1 for (2, 3) (matched_count = 2), then
+//         return true since seen_count == 3 and matched_count == 2.
+//
+//   Example 3:
+//     Input:  org = [1], seqs = [[1, 1]]
+//     Output: false
+//     Explanation:
+//       - Build pos = [-1, 0] for n = 1.
+//       - Read the first 1 in [1, 1], setting seen[1] = 1 (seen_count = 1) and
+//         prev_pos = 0.
+//       - Read the second 1 with cur_pos = 0, detect prev_pos >= cur_pos (0 >= 0),
+//         and immediately return false.
+//
 // Algorithm:
 //   Direct position-and-edge verification without constructing an explicit
 //   graph. A DAG over `1..n` has `org` as its unique topological order if and

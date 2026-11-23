@@ -8,6 +8,39 @@
 //   and onto mapping) between each distinct character in `pattern` and each
 //   distinct non-empty word in `s`.
 //
+// Examples:
+//   Example 1:
+//     Input:  pattern = "abba", s = "dog cat cat dog"
+//     Output: true
+//     Explanation:
+//       - splitWords slices s into 4 tokens ["dog", "cat", "cat", "dog"], matching
+//         pattern.size() == 4.
+//       - At i = 0 ('a', "dog") and i = 1 ('b', "cat"), char_to_word stores 'a' ->
+//         "dog" and 'b' -> "cat" while word_to_char stores "dog" -> 'a' and "cat"
+//         -> 'b'.
+//       - At i = 2 ('b', "cat") and i = 3 ('a', "dog"), both maps already hold
+//         matching partners, so the loop completes and returns true.
+//
+//   Example 2:
+//     Input:  pattern = "abba", s = "dog dog dog dog"
+//     Output: false
+//     Explanation:
+//       - splitWords extracts ["dog", "dog", "dog", "dog"] of length 4, matching
+//         pattern.size().
+//       - At i = 0, try_emplace records 'a' -> "dog" in char_to_word and "dog" ->
+//         'a' in word_to_char.
+//       - At i = 1, char_to_word inserts 'b' -> "dog", but
+//         word_to_char.try_emplace("dog", 'b') sees existing partner 'a' != 'b' and
+//         immediately returns false.
+//
+//   Example 3:
+//     Input:  pattern = "abc", s = "dog cat"
+//     Output: false
+//     Explanation:
+//       - splitWords scans s on spaces and extracts 2 tokens: ["dog", "cat"].
+//       - Comparing pattern.size() (3) with words.size() (2) fails the length check
+//         and immediately returns false.
+//
 // Algorithm:
 //   Split `s` into non-empty `std::string_view` word tokens without copying
 //   character data. First verify that the number of tokens matches

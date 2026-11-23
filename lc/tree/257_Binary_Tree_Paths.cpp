@@ -6,6 +6,38 @@
 //   order. Each path is formatted as a string of node values separated by
 //   `"->"` (e.g., `"1->2->5"`). A leaf is a node with no left or right child.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, null, 5]
+//     Output: ["1->2->5", "1->3"]
+//     Explanation:
+//       - Enter root 1 (path = [1]), recurse left to 2 (path = [1, 2]), skip its
+//         null left child, and recurse right to leaf 5 (path = [1, 2, 5]).
+//       - At leaf 5, format_path([1, 2, 5]) appends "1->2->5" to result, then pops
+//         5 and 2 while returning to 1 (path = [1]).
+//       - Recurse right to leaf 3 (path = [1, 3]), append "1->3" to result, and pop
+//         3 and 1 to return ["1->2->5", "1->3"].
+//
+//   Example 2:
+//     Input:  root = [-10, 20, -30, 4]
+//     Output: ["-10->20->4", "-10->-30"]
+//     Explanation:
+//       - Push -10 onto path, recurse left to 20 (path = [-10, 20]), and then left
+//         to leaf 4 (path = [-10, 20, 4]).
+//       - Format and record "-10->20->4" at leaf 4, then backtrack by popping 4 and
+//         20 back to path = [-10].
+//       - Recurse right into leaf -30 (path = [-10, -30]), record "-10->-30", and
+//         pop -30 and -10 to finish.
+//
+//   Example 3:
+//     Input:  root = [7]
+//     Output: ["7"]
+//     Explanation:
+//       - Enter root 7 and push its value onto path (path = [7]).
+//       - Both left and right are nullptr, so format_path([7]) appends "7" to
+//         result without adding any "->" separator.
+//       - Pop 7 from path and return ["7"].
+//
 // Algorithm:
 //   Preorder DFS with backtracking:
 //     - Maintain a single mutable `path` stack storing node values from `root`

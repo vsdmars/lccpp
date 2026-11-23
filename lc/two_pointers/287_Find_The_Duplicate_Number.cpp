@@ -7,6 +7,41 @@
 //   times (possibly more than twice). Return that repeated integer without
 //   modifying `nums` and using only O(1) extra space.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 3, 4, 2, 2]
+//     Output: 2
+//     Explanation:
+//       - Start Phase 1 at slow = nums[0] = 1 and fast = nums[nums[0]] = nums[1] =
+//         3.
+//       - Advance slow by 1 step and fast by 2 steps: (1, 3) -> (3, 4) -> (2, 4) ->
+//         (4, 4), meeting inside the cycle at 4.
+//       - Start Phase 2 with finder = 0 and slow = 4, advancing both 1 step at a
+//         time: (0, 4) -> (1, 2) -> (3, 4) -> (2, 2).
+//       - Both pointers collide at cycle entry 2, so return 2.
+//
+//   Example 2:
+//     Input:  nums = [2, 3, 4, 1, 1]
+//     Output: 1
+//     Explanation:
+//       - Start Phase 1 at slow = nums[0] = 2 and fast = nums[nums[0]] = nums[2] =
+//         4 along the stem 0 -> 2 -> 4 -> 1 -> 3 -> 1.
+//       - Advance slow by 1 step and fast by 2 steps: (2, 4) -> (4, 3) -> (1, 3) ->
+//         (3, 3), intersecting at 3.
+//       - Reset finder = 0 while slow = 3 and step both forward by 1: (0, 3) -> (2,
+//         1) -> (4, 3) -> (1, 1).
+//       - Finder and slow meet at cycle entry 1, so return 1.
+//
+//   Example 3:
+//     Input:  nums = [2, 2, 2, 2, 2]
+//     Output: 2
+//     Explanation:
+//       - Initialize slow = nums[0] = 2 and fast = nums[nums[0]] = nums[2] = 2.
+//       - Because slow == fast == 2 immediately, Phase 1 finishes without extra
+//         iterations.
+//       - In Phase 2, start finder = 0 and slow = 2; one step moves finder =
+//         nums[0] = 2 and slow = nums[2] = 2, returning 2.
+//
 // Algorithm:
 //   Floyd's Tortoise and Hare Cycle Detection on an implicit functional graph:
 //     - Interpret the array as a directed graph where every index i in [0, n]

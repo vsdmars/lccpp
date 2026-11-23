@@ -8,6 +8,43 @@
 //   island, and has no interior lakes. Each cell is a unit square with side
 //   length 1. Return the total perimeter of the island.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[0, 1, 0, 0], [1, 1, 1, 0], [0, 1, 0, 0], [1, 1, 0, 0]]
+//     Output: 16
+//     Explanation:
+//       - Initialize perimeter = 0 and scan row-major; in row 0, land cell (0, 1)
+//         has no top or left land neighbor so perimeter becomes 4.
+//       - In row 1, (1, 0) adds 4 (perimeter = 8), (1, 1) has both top (0, 1) and
+//         left (1, 0) land neighbors so it adds 4 - 2 - 2 = 0 (perimeter = 8), and
+//         (1, 2) has left neighbor (1, 1) so it adds 4 - 2 = 2 (perimeter = 10).
+//       - In row 2, (2, 1) has top neighbor (1, 1), adding 4 - 2 = 2 (perimeter =
+//         12).
+//       - In row 3, (3, 0) adds 4 (perimeter = 16), and (3, 1) has both top (2, 1)
+//         and left (3, 0) land neighbors, adding 4 - 2 - 2 = 0.
+//       - Return the accumulated perimeter of 16.
+//
+//   Example 2:
+//     Input:  grid = [[1, 1, 1], [1, 1, 1]]
+//     Output: 10
+//     Explanation:
+//       - In row 0, (0, 0) adds 4 (perimeter = 4), while (0, 1) and (0, 2) each
+//         have a left land neighbor and add 4 - 2 = 2 each (perimeter = 8).
+//       - In row 1, (1, 0) has top land neighbor (0, 0) so it adds 4 - 2 = 2
+//         (perimeter = 10).
+//       - Cells (1, 1) and (1, 2) each have both a top and a left land neighbor, so
+//         each contributes 4 - 2 - 2 = 0.
+//       - Return perimeter = 10.
+//
+//   Example 3:
+//     Input:  grid = [[0, 0], [0, 0]]
+//     Output: 0
+//     Explanation:
+//       - Initialize perimeter = 0 and scan all cells of the 2 x 2 grid in
+//         row-major order.
+//       - Because every cell holds 0 != 1, all cells are skipped and the function
+//         returns 0.
+//
 // Algorithm:
 //   Primary approach (Single-Pass Shared-Edge Subtraction):
 //     Scan every cell (r, c) in row-major order. Each land cell initially

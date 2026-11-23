@@ -6,6 +6,47 @@
 //   traversal (root, left, right) of a binary search tree, reconstruct and
 //   return the root of that unique BST.
 //
+// Examples:
+//   Example 1:
+//     Input:  preorder = [8, 5, 1, 7, 10, 12]
+//     Output: [8, 5, 10, 1, 7, null, 12]
+//     Explanation:
+//       - Start at idx = 0 with bounds (-inf, +inf): consume 8 as root (idx = 1)
+//         and recurse left on (-inf, 8).
+//       - Consume 5 as 8->left (idx = 2), then 1 as 5->left (idx = 3); preorder[3]
+//         = 7 exceeds upper bound 1 and 5, returning nullptrs for 1's children.
+//       - Back at 5, right call (5, 8) consumes 7 (idx = 4); its child calls reject
+//         preorder[4] = 10 (>= 8) and return nullptr.
+//       - Back at root 8, right call (8, +inf) consumes 10 (idx = 5), whose left
+//         call (8, 10) rejects 12 (nullptr) and right call (10, +inf) consumes 12
+//         (idx = 6).
+//       - Serializing the reconstructed BST in level order yields [8, 5, 10, 1, 7,
+//         null, 12].
+//
+//   Example 2:
+//     Input:  preorder = [1, 2, 3, 4]
+//     Output: [1, null, 2, null, 3, null, 4]
+//     Explanation:
+//       - At idx = 0 with (-inf, +inf), create root 1 (idx = 1) and recurse left on
+//         (-inf, 1).
+//       - Because preorder[1] = 2 >= 1, the left call returns nullptr without
+//         advancing idx, so right call (1, +inf) consumes 2.
+//       - Repeating this check at nodes 2 and 3 rejects 3 in (1, 2) and 4 in (2,
+//         3), attaching each value solely as a right child.
+//       - After consuming 4 (idx = 4), remaining calls hit idx >= preorder.size(),
+//         yielding right-skewed [1, null, 2, null, 3, null, 4].
+//
+//   Example 3:
+//     Input:  preorder = [4, 3, 2, 1]
+//     Output: [4, 3, null, 2, null, 1]
+//     Explanation:
+//       - At idx = 0 with (-inf, +inf), create root 4 (idx = 1) and recurse left
+//         within (-inf, 4).
+//       - Each successive key fits its parent's tighter upper bound (3 < 4, 2 < 3,
+//         1 < 2), chaining 4->left = 3, 3->left = 2, and 2->left = 1 until idx = 4.
+//       - Once idx reaches 4, all remaining child calls return nullptr, producing
+//         left-skewed [4, 3, null, 2, null, 1].
+//
 // Algorithm:
 //   1. Bound-Guided Single-Pass DFS (primary approach):
 //      Maintain a shared index `idx` advancing through `preorder` from left to

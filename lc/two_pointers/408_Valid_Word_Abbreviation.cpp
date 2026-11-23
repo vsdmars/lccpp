@@ -8,6 +8,42 @@
 //   of non-adjacent, non-empty substrings with their decimal lengths (without
 //   leading zeroes; e.g., "01" and "0" are invalid).
 //
+// Examples:
+//   Example 1:
+//     Input:  word = "internationalization", abbr = "i12iz4n"
+//     Output: true
+//     Explanation:
+//       - Start with w = 0, a = 0; literal 'i' matches word[0], advancing to w = 1
+//         and a = 1.
+//       - Digits '1' and '2' at abbr[1..2] parse to skip = 12 (<= remaining = 19),
+//         advancing to w = 13 and a = 3.
+//       - Literals 'i' and 'z' match word[13] and word[14], advancing to w = 15 and
+//         a = 5.
+//       - Digit '4' at abbr[5] parses to skip = 4 (<= remaining = 5), advancing to
+//         w = 19 and a = 6.
+//       - Literal 'n' matches word[19], leaving w = 20 == word.size() and a = 7 ==
+//         abbr.size(), so return true.
+//
+//   Example 2:
+//     Input:  word = "apple", abbr = "a2e"
+//     Output: false
+//     Explanation:
+//       - Start with w = 0, a = 0; literal 'a' matches word[0], advancing to w = 1
+//         and a = 1.
+//       - Digit '2' at abbr[1] parses to skip = 2 (<= remaining = 4), advancing to
+//         w = 3 ('l') and a = 2 ('e').
+//       - Literal comparison finds word[3] ('l') != abbr[2] ('e') and immediately
+//         returns false.
+//
+//   Example 3:
+//     Input:  word = "substitution", abbr = "s010n"
+//     Output: false
+//     Explanation:
+//       - Start with w = 0, a = 0; literal 's' matches word[0], advancing to w = 1
+//         and a = 1.
+//       - At a = 1, abbr[1] is '0', which triggers the leading-zero check `abbr[a]
+//         == '0'` and immediately returns false.
+//
 // Algorithm:
 //   Lockstep two-pointer scan with index `w` over `word` and index `a` over
 //   `abbr`:

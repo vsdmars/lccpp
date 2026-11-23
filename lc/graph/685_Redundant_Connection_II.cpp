@@ -9,6 +9,42 @@
 //   in-degree 1, and no cycles). If multiple edges qualify, return the one
 //   that appears last in `edges`.
 //
+// Examples:
+//   Example 1:
+//     Input:  edges = [[1, 2], [1, 3], [2, 3]]
+//     Output: [2, 3]
+//     Explanation:
+//       - Pass 1 records direct_parent[2] = 1 and direct_parent[3] = 1, then sees
+//         node 3 already has parent 1 on edge [2, 3], saving cand1 = [1, 3], cand2
+//         = [2, 3], and cand2_idx = 2.
+//       - Pass 2 initializes dsu = [0, 1, 2, 3] and unions [1, 2] (dsu[2] = 1) and
+//         [1, 3] (dsu[3] = 1), skipping cand2 at index 2.
+//       - No cycle is found among the remaining edges, so the algorithm returns
+//         cand2 = [2, 3].
+//
+//   Example 2:
+//     Input:  edges = [[1, 2], [2, 3], [3, 4], [4, 1], [1, 5]]
+//     Output: [4, 1]
+//     Explanation:
+//       - Pass 1 sets direct_parent for nodes 2, 3, 4, 1, and 5 once each, so no
+//         node has two parents and cand1 remains empty (cand2_idx = 5).
+//       - Pass 2 unions [1, 2], [2, 3], and [3, 4], merging nodes 1, 2, 3, and 4
+//         under root 1 (dsu[2] = dsu[3] = dsu[4] = 1).
+//       - On edge [4, 1] at index 3, find(4) == 1 and find(1) == 1 detect a cycle,
+//         and because cand1 is empty, return edges[3] = [4, 1].
+//
+//   Example 3:
+//     Input:  edges = [[2, 1], [3, 1], [4, 2], [1, 4]]
+//     Output: [2, 1]
+//     Explanation:
+//       - Pass 1 sets direct_parent[1] = 2 on [2, 1] and detects a second parent on
+//         [3, 1], saving cand1 = [2, 1], cand2 = [3, 1], and cand2_idx = 1, then
+//         sets direct_parent[2] = 4 and direct_parent[4] = 1.
+//       - Pass 2 skips index 1 (cand2) and unions [2, 1] (dsu[1] = 2) and [4, 2]
+//         (dsu[2] = 4).
+//       - On edge [1, 4], find(1) and find(4) both evaluate to 4, so a cycle still
+//         exists without cand2 and the algorithm returns cand1 = [2, 1].
+//
 // Algorithm:
 //   Two-pass in-degree classification paired with Union-Find (DSU). Adding one
 //   directed edge to a rooted tree produces exactly one of three failure modes:

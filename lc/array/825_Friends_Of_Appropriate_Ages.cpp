@@ -13,6 +13,45 @@
 //   to themselves.
 //   Constraints: 1 <= ages.size() <= 20,000; 1 <= ages[i] <= 120.
 //
+// Examples:
+//   Example 1:
+//     Input:  ages = [16, 17, 18]
+//     Output: 2
+//     Explanation:
+//       - Populate counts[16] = 1, counts[17] = 1, and counts[18] = 1, yielding
+//         prefix[15] = 0, prefix[16] = 1, prefix[17] = 2, and prefix[18] = 3.
+//       - For age = 16, lower_exclusive = (16 / 2) + 7 = 15 gives in_range =
+//         prefix[16] - prefix[15] = 1, adding 1 * (1 - 1) = 0 requests.
+//       - For age = 17, lower_exclusive = (17 / 2) + 7 = 15 gives in_range =
+//         prefix[17] - prefix[15] = 2, adding 1 * (2 - 1) = 1 request.
+//       - For age = 18, lower_exclusive = (18 / 2) + 7 = 16 gives in_range =
+//         prefix[18] - prefix[16] = 2, adding 1 * (2 - 1) = 1 request for a total
+//         of 2.
+//
+//   Example 2:
+//     Input:  ages = [20, 30, 100, 110, 120]
+//     Output: 3
+//     Explanation:
+//       - Populate counts of 1 at ages 20, 30, 100, 110, and 120, producing
+//         prefix[20] = 1, prefix[30] = 2, prefix[100] = 3, prefix[110] = 4, and
+//         prefix[120] = 5.
+//       - For ages 20, 30, and 100 (lower_exclusive = 17, 22, and 57 respectively),
+//         in_range = 1 in each case, so each contributes 1 * (1 - 1) = 0 requests.
+//       - For age = 110, lower_exclusive = 62 gives in_range = prefix[110] -
+//         prefix[62] = 4 - 2 = 2, adding 1 * (2 - 1) = 1 request.
+//       - For age = 120, lower_exclusive = 67 gives in_range = prefix[120] -
+//         prefix[67] = 5 - 2 = 3, adding 1 * (3 - 1) = 2 requests for a total of 3.
+//
+//   Example 3:
+//     Input:  ages = [1, 10, 14, 14, 14]
+//     Output: 0
+//     Explanation:
+//       - Populate counts[1] = 1, counts[10] = 1, and counts[14] = 3, leaving
+//         counts[age] = 0 for all age >= 15.
+//       - The summation loop starts at kMinRequestingAge = 15 because (age / 2) + 7
+//         >= age for all age <= 14.
+//       - Every bucket in [15, 120] has count 0, so total_requests remains 0.
+//
 // Algorithm:
 //   Condition 3 is redundant because `ages[y] > 100 && ages[x] < 100` already
 //   implies `ages[y] > ages[x]` (Condition 2). Thus person `x` sends a request

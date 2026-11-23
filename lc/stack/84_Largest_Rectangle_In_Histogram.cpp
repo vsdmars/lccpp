@@ -7,6 +7,42 @@
 //   the largest axis-aligned rectangle that fits completely inside the
 //   histogram.
 //
+// Examples:
+//   Example 1:
+//     Input:  heights = [2, 1, 5, 6, 2, 3]
+//     Output: 10
+//     Explanation:
+//       - Push idx = 0 (height 2), then at idx = 1 (cur_height = 1 < 2) pop 0 with
+//         width 1 (max_area = 2 * 1 = 2) and push 1, 2, and 3 so inc_stack = [1, 2,
+//         3].
+//       - At idx = 4 (cur_height = 2 < 6): pop 3 (height 6, width 4 - 2 - 1 = 1,
+//         area 6) and pop 2 (height 5, width 4 - 1 - 1 = 2, area 10), updating
+//         max_area = 10 before pushing 4 (inc_stack = [1, 4]).
+//       - Push idx = 5 (height 3, inc_stack = [1, 4, 5]), then at sentinel idx = 6
+//         (cur_height = 0) pop 5 (area 3 * 1 = 3), 4 (area 2 * (6 - 1 - 1) = 8),
+//         and 1 (area 1 * 6 = 6), returning 10.
+//
+//   Example 2:
+//     Input:  heights = [2, 1, 2]
+//     Output: 3
+//     Explanation:
+//       - Push idx = 0 (height 2), then at idx = 1 (cur_height = 1 < 2) pop 0 with
+//         width 1 to set max_area = 2, and push 1 (inc_stack = [1]).
+//       - Push idx = 2 (height 2 >= 1) so inc_stack = [1, 2].
+//       - At sentinel idx = 3 (cur_height = 0), pop 2 (height 2, width 3 - 1 - 1 =
+//         1, area 2) and then pop 1 (height 1, empty stack gives width 3, area 3),
+//         updating max_area to 3.
+//
+//   Example 3:
+//     Input:  heights = [1, 2, 3, 4, 5]
+//     Output: 9
+//     Explanation:
+//       - For idx = 0 through 4, each bar height exceeds heights[inc_stack.back()],
+//         so no bars pop and inc_stack becomes [0, 1, 2, 3, 4].
+//       - At sentinel idx = 5 (cur_height = 0), bars pop in reverse order: 4 yields
+//         5 * 1 = 5, 3 yields 4 * 2 = 8, 2 yields 3 * 3 = 9, 1 yields 2 * 4 = 8,
+//         and 0 yields 1 * 5 = 5, returning max_area = 9.
+//
 // Algorithm:
 //   Use a monotonic increasing stack of bar indices. For every bar `j`, the
 //   widest rectangle whose height equals `heights[j]` extends leftward to the

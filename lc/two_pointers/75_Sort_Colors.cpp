@@ -8,6 +8,47 @@
 //   without using the standard library's sort function, ideally in a single
 //   pass using O(1) extra space.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [2, 0, 2, 1, 1, 0]
+//     Output: [0, 0, 1, 1, 2, 2]
+//     Explanation:
+//       - Start with small_idx = 0, mv_idx = 0, and large_idx = 6; at mv_idx = 0,
+//         nums[0] = 2 > 1 decrements large_idx to 5 and swaps nums[0] with nums[5],
+//         giving [0, 0, 2, 1, 1, 2] with mv_idx still 0.
+//       - Inspect mv_idx = 0 (nums[0] = 0 < 1) and mv_idx = 1 (nums[1] = 0 < 1),
+//         swapping each 0 in place and advancing small_idx and mv_idx both to 2.
+//       - At mv_idx = 2, nums[2] = 2 > 1 decrements large_idx to 4 and swaps
+//         nums[2] with nums[4], producing [0, 0, 1, 1, 2, 2] while mv_idx stays at
+//         2.
+//       - At mv_idx = 2 and mv_idx = 3, both elements equal 1 so mv_idx advances to
+//         4, ending the loop because mv_idx == large_idx == 4 with nums = [0, 0, 1,
+//         1, 2, 2].
+//
+//   Example 2:
+//     Input:  nums = [2, 0, 1]
+//     Output: [0, 1, 2]
+//     Explanation:
+//       - Initialize small_idx = 0, mv_idx = 0, and large_idx = 3; nums[0] = 2 > 1
+//         decrements large_idx to 2 and swaps nums[0] with nums[2], giving [1, 0,
+//         2] with mv_idx = 0.
+//       - Re-inspect mv_idx = 0 where nums[0] = 1 now equals 1, so advance mv_idx
+//         to 1.
+//       - At mv_idx = 1, nums[1] = 0 < 1 swaps nums[0] and nums[1] to form [0, 1,
+//         2] and increments small_idx to 1 and mv_idx to 2, terminating since
+//         mv_idx == large_idx == 2.
+//
+//   Example 3:
+//     Input:  nums = [1, 0]
+//     Output: [0, 1]
+//     Explanation:
+//       - Initialize small_idx = 0, mv_idx = 0, and large_idx = 2; at mv_idx = 0,
+//         nums[0] = 1 keeps the element in the middle region and advances mv_idx to
+//         1.
+//       - At mv_idx = 1, nums[1] = 0 < 1 swaps nums[0] and nums[1] to yield [0, 1]
+//         and advances small_idx to 1 and mv_idx to 2.
+//       - Stop the loop at mv_idx == large_idx == 2 with nums sorted as [0, 1].
+//
 // Algorithm:
 //   Dutch National Flag (three-way partitioning) using three pointers:
 //   `small_idx`, `mv_idx`, and `large_idx`.

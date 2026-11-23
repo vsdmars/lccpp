@@ -7,6 +7,42 @@
 //   the entire left subtree, then the entire right subtree, and finally the
 //   node itself (Left -> Right -> Root).
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, null, 2, 3]
+//     Output: [3, 2, 1]
+//     Explanation:
+//       - Recursive dfs(1) sees left is nullptr and recurses into right child 2,
+//         which descends into left child 3.
+//       - At leaf 3, both children are nullptr, so 3 is appended first to give
+//         result = [3].
+//       - Unwinding appends 2 (whose right child is nullptr) and then root 1,
+//         yielding [3, 2, 1]; postorderIterative produces the same sequence using
+//         stack and last_visited tracking.
+//
+//   Example 2:
+//     Input:  root = [3, 9, 20, null, null, 15, 7]
+//     Output: [9, 15, 7, 20, 3]
+//     Explanation:
+//       - postorderIterative descends the left spine pushing 3 and 9, then pops and
+//         emits leaf 9 with last_visited = 9.
+//       - Peeking 3 sees unvisited right child 20, so it descends left from 20
+//         pushing 20 and 15, then pops and emits 15 with last_visited = 15.
+//       - Peeking 20 sees unvisited right child 7, pushes and emits 7 with
+//         last_visited = 7.
+//       - Because last_visited now equals 20->right, 20 is popped and emitted
+//         (last_visited = 20), and then 3 is popped and emitted to finish [9, 15,
+//         7, 20, 3].
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: []
+//     Explanation:
+//       - In postorderTraversal, dfs(nullptr) hits node == nullptr immediately and
+//         returns without modifying result.
+//       - In postorderIterative, curr is nullptr and stack is empty, so the
+//         traversal loop exits immediately and returns [].
+//
 // Algorithm:
 //   Two approaches are provided:
 //     1. Recursive DFS (`postorderTraversal`, matching the Python source):

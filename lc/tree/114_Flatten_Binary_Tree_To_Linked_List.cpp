@@ -9,6 +9,38 @@
 //     - The list order must match the binary tree's preorder traversal
 //       (root, left subtree, right subtree).
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 5, 3, 4, null, 6]
+//     Output: [1, null, 2, null, 3, null, 4, null, 5, null, 6]
+//     Explanation:
+//       - Initialize stack = [1], pop 1, push 5 then 2 (stack = [5, 2]), set
+//         1->left = nullptr, and wire 1->right = 2.
+//       - Pop 2, push 4 then 3 (stack = [5, 4, 3]), set 2->left = nullptr, and wire
+//         2->right = 3.
+//       - Pop leaf 3 (3->right = 4) and leaf 4 (4->right = 5), leaving stack = [5].
+//       - Pop 5, push 6 (stack = [6]), wire 5->right = 6, and finally pop 6 with
+//         6->left = nullptr and 6->right = nullptr.
+//
+//   Example 2:
+//     Input:  root = [1, 2, null, 3]
+//     Output: [1, null, 2, null, 3]
+//     Explanation:
+//       - Pop 1 from stack = [1], push left child 2 (stack = [2]), set 1->left =
+//         nullptr, and rewire 1->right = 2.
+//       - Pop 2, push left child 3 (stack = [3]), set 2->left = nullptr, and rewire
+//         2->right = 3.
+//       - Pop 3 from empty-after-pop stack, setting 3->left = nullptr and 3->right
+//         = nullptr.
+//
+//   Example 3:
+//     Input:  root = [42]
+//     Output: [42]
+//     Explanation:
+//       - Push 42 onto stack and pop it; neither child exists to push.
+//       - Set 42->left = nullptr and 42->right = nullptr because stack is empty,
+//         leaving [42].
+//
 // Algorithm:
 //   Two clean in-place approaches (matching both methods in the Python source):
 //     1. Iterative Preorder Stack (`flatten`):

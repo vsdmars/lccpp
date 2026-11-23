@@ -7,6 +7,41 @@
 //   where each pair `[u, v]` indicates that `u` and `v` are adjacent in `nums`
 //   (in either order). Reconstruct and return any valid original array `nums`.
 //
+// Examples:
+//   Example 1:
+//     Input:  adjacentPairs = [[2, 1], [3, 4], [3, 2]]
+//     Output: [1, 2, 3, 4]
+//     Explanation:
+//       - Building the adjacency map produces {1: [2], 2: [1, 3], 3: [4, 2], 4:
+//         [3]}.
+//       - Scanning adj for degree-1 vertices finds 1 and 4 and picks the smaller
+//         endpoint start = 1.
+//       - result starts with [1, 2] where prev = 1 and curr = adj[1][0] = 2.
+//       - Looping while result.size() < 4 picks next = 3 from adj[2] = [1, 3]
+//         (since 1 == prev) and then next = 4 from adj[3] = [4, 2], returning [1,
+//         2, 3, 4].
+//
+//   Example 2:
+//     Input:  adjacentPairs = [[4, -2], [1, 4], [-3, 1]]
+//     Output: [-3, 1, 4, -2]
+//     Explanation:
+//       - Building adj produces {-3: [1], 1: [4, -3], 4: [-2, 1], -2: [4]}.
+//       - Between degree-1 endpoints -3 and -2, std::min selects start = -3, and
+//         result begins with [-3, 1].
+//       - At curr = 1 (prev = -3), adj[1] = [4, -3] yields next = 4; at curr = 4
+//         (prev = 1), adj[4] = [-2, 1] yields next = -2, returning [-3, 1, 4, -2].
+//
+//   Example 3:
+//     Input:  adjacentPairs = [[100000, -100000]]
+//     Output: [-100000, 100000]
+//     Explanation:
+//       - Building adj creates two degree-1 nodes: 100000 -> [-100000] and -100000
+//         -> [100000].
+//       - Selecting the smaller endpoint sets start = -100000 and appends its
+//         neighbor curr = 100000 so result = [-100000, 100000].
+//       - Because result.size() already equals n = 2, the while loop does not
+//         execute and [-100000, 100000] is returned.
+//
 // Algorithm:
 //   Model the adjacent pairs as an undirected graph. Because all n values are
 //   unique and pairs form a single simple path of n vertices, the graph is a

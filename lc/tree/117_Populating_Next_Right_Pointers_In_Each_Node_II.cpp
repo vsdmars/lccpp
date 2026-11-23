@@ -8,6 +8,47 @@
 //   nullptr if there is no next right node. Return the root of the tree.
 //   Follow-up constraint: use O(1) constant extra space.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, 4, 5, null, 7]
+//     Output: [[1], [2, 3], [4, 5, 7]] (next pointers per level: 1 -> nullptr, 2 ->
+//             3 -> nullptr, 4 -> 5 -> 7 -> nullptr)
+//     Explanation:
+//       - Start with level_head = node 1 and walk curr = 1, appending 1->left (2)
+//         and 1->right (3) onto sentinel so sentinel.next is 2 -> 3 -> nullptr,
+//         then set level_head = 2.
+//       - At level 2 with a fresh sentinel, visit curr = 2 (appending 4, 5) and
+//         advance via curr->next to curr = 3 (skipping null left child, appending
+//         7), forming 4 -> 5 -> 7 -> nullptr and setting level_head = 4.
+//       - At level 3, walk 4 -> 5 -> 7; no node has children so sentinel.next stays
+//         nullptr, setting level_head = nullptr and returning root.
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, 4, 5, null, 6, null, null, null, null, null, 8]
+//     Output: [[1], [2, 3], [4, 5, 6], [8]] (next pointers per level: 1 -> nullptr,
+//             2 -> 3 -> nullptr, 4 -> 5 -> 6 -> nullptr, 8 -> nullptr)
+//     Explanation:
+//       - On level 1 (level_head = 1), append children 2 and 3 to sentinel to form
+//         2 -> 3 -> nullptr and advance level_head = 2.
+//       - On level 2 (level_head = 2), curr = 2 appends 4 and 5, then curr = 3
+//         skips its null left child and appends 6, forming 4 -> 5 -> 6 -> nullptr
+//         and advancing level_head = 4.
+//       - On level 3 (level_head = 4), curr = 4 and curr = 5 have no children so
+//         tail stays on sentinel until curr = 6 appends 8, setting sentinel.next =
+//         8 and level_head = 8 across the childless leftmost gap.
+//       - On level 4 (level_head = 8), node 8 has no children so sentinel.next
+//         stays nullptr, terminating the loop and returning root.
+//
+//   Example 3:
+//     Input:  root = [9]
+//     Output: [[9]] (9 -> nullptr)
+//     Explanation:
+//       - Set level_head = node 9 and initialize a stack-local sentinel with tail =
+//         &sentinel.
+//       - Visit curr = 9; since both left and right are nullptr, sentinel.next
+//         remains nullptr, so level_head becomes nullptr and root is returned with
+//         9->next == nullptr.
+//
 // Algorithm:
 //   Two approaches (matching both methods in the Python source):
 //     1. O(1)-Space Sentinel Level Threading (`connect`):

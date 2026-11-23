@@ -11,6 +11,46 @@
 //   string `password`, return the minimum number of steps required to make it
 //   strong (or 0 if it is already strong).
 //
+// Examples:
+//   Example 1:
+//     Input:  password = "aaaaa"
+//     Output: 2
+//     Explanation:
+//       - Count missing character classes for "aaaaa": lowercase is present while
+//         uppercase and digit are absent, giving missing_types = 2.
+//       - Scan the single maximal run of five 'a' characters (run_len = 5 >= 3),
+//         adding 5 / 3 = 1 to replacements.
+//       - Because n = 5 is below kMinLength = 6, apply Regime 1 and return
+//         max(missing_types, 6 - n) = max(2, 1) = 2.
+//
+//   Example 2:
+//     Input:  password = "aaa111"
+//     Output: 2
+//     Explanation:
+//       - Count missing character classes for "aaa111": lowercase and digit are
+//         present while uppercase is absent, giving missing_types = 1.
+//       - Scan two runs of length 3 ("aaa" and "111"), contributing 3 / 3 + 3 / 3 =
+//         2 to replacements.
+//       - Because n = 6 satisfies 6 <= n <= 20, apply Regime 2 and return
+//         max(missing_types, replacements) = max(1, 2) = 2.
+//
+//   Example 3:
+//     Input:  password = "bbaaaaaaaaaaaaaaacccccc"
+//     Output: 8
+//     Explanation:
+//       - Count missing_types = 2 (uppercase and digit absent) and scan runs "bb"
+//         (length 2), 15 'a's (length 15, 5 replacements, 15 % 3 == 0), and 6 'c's
+//         (length 6, 2 replacements, 6 % 3 == 0), yielding replacements = 7,
+//         one_del_runs = 2, and two_del_runs = 0.
+//       - Because n = 23 exceeds kMaxLength = 20, enter Regime 3 with deletions =
+//         23 - 20 = 3 and rem_del = 3.
+//       - In Tier 1, apply use_one = min(3, 2) = 2 deletions to save 2 replacements
+//         (replacements drops from 7 to 5, rem_del becomes 1).
+//       - Tiers 2 and 3 save 0 additional replacements because two_del_runs = 0 and
+//         rem_del / 3 = 1 / 3 = 0.
+//       - Return deletions + max(missing_types, 0, replacements) = 3 + max(2, 0, 5)
+//         = 8.
+//
 // Algorithm:
 //   First count `missing_types` in {0, 1, 2, 3} for the three required
 //   character classes. Next scan all maximal runs of identical characters with

@@ -9,6 +9,42 @@
 //   Constraints: 1 to 5000 nodes; each node value is in [0, 100000]. Answers
 //   within 10^-5 of the true value are accepted.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [5, 6, 1]
+//     Output: 6.0
+//     Explanation:
+//       - Visit leaf 6 first in post-order DFS, returning {sum = 6, count = 1} and
+//         setting max_avg = 6.0 / 1 = 6.0.
+//       - Visit leaf 1, returning {sum = 1, count = 1} with avg = 1.0, leaving
+//         max_avg at 6.0.
+//       - Aggregate root 5 with total_sum = 5 + 6 + 1 = 12 and total_count = 3,
+//         giving avg = 4.0 and returning max_avg = 6.0.
+//
+//   Example 2:
+//     Input:  root = [5, 4, 100, 10, null, 2, 30]
+//     Output: 44.0
+//     Explanation:
+//       - In the left subtree of 5, leaf 10 returns {10, 1} (avg = 10.0) and node 4
+//         aggregates {14, 2} (avg = 7.0), setting max_avg = 10.0.
+//       - In the right subtree of 5, leaves 2 and 30 return {2, 1} and {30, 1},
+//         raising max_avg to 30.0.
+//       - Node 100 aggregates {sum = 100 + 2 + 30 = 132, count = 3}, computing avg
+//         = 132.0 / 3 = 44.0 and updating max_avg = 44.0.
+//       - Root 5 aggregates {sum = 151, count = 6} with avg = 25.16667, so max_avg
+//         remains 44.0.
+//
+//   Example 3:
+//     Input:  root = [0, null, 1]
+//     Output: 1.0
+//     Explanation:
+//       - Null left child of 0 returns {sum = 0, count = 0} without updating
+//         max_avg.
+//       - Right child leaf 1 returns {sum = 1, count = 1} with avg = 1.0, setting
+//         max_avg = 1.0.
+//       - Root 0 aggregates {sum = 1, count = 2} with avg = 0.5, returning max_avg
+//         = 1.0.
+//
 // Algorithm:
 //   Perform a bottom-up post-order DFS. Each recursive call computes and
 //   returns a pair {sum, count} for the subtree rooted at the current node by

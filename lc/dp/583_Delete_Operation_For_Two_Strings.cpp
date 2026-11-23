@@ -6,6 +6,41 @@
 //   single-character deletion steps required to make `word1` and `word2`
 //   identical. In each step, you may delete one character from either string.
 //
+// Examples:
+//   Example 1:
+//     Input:  word1 = "sea", word2 = "eat"
+//     Output: 2
+//     Explanation:
+//       - Initialize the rolling row dp = [0, 1, 2, 3] for matching "" against
+//         prefixes of "eat".
+//       - Row i = 1 ('s') matches no character in "eat", updating dp to [1, 2, 3,
+//         4].
+//       - Row i = 2 ('e') matches word2[0] = 'e' via prev_diag = 1, yielding dp =
+//         [2, 1, 2, 3].
+//       - Row i = 3 ('a') matches word2[1] = 'a' via prev_diag = 1, yielding dp =
+//         [3, 2, 1, 2] and returning dp[3] = 2.
+//
+//   Example 2:
+//     Input:  word1 = "leetcode", word2 = "etco"
+//     Output: 4
+//     Explanation:
+//       - Initialize the rolling row dp = [0, 1, 2, 3, 4] for word2 = "etco" (n =
+//         4).
+//       - Across rows i = 1..6 ("leetco"), matching 'e', 't', 'c', 'o' in order
+//         reduces dp[4] down to 2 (zero deletions needed beyond the two extra
+//         prefix characters 'l' and 'e').
+//       - Rows i = 7 ('d') and i = 8 ('e') increment the minimum deletion count
+//         against "etco" from 2 to 4, ending at dp = [8, 7, 6, 5, 4] and returning
+//         dp[4] = 4.
+//
+//   Example 3:
+//     Input:  word1 = "abc", word2 = ""
+//     Output: 3
+//     Explanation:
+//       - With n = 0, initialize dp = [0] of length 1.
+//       - For each i from 1 to 3, the inner loop j = 1..0 does not run and dp[0] is
+//         set to i, ending at dp[0] = 3.
+//
 // Algorithm:
 //   Two equivalent bottom-up dynamic programming formulations:
 //   1) Direct Deletion-Distance DP (primary, space-optimized to 1D):

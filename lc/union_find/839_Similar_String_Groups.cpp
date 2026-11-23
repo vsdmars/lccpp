@@ -8,6 +8,44 @@
 //   share the same length L), partition `strs` into equivalence groups under
 //   the transitive closure of similarity and return the number of groups.
 //
+// Examples:
+//   Example 1:
+//     Input:  strs = ["tars", "rats", "arts", "star"]
+//     Output: 2
+//     Explanation:
+//       - Initialize DisjointSet with 4 singleton index groups (parent_ = [0, 1, 2,
+//         3], groups_ = 4).
+//       - Compare index 0 ("tars") with 1 ("rats"): are_similar counts 2 mismatches
+//         at indices 0 and 2, so unite(0, 1) merges them and reduces groups_ to 3.
+//       - Compare index 1 ("rats") with 2 ("arts"): are_similar counts 2 mismatches
+//         at indices 0 and 1, so unite(1, 2) merges index 2 into root 0 and reduces
+//         groups_ to 2.
+//       - All comparisons against index 3 ("star") exit early once diff exceeds 2,
+//         leaving groups_ at 2.
+//
+//   Example 2:
+//     Input:  strs = ["tars", "rats", "arts", "star", "star"]
+//     Output: 2
+//     Explanation:
+//       - Initialize DisjointSet over array indices 0..4 (groups_ = 5) so duplicate
+//         strings are tracked as distinct indices.
+//       - Pairwise checks among indices 0..2 unite {"tars", "rats", "arts"} into
+//         one group (groups_ = 3), while indices 3 and 4 differ from them at more
+//         than 2 positions.
+//       - When comparing i = 3 and j = 4 ("star" vs. "star"), are_similar sees diff
+//         == 0 and returns true, so unite(3, 4) merges the duplicates and returns
+//         groups_ = 2.
+//
+//   Example 3:
+//     Input:  strs = ["abc", "bca", "cab"]
+//     Output: 3
+//     Explanation:
+//       - Initialize DisjointSet with 3 singleton groups (groups_ = 3).
+//       - Compare every pair (0, 1), (0, 2), and (1, 2); each pair differs at all 3
+//         character positions, causing are_similar to exit early with false on diff
+//         > 2.
+//       - No unite calls execute, so dsu.groups() returns 3.
+//
 // Algorithm:
 //   1. Initialize an index-based Disjoint Set Union (`DisjointSet`) with `n`
 //      singleton groups (`n = strs.size()`). Indexing by position handles

@@ -5,6 +5,44 @@
 //   Given the root of a non-empty binary tree, return the leftmost value in
 //   the last (deepest) row of the tree.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [2, 1, 3]
+//     Output: 1
+//     Explanation:
+//       - Initialize frontier = [2] and bottom_left = 2.
+//       - On level 0 (level_size = 1), record bottom_left = frontier.front()->val =
+//         2, dequeue 2, and enqueue children 1 and 3 so frontier = [1, 3].
+//       - On level 1 (level_size = 2), record bottom_left = frontier.front()->val =
+//         1, then dequeue 1 and 3 (neither has children).
+//       - Because frontier is now empty, exit the loop and return bottom_left = 1.
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, 4, null, 5, 6, null, null, 7]
+//     Output: 7
+//     Explanation:
+//       - Initialize frontier = [1] and bottom_left = 1.
+//       - On level 0 (level_size = 1), set bottom_left = 1, dequeue 1, and enqueue
+//         2 and 3 so frontier = [2, 3].
+//       - On level 1 (level_size = 2), set bottom_left = 2, dequeue 2 (enqueueing
+//         4) and 3 (enqueueing 5 and 6), leaving frontier = [4, 5, 6].
+//       - On level 2 (level_size = 3), set bottom_left = 4, dequeue 4 (no
+//         children), 5 (enqueueing 7), and 6 (no children), leaving frontier = [7].
+//       - On level 3 (level_size = 1), set bottom_left = 7 and dequeue 7 (no
+//         children), emptying frontier and returning 7.
+//
+//   Example 3:
+//     Input:  root = [1, null, 2, null, 3]
+//     Output: 3
+//     Explanation:
+//       - Initialize frontier = [1] and bottom_left = 1.
+//       - On level 0 (level_size = 1), set bottom_left = 1, dequeue 1, and enqueue
+//         its right child 2 so frontier = [2].
+//       - On level 1 (level_size = 1), set bottom_left = 2, dequeue 2, and enqueue
+//         its right child 3 so frontier = [3].
+//       - On level 2 (level_size = 1), set bottom_left = 3 and dequeue 3 (no
+//         children), emptying frontier and returning 3.
+//
 // Algorithm:
 //   Perform a standard left-to-right level-order Breadth-First Search (BFS)
 //   using a FIFO queue. At the start of each level, the node at the front of

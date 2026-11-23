@@ -7,6 +7,45 @@
 //   Given a target square `(x, y)` with `|x| + |y| <= 300`, return the minimum
 //   number of moves required to reach `(x, y)`.
 //
+// Examples:
+//   Example 1:
+//     Input:  x = 5, y = 5
+//     Output: 4
+//     Explanation:
+//       - Fold the target into the first quadrant (target_x = 5, target_y = 5) and
+//         allocate a 6 x 6 memo vector initialized to -1.
+//       - From (5, 5), dfs branches inward to dfs(4, 3) and dfs(3, 4).
+//       - Along the (4, 3) branch, dfs(2, 1) = min(dfs(1, 1), dfs(0, 0)) + 1 = 1
+//         and dfs(1, 0) = min(dfs(0, 2), dfs(1, 1)) + 1 = 3 give dfs(3, 1) = 2,
+//         while dfs(2, 2) = 4, yielding dfs(4, 3) = min(2, 4) + 1 = 3.
+//       - Symmetrically, dfs(1, 2) = 1 and dfs(1, 3) = 2 yield dfs(3, 4) = 3, so
+//         dfs(5, 5) stores and returns min(3, 3) + 1 = 4.
+//
+//   Example 2:
+//     Input:  x = 0, y = 1
+//     Output: 3
+//     Explanation:
+//       - Set target_x = 0 and target_y = 1, allocating a 3 x 3 memo vector
+//         initialized to -1.
+//       - At (0, 1), cx + cy = 1 misses base cases 0 and 2, so dfs branches to
+//         dfs(|0 - 1|, |1 - 2|) = dfs(1, 1) and dfs(|0 - 2|, |1 - 1|) = dfs(2, 0).
+//       - Both (1, 1) and (2, 0) satisfy cx + cy == 2 and return 2 directly from
+//         the base case.
+//       - Combine the branches as min(2, 2) + 1 = 3, cache it in memo[1], and
+//         return 3.
+//
+//   Example 3:
+//     Input:  x = -2, y = -1
+//     Output: 1
+//     Explanation:
+//       - Take absolute coordinates target_x = 2 and target_y = 1 using quadrant
+//         symmetry and allocate a 3 x 3 memo vector.
+//       - dfs(2, 1) branches to dfs(|2 - 1|, |1 - 2|) = dfs(1, 1) and dfs(|2 - 2|,
+//         |1 - 1|) = dfs(0, 0).
+//       - Base cases return 2 for (1, 1) (since 1 + 1 == 2) and 0 for (0, 0) (since
+//         0 + 0 == 0).
+//       - Cache min(2, 0) + 1 = 1 at memo[7] and return 1.
+//
 // Algorithm:
 //   Symmetry-reduced top-down DFS with memoization. Because the board and move
 //   set are symmetric across both axes, reaching `(x, y)` takes the same number

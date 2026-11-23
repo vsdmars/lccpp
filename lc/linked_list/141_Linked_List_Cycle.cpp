@@ -8,6 +8,38 @@
 //   Follow-up: solve using O(1) constant auxiliary memory.
 //   Constraints: 0 <= number of nodes <= 10^4, -10^5 <= Node.val <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [3, 2, 0, -4], pos = 1
+//     Output: true
+//     Explanation:
+//       - Initialize `slow` and `fast` at index `0` (value `3`), where index `3`
+//         (`-4`) links back to index `1` (`2`).
+//       - Step 1 advances `slow` to index `1` (`2`) and `fast` to index `2` (`0`).
+//       - Step 2 advances `slow` to index `2` (`0`) and `fast` across `-4` to index
+//         `1` (`2`).
+//       - Step 3 advances `slow` to index `3` (`-4`) and `fast` across `0` to index
+//         `3` (`-4`), so `slow == fast` and `hasCycle` returns `true`.
+//
+//   Example 2:
+//     Input:  head = [1, 2, 3, 4, 5], pos = -1
+//     Output: false
+//     Explanation:
+//       - Initialize `slow` and `fast` at index `0` (value `1`) on the acyclic list
+//         `1 -> 2 -> 3 -> 4 -> 5 -> nullptr`.
+//       - Step 1 moves `slow` to `2` and `fast` to `3`; Step 2 moves `slow` to `3`
+//         and `fast` to `5`.
+//       - Now `fast->next == nullptr`, so the loop exits and returns `false`.
+//
+//   Example 3:
+//     Input:  head = [1], pos = -1
+//     Output: false
+//     Explanation:
+//       - Initialize `slow` and `fast` at the single node `1`, whose `next` is
+//         `nullptr`.
+//       - Since `fast->next == nullptr`, the `while` loop never executes and
+//         `hasCycle` returns `false`.
+//
 // Algorithm:
 //   Floyd's Tortoise and Hare (Cycle-Finding) Algorithm:
 //   1. Initialize two pointers `slow` and `fast` at `head`.

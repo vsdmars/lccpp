@@ -8,6 +8,46 @@
 //   strictly greater than the original key. Return the root of the modified
 //   tree. (Identical to LeetCode #538.)
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [4, 1, 6, 0, 2, 5, 7, null, null, null, 3, null, null, null,
+//             8]
+//     Output: [30, 36, 21, 36, 35, 26, 15, null, null, null, 33, null, null, null,
+//             8]
+//     Explanation:
+//       - Initialize running_sum = 0 and recurse right-first from root 4 down to
+//         the largest key 8.
+//       - Visit the right subtree in descending order (8 -> 7 -> 6 -> 5):
+//         running_sum accumulates 8, 15, 21, and 26, overwriting nodes 8, 7, 6, and
+//         5 with those sums.
+//       - Return to root 4: update running_sum = 26 + 4 = 30 and set root->val = 30
+//         before recursing into the left subtree.
+//       - Visit the left subtree in reverse in-order (3 -> 2 -> 1 -> 0):
+//         running_sum becomes 33, 35, 36, and 36, updating nodes 3, 2, 1, and 0.
+//       - Level-order serialization of the in-place modified tree produces [30, 36,
+//         21, 36, 35, 26, 15, null, null, null, 33, null, null, null, 8].
+//
+//   Example 2:
+//     Input:  root = [3, 2, 4, 1]
+//     Output: [7, 9, 4, 10]
+//     Explanation:
+//       - Start with running_sum = 0 and traverse right first to leaf 4, updating
+//         running_sum = 4 and node 4 to 4.
+//       - Back at root 3, add 3 to get running_sum = 7 and update root 3 to 7.
+//       - Recurse left to node 2 (whose right child is nullptr): update running_sum
+//         = 7 + 2 = 9 and node 2 to 9.
+//       - Recurse left to leaf 1: update running_sum = 9 + 1 = 10 and node 1 to 10,
+//         yielding [7, 9, 4, 10].
+//
+//   Example 3:
+//     Input:  root = [0, null, 1]
+//     Output: [1, null, 1]
+//     Explanation:
+//       - Start at root 0 with running_sum = 0 and recurse into its right child 1.
+//       - At node 1, add 1 to get running_sum = 1 and update node 1 to 1.
+//       - Return to root 0, update running_sum = 1 + 0 = 1 and root 0 to 1, and
+//         return [1, null, 1] since root->left is nullptr.
+//
 // Algorithm:
 //   Reverse In-Order Traversal (Right -> Node -> Left):
 //   In a BST, visiting right subtree, then current node, then left subtree

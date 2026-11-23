@@ -8,6 +8,34 @@
 //   concatenation of two copies of `nums`.
 //   Constraints: 1 <= n <= 1000; 1 <= nums[i] <= 1000.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 1]
+//     Output: [1, 2, 1, 1, 2, 1]
+//     Explanation:
+//       - Initialize an empty vector ans and reserve capacity for 3 * 2 = 6
+//         elements upfront.
+//       - Insert the range [nums.begin(), nums.end()) at ans.end() to get [1, 2,
+//         1].
+//       - Insert the same range a second time at ans.end() to produce [1, 2, 1, 1,
+//         2, 1].
+//
+//   Example 2:
+//     Input:  nums = [1, 3, 2, 1]
+//     Output: [1, 3, 2, 1, 1, 3, 2, 1]
+//     Explanation:
+//       - Initialize ans and reserve capacity for 4 * 2 = 8 elements upfront.
+//       - Append the first copy of nums so ans contains [1, 3, 2, 1].
+//       - Append the second copy of nums so ans becomes [1, 3, 2, 1, 1, 3, 2, 1].
+//
+//   Example 3:
+//     Input:  nums = []
+//     Output: []
+//     Explanation:
+//       - Initialize ans and reserve 0 * 2 = 0 elements.
+//       - Execute both range insertions over the empty range [nums.begin(),
+//         nums.end()), leaving ans empty and returning [].
+//
 // Algorithm:
 //   Single-Allocation Double Copy:
 //   Pre-allocate an output vector with exact capacity `2 * nums.size()` via

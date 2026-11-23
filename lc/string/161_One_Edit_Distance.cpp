@@ -7,6 +7,34 @@
 //   deleting one character, or replacing one character in `s` to obtain `t`.
 //   Identical strings are 0 edits apart and therefore return false.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "sds", t = "sxds"
+//     Output: true
+//     Explanation:
+//       - Since `s.size() = 3 <= t.size() = 4` and `4 - 3 <= 1`, scan forward from
+//         `i = 0`, matching `s[0] == t[0] == 's'`.
+//       - At `i = 1`, `s[1] = 'd' != t[1] = 'x'`; because `s.size() != t.size()`,
+//         compare `s.substr(1)` (`"ds"`) with `t.substr(2)` (`"ds"`), returning
+//         `true`.
+//
+//   Example 2:
+//     Input:  s = "cat", t = "cut"
+//     Output: true
+//     Explanation:
+//       - Both strings have length `3`; scanning from `i = 0` matches `'c'` at
+//         index `0` and finds `s[1] = 'a' != t[1] = 'u'` at index `1`.
+//       - Because `s.size() == t.size()`, compare the remaining suffixes
+//         `s.substr(2) == t.substr(2)` (`"t" == "t"`), returning `true`.
+//
+//   Example 3:
+//     Input:  s = "abc", t = "abc"
+//     Output: false
+//     Explanation:
+//       - Both strings have length `3` and match at every index `i = 0, 1, 2`.
+//       - After the loop finishes with no mismatch, `s.size() + 1 == t.size()` (`4
+//         == 3`) evaluates to `false`, rejecting identical strings.
+//
 // Algorithm:
 //   Normalize the inputs so that `s.size() <= t.size()` by swapping their
 //   `std::string_view` handles if necessary.

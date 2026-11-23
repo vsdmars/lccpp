@@ -8,6 +8,44 @@
 //   permutations of `nums` that are squareful. Two permutations are considered
 //   different if they differ at any index.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 17, 8]
+//     Output: 2
+//     Explanation:
+//       - numSquarefulPerms sorts nums to [1, 8, 17] and initializes used = [0, 0,
+//         0].
+//       - Starting with 1 at depth = 0, 1 + 8 = 9 (3^2) extends to 8, while 1 + 17
+//         = 18 is pruned; from [1, 8], 8 + 17 = 25 (5^2) completes [1, 8, 17] at
+//         depth = 3 for count 1.
+//       - Starting with 8 at depth = 0 reaches [8, 1] and [8, 17], both pruned at
+//         depth = 2 because 1 + 17 = 18 is not a perfect square.
+//       - Starting with 17 at depth = 0 prunes 17 + 1 = 18, extends to 8 (17 + 8 =
+//         25), and completes [17, 8, 1] (8 + 1 = 9) for a total of 2.
+//
+//   Example 2:
+//     Input:  nums = [0, 0, 0, 1]
+//     Output: 4
+//     Explanation:
+//       - Sorting leaves nums = [0, 0, 0, 1]; at depth = 0, duplicate pruning
+//         (nums[i] == nums[i - 1] && used[i - 1] == 0) allows only index 0 (0) and
+//         index 3 (1).
+//       - Since 0 + 0 = 0^2 and 0 + 1 = 1^2 are both perfect squares, starting with
+//         index 0 explores all 3 distinct placements of the single 1 among the
+//         remaining positions: [0, 0, 0, 1], [0, 0, 1, 0], and [0, 1, 0, 0].
+//       - Starting with index 3 (1) forces the three remaining 0s to be chosen in a
+//         single canonical order due to duplicate pruning, adding [1, 0, 0, 0] for
+//         3 + 1 = 4 valid permutations.
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 4]
+//     Output: 0
+//     Explanation:
+//       - After sorting, nums remains [1, 2, 4] and dfs starts at depth = 0.
+//       - Picking 1 prunes both 2 (1 + 2 = 3) and 4 (1 + 4 = 5); picking 2 prunes 1
+//         (3) and 4 (2 + 4 = 6); picking 4 prunes 1 (5) and 2 (6).
+//       - No branch reaches depth = 3, so dfs(0, 0) returns 0.
+//
 // Algorithm:
 //   Sort `nums` ascending so duplicate values sit adjacently, then run
 //   backtracking DFS to build permutations one position at a time. At each

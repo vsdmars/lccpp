@@ -7,6 +7,43 @@
 //   between any two nodes in the tree; this path may or may not pass through
 //   the root.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, 4, 5]
+//     Output: 3
+//     Explanation:
+//       - Initialize max_diameter = 0 and start post-order DFS height(1).
+//       - Leaves 4 and 5 each see left_h = 0 and right_h = 0, keeping max_diameter
+//         = 0 and returning height 1 to node 2.
+//       - At node 2, left_h = 1 and right_h = 1 update max_diameter = max(0, 1 + 1)
+//         = 2 and return height 1 + max(1, 1) = 2.
+//       - Leaf 3 returns height 1 to root 1, where left_h = 2 and right_h = 1
+//         update max_diameter = max(2, 2 + 1) = 3 and the function returns 3.
+//
+//   Example 2:
+//     Input:  root = [1, 2, null, 3, 4, 5, null, null, 6, 7, null, null, 8]
+//     Output: 6
+//     Explanation:
+//       - Leaves 7 and 8 each return height 1, so nodes 5 (left_h = 1, right_h = 0)
+//         and 6 (left_h = 0, right_h = 1) update max_diameter = 1 and return height
+//         2.
+//       - Nodes 3 (left_h = 2, right_h = 0) and 4 (left_h = 0, right_h = 2) each
+//         update max_diameter = 2 and return height 3 to node 2.
+//       - At node 2, combining left_h = 3 and right_h = 3 updates max_diameter =
+//         max(2, 3 + 3) = 6 and returns height 1 + 3 = 4.
+//       - At root 1, left_h = 4 and right_h = 0 produce 4 + 0 = 4 < 6, so
+//         max_diameter stays 6 and is returned.
+//
+//   Example 3:
+//     Input:  root = [1]
+//     Output: 0
+//     Explanation:
+//       - Initialize max_diameter = 0 and call height(1).
+//       - Both node->left and node->right are nullptr, yielding left_h = 0 and
+//         right_h = 0.
+//       - Node 1 updates max_diameter = max(0, 0 + 0) = 0, returns height 1, and
+//         diameterOfBinaryTree returns 0.
+//
 // Algorithm:
 //   Use a single post-order DFS that computes the height (longest downward
 //   chain in nodes) of each subtree while simultaneously tracking the maximum

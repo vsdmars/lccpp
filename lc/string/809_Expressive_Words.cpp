@@ -10,6 +10,43 @@
 //   Given `s` and a list of query strings `words`, return how many words in
 //   `words` are stretchy.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "heeellooo", words = ["hello", "hi", "helo"]
+//     Output: 1
+//     Explanation:
+//       - Run-length encode s into target_runs = [('h', 1), ('e', 3), ('l', 2),
+//         ('o', 3)].
+//       - Check "hello" with runs [('h', 1), ('e', 1), ('l', 2), ('o', 1)]: 'h' and
+//         'l' match exactly, while 'e' and 'o' can stretch to target count 3 >= 3,
+//         incrementing stretchy_count to 1.
+//       - Reject "hi" because it has 2 runs instead of 4.
+//       - Reject "helo" on the 'l' run because query count 1 != target count 2
+//         while target count 2 < 3.
+//
+//   Example 2:
+//     Input:  s = "eeoooe", words = ["eeo", "eeoe", "eoe", "eeooooe", "eoooe",
+//             "eeooe", "eeooee"]
+//     Output: 2
+//     Explanation:
+//       - Encode s into target_runs = [('e', 2), ('o', 3), ('e', 1)].
+//       - Accept "eeoe" ([('e', 2), ('o', 1), ('e', 1)]) and "eeooe" ([('e', 2),
+//         ('o', 2), ('e', 1)]) because both 'e' runs match exactly and the 'o' run
+//         stretches to 3 >= 3.
+//       - Reject "eeo" (only 2 runs), "eoe" and "eoooe" (first 'e' has count 1 != 2
+//         with target < 3), "eeooooe" ('o' count 4 > 3), and "eeooee" (last 'e'
+//         count 2 > 1), returning 2.
+//
+//   Example 3:
+//     Input:  s = "", words = ["", "a"]
+//     Output: 1
+//     Explanation:
+//       - Encode s = "" into an empty target_runs vector of length 0.
+//       - Match word "" whose encode_runs("") also has length 0, incrementing
+//         stretchy_count to 1.
+//       - Reject "a" because its 1 run does not match target_runs size 0, returning
+//         1.
+//
 // Algorithm:
 //   Compress `s` once into its run-length encoding (RLE) signature: a sequence
 //   of `(character, count)` pairs representing each maximal contiguous group of

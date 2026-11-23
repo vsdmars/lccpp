@@ -8,6 +8,42 @@
 //   their original order. Only node links may be modified (not node values),
 //   and the algorithm must run in O(1) extra memory.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 3, 4, 5], k = 2
+//     Output: [2, 1, 4, 3, 5]
+//     Explanation:
+//       - Initialize dummy(0) pointing to node 1 and set group_prev = &dummy.
+//       - Probe k = 2 steps to group_end = 2, save next_group = 3, reverse [1, 2]
+//         with prev seeded to 3 to form dummy -> 2 -> 1 -> 3 -> 4 -> 5, and advance
+//         group_prev to 1.
+//       - Probe k = 2 steps from 1 to group_end = 4, reverse [3, 4] with next_group
+//         = 5 to link 1 -> 4 -> 3 -> 5, and advance group_prev to 3.
+//       - Probing k = 2 steps from 3 reaches nullptr after node 5, so the loop
+//         breaks leaving 5 untouched and returning [2, 1, 4, 3, 5].
+//
+//   Example 2:
+//     Input:  head = [1, 2, 3, 4, 5], k = 3
+//     Output: [3, 2, 1, 4, 5]
+//     Explanation:
+//       - Initialize dummy(0) before node 1 with group_prev = &dummy.
+//       - Probe k = 3 steps via advance_k to group_end = 3, saving group_start = 1
+//         and next_group = 4.
+//       - Reverse [1, 2, 3] with prev initialized to 4 to link dummy -> 3 -> 2 -> 1
+//         -> 4 -> 5, and advance group_prev to 1.
+//       - Probing k = 3 steps from 1 hits nullptr after 5 because only two nodes
+//         remain, so the loop stops and returns [3, 2, 1, 4, 5].
+//
+//   Example 3:
+//     Input:  head = [1, 2], k = 3
+//     Output: [1, 2]
+//     Explanation:
+//       - Initialize dummy(0) pointing to node 1 and set group_prev = &dummy.
+//       - Call advance_k(group_prev, 3), which steps through nodes 1 and 2 before
+//         hitting nullptr on step 3.
+//       - Because group_end is nullptr, break out of the loop immediately without
+//         altering links and return [1, 2].
+//
 // Algorithm:
 //   Iterative group-by-group in-place reversal anchored by a sentinel dummy:
 //   Maintain `group_prev` pointing to the tail of the already-processed prefix.

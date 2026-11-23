@@ -7,6 +7,42 @@
 //   leaving digits unchanged. Return a list of all possible strings that can be
 //   created (in any order).
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "a1b2"
+//     Output: ["a1b2", "a1B2", "A1b2", "A1B2"]
+//     Explanation:
+//       - Count `letter_count = 2` (`'a'`, `'b'`), reserve `2^2 = 4` slots in
+//         `result`, and initialize `current = "a1b2"`.
+//       - At `idx = 0` (`'a'`), `dfs` first sets `current[0] = 'a'` and recurses
+//         past digit `'1'` at `idx = 1` to `idx = 2`.
+//       - At `idx = 2` (`'b'`), `dfs` branches on `'b'` and `'B'`, each skipping
+//         digit `'2'` at `idx = 3` to reach `idx = 4` and append `"a1b2"` and
+//         `"a1B2"`.
+//       - Backtracking to `idx = 0`, `dfs` sets `current[0] = 'A'` and repeats the
+//         two choices at `idx = 2`, appending `"A1b2"` and `"A1B2"`.
+//
+//   Example 2:
+//     Input:  s = "3z4"
+//     Output: ["3z4", "3Z4"]
+//     Explanation:
+//       - Count `letter_count = 1` (`'z'`), reserve `2` slots in `result`, and
+//         start `dfs(0)` with `current = "3z4"`.
+//       - At `idx = 0`, `std::isalpha('3')` is `0`, so `dfs` keeps `'3'` unchanged
+//         and recurses directly to `idx = 1`.
+//       - At `idx = 1`, `dfs` sets `current[1]` to `'z'` and then `'Z'`, passing
+//         digit `'4'` at `idx = 2` in each branch to push `"3z4"` and `"3Z4"` at
+//         `idx = 3`.
+//
+//   Example 3:
+//     Input:  s = "12345"
+//     Output: ["12345"]
+//     Explanation:
+//       - Scan `s` to find `letter_count = 0` and reserve `2^0 = 1` slot in
+//         `result`.
+//       - Recurse through `idx = 0..4` without branching because `std::isalpha`
+//         returns `0` for every digit, then push `"12345"` at `idx = 5`.
+//
 // Algorithm:
 //   In-place DFS backtracking over character positions `0..s.size()-1`.
 //   - If `s[idx]` is not an ASCII letter (e.g., a digit), there is only one

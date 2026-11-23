@@ -11,6 +11,41 @@
 //   Constraints: 1 <= words.length <= 100, 1 <= words[i].length <= 20,
 //   order.length == 26.
 //
+// Examples:
+//   Example 1:
+//     Input:  words = ["hello", "leetcode"], order = "hlabcdefgijkmnopqrstuvwxyz"
+//     Output: true
+//     Explanation:
+//       - Populate rank from order: rank['h'] = 0, rank['l'] = 1, rank['a'] = 2,
+//         ..., rank['z'] = 25.
+//       - Compare adjacent pair ("hello", "leetcode") starting at idx = 0: 'h' !=
+//         'l' and rank['h'] = 0 < rank['l'] = 1.
+//       - is_pair_sorted returns true immediately on the first mismatch, and with
+//         no remaining pairs isAlienSorted returns true.
+//
+//   Example 2:
+//     Input:  words = ["word", "world", "row"], order =
+//             "worldabcefghijkmnpqstuvxyz"
+//     Output: false
+//     Explanation:
+//       - Populate rank from order: rank['w'] = 0, rank['o'] = 1, rank['r'] = 2,
+//         rank['l'] = 3, rank['d'] = 4, and so on.
+//       - Compare ("word", "world"): indices 0..2 ("wor") match, and the first
+//         difference occurs at idx = 3 between 'd' and 'l'.
+//       - Because rank['d'] = 4 is not less than rank['l'] = 3, is_pair_sorted
+//         returns false and isAlienSorted returns false immediately.
+//
+//   Example 3:
+//     Input:  words = ["apple", "app"], order = "abcdefghijklmnopqrstuvwxyz"
+//     Output: false
+//     Explanation:
+//       - Populate rank with the standard alphabet so rank['a'] = 0 through
+//         rank['z'] = 25.
+//       - Compare ("apple", "app") across limit = min(5, 3) = 3: indices 0..2
+//         ("app") are identical with no differing character.
+//       - Fall through to the prefix length check first.size() <= second.size() (5
+//         <= 3), which evaluates to false and returns false.
+//
 // Algorithm:
 //   Direct-Indexed Rank Table + Adjacent Pair Comparison:
 //   1. Precompute an array `rank[26]` mapping each lowercase letter to its

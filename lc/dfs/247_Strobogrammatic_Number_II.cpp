@@ -9,6 +9,37 @@
 //   {'00', '11', '69', '88', '96'}. Multi-digit numbers (n > 1) must not have
 //   leading zeros.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3
+//     Output: ["101", "111", "181", "609", "619", "689", "808", "818", "888",
+//             "906", "916", "986"]
+//     Explanation:
+//       - dfs(3) sees odd len = 3 and recurses on len - 1 = 2 to generate all valid
+//         length-2 outer shells.
+//       - Base case dfs(2) returns kOuterPairs = ["11", "69", "88", "96"],
+//         excluding "00" so multi-digit numbers never start with '0'.
+//       - insertAtMidpoint splits each length-2 shell at half = 1 into left and
+//         right substrings of length 1.
+//       - Inserting every center from kOddCenters = ["0", "1", "8"] between left
+//         and right yields the 4 * 3 = 12 sorted strings from "101" through "986".
+//
+//   Example 2:
+//     Input:  n = 2
+//     Output: ["11", "69", "88", "96"]
+//     Explanation:
+//       - findStrobogrammatic(2) passes the n <= 0 guard and invokes dfs(2).
+//       - dfs(2) hits the len == 2 base case and returns kOuterPairs = ["11", "69",
+//         "88", "96"], omitting "00" to prevent leading zeros.
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: ["0", "1", "8"]
+//     Explanation:
+//       - findStrobogrammatic(1) invokes dfs(1), which hits the len == 1 base case.
+//       - It returns kOddCenters = ["0", "1", "8"] directly because '0' is valid as
+//         a standalone single-digit strobogrammatic number.
+//
 // Algorithm:
 //   Recursive DFS building strings by inserting valid central digits/pairs into
 //   the exact midpoint of shorter valid strobogrammatic strings:

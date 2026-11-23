@@ -8,6 +8,43 @@
 //   stamp indices that transforms the initial string into `target`, or an empty
 //   vector if `target` cannot be formed.
 //
+// Examples:
+//   Example 1:
+//     Input:  stamp = "abc", target = "ababc"
+//     Output: [0, 2]
+//     Explanation:
+//       - Initialize moves = {0} and start dfs(0, 0), matching stamp[0..1] = "ab"
+//         with target[0..1] = "ab" to reach (sidx = 2, tidx = 2).
+//       - At (2, 2), stamp[2] = 'c' mismatches target[2] = 'a', so the branch marks
+//         dead[(2, 2)] = 1 and backtracks to (1, 1).
+//       - At (1, 1), Option 2 overlays a new later stamp at tidx + 1 = 2 (pushing 2
+//         to the back so moves = {0, 2}) and recurses to (0, 2).
+//       - From (0, 2), stamp[0..2] = "abc" matches target[2..4] = "abc" directly,
+//         reaching (sidx = 3, tidx = 5) and returning [0, 2].
+//
+//   Example 2:
+//     Input:  stamp = "abca", target = "aabcaca"
+//     Output: [3, 0, 1]
+//     Explanation:
+//       - Start with moves = {0} at (0, 0), find that continuing to (1, 1) fails on
+//         'b' != 'a', and take Option 2 to append 1 (moves = {0, 1}) and recurse to
+//         (0, 1).
+//       - From (0, 1), match all four characters of "abca" against target[1..4] =
+//         "abca" to reach the completed stamp state (sidx = 4, tidx = 5).
+//       - In tryRevealUnderlyingStamp(5), offset idx = 2 yields pos = 5 - 2 = 3
+//         (with 3 + 4 <= 7), prepending 3 to the front (moves = {3, 0, 1}) and
+//         recursing to (2, 5).
+//       - From (2, 5), match stamp[2..3] = "ca" against target[5..6] = "ca" to
+//         reach (4, 7), returning [3, 0, 1].
+//
+//   Example 3:
+//     Input:  stamp = "abc", target = "ab"
+//     Output: []
+//     Explanation:
+//       - Compare s_len = 3 against t_len = 2 at the start of movesToStamp.
+//       - Since t_len < s_len, no in-bounds stamp placement can fit in target, so
+//         return {} immediately.
+//
 // Algorithm:
 //   Top-down DFS with memoization over `(sidx, tidx)` pairs, where `sidx` is
 //   the current position in `stamp` and `tidx` is the current position in

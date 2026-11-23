@@ -7,6 +7,39 @@
 //   the squares of its base-10 digits. If the sequence reaches 1, `n` is happy
 //   (return true); if it enters a cycle that does not contain 1, return false.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 19
+//     Output: true
+//     Explanation:
+//       - In isHappy, start with n = 19 and an empty seen set; insert 19 and
+//         compute 1^2 + 9^2 = 82.
+//       - Insert 82 into seen and advance to 8^2 + 2^2 = 68, then insert 68 and
+//         advance to 6^2 + 8^2 = 100.
+//       - Insert 100 into seen and compute 1^2 + 0^2 + 0^2 = 1, exiting the while
+//         loop and returning n == 1 (true).
+//
+//   Example 2:
+//     Input:  n = 2
+//     Output: false
+//     Explanation:
+//       - In isHappy, start with n = 2 and empty seen, inserting each visited state
+//         along 2 -> 4 -> 16 -> 37 -> 58 -> 89 -> 145 -> 42 -> 20.
+//       - From n = 20, next_digit_square_sum(20) produces 2^2 + 0^2 = 4, which is
+//         already in seen.
+//       - The loop condition !seen.contains(n) fails at n = 4, so isHappy returns n
+//         == 1 (false).
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: true
+//     Explanation:
+//       - For n = 1, the while loop guard n != 1 && !seen.contains(n) in isHappy is
+//         immediately false.
+//       - Return n == 1 (true) without computing any transitions or inserting into
+//         seen; isHappyFloyd also stops immediately since fast =
+//         next_digit_square_sum(1) = 1.
+//
 // Algorithm:
 //   The digit-square-sum transition f(x) maps every d-digit number with d >= 4
 //   strictly downward (e.g. 9999 -> 324, 2^31 - 1 -> <= 730), so every orbit

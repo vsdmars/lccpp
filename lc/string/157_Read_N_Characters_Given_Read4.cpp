@@ -8,6 +8,40 @@
 //   `read(buf, n)` to read at most `n` characters into `buf` and return the
 //   actual number of characters copied. `read` is called once per test case.
 //
+// Examples:
+//   Example 1:
+//     Input:  file = "asdlls", n = 42
+//     Output: 6 (buf = "asdlls")
+//     Explanation:
+//       - Compute `target = min(42, 42) = 42` and call `read4(local_buf)`, which
+//         reads `fetched = 4` chars `"asdl"` and copies them into `buf[0..4)`
+//         (`total = 4`).
+//       - Call `read4(local_buf)` again, reading the remaining `fetched = 2` chars
+//         `"ls"` and copying them into `buf[4..6)` (`total = 6`).
+//       - Since `fetched = 2 < 4`, the reader reached EOF, so the loop breaks early
+//         and returns `6`.
+//
+//   Example 2:
+//     Input:  file = "abcdefgh", n = 8
+//     Output: 8 (buf = "abcdefgh")
+//     Explanation:
+//       - Compute `target = min(8, 8) = 8`; the first `read4` fetches `"abcd"`
+//         (`fetched = 4`) and copies 4 bytes into `buf[0..4)` (`total = 4`).
+//       - The second `read4` fetches `"efgh"` (`fetched = 4`) and copies 4 bytes
+//         into `buf[4..8)` (`total = 8`).
+//       - Now `total == target` (`8 == 8`), so the while loop terminates and
+//         returns `8`.
+//
+//   Example 3:
+//     Input:  file = "", n = 5
+//     Output: 0 (buf unchanged)
+//     Explanation:
+//       - With `target = min(5, 10) = 5` and `total = 0`, the first
+//         `read4(local_buf)` sees `pos_ == content_.size() == 0` and returns
+//         `fetched = 0`.
+//       - The `fetched == 0` check breaks out of the loop immediately and returns
+//         `0`.
+//
 // Algorithm:
 //   Repeatedly invoke `read4` into a fixed 4-byte stack-allocated staging
 //   buffer `local_buf`, then copy `min(fetched, n - total)` characters into

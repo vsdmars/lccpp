@@ -7,6 +7,40 @@
 //   where `target` would be inserted to keep `nums` sorted in ascending order.
 //   The solution must run in O(log n) time.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 3, 5, 6], target = 5
+//     Output: 2
+//     Explanation:
+//       - Initialize [left, right) = [0, 4) (matching the range searched by
+//         std::ranges::lower_bound).
+//       - Compute mid = 2; since nums[2] = 5 >= 5, shrink the right bound to right
+//         = 2.
+//       - On [0, 2), compute mid = 1; since nums[1] = 3 < 5, advance left = 2.
+//       - Terminate with left == right == 2 and return 2.
+//
+//   Example 2:
+//     Input:  nums = [1, 3, 5, 6], target = 2
+//     Output: 1
+//     Explanation:
+//       - Initialize [left, right) = [0, 4) to locate the smallest index where
+//         nums[i] >= 2.
+//       - Compute mid = 2 (nums[2] = 5 >= 2) to set right = 2, then mid = 1
+//         (nums[1] = 3 >= 2) to set right = 1.
+//       - On [0, 1), compute mid = 0 (nums[0] = 1 < 2), advancing left = 1.
+//       - Terminate with left == right == 1 and return 1 as the insertion index.
+//
+//   Example 3:
+//     Input:  nums = [1, 3, 5, 6], target = 7
+//     Output: 4
+//     Explanation:
+//       - Initialize [left, right) = [0, 4) with target = 7 larger than every
+//         element in nums.
+//       - Compute mid = 2 (nums[2] = 5 < 7) and advance left = 3.
+//       - On [3, 4), compute mid = 3 (nums[3] = 6 < 7) and advance left = 4.
+//       - Terminate with left == right == 4 (matching nums.end() from lower_bound)
+//         and return 4.
+//
 // Algorithm:
 //   Compute the lower bound of `target` in `nums` — the smallest index `i` in
 //   `[0, n]` such that `i == n` or `nums[i] >= target`.

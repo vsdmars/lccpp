@@ -9,6 +9,45 @@
 //   tree structure and string remains unambiguous (one-to-one). All other
 //   redundant empty parenthesis pairs must be omitted.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, 4]
+//     Output: "1(2(4))(3)"
+//     Explanation:
+//       - Start preorder DFS at node 1: append "1", see it is not a leaf, emit '(',
+//         and recurse on left child 2.
+//       - At node 2, append "2", emit '(', recurse on left child 4 (a leaf, which
+//         appends "4" and returns immediately), then emit ')'.
+//       - Because node 2 has right == nullptr, omit the right parenthesis group and
+//         return to node 1, closing its left subtree with ')'.
+//       - Since node 1 has right child 3, emit '(', visit leaf 3 to append "3", and
+//         emit ')' to produce "1(2(4))(3)".
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, null, 4]
+//     Output: "1(2()(4))(3)"
+//     Explanation:
+//       - Start at root 1: append "1", emit '(', and recurse into left child 2.
+//       - At node 2, append "2"; because 2 is not a leaf (right child 4 exists),
+//         always emit '(' then recurse on left == nullptr (no output) then emit
+//         ')', yielding the required "()" marker.
+//       - Still at node 2, since right child 4 is non-null, emit '(', visit leaf 4
+//         to append "4", and close with ')'.
+//       - Return to node 1, close its left subtree with ')', then wrap right leaf 3
+//         in "(3)" to obtain "1(2()(4))(3)".
+//
+//   Example 3:
+//     Input:  root = [1, null, 2, null, 3]
+//     Output: "1()(2()(3))"
+//     Explanation:
+//       - At node 1, append "1"; since right child 2 exists, emit '(' and recurse
+//         on left == nullptr, closing immediately with ')' to form "1()".
+//       - Still at node 1, emit '(', recurse into right child 2, append "2", and
+//         emit "()" for node 2's null left child.
+//       - From node 2, emit '(', visit leaf 3 (which appends "3" and returns), and
+//         close both open right-subtree parentheses with "))" to form
+//         "1()(2()(3))".
+//
 // Algorithm:
 //   Perform a preorder DFS that appends directly into a single output buffer
 //   `std::string`:

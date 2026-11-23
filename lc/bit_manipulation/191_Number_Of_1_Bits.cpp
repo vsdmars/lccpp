@@ -6,6 +6,38 @@
 //   number of `'1'` bits in its binary representation (also known as its
 //   Hamming weight or population count).
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 11 (0b1011)
+//     Output: 3
+//     Explanation:
+//       - Initialize count = 0 and n = 11 (0b1011).
+//       - Iteration 1 clears the lowest set bit via n &= (n - 1) = 11 & 10 = 10
+//         (0b1010) and increments count to 1.
+//       - Iteration 2 sets n = 10 & 9 = 8 (0b1000) and increments count to 2.
+//       - Iteration 3 sets n = 8 & 7 = 0 and increments count to 3, then exits the
+//         loop and returns 3.
+//
+//   Example 2:
+//     Input:  n = 4294967293 (0xFFFFFFFD)
+//     Output: 31
+//     Explanation:
+//       - Start with count = 0 and n = 0xFFFFFFFD, which has 31 set bits and a
+//         single 0 at bit 1.
+//       - Each iteration executes n &= (n - 1) to clear the lowest remaining 1-bit
+//         (first bit 0 to 0xFFFFFFFC, then bit 2 to 0xFFFFFFF8, and so on) and
+//         increments count.
+//       - After 31 iterations, the final set bit (0x80000000) is cleared to 0 and
+//         the loop returns count = 31.
+//
+//   Example 3:
+//     Input:  n = 0
+//     Output: 0
+//     Explanation:
+//       - Initialize count = 0 with n = 0.
+//       - The condition while (n != 0U) is immediately false, so the loop executes
+//         zero times and returns 0.
+//
 // Algorithm:
 //   1. Brian Kernighan's Bit-Clearing Algorithm (`hammingWeight`):
 //      Subtracting 1 from a nonzero unsigned integer flips its lowest set bit

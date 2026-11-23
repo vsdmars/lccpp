@@ -7,6 +7,35 @@
 //   that is missing from the array. The solution must run in O(n) linear time
 //   and O(1) constant auxiliary space.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 0, 1]
+//     Output: 2
+//     Explanation:
+//       - Seed missing = nums.size() = 3.
+//       - At i = 0, update missing = 3 ^ 0 ^ 3 = 0; at i = 1, update missing = 0 ^
+//         1 ^ 0 = 1; at i = 2, update missing = 1 ^ 2 ^ 1 = 2.
+//       - Return missing = 2 (equivalently, missingNumberGauss computes 3 * 4 / 2 -
+//         (3 + 0 + 1) = 6 - 4 = 2).
+//
+//   Example 2:
+//     Input:  nums = [9, 6, 4, 2, 3, 5, 7, 0, 1]
+//     Output: 8
+//     Explanation:
+//       - Seed missing = nums.size() = 9.
+//       - Looping i from 0 to 8 XORs every index 0..8 with nums[i]; all present
+//         values {0, 1, 2, 3, 4, 5, 6, 7, 9} cancel in pairs against {0..9}.
+//       - Index 8 has no matching value in nums, leaving missing = 8 (and
+//         missingNumberGauss yields 9 * 10 / 2 - 37 = 45 - 37 = 8).
+//
+//   Example 3:
+//     Input:  nums = []
+//     Output: 0
+//     Explanation:
+//       - Seed missing = nums.size() = 0.
+//       - The loop over i < 0 performs zero iterations and returns 0, the sole
+//         number in [0, 0].
+//
 // Algorithm:
 //   1. XOR Index-Value Cancellation (`missingNumber`):
 //      Every number present in `nums` appears once as a value and once as an

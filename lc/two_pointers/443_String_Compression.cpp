@@ -8,6 +8,44 @@
 //   the length is strictly greater than 1 (each digit stored as a separate char
 //   element). Return the new compressed length using only O(1) extra space.
 //
+// Examples:
+//   Example 1:
+//     Input:  chars = ['a', 'a', 'b', 'b', 'c', 'c', 'c']
+//     Output: 6 (chars[0..5] = ['a', '2', 'b', '2', 'c', '3'])
+//     Explanation:
+//       - First run 'a' spans indices 0..1 (run_len = 2), writing 'a' and '2' at
+//         chars[0..1] and advancing to read = 2, write = 2.
+//       - Second run 'b' spans indices 2..3 (run_len = 2), writing 'b' and '2' at
+//         chars[2..3] and advancing to read = 4, write = 4.
+//       - Third run 'c' spans indices 4..6 (run_len = 3), writing 'c' and '3' at
+//         chars[4..5] and advancing to read = 7, write = 6.
+//       - Return write = 6 with compressed prefix ['a', '2', 'b', '2', 'c', '3'].
+//
+//   Example 2:
+//     Input:  chars = ['a', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b',
+//             'b']
+//     Output: 4 (chars[0..3] = ['a', 'b', '1', '2'])
+//     Explanation:
+//       - First run 'a' at index 0 has run_len = 1, so only 'a' is written at
+//         chars[0] and read = 1, write = 1.
+//       - Second run 'b' spans indices 1..12 (run_len = 12), writing 'b' at
+//         chars[1] and setting digits_start = 2, write = 2, read = 13.
+//       - Emitting digits of 12 via remaining % 10 writes '2' then '1' at
+//         chars[2..3] (write = 4), and std::ranges::reverse flips chars[2..4] to
+//         '1', '2'.
+//       - Return write = 4 with compressed prefix ['a', 'b', '1', '2'].
+//
+//   Example 3:
+//     Input:  chars = ['a', 'b', 'c', 'd']
+//     Output: 4 (chars[0..3] = ['a', 'b', 'c', 'd'])
+//     Explanation:
+//       - Start with read = 0 and write = 0; each character forms a maximal run of
+//         length run_len = 1.
+//       - For each run, chars[write++] = ch writes the character and skips the `if
+//         (run_len > 1)` digit-emission block.
+//       - When read reaches 4, return write = 4 with chars unchanged as ['a', 'b',
+//         'c', 'd'].
+//
 // Algorithm:
 //   Two-pointer in-place run-length encoding with `read` and `write` indices:
 //     - Outer loop scans one maximal run of equal characters starting at

@@ -13,6 +13,54 @@
 //   Return the array of query answers.
 //   Constraints: 1 <= n <= 10^9, 0 <= lamps.length, queries.length <= 20000.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 5, lamps = [[0, 0], [4, 4]], queries = [[1, 1], [1, 0]]
+//     Output: [1, 0]
+//     Explanation:
+//       - Insert (0, 0) and (4, 4) into active_lamps_, yielding row_counts_ = {0:
+//         1, 4: 1}, col_counts_ = {0: 1, 4: 1}, main_diag_counts_ = {0: 2}, and
+//         anti_diag_counts_ = {0: 1, 8: 1}.
+//       - For query [1, 1], main_diag_counts_ contains 1 - 1 = 0, so record 1 as
+//         illuminated.
+//       - Extinguish the 3x3 neighborhood [0..2] x [0..2] around (1, 1), removing
+//         (0, 0), pruning row 0, col 0, and anti_diag 0, and decrementing
+//         main_diag_counts_[0] from 2 to 1.
+//       - For query [1, 0], row 1, col 0, main_diag 1, and anti_diag 1 are all
+//         absent from the line maps, so record 0 and return [1, 0].
+//
+//   Example 2:
+//     Input:  n = 5, lamps = [[0, 0], [0, 0]], queries = [[0, 0], [0, 1]]
+//     Output: [1, 0]
+//     Explanation:
+//       - Adding the first [0, 0] inserts the key into active_lamps_ and sets
+//         row_counts_[0], col_counts_[0], main_diag_counts_[0], and
+//         anti_diag_counts_[0] to 1.
+//       - Adding the duplicate [0, 0] sees active_lamps_.insert(key).second ==
+//         false and returns early without double-counting any line counter.
+//       - For query [0, 0], row_counts_.contains(0) is true so record 1, then
+//         extinguish_around(0, 0) erases (0, 0) and prunes all four counts (1 -> 0)
+//         from the maps.
+//       - For query [0, 1], all four line keys (row 0, col 1, main_diag -1,
+//         anti_diag 1) are absent, so record 0 and return [1, 0].
+//
+//   Example 3:
+//     Input:  n = 1000000000, lamps = [[0, 999999999], [999999999, 0]], queries =
+//             [[500000000, 499999999], [0, 0], [1, 1]]
+//     Output: [1, 1, 0]
+//     Explanation:
+//       - Insert both corner lamps into the sparse hash structures without
+//         allocating a 10^9 x 10^9 grid, setting anti_diag_counts_[999999999] = 2
+//         and counts of 1 for rows and cols 0 and 999999999.
+//       - For query [500000000, 499999999], r + c = 999999999 hits
+//         anti_diag_counts_ so record 1; its 3x3 neighborhood hits neither corner
+//         lamp.
+//       - For query [0, 0], row_counts_.contains(0) and col_counts_.contains(0) are
+//         true so record 1, and its 3x3 neighborhood again leaves both corner lamps
+//         active.
+//       - For query [1, 1], row 1, col 1, main_diag 0, and anti_diag 2 are all
+//         absent from the line maps, so record 0 and return [1, 1, 0].
+//
 // Algorithm:
 //   Sparse Line Reference-Counting with Deduplicated Lamp Set:
 //   Because `n` can be up to 10^9, materializing an `n x n` grid is infeasible.

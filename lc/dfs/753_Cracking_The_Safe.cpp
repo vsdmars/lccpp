@@ -9,6 +9,40 @@
 //   `n`-digit passwords as a contiguous substring.
 //   Constraints: 1 <= n <= 4, 1 <= k <= 10, 1 <= k^n <= 4096.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 2, k = 2
+//     Output: "01100"
+//     Explanation:
+//       - crackSafe computes total_passwords = 2^2 = 4 and initializes ans = "0" (n
+//         - 1 zeros) with an empty visited set.
+//       - At step 0 (prefix "0") and step 1 (prefix "1"), trying digits from 1 down
+//         to 0 inserts "01" and then "11" into visited, extending ans to "011".
+//       - At step 2 (prefix "1"), "11" is already in visited so digit 0 is chosen
+//         to form "10", extending ans to "0110".
+//       - At step 3 (prefix "0"), "01" is already in visited so digit 0 is chosen
+//         to form "00", returning "01100" covering all 4 two-digit passwords.
+//
+//   Example 2:
+//     Input:  n = 1, k = 2
+//     Output: "10"
+//     Explanation:
+//       - crackSafe computes total_passwords = 2^1 = 2 with prefix_len = 0,
+//         starting ans = "" and candidate = "0".
+//       - At step 0, trying digits from 1 down to 0 inserts "1" into visited and
+//         appends '1' to ans.
+//       - At step 1, "1" is already in visited so digit 0 is chosen, inserting "0"
+//         and returning "10", which contains all 2 passwords of length 1.
+//
+//   Example 3:
+//     Input:  n = 1, k = 1
+//     Output: "0"
+//     Explanation:
+//       - crackSafe computes total_passwords = 1^1 = 1 with prefix_len = 0 and ans
+//         = "".
+//       - The single iteration tests digit = 0, inserts "0" into visited, appends
+//         '0' to ans, and returns "0".
+//
 // Algorithm:
 //   The minimum-length string containing all `k^n` length-`n` words over an
 //   alphabet of size `k` is a linear De Bruijn sequence of length `k^n + n - 1`

@@ -6,6 +6,39 @@
 //   defined as the element that appears strictly more than `floor(n / 2)`
 //   times. You may assume that a majority element always exists in `nums`.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 2, 3]
+//     Output: 3
+//     Explanation:
+//       - In majorityElement, set threshold = 3 / 2 = 1 and count counts[3] = 1,
+//         counts[2] = 1, then counts[3] = 2 > 1 to return 3.
+//       - In majorityElementBoyerMoore, element 3 sets candidate = 3 and balance =
+//         1, element 2 decrements balance to 0, and the final 3 resets candidate =
+//         3 with balance = 1, returning 3.
+//
+//   Example 2:
+//     Input:  nums = [2, 2, 1, 1, 1, 2, 2]
+//     Output: 2
+//     Explanation:
+//       - In majorityElement, threshold = 7 / 2 = 3, and 2 reaches counts[2] = 4 >
+//         3 on the final element to return 2.
+//       - In majorityElementBoyerMoore, the first four elements [2, 2, 1, 1] set
+//         candidate = 2 with balance progressing 1 -> 2 -> 1 -> 0.
+//       - At index 4 (value 1), balance == 0 adopts candidate = 1 and balance = 1,
+//         then index 5 (value 2) cancels balance back to 0.
+//       - At index 6 (value 2), balance == 0 adopts candidate = 2 with balance = 1,
+//         and the loop finishes returning 2.
+//
+//   Example 3:
+//     Input:  nums = [42]
+//     Output: 42
+//     Explanation:
+//       - In majorityElement, threshold = 1 / 2 = 0, so the first element
+//         increments counts[42] to 1 > 0 and immediately returns 42.
+//       - In majorityElementBoyerMoore, balance starts at 0, so candidate becomes
+//         42 with balance = 1 and the function returns 42.
+//
 // Algorithm:
 //   1. Hash-Map Frequency Count (`majorityElement`):
 //      Count occurrences of each integer in an `std::unordered_map` and return

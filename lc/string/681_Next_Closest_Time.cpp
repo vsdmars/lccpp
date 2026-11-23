@@ -9,6 +9,45 @@
 //   around to the earliest valid time on the next day (which may be the input
 //   time itself when only one distinct digit appears, e.g., "00:00").
 //
+// Examples:
+//   Example 1:
+//     Input:  time = "19:34"
+//     Output: "19:39"
+//     Explanation:
+//       - Record the allowed digits from "19:34" in the boolean array as {1, 3, 4,
+//         9} and convert the start time to start_total = 19 * 60 + 34 = 1174
+//         minutes since midnight.
+//       - Advance minute-by-minute for delta = 1..4, checking candidates 19:35,
+//         19:36, 19:37, and 19:38, each of which fails all_digits_allowed because
+//         digits 5, 6, 7, and 8 are not in {1, 3, 4, 9}.
+//       - At delta = 5, candidate = (1174 + 5) % 1440 = 1179 decomposes to hour =
+//         19 and minute = 39, whose digits {1, 9, 3, 9} are all allowed, returning
+//         "19:39".
+//
+//   Example 2:
+//     Input:  time = "23:59"
+//     Output: "22:22"
+//     Explanation:
+//       - Record allowed digits {2, 3, 5, 9} and compute start_total = 23 * 60 + 59
+//         = 1439.
+//       - Stepping forward wraps modulo 1440 into the next day at delta = 1
+//         (00:00), rejecting every candidate through 22:21 because each contains at
+//         least one disallowed digit outside {2, 3, 5, 9}.
+//       - At delta = 1343, candidate = (1439 + 1343) % 1440 = 1342 decomposes to
+//         hour = 22 and minute = 22, where all four digits are 2, returning
+//         "22:22".
+//
+//   Example 3:
+//     Input:  time = "00:00"
+//     Output: "00:00"
+//     Explanation:
+//       - Record allowed digits as only {0} and compute start_total = 0.
+//       - Every candidate from delta = 1 through delta = 1439 has at least one
+//         non-zero digit in its hour or minute, so all_digits_allowed returns false
+//         for all of them.
+//       - At delta = 1440, candidate = (0 + 1440) % 1440 = 0 yields hour = 0 and
+//         minute = 0, passing all_digits_allowed and returning "00:00".
+//
 // Algorithm:
 //   Parse the input time into total minutes elapsed since 00:00 (in [0, 1439])
 //   and record the set of allowed decimal digits in a 10-element boolean array.

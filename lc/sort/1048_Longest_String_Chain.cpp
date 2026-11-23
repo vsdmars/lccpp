@@ -11,6 +11,45 @@
 //   length formed using words from `words`.
 //   Constraints: `1 <= words.length <= 1000`, `1 <= words[i].length <= 16`.
 //
+// Examples:
+//   Example 1:
+//     Input:  words = ["a", "b", "ba", "bca", "bda", "bdca"]
+//     Output: 4
+//     Explanation:
+//       - Sort non-owning string views by length in ascending order: ["a", "b",
+//         "ba", "bca", "bda", "bdca"].
+//       - Process "a" and "b": neither has a length-0 predecessor in dp, so dp["a"]
+//         = 1 and dp["b"] = 1.
+//       - Process "ba": deleting index 0 ("a") and index 1 ("b") both hit dp with
+//         value 1, setting dp["ba"] = 2.
+//       - Process "bca" and "bda": deleting the middle character from each yields
+//         "ba", setting dp["bca"] = 3 and dp["bda"] = 3.
+//       - Process "bdca": deleting 'c' yields "bda" (dp = 3) and deleting 'd'
+//         yields "bca" (dp = 3), so dp["bdca"] = 4 and longest = 4.
+//
+//   Example 2:
+//     Input:  words = ["xbc", "pcxbcf", "xb", "cxbc", "pcxbc"]
+//     Output: 5
+//     Explanation:
+//       - Sort string views by length: ["xb", "xbc", "cxbc", "pcxbc", "pcxbcf"].
+//       - Initialize dp["xb"] = 1 because "xb" has no shorter predecessor.
+//       - Process "xbc": deleting index 2 yields "xb" (dp = 1), giving dp["xbc"] =
+//         2.
+//       - Process "cxbc" and "pcxbc": deleting index 0 from each finds "xbc" and
+//         "cxbc" respectively, setting dp["cxbc"] = 3 and dp["pcxbc"] = 4.
+//       - Process "pcxbcf": deleting 'f' at index 5 yields "pcxbc", updating
+//         dp["pcxbcf"] = 5 and returning longest = 5.
+//
+//   Example 3:
+//     Input:  words = ["abcd", "dbqca"]
+//     Output: 1
+//     Explanation:
+//       - Sort string views by length: ["abcd", "dbqca"].
+//       - Process "abcd": none of its length-3 deletions exist in dp, so dp["abcd"]
+//         = 1.
+//       - Process "dbqca": none of its five length-4 deletions ("bqca", "dqca",
+//         "dbca", "dbqa", "dbqc") match "abcd", so dp["dbqca"] = 1 and longest = 1.
+//
 // Algorithm:
 //   Sort-by-length + Hash-Map Dynamic Programming (Longest Path in a DAG):
 //   1. Sort `words` in ascending order of length so every possible predecessor

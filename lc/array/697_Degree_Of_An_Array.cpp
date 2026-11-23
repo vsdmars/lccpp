@@ -8,6 +8,46 @@
 //   exact same degree as `nums`.
 //   Constraints: 1 <= nums.size() <= 50,000; 0 <= nums[i] <= 49,999.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 2, 3, 1]
+//     Output: 2
+//     Explanation:
+//       - At idx = 0 (value 1) and idx = 1 (value 2), try_emplace records first_idx
+//         = 0 and 1 with count = 1, setting max_degree = 1 and shortest_len = 1.
+//       - At idx = 2 (value 2), stats[2].count increments to 2 with span = 2 - 1 +
+//         1 = 2, strictly exceeding max_degree = 1 so max_degree becomes 2 and
+//         shortest_len becomes 2.
+//       - At idx = 3 (value 3), stats[3] records count = 1, which is below
+//         max_degree = 2 and leaves shortest_len unchanged.
+//       - At idx = 4 (value 1), stats[1].count increments to 2 with span = 4 - 0 +
+//         1 = 5, tying max_degree = 2 so shortest_len stays min(2, 5) = 2.
+//
+//   Example 2:
+//     Input:  nums = [1, 2, 2, 3, 1, 4, 2]
+//     Output: 6
+//     Explanation:
+//       - During indices 0 through 4, value 2 reaches count = 2 with span 2
+//         (indices 1..2) and value 1 reaches count = 2 with span 5 (indices 0..4),
+//         leaving max_degree = 2 and shortest_len = 2.
+//       - At idx = 5 (value 4), stats[4] is inserted with count = 1 and first_idx =
+//         5, which does not reach max_degree = 2.
+//       - At idx = 6 (value 2), stats[2].count increments to 3 with span = 6 - 1 +
+//         1 = 6, strictly beating max_degree = 2 so max_degree updates to 3 and
+//         shortest_len returns 6.
+//
+//   Example 3:
+//     Input:  nums = [1, 2, 3, 1, 2, 2]
+//     Output: 5
+//     Explanation:
+//       - At indices 0..2, values 1, 2, and 3 are each seen once, keeping
+//         max_degree = 1 and shortest_len = 1.
+//       - At idx = 3 (value 1), stats[1].count reaches 2 with span = 3 - 0 + 1 = 4,
+//         updating max_degree = 2 and shortest_len = 4; at idx = 4 (value 2),
+//         stats[2].count also reaches 2 with span = 4 - 1 + 1 = 4.
+//       - At idx = 5 (value 2), stats[2].count increments to 3 with span = 5 - 1 +
+//         1 = 5, surpassing the tied degree 2 and updating shortest_len to 5.
+//
 // Algorithm:
 //   Any shortest subarray achieving the array's degree `d` must start at the
 //   first occurrence and end at the last occurrence of some element whose total

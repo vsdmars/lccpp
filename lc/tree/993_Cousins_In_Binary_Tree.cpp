@@ -8,6 +8,43 @@
 //   depth (root has depth 0) but have different parent nodes.
 //   Constraints: 2 to 100 nodes; unique integer values in [1, 100].
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [1, 2, 3, 4], x = 4, y = 3
+//     Output: false
+//     Explanation:
+//       - DFS descends from 1 (depth 0) through 2 (depth 1, parent 1) to 4 (depth
+//         2, parent 2), recording {depth: 2, parent: node 2} for x = 4.
+//       - Backtracking to 1, DFS visits right child 3 (depth 1, parent 1),
+//         recording {depth: 1, parent: node 1} for y = 3 and stopping early as
+//         found.size() reaches 2.
+//       - Because found[0].depth != found[1].depth (2 != 1), isCousins returns
+//         false.
+//
+//   Example 2:
+//     Input:  root = [1, 2, 3, null, 4, null, 5], x = 5, y = 4
+//     Output: true
+//     Explanation:
+//       - DFS visits 1 (depth 0) -> 2 (depth 1) -> 4 (depth 2), recording {depth:
+//         2, parent: node 2} for target 4.
+//       - Backtracking to 1, DFS visits 3 (depth 1) -> 5 (depth 2), recording
+//         {depth: 2, parent: node 3} for target 5 and halting early with
+//         found.size() == 2.
+//       - Both entries share depth == 2 and have different parent pointers (node 2
+//         != node 3), so isCousins returns true.
+//
+//   Example 3:
+//     Input:  root = [1, 2, 3, null, 4], x = 2, y = 3
+//     Output: false
+//     Explanation:
+//       - DFS visits 1 (depth 0) and then left child 2 (depth 1), recording {depth:
+//         1, parent: node 1} for x = 2.
+//       - After visiting 4 (depth 2), DFS backtracks to 1 and visits right child 3
+//         (depth 1), recording {depth: 1, parent: node 1} for y = 3 and stopping
+//         early.
+//       - Although found[0].depth == found[1].depth (1 == 1), both entries share
+//         parent == node 1, so isCousins returns false.
+//
 // Algorithm:
 //   Run a single depth-first search carrying each node's parent pointer and
 //   current depth. Whenever a node's value matches x or y, record its

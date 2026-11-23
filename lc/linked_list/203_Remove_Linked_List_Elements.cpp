@@ -6,6 +6,38 @@
 //   nodes of the linked list that satisfy `node->val == val`, and return the
 //   new head of the modified list.
 //
+// Examples:
+//   Example 1:
+//     Input:  head = [1, 2, 6, 3, 4, 5, 6], val = 6
+//     Output: [1, 2, 3, 4, 5]
+//     Explanation:
+//       - Create sentinel dummy(0) pointing to node 1 and initialize prev = &dummy.
+//       - Advance prev past nodes 1 and 2 since neither equals 6, then unlink node
+//         6 after 2 by setting 2->next = 3 without advancing prev.
+//       - Advance prev through nodes 3, 4, and 5, then unlink the trailing 6 by
+//         setting 5->next = nullptr and return dummy.next ([1, 2, 3, 4, 5]).
+//
+//   Example 2:
+//     Input:  head = [7, 7, 7, 7], val = 7
+//     Output: nullptr
+//     Explanation:
+//       - Create sentinel dummy(0) pointing to the first 7 and set prev = &dummy.
+//       - On four consecutive iterations, curr = prev->next has val == 7, so
+//         prev->next is updated to curr->next while prev stays fixed at &dummy.
+//       - Once all four 7 nodes are bypassed, dummy.next becomes nullptr, ending
+//         the loop and returning nullptr.
+//
+//   Example 3:
+//     Input:  head = [6, 6, 1, 6, 6, 2, 6], val = 6
+//     Output: [1, 2]
+//     Explanation:
+//       - Start with prev at sentinel dummy(0) and bypass both leading 6 nodes in
+//         place until dummy.next points to node 1.
+//       - Advance prev to node 1, then bypass the two consecutive 6 nodes after 1
+//         while keeping prev stationary until 1->next points to node 2.
+//       - Advance prev to node 2, unlink the trailing 6 via 2->next = nullptr, and
+//         return dummy.next ([1, 2]).
+//
 // Algorithm:
 //   Sentinel (dummy) head with single-pass predecessor scanning:
 //   Attach a stack-allocated sentinel node `dummy` pointing to `head`, which

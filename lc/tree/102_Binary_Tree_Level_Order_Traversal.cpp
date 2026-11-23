@@ -6,6 +6,35 @@
 //   nodes' values grouped by depth (from left to right, level by level,
 //   starting at the root). An empty tree returns an empty 2D vector.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 9, 20, null, null, 15, 7]
+//     Output: [[3], [9, 20], [15, 7]]
+//     Explanation:
+//       - Seed frontier with root node 3, then snapshot level_size = 1, pop 3 into
+//         [3], and enqueue children 9 and 20.
+//       - Snapshot level_size = 2, pop 9 (no children) and 20 (enqueueing 15 and
+//         7), recording level [9, 20].
+//       - Snapshot level_size = 2, pop leaves 15 and 7 to record [15, 7], leaving
+//         frontier empty and returning [[3], [9, 20], [15, 7]].
+//
+//   Example 2:
+//     Input:  root = [1, 2, null, 3]
+//     Output: [[1], [2], [3]]
+//     Explanation:
+//       - Start with frontier = [1]; level 1 pops 1 into [1] and enqueues only its
+//         non-null left child 2.
+//       - Level 2 pops 2 into [2] and enqueues only its non-null left child 3.
+//       - Level 3 pops leaf 3 into [3], returning [[1], [2], [3]].
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: []
+//     Explanation:
+//       - The initial guard detects root == nullptr.
+//       - Return the empty result vector {} immediately without touching the BFS
+//         queue.
+//
 // Algorithm:
 //   Breadth-First Search (BFS) with level-boundary snapshotting. Seed a FIFO
 //   queue with the root node. On each outer iteration, capture the current

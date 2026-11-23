@@ -9,6 +9,43 @@
 //   immediately stepping back to the previous cell, returning to its start.
 //   Constraints: 1 <= m, n <= 500, `grid[i][j]` is a lowercase English letter.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [['a', 'a', 'a', 'a'], ['a', 'b', 'b', 'a'], ['a', 'b', 'b',
+//             'a'], ['a', 'a', 'a', 'a']]
+//     Output: true
+//     Explanation:
+//       - DFS starts at unvisited cell (0, 0) with target 'a' and follows kDirs
+//         around the outer perimeter: (0, 0) -> (0, 1) -> (0, 2) -> (0, 3) -> (1,
+//         3) -> (2, 3) -> (3, 3) -> (3, 2) -> (3, 1) -> (3, 0) -> (2, 0) -> (1, 0).
+//       - At (1, 0) with parent (2, 0), checking neighbor (0, 0) skips the parent
+//         guard and matches 'a' with visited[0][0] == 1.
+//       - Detecting this already-visited non-parent neighbor proves a cycle of
+//         length >= 4 exists, returning true immediately.
+//
+//   Example 2:
+//     Input:  grid = [['c', 'c', 'c', 'a'], ['c', 'd', 'c', 'c'], ['c', 'c', 'e',
+//             'c'], ['f', 'c', 'c', 'c']]
+//     Output: true
+//     Explanation:
+//       - DFS starts at (0, 0) = 'c', skips non-'c' cells ('a', 'd', 'e', 'f'), and
+//         traces the connected 'c' loop through (0, 1) -> (0, 2) -> (1, 2) -> (1,
+//         3) -> (2, 3) -> (3, 3) -> (3, 2) -> (3, 1) -> (2, 1) -> (2, 0) -> (1, 0).
+//       - From (1, 0) with parent (2, 0), the upward neighbor (0, 0) is already
+//         visited, so dfs returns true.
+//
+//   Example 3:
+//     Input:  grid = [['a', 'b', 'b'], ['b', 'z', 'b'], ['b', 'b', 'a']]
+//     Output: false
+//     Explanation:
+//       - DFS from (0, 0) = 'a' finds no adjacent 'a' neighbors and returns false.
+//       - DFS from (0, 1) = 'b' traverses the chain (0, 1) -> (0, 2) -> (1, 2) ->
+//         (2, 2) skipped -> (2, 1) -> (2, 0) without revisiting any non-parent
+//         cell, and separate components (1, 0) = 'b', (1, 1) = 'z', and (2, 2) =
+//         'a' also finish cleanly.
+//       - Because no component encounters an already-visited non-parent neighbor,
+//         containsCycle returns false.
+//
 // Algorithm:
 //   Undirected Depth-First Search (DFS) with parent-coordinate tracking across
 //   same-character connected components. Key graph-theoretic invariant: any

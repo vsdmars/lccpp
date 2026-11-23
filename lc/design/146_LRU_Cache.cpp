@@ -10,6 +10,52 @@
 //       most recently used), or insert the key-value pair. If inserting causes
 //       the cache size to exceed `capacity`, evict the least recently used key.
 //
+// Examples:
+//   Example 1:
+//     Input:  ["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get",
+//             "get"], [[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3],
+//             [4]]
+//     Output: [null, null, null, 1, null, -1, null, -1, 3, 4]
+//     Explanation:
+//       - Initialize `LRUCache(2)`, then `put(1, 1)` and `put(2, 2)` push to the
+//         front of `order_`, leaving `order_ = [(2, 2), (1, 1)]` from MRU to LRU.
+//       - `get(1)` finds key `1` in `index_`, splices `(1, 1)` to the front
+//         (`order_ = [(1, 1), (2, 2)]`), and returns `1`.
+//       - `put(3, 3)` sees `index_.size() == 2`, evicts `order_.back()` (key `2`),
+//         and inserts `(3, 3)` at the front (`order_ = [(3, 3), (1, 1)]`), so
+//         `get(2)` misses and returns `-1`.
+//       - `put(4, 4)` evicts `order_.back()` (key `1`) and inserts `(4, 4)` at the
+//         front (`order_ = [(4, 4), (3, 3)]`), so `get(1)` misses and returns `-1`.
+//       - `get(3)` splices `(3, 3)` to the front and returns `3`, and `get(4)`
+//         splices `(4, 4)` to the front and returns `4`.
+//
+//   Example 2:
+//     Input:  ["LRUCache", "put", "put", "put", "put", "get", "get", "get"], [[2],
+//             [1, 10], [2, 20], [1, 100], [3, 30], [1], [2], [3]]
+//     Output: [null, null, null, null, null, 100, -1, 30]
+//     Explanation:
+//       - Initialize `LRUCache(2)` and execute `put(1, 10)` and `put(2, 20)`,
+//         producing `order_ = [(2, 20), (1, 10)]` with key `1` at the LRU back.
+//       - `put(1, 100)` finds key `1` in `index_`, updates its value to `100`, and
+//         splices it to the front so `order_ = [(1, 100), (2, 20)]`.
+//       - `put(3, 30)` sees `index_.size() == 2`, evicts `order_.back()` (key `2`),
+//         and inserts `(3, 30)` at the front (`order_ = [(3, 30), (1, 100)]`).
+//       - `get(1)` returns `100`, `get(2)` misses in `index_` and returns `-1`, and
+//         `get(3)` returns `30`.
+//
+//   Example 3:
+//     Input:  ["LRUCache", "put", "get", "put", "get", "get"], [[1], [1, 5], [1],
+//             [2, 6], [1], [2]]
+//     Output: [null, null, 5, null, -1, 6]
+//     Explanation:
+//       - Initialize `LRUCache(1)`, then `put(1, 5)` inserts `(1, 5)` at the front
+//         of `order_` and records `index_[1]`; `get(1)` hits and returns `5`.
+//       - `put(2, 6)` sees `index_.size() == capacity_` (`1`), erases
+//         `order_.back()` (key `1`) from `index_` and pops it from `order_`, then
+//         inserts `(2, 6)`.
+//       - `get(1)` misses in `index_` and returns `-1`, while `get(2)` finds key
+//         `2` in `index_` and returns `6`.
+//
 // Algorithm:
 //   Hash Map + Doubly-Linked List (`std::unordered_map` + `std::list`):
 //   - Maintain recency order in a doubly-linked list `order_` storing

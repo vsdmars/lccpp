@@ -7,6 +7,40 @@
 //   contiguous subarray whose elements sum to `k`. If no such subarray exists,
 //   return `0`.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, -1, 5, -2, 3], k = 3
+//     Output: 4
+//     Explanation:
+//       - Seed first_index = {0: -1}, prefix = 0, and max_len = 0.
+//       - At i = 0 (prefix = 1) and i = 1 (prefix = 0), prefix - 3 is absent;
+//         first_index records {1: 0} while try_emplace keeps {0: -1} as the
+//         earliest index for prefix 0.
+//       - At i = 2 (prefix = 5), first_index records {5: 2}; at i = 3 (prefix = 3),
+//         prefix - 3 = 0 hits first_index[0] = -1, updating max_len = 3 - (-1) = 4
+//         and recording {3: 3}.
+//       - At i = 4 (prefix = 6), prefix - 3 = 3 hits index 3 for length 4 - 3 = 1 <
+//         4, so maxSubArrayLen returns 4.
+//
+//   Example 2:
+//     Input:  nums = [-2, -1, 2, 1], k = 1
+//     Output: 2
+//     Explanation:
+//       - Seed first_index = {0: -1}; at i = 0 and i = 1, prefix becomes -2 and -3
+//         with no prefix - 1 match, storing {-2: 0} and {-3: 1}.
+//       - At i = 2, prefix = -1 and prefix - 1 = -2 matches index 0, updating
+//         max_len = 2 - 0 = 2 and storing {-1: 2}.
+//       - At i = 3, prefix = 0 and prefix - 1 = -1 matches index 2 (length 3 - 2 =
+//         1 < 2), leaving max_len = 2 as the result.
+//
+//   Example 3:
+//     Input:  nums = [], k = 0
+//     Output: 0
+//     Explanation:
+//       - Seed first_index = {0: -1} and initialize max_len = 0.
+//       - Because nums is empty, the loop runs zero iterations and returns 0
+//         without falsely matching the virtual index -1.
+//
 // Algorithm:
 //   Use running prefix sums paired with a hash map storing the *earliest*
 //   index where each prefix sum value was observed. Seed the map with

@@ -8,6 +8,47 @@
 //   number of land cells it contains. Return the maximum area of an island in
 //   `grid`, or `0` if no island exists.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0,
+//             0, 1, 1, 1, 0, 0, 0], [0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1,
+//             0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0], [0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1,
+//             0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0,
+//             1, 1, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0]]
+//     Output: 6
+//     Explanation:
+//       - Row-major scanning finds the single land cell at (0, 2); dfsArea zeroes
+//         it and returns 1, setting max_area = 1.
+//       - At (0, 7), dfsArea sinks (0, 7), (1, 7), (1, 8), and (1, 9), updating
+//         max_area = 4; subsequent islands at (2, 1) and (2, 4) yield areas 4 and
+//         5, raising max_area = 5.
+//       - At (3, 8), dfsArea sinks (3, 8), (4, 8), (4, 9), (4, 10), (3, 10), and
+//         (5, 10) for area 6, updating max_area = 6.
+//       - The remaining island starting at (6, 7) spans 5 cells ((6, 7), (6, 8),
+//         (6, 9), (7, 7), (7, 8)), so maxAreaOfIsland returns 6.
+//
+//   Example 2:
+//     Input:  grid = [[1, 0, 1], [0, 1, 0], [1, 0, 1]]
+//     Output: 1
+//     Explanation:
+//       - Scanning row 0 encounters grid[0][0] == 1 and invokes dfsArea(grid, 0,
+//         0), which sets grid[0][0] = 0.
+//       - kDirs4 checks only the four orthogonal neighbors (0, 1), (0, -1), (1, 0),
+//         and (-1, 0), each of which is 0 or out of bounds, so dfsArea returns 1
+//         without reaching the diagonal 1 at (1, 1).
+//       - Later iterations visit the remaining isolated 1s at (0, 2), (1, 1), (2,
+//         0), and (2, 2), each returning area 1 and leaving max_area = 1.
+//
+//   Example 3:
+//     Input:  grid = [[0, 0, 0, 0, 0, 0, 0, 0]]
+//     Output: 0
+//     Explanation:
+//       - maxAreaOfIsland verifies grid and grid[0] are non-empty and initializes
+//         max_area = 0.
+//       - The outer loops scan row 0 across columns 0..7, finding grid[0][c] == 0
+//         at every cell so dfsArea is never invoked.
+//       - max_area remains 0 and is returned.
+//
 // Algorithm:
 //   Iterate over every cell `(r, c)` of the grid. Whenever an unvisited land
 //   cell (`grid[r][c] == 1`) is encountered, run a 4-directional flood-fill

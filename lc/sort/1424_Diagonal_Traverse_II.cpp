@@ -9,6 +9,43 @@
 //   Constraints: 1 <= nums.length <= 10^5, 1 <= nums[i].length <= 10^5,
 //   total number of elements N <= 10^5, 1 <= nums[i][j] <= 10^9.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+//     Output: [1, 4, 2, 7, 5, 3, 8, 6, 9]
+//     Explanation:
+//       - Scan row r = 0 left-to-right, placing 1, 2, and 3 into diagonals[0] =
+//         [1], diagonals[1] = [2], and diagonals[2] = [3] using diag_id = r + c.
+//       - Scan row r = 1, appending 4, 5, and 6 to diagonals[1] = [2, 4],
+//         diagonals[2] = [3, 5], and diagonals[3] = [6].
+//       - Scan row r = 2, appending 7, 8, and 9 to diagonals[2] = [3, 5, 7],
+//         diagonals[3] = [6, 8], and diagonals[4] = [9].
+//       - Iterate through diagonals[0..4] in reverse order per bucket to emit [1],
+//         [4, 2], [7, 5, 3], [8, 6], and [9], yielding [1, 4, 2, 7, 5, 3, 8, 6, 9].
+//
+//   Example 2:
+//     Input:  nums = [[1, 2, 3], [4], [5, 6, 7], [8], [9, 10, 11]]
+//     Output: [1, 4, 2, 5, 3, 8, 6, 9, 7, 10, 11]
+//     Explanation:
+//       - Group row 0 into diagonals[0..2] = [[1], [2], [3]], then append row 1 (4
+//         at r + c = 1) so diagonals[1] becomes [2, 4].
+//       - Append row 2 ([5, 6, 7] at r = 2) to diagonals[2..4], giving diagonals[2]
+//         = [3, 5], diagonals[3] = [6], and diagonals[4] = [7].
+//       - Append row 3 (8 at r + c = 3) to diagonals[3] = [6, 8] and row 4 ([9, 10,
+//         11] at r = 4) to diagonals[4..6] = [[7, 9], [10], [11]].
+//       - Append each bucket in reverse order from diag_id = 0 to 6 to produce [1,
+//         4, 2, 5, 3, 8, 6, 9, 7, 10, 11].
+//
+//   Example 3:
+//     Input:  nums = [[1], [2], [3], [4]]
+//     Output: [1, 2, 3, 4]
+//     Explanation:
+//       - Every row has only column c = 0, so diag_id = r + 0 places each element
+//         into its own bucket: diagonals[0] = [1], diagonals[1] = [2], diagonals[2]
+//         = [3], and diagonals[3] = [4].
+//       - Iterate through diagonals[0..3] and reverse each single-element bucket to
+//         return [1, 2, 3, 4].
+//
 // Algorithm:
 //   All cells `(r, c)` on the same anti-diagonal share the invariant sum
 //   `d = r + c`. Because every row is non-empty, the occupied diagonal indices

@@ -9,6 +9,38 @@
 //   functions must not be used.
 //   Constraints: -2^31 <= num <= 2^31 - 1.
 //
+// Examples:
+//   Example 1:
+//     Input:  num = 26
+//     Output: "1a"
+//     Explanation:
+//       - Since num != 0, convert 26 to std::uint32_t giving value = 26U (0x1a).
+//       - Iteration 1 extracts nibble = 26U & 0xFU = 10, appends kHexDigits[10] =
+//         'a' to result ("a"), and shifts value >>= 4U to 1U.
+//       - Iteration 2 extracts nibble = 1U & 0xFU = 1, appends kHexDigits[1] = '1'
+//         to result ("a1"), and shifts value >>= 4U to 0U.
+//       - The loop ends when value == 0U, and std::ranges::reverse(result) reverses
+//         "a1" to return "1a".
+//
+//   Example 2:
+//     Input:  num = -1
+//     Output: "ffffffff"
+//     Explanation:
+//       - Since num != 0, casting -1 to std::uint32_t yields its 32-bit
+//         two's-complement bit pattern value = 0xFFFFFFFFU.
+//       - Each of the 8 loop iterations masks nibble = value & 0xFU = 15, appends
+//         kHexDigits[15] = 'f', and performs a logical shift value >>= 4U.
+//       - After 8 shifts value reaches 0U with result = "ffffffff", which reverses
+//         to "ffffffff".
+//
+//   Example 3:
+//     Input:  num = 0
+//     Output: "0"
+//     Explanation:
+//       - The initial guard if (num == 0) matches before any unsigned conversion or
+//         bit-shifting loop executes.
+//       - It returns "0" directly so zero is not emitted as an empty string.
+//
 // Algorithm:
 //   Handle `num == 0` directly by returning `"0"`. Otherwise, convert `num` to
 //   `std::uint32_t`, which preserves the exact 32-bit two's-complement bit

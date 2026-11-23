@@ -10,6 +10,47 @@
 //   Constraints: 1 <= candidates.length <= 30, 2 <= candidates[i] <= 40,
 //   all elements of `candidates` are distinct, 1 <= target <= 40.
 //
+// Examples:
+//   Example 1:
+//     Input:  candidates = [2, 3, 6, 7], target = 7
+//     Output: [[2, 2, 3], [7]]
+//     Explanation:
+//       - Sorting candidates leaves [2, 3, 6, 7], and dfs(0, 7) begins with current
+//         = [].
+//       - Choosing index 0 (2) repeatedly reaches current = [2, 2, 2] with
+//         remaining = 1, where candidates[0] = 2 > 1 breaks the loop and backtracks
+//         to [2, 2] (remaining = 3).
+//       - From [2, 2], choosing index 1 (3) hits remaining = 0 to record [2, 2, 3],
+//         after which candidates[2] = 6 > 3 prunes the remaining candidates.
+//       - Backtracking to [2] (remaining = 5) and trying 3 reaches remaining = 2 <
+//         3 and prunes, while starting at 3 or 6 also fails to hit 0.
+//       - Starting from current = [] at index 3 (7) reaches remaining = 0 and
+//         records [7], producing [[2, 2, 3], [7]].
+//
+//   Example 2:
+//     Input:  candidates = [2, 3, 5], target = 8
+//     Output: [[2, 2, 2, 2], [2, 3, 3], [3, 5]]
+//     Explanation:
+//       - After sorting [2, 3, 5], dfs(0, 8) reuses index 0 (2) four times
+//         (remaining: 8 -> 6 -> 4 -> 2 -> 0) to record [2, 2, 2, 2].
+//       - Backtracking to [2, 2] (remaining = 4) tries 3 (leaving remaining = 1 <
+//         3) and prunes 5 > 4, then backtracks to [2] (remaining = 6).
+//       - From [2] (remaining = 6), choosing index 1 (3) twice reaches remaining =
+//         0 and records [2, 3, 3], while [2, 5] leaves remaining = 1 and prunes.
+//       - Backtracking to [] (remaining = 8) tries index 1 (3): [3, 3] leaves
+//         remaining = 2 < 3 and prunes, while [3, 5] reaches remaining = 0 and
+//         records [3, 5].
+//       - Starting with index 2 (5) leaves remaining = 3 < 5 and prunes, returning
+//         [[2, 2, 2, 2], [2, 3, 3], [3, 5]].
+//
+//   Example 3:
+//     Input:  candidates = [2], target = 1
+//     Output: []
+//     Explanation:
+//       - After sorting [2], dfs(0, 1) starts at index 0 with remaining = 1.
+//       - Because candidates[0] = 2 exceeds remaining = 1, the loop breaks
+//         immediately without recursing and returns [].
+//
 // Algorithm:
 //   Sort `candidates` ascending, then run backtracking DFS:
 //     - Maintain a non-decreasing index invariant: at recursion state

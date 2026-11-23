@@ -9,6 +9,43 @@
 //   (rectangles that merely touch along an edge or at a corner do not overlap).
 //   Given two rectangles `rec1` and `rec2`, return whether they overlap.
 //
+// Examples:
+//   Example 1:
+//     Input:  rec1 = [0, 0, 2, 2], rec2 = [1, 1, 3, 3]
+//     Output: true
+//     Explanation:
+//       - Confirm both `rec1` and `rec2` have size at least 4.
+//       - Compute the x-axis projection check `max(0, 1) < min(2, 3)` (`1 < 2`),
+//         yielding `x_overlap = true`.
+//       - Compute the y-axis projection check `max(0, 1) < min(2, 3)` (`1 < 2`),
+//         yielding `y_overlap = true`.
+//       - Return `x_overlap && y_overlap`, which is `true` because the intersection
+//         `[1, 1, 2, 2]` has positive area.
+//
+//   Example 2:
+//     Input:  rec1 = [0, 0, 1, 1], rec2 = [1, 0, 2, 1]
+//     Output: false
+//     Explanation:
+//       - Confirm both `rec1` and `rec2` have size at least 4.
+//       - Compute the x-axis projection check `max(0, 1) < min(1, 2)` (`1 < 1`),
+//         yielding `x_overlap = false`.
+//       - Compute the y-axis projection check `max(0, 0) < min(1, 1)` (`0 < 1`),
+//         yielding `y_overlap = true`.
+//       - Return `false && true`, which is `false` because touching along the
+//         vertical edge `x = 1` gives zero overlap area.
+//
+//   Example 3:
+//     Input:  rec1 = [0, 0, 0, 2], rec2 = [-1, -1, 1, 1]
+//     Output: false
+//     Explanation:
+//       - Confirm both `rec1` and `rec2` have size at least 4.
+//       - Compute the x-axis projection check `max(0, -1) < min(0, 1)` (`0 < 0`),
+//         yielding `x_overlap = false`.
+//       - Compute the y-axis projection check `max(0, -1) < min(2, 1)` (`0 < 1`),
+//         yielding `y_overlap = true`.
+//       - Return `false && true`, which is `false` because the degenerate
+//         zero-width rectangle `rec1` cannot enclose positive intersection area.
+//
 // Algorithm:
 //   Separating Axis Theorem (1D interval projection) on the x- and y-axes:
 //   - The intersection of two axis-aligned rectangles is itself an axis-aligned

@@ -10,6 +10,42 @@
 //   Constraints: 1 <= m, n <= 15, 0 <= grid[r][c] <= 100, and at most 25 cells
 //   contain gold.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[0, 6, 0], [5, 8, 7], [0, 9, 0]]
+//     Output: 24
+//     Explanation:
+//       - The outer loop starts DFS from each positive-gold cell in the 3x3 grid,
+//         temporarily setting each visited cell to 0 and restoring it on return.
+//       - Starting at (2, 1) with gold 9, the only positive-gold neighbor is (1, 1)
+//         with gold 8.
+//       - From (1, 1), setting it to 0 leaves three unvisited positive branches:
+//         (0, 1) returning 6, (1, 0) returning 5, and (1, 2) returning 7.
+//       - Backtracking restores the cells and takes the maximum branch: 9 + 8 + 7 =
+//         24, which exceeds all other starting cells.
+//
+//   Example 2:
+//     Input:  grid = [[1, 0, 7], [2, 0, 6], [3, 4, 5], [0, 3, 0], [9, 0, 20]]
+//     Output: 28
+//     Explanation:
+//       - Cells (4, 0) = 9 and (4, 2) = 20 have no positive-gold neighbors, so
+//         their DFS runs return 9 and 20 respectively.
+//       - Starting at (0, 0) = 1, DFS follows the single corridor (0, 0) -> (1, 0)
+//         -> (2, 0) -> (2, 1), accumulating 1 + 2 + 3 + 4 = 10.
+//       - At (2, 1) = 4, the downward branch to (3, 1) = 3 returns 3, whereas the
+//         rightward branch explores (2, 2) = 5 -> (1, 2) = 6 -> (0, 2) = 7 and
+//         returns 18.
+//       - Combining the prefix with the better branch yields 10 + 18 = 28, which
+//         becomes the global maximum.
+//
+//   Example 3:
+//     Input:  grid = [[0, 0], [0, 0]]
+//     Output: 0
+//     Explanation:
+//       - The double loop checks grid[r][c] > 0 for every cell in the 2x2 grid.
+//       - Because every cell holds 0, no DFS call is launched and best remains at
+//         its initial value of 0.
+//
 // Algorithm:
 //   Backtracking Depth-First Search (DFS) initiated from every cell containing
 //   gold. On entering `(r, c)`, the cell's gold value is saved and temporarily

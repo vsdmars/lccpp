@@ -8,6 +8,49 @@
 //     - '*' matches any sequence of characters (including the empty sequence).
 //   The match must cover the entire input string `s` (not a partial substring).
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "adceb", p = "*a*b"
+//     Output: true
+//     Explanation:
+//       - At si = 0 ('a') and pi = 0 ('*'), save checkpoint star_pi = 0,
+//         star_match_si = 0 and advance pi to 1.
+//       - At si = 0 ('a') and pi = 1 ('a'), exact match advances si to 1 and pi to
+//         2.
+//       - At si = 1 ('d') and pi = 2 ('*'), the second '*' supersedes the earlier
+//         checkpoint with star_pi = 2, star_match_si = 1 and advances pi to 3.
+//       - At pi = 3 ('b'), s[1..3] ("dce") mismatches 'b', so each mismatch
+//         backtracks pi to 3 and increments star_match_si from 1 up to 4 until s[4]
+//         ('b') matches p[3] ('b'), advancing si to 5 and pi to 4.
+//       - With si == 5 == s.size() and pi == 4 == p.size(), the post-loop check
+//         returns true.
+//
+//   Example 2:
+//     Input:  s = "acdcb", p = "a*c?b"
+//     Output: false
+//     Explanation:
+//       - Match s[0] == p[0] ('a') to advance si = 1, pi = 1, then checkpoint p[1]
+//         == '*' at star_pi = 1, star_match_si = 1 and advance pi = 2.
+//       - Match p[2] == 'c' against s[1] ('c') and p[3] == '?' against s[2] ('d'),
+//         reaching si = 3 and pi = 4.
+//       - s[3] ('c') mismatches p[4] ('b'), so backtrack to star_pi + 1 (pi = 2)
+//         and expand star_match_si to 2 (si = 2); s[2] ('d') then mismatches p[2]
+//         ('c'), triggering another backtrack to star_match_si = 3, si = 3, pi = 2.
+//       - Match p[2] == 'c' against s[3] ('c') and p[3] == '?' against s[4] ('b'),
+//         advancing si to 5 (end of s) and pi to 4.
+//       - After the loop exits, p[4] == 'b' is not '*', so pi (4) != p.size() (5)
+//         and the function returns false.
+//
+//   Example 3:
+//     Input:  s = "", p = "***"
+//     Output: true
+//     Explanation:
+//       - Because s.size() == 0, the main while (si < s.size()) loop is skipped
+//         with si = 0 and pi = 0.
+//       - The trailing wildcard loop advances pi past all three '*' characters in
+//         p[0..2] until pi = 3.
+//       - Since pi == 3 == p.size(), the function returns true.
+//
 // Algorithm:
 //   Greedy two-pointer scan with single-checkpoint backtracking (the classic
 //   O(1)-space algorithm).

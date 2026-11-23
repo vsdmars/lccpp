@@ -8,6 +8,40 @@
 //   stone that has not yet been removed. Return the maximum number of stones
 //   that can be removed.
 //
+// Examples:
+//   Example 1:
+//     Input:  stones = [[0, 0], [0, 1], [1, 0], [1, 2], [2, 1], [2, 2]]
+//     Output: 5
+//     Explanation:
+//       - Encode each row r as node r and each column c as -(c + 1) inside
+//         SparseDisjointSet.
+//       - Stone [0, 0] registers and unites 0 with -1 (components_ = 1), [0, 1]
+//         merges -2 into that component, and [1, 0] merges row 1 with -1.
+//       - Stone [1, 2] merges -3 with 1, [2, 1] merges row 2 with -2, and [2, 2]
+//         sees 2 and -3 already share a root, leaving dsu.components() = 1.
+//       - Return stones.size() - dsu.components() = 6 - 1 = 5 removable stones.
+//
+//   Example 2:
+//     Input:  stones = [[0, 0], [0, 2], [1, 1], [2, 0], [2, 2]]
+//     Output: 3
+//     Explanation:
+//       - Stones [0, 0] and [0, 2] register and unite nodes {0, -1, -3} into one
+//         component (components_ = 1).
+//       - Stone [1, 1] registers and unites row 1 with column -2 as a second
+//         disjoint component (components_ = 2).
+//       - Stone [2, 0] unites row 2 with -1 and [2, 2] finds 2 and -3 already
+//         connected, keeping dsu.components() = 2 and returning 5 - 2 = 3.
+//
+//   Example 3:
+//     Input:  stones = [[0, 0], [1, 1], [2, 2]]
+//     Output: 0
+//     Explanation:
+//       - Each stone introduces a fresh row-column pair: unite(0, -1), unite(1,
+//         -2), and unite(2, -3).
+//       - Because no row or column node repeats across stones, dsu.components()
+//         reaches 3.
+//       - Return stones.size() - dsu.components() = 3 - 3 = 0 removable stones.
+//
 // Algorithm:
 //   1. Model the grid as a bipartite graph between row nodes and column nodes.
 //      Encode each row `r` as non-negative integer `r` and each column `c` as

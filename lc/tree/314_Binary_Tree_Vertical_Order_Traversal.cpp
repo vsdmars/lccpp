@@ -7,6 +7,41 @@
 //   top to bottom within each column. If two nodes occupy the exact same row
 //   and column, they must appear from left to right.
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 9, 20, null, null, 15, 7]
+//     Output: [[9], [3, 15], [20], [7]]
+//     Explanation:
+//       - Enqueue (3, col=0), then dequeue 3 into columns[0] = [3] and enqueue (9,
+//         -1) and (20, 1).
+//       - Dequeue (9, -1) into columns[-1] = [9] (min_col = -1) and (20, 1) into
+//         columns[1] = [20] (max_col = 1), enqueueing (15, 0) and (7, 2).
+//       - Dequeue (15, 0) into columns[0] = [3, 15] and (7, 2) into columns[2] =
+//         [7] (max_col = 2).
+//       - Collect buckets for col from -1 to 2 to produce [[9], [3, 15], [20],
+//         [7]].
+//
+//   Example 2:
+//     Input:  root = [3, 9, 8, 4, 0, 1, 7, null, null, null, 2, 5]
+//     Output: [[4], [9, 5], [3, 0, 1], [8, 2], [7]]
+//     Explanation:
+//       - BFS visits row 0 and row 1 left-to-right, filling columns[0] = [3],
+//         columns[-1] = [9], and columns[1] = [8].
+//       - Row 2 dequeues (4, -2), (0, 0), (1, 0), and (7, 2), appending 0 before 1
+//         in columns[0] = [3, 0, 1] and enqueueing (2, 1) from 0 and (5, -1) from
+//         1.
+//       - Row 3 dequeues (2, 1) into columns[1] = [8, 2] and (5, -1) into
+//         columns[-1] = [9, 5].
+//       - Sweep columns -2 through 2 to return [[4], [9, 5], [3, 0, 1], [8, 2],
+//         [7]].
+//
+//   Example 3:
+//     Input:  root = []
+//     Output: []
+//     Explanation:
+//       - Check root == nullptr before allocating BFS state or column buckets.
+//       - Return an empty 2D vector {} immediately.
+//
 // Algorithm:
 //   Perform a Breadth-First Search (level-order traversal) tagging each node
 //   with its horizontal column index:

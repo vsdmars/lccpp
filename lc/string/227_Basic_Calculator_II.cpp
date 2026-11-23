@@ -8,6 +8,46 @@
 //   must truncate toward zero, and built-in expression evaluators are
 //   disallowed.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "3+2*2"
+//     Output: 7
+//     Explanation:
+//       - Initialize terms = [], current = 0, and pending_op = '+'.
+//       - Parse '3' into current = 3, then at '+' apply pending_op = '+' to push 3
+//         (terms = [3]) and update pending_op = '+'.
+//       - Parse '2' into current = 2, then at '*' apply pending_op = '+' to push 2
+//         (terms = [3, 2]) and update pending_op = '*'.
+//       - Parse '2' into current = 2, then at the virtual trailing '+' sentinel
+//         apply pending_op = '*' to update terms.back() in place (terms = [3, 4]).
+//       - Sum the elements of terms (3 + 4) and return 7.
+//
+//   Example 2:
+//     Input:  s = " 3+5 / 2 "
+//     Output: 5
+//     Explanation:
+//       - Skip the leading space, parse '3' into current = 3, and at '+' push 3
+//         onto terms ([3]) with pending_op = '+'.
+//       - Parse '5' into current = 5, skip the space before '/', and at '/' push 5
+//         onto terms ([3, 5]) with pending_op = '/'.
+//       - Skip the space before '2', parse '2' into current = 2, and at the virtual
+//         trailing '+' sentinel apply pending_op = '/' to compute 5 / 2 = 2 (terms
+//         = [3, 2]).
+//       - Sum the contracted terms (3 + 2) and return 5.
+//
+//   Example 3:
+//     Input:  s = "14-3/2"
+//     Output: 13
+//     Explanation:
+//       - Parse digits '1' and '4' into current = 14, then at '-' apply pending_op
+//         = '+' to push 14 (terms = [14]) and set pending_op = '-'.
+//       - Parse '3' into current = 3, then at '/' apply pending_op = '-' to push -3
+//         (terms = [14, -3]) and set pending_op = '/'.
+//       - Parse '2' into current = 2, then at the virtual trailing '+' sentinel
+//         divide terms.back() by 2 using C++ signed division (-3 / 2 = -1,
+//         truncating toward zero) so terms = [14, -1].
+//       - Sum terms (14 + -1) and return 13.
+//
 // Algorithm:
 //   Operator precedence requires evaluating `*` and `/` before `+` and `-`.
 //   We scan `s` left to right while accumulating the current multi-digit

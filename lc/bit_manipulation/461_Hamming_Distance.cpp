@@ -6,6 +6,39 @@
 //   calculate their Hamming distance — the number of bit positions at which
 //   their binary representations differ.
 //
+// Examples:
+//   Example 1:
+//     Input:  x = 1, y = 4
+//     Output: 2
+//     Explanation:
+//       - Cast x = 1 (0001_2) and y = 4 (0100_2) to std::uint32_t and compute diff
+//         = 1U ^ 4U = 5U (0101_2).
+//       - The two 1-bits in diff at positions 0 and 2 mark the exact bit positions
+//         where x and y differ.
+//       - std::popcount(5U) counts those two set bits and returns 2 (matching
+//         hammingDistanceKernighan clearing 5 -> 4 -> 0 in two steps).
+//
+//   Example 2:
+//     Input:  x = 4, y = 9
+//     Output: 3
+//     Explanation:
+//       - Cast x = 4 (0100_2) and y = 9 (1001_2) to std::uint32_t and compute diff
+//         = 4U ^ 9U = 13U (1101_2).
+//       - Bits 0, 2, and 3 are set in diff, indicating three differing positions
+//         between 4 and 9.
+//       - std::popcount(13U) returns 3 (matching hammingDistanceKernighan stripping
+//         bits via 13 -> 12 -> 8 -> 0).
+//
+//   Example 3:
+//     Input:  x = 12345, y = 12345
+//     Output: 0
+//     Explanation:
+//       - Compute diff = static_cast<std::uint32_t>(12345) ^
+//         static_cast<std::uint32_t>(12345) = 0U.
+//       - Since every bit position agrees, diff contains no set bits.
+//       - std::popcount(0U) returns 0 directly (and hammingDistanceKernighan skips
+//         its while loop and returns 0).
+//
 // Algorithm:
 //   Primary (`std::popcount`): compute `diff = x ^ y` in `std::uint32_t`,
 //   whose set bits correspond 1-to-1 with bit positions where `x` and `y`

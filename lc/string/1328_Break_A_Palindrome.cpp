@@ -8,6 +8,36 @@
 //   and is lexicographically smallest among all valid results. Return "" if
 //   no single-character replacement can break the palindrome.
 //
+// Examples:
+//   Example 1:
+//     Input:  palindrome = "abccba"
+//     Output: "aaccba"
+//     Explanation:
+//       - Since n = 6 > 1, copy the input into result = "abccba" and compute half =
+//         6 / 2 = 3.
+//       - Check i = 0 (result[0] == 'a'), then at i = 1 find result[1] == 'b' !=
+//         'a'.
+//       - Replace result[1] with 'a' and immediately return "aaccba".
+//
+//   Example 2:
+//     Input:  palindrome = "aabaa"
+//     Output: "aabab"
+//     Explanation:
+//       - Since n = 5 > 1, copy the input into result = "aabaa" and set half = 5 /
+//         2 = 2.
+//       - Scan indices 0 and 1 (skipping center index 2 whose 'b' cannot break
+//         symmetry); both result[0] and result[1] equal 'a'.
+//       - With no non-'a' found in [0, 2), apply the fallback by changing
+//         result.back() at index 4 to 'b' and return "aabab".
+//
+//   Example 3:
+//     Input:  palindrome = "a"
+//     Output: ""
+//     Explanation:
+//       - Check n = palindrome.size() = 1 <= 1.
+//       - Return "" immediately because any replacement in a length-1 string
+//         remains a palindrome.
+//
 // Algorithm:
 //   1. If `palindrome.size() <= 1`, any single-character string remains a
 //      palindrome after replacement, so return "".

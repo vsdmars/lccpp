@@ -6,6 +6,42 @@
 //   with the integers `1` through `n^2` in clockwise spiral order starting at
 //   the top-left cell `(0, 0)`.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 3
+//     Output: [[1, 2, 3], [8, 9, 4], [7, 6, 5]]
+//     Explanation:
+//       - Create a 3 x 3 matrix filled with 0 and start at (0, 0) with direction
+//         (dr, dc) = (0, 1).
+//       - Write 1, 2, 3 across row 0, then hit next_c = 3 out of bounds at (0, 2)
+//         and rotate (0, 1) to (1, 0) to write 4, 5 down column 2.
+//       - At (2, 2) rotate (1, 0) to (0, -1) to write 6, 7 across row 2, then at
+//         (2, 0) rotate to (-1, 0) to write 8 at (1, 0).
+//       - From (1, 0), probing (0, 0) sees non-zero entry 1, rotating direction to
+//         (0, 1) and stepping to (1, 1) to write the final value 9.
+//
+//   Example 2:
+//     Input:  n = 4
+//     Output: [[1, 2, 3, 4], [12, 13, 14, 5], [11, 16, 15, 6], [10, 9, 8, 7]]
+//     Explanation:
+//       - Initialize a 4 x 4 zero matrix and walk clockwise from (0, 0) with
+//         initial direction (0, 1).
+//       - The outer ring fills 1..4 along row 0, turns down at (0, 3) for 5..7,
+//         turns left at (3, 3) for 8..10, and turns up at (3, 0) for 11, 12.
+//       - At (1, 0), the probe (0, 0) is already non-zero, rotating direction to
+//         (0, 1) to fill the inner 2 x 2 ring: 13 at (1, 1), 14 at (1, 2), 15 at
+//         (2, 2), and 16 at (2, 1).
+//
+//   Example 3:
+//     Input:  n = 1
+//     Output: [[1]]
+//     Explanation:
+//       - Allocate a 1 x 1 matrix initialized to [[0]] with (row, col) = (0, 0),
+//         (dr, dc) = (0, 1), and total = 1.
+//       - On the single loop step val = 1, write 1 to result[0][0], probe (0, 1)
+//         out of bounds to rotate direction to (1, 0), and advance out of the loop
+//         returning [[1]].
+//
 // Algorithm:
 //   Initialize an `n x n` matrix with `0` (serving as an unvisited sentinel)
 //   and simulate a clockwise walk starting at `(0, 0)` with direction vector

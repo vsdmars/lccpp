@@ -8,6 +8,35 @@
 //   Constraints: 1 <= n <= 10^5, -10^9 <= nums[i] <= 10^9, and the answer is
 //   guaranteed to fit in a 32-bit signed integer.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3]
+//     Output: 3
+//     Explanation:
+//       - Confirm nums.size() = 3 > 1 and find the global minimum min_val = 1 using
+//         std::ranges::min.
+//       - Accumulate (num - min_val) across all elements in 64-bit arithmetic: (1 -
+//         1) + (2 - 1) + (3 - 1) = 0 + 1 + 2 = 3.
+//       - Return total_moves = 3.
+//
+//   Example 2:
+//     Input:  nums = [-100, 0, 100]
+//     Output: 300
+//     Explanation:
+//       - Confirm nums.size() = 3 > 1 and identify min_val = -100.
+//       - Accumulate offsets above -100: (-100 - (-100)) + (0 - (-100)) + (100 -
+//         (-100)) = 0 + 100 + 200 = 300.
+//       - Return total_moves = 300.
+//
+//   Example 3:
+//     Input:  nums = [42]
+//     Output: 0
+//     Explanation:
+//       - Check the early-return guard nums.size() <= 1uz on the single-element
+//         input [42].
+//       - Because size is 1, return 0 immediately since the array is already
+//         equalized.
+//
 // Algorithm:
 //   Incrementing n - 1 elements by 1 changes relative differences identically
 //   to decrementing the single remaining element by 1. Under this equivalent

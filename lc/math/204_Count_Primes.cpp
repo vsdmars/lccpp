@@ -5,6 +5,38 @@
 //   Given an integer `n` (0 <= n <= 5 * 10^6), return the number of prime
 //   numbers that are strictly less than `n`.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 10
+//     Output: 4
+//     Explanation:
+//       - Allocate is_prime of size 10 initialized to 1, and set is_prime[0] = 0
+//         and is_prime[1] = 0.
+//       - At p = 2 (2 * 2 = 4 < 10), is_prime[2] == 1, so cross off multiples 4, 6,
+//         and 8 by setting them to 0.
+//       - At p = 3 (3 * 3 = 9 < 10), is_prime[3] == 1, so set is_prime[9] = 0; the
+//         outer loop terminates before p = 4 since 4 * 4 = 16 >= 10.
+//       - Count remaining 1 entries in is_prime (at indices 2, 3, 5, and 7) via
+//         std::ranges::count and return 4.
+//
+//   Example 2:
+//     Input:  n = 2
+//     Output: 0
+//     Explanation:
+//       - Because n <= 2, the initial guard if (n <= 2) returns 0 immediately
+//         without allocating the sieve array.
+//       - No prime numbers exist strictly less than 2.
+//
+//   Example 3:
+//     Input:  n = 4
+//     Output: 2
+//     Explanation:
+//       - Allocate is_prime of size 4 initialized to 1 and mark is_prime[0] = 0 and
+//         is_prime[1] = 0.
+//       - Skip the sieving loop because at p = 2, p * p = 4 is not strictly less
+//         than limit = 4.
+//       - Count remaining 1 entries in is_prime (indices 2 and 3) and return 2.
+//
 // Algorithm:
 //   Sieve of Eratosthenes.
 //   Maintain a byte array `is_prime[0..n-1]` initialized to 1 (candidate prime)

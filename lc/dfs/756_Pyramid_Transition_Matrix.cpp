@@ -11,6 +11,46 @@
 //   Constraints: 2 <= bottom.size() <= 6, 0 <= allowed.size() <= 216,
 //   allowed[i].size() == 3.
 //
+// Examples:
+//   Example 1:
+//     Input:  bottom = "XYZ", allowed = ["XYD", "YZE", "DEA", "FFF"]
+//     Output: true
+//     Explanation:
+//       - pyramidTransition builds transitions with ('X','Y') -> "D", ('Y','Z') ->
+//         "E", ('D','E') -> "A", and ('F','F') -> "F".
+//       - can_build_pyramid("XYZ") runs build_next_row across pos = 0 ("XY" -> 'D')
+//         and pos = 1 ("YZ" -> 'E'), producing next_row = "DE".
+//       - can_build_pyramid("DE") maps ('D','E') -> 'A' to form next_row = "A".
+//       - can_build_pyramid("A") reaches the base case row.size() == 1uz and
+//         unwinds true.
+//
+//   Example 2:
+//     Input:  bottom = "XXYX", allowed = ["XXX", "XXY", "XYX", "XYY", "YXZ"]
+//     Output: false
+//     Explanation:
+//       - pyramidTransition populates transitions with ('X','X') -> "XY", ('X','Y')
+//         -> "XY", and ('Y','X') -> "Z".
+//       - From "XXYX", build_next_row combines pairs ("XX", "XY", "YX") to test
+//         every candidate next row: "XXZ", "XYZ", "YXZ", and "YYZ".
+//       - Each candidate ends in "XZ" or "YZ", which has no entry in transitions,
+//         so each 3-letter row fails and is memoized in failed_rows.
+//       - After all branches return false, "XXYX" is inserted into failed_rows and
+//         pyramidTransition returns false.
+//
+//   Example 3:
+//     Input:  bottom = "ABC", allowed = ["ABD", "ABE", "BCF", "EFG"]
+//     Output: true
+//     Explanation:
+//       - pyramidTransition maps ('A','B') -> "DE", ('B','C') -> "F", and ('E','F')
+//         -> "G".
+//       - Starting from "ABC", build_next_row first picks 'D' for "AB" and 'F' for
+//         "BC", calling can_build_pyramid("DF") which finds no transition for
+//         ('D','F') and records "DF" in failed_rows.
+//       - Backtracking at pos = 0 pops 'D', selects 'E' for "AB", and pairs it with
+//         'F' from "BC" to build next_row = "EF".
+//       - can_build_pyramid("EF") maps ('E','F') -> 'G' to reach apex "G" (size 1)
+//         and returns true.
+//
 // Algorithm:
 //   Preprocess `allowed` into a 2D transition lookup table `transitions[a][b]`
 //   storing all valid top characters `c` that can sit on `(a, b)`.

@@ -8,6 +8,39 @@
 //   minimized maximum pair sum.
 //   Constraints: n is even, 2 <= n <= 10^5, 1 <= nums[i] <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [3, 5, 2, 3]
+//     Output: 7
+//     Explanation:
+//       - Sort nums ascending to [2, 3, 3, 5] with n = 4 and half = 2.
+//       - At i = 0, pair nums[0] = 2 with nums[3] = 5 for pair_sum = 7 and update
+//         max_pair_sum = 7.
+//       - At i = 1, pair nums[1] = 3 with nums[2] = 3 for pair_sum = 6, keeping
+//         max_pair_sum = max(7, 6) = 7.
+//       - Return max_pair_sum = 7.
+//
+//   Example 2:
+//     Input:  nums = [3, 5, 4, 2, 4, 6]
+//     Output: 8
+//     Explanation:
+//       - Sort nums ascending to [2, 3, 4, 4, 5, 6] with n = 6 and half = 3.
+//       - At i = 0, pair (nums[0], nums[5]) = (2, 6) gives pair_sum = 8 and
+//         max_pair_sum = 8.
+//       - At i = 1 and i = 2, pairs (3, 5) and (4, 4) both give pair_sum = 8,
+//         leaving max_pair_sum = 8.
+//       - Return 8.
+//
+//   Example 3:
+//     Input:  nums = [1, 1, 1, 100, 100, 100]
+//     Output: 101
+//     Explanation:
+//       - Sorting leaves [1, 1, 1, 100, 100, 100] unchanged with n = 6 and half =
+//         3.
+//       - For i = 0, 1, and 2, each nums[i] = 1 pairs with mirror element nums[5 -
+//         i] = 100 for pair_sum = 101.
+//       - Return max_pair_sum = 101, avoiding pairing two 100s together.
+//
 // Algorithm:
 //   Sort `nums` in non-decreasing order and pair the i-th smallest element with
 //   the i-th largest element: `(nums[i], nums[n - 1 - i])` for `0 <= i < n / 2`.

@@ -9,6 +9,48 @@
 //     3) any index j != i such that arr[i] == arr[j].
 //   Return the minimum number of steps required to reach the last index n - 1.
 //
+// Examples:
+//   Example 1:
+//     Input:  arr = [100, -23, -23, 404, 100, 23, 23, 23, 3, 404]
+//     Output: 3
+//     Explanation:
+//       - minJumps groups indices by value (100 -> [0, 4], -23 -> [1, 2], 404 ->
+//         [3, 9], 23 -> [5, 6, 7], 3 -> [8]), sets visited[0] = 1, and enqueues (0,
+//         0) with last_idx = 9.
+//       - Popping (0, 0) (next_steps = 1) enqueues right neighbor (1, 1), uses
+//         value_indices[100] to enqueue (4, 1), and erases key 100 from
+//         value_indices.
+//       - Popping (1, 1) (next_steps = 2) enqueues right neighbor (2, 2) and erases
+//         key -23; popping (4, 1) enqueues left neighbor (3, 2) and right neighbor
+//         (5, 2) while skipping already-erased key 100.
+//       - Popping (2, 2) yields no unvisited neighbors, and then popping (3, 2)
+//         (next_steps = 3) expands value_indices[404] to hit index 9 == last_idx,
+//         immediately returning 3.
+//
+//   Example 2:
+//     Input:  arr = [11, 22, 7, 7, 7, 6, 7, 7, 7, 22, 7, 7, 7, 7, 13]
+//     Output: 4
+//     Explanation:
+//       - minJumps maps 22 -> [1, 9] and 7 -> [2..4, 6..8, 10..13] with last_idx =
+//         14, then starts BFS by enqueuing (0, 0).
+//       - Popping (0, 0) enqueues right neighbor (1, 1); popping (1, 1) enqueues
+//         right neighbor (2, 2) and value-group neighbor (9, 2), then erases key
+//         22.
+//       - Popping (2, 2) (next_steps = 3) expands value_indices[7] to enqueue all
+//         remaining indices holding 7—including (13, 3)—and erases key 7 so later
+//         pops never rescan that group.
+//       - After earlier queued indices at steps 2 and 3 finish without reaching 14,
+//         popping (13, 3) steps right to 13 + 1 = 14 == last_idx and immediately
+//         returns 4.
+//
+//   Example 3:
+//     Input:  arr = [7]
+//     Output: 0
+//     Explanation:
+//       - minJumps computes n = arr.size() = 1.
+//       - The early-exit check if (n <= 1uz) triggers and returns 0 because index 0
+//         is already the last index.
+//
 // Algorithm:
 //   Unweighted shortest-path BFS with value-group pruning:
 //   - Group all indices sharing the same value into an adjacency hash map:

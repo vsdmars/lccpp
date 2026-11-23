@@ -8,6 +8,43 @@
 //   (top, bottom, left, right) by `1`s—meaning none of its cells touch the
 //   outer boundary of the grid. Return the total number of closed islands.
 //
+// Examples:
+//   Example 1:
+//     Input:  grid = [[1, 1, 1, 1, 1, 1, 1, 0], [1, 0, 0, 0, 0, 1, 1, 0], [1, 0, 1,
+//             0, 1, 1, 1, 0], [1, 0, 0, 0, 0, 1, 0, 1], [1, 1, 1, 1, 1, 1, 1, 0]]
+//     Output: 2
+//     Explanation:
+//       - Since rows = 5 >= 3 and cols = 8 >= 3, Phase 1 runs flood_fill from the
+//         border cells and sinks the border-touching 0s at (0, 7), (1, 7), (2, 7),
+//         and (4, 7) to 1.
+//       - Phase 2 scans interior cells [1..3] x [1..6] and encounters 0 at (1, 1),
+//         incrementing count to 1 and sinking its entire 4-connected component
+//         spanning rows 1..3 and cols 1..4 (including (2, 3)) to 1.
+//       - Continuing the interior scan finds the remaining 0 at (3, 6),
+//         incrementing count to 2 and sinking (3, 6) to 1.
+//       - All remaining interior cells are 1, so closedIsland returns 2.
+//
+//   Example 2:
+//     Input:  grid = [[0, 0, 1, 0, 0], [0, 1, 0, 1, 0], [0, 1, 1, 1, 0]]
+//     Output: 1
+//     Explanation:
+//       - Phase 1 flood-fills from all border cells, sinking the left border land
+//         {(0, 0), (0, 1), (1, 0), (2, 0)} and right border land {(0, 3), (0, 4),
+//         (1, 4), (2, 4)} from 0 to 1.
+//       - Phase 2 scans the single interior row r = 1 across columns 1..3, skipping
+//         1s at (1, 1) and (1, 3).
+//       - At (1, 2) == 0, count increments to 1 and flood_fill flips (1, 2) to 1,
+//         returning 1.
+//
+//   Example 3:
+//     Input:  grid = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+//     Output: 0
+//     Explanation:
+//       - Phase 1 starts flood_fill from border cell (0, 0) == 0 and sinks the
+//         entire 4-connected 3x3 component (including center cell (1, 1)) to 1.
+//       - Phase 2 checks interior cell (1, 1), finds it is already 1, and returns
+//         0.
+//
 // Algorithm:
 //   Use a two-phase flood-fill DFS (mutating visited land cells from `0` to
 //   `1` in place so no separate visited matrix is required):

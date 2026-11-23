@@ -9,6 +9,34 @@
 //   Characters of `s` that do not appear in `order` may be placed anywhere.
 //   Constraints: `1 <= order.length <= 26`, `1 <= s.length <= 200`.
 //
+// Examples:
+//   Example 1:
+//     Input:  order = "cba", s = "abcd"
+//     Output: "cbad"
+//     Explanation:
+//       - Build the rank table from order = "cba": rank['c'] = 0, rank['b'] = 1,
+//         rank['a'] = 2, and unranked 'd' defaults to 26.
+//       - Sort s = "abcd" by ascending rank to obtain "cbad" (or in counting sort,
+//         emit 'c', 'b', 'a' in order followed by remaining 'd').
+//
+//   Example 2:
+//     Input:  order = "kqep", s = "pekeq"
+//     Output: "kqeep"
+//     Explanation:
+//       - Count frequencies in s = "pekeq": 'p': 1, 'e': 2, 'k': 1, 'q': 1 (or
+//         assign ranks k:0, q:1, e:2, p:3).
+//       - Emit characters following order = "kqep": one 'k', one 'q', two 'e's, and
+//         one 'p', yielding "kqeep" with no unranked characters left over.
+//
+//   Example 3:
+//     Input:  order = "abcdefgh", s = "ha"
+//     Output: "ah"
+//     Explanation:
+//       - Assign ranks 'a' -> 0 through 'h' -> 7 (or count 'a': 1, 'h': 1 in s =
+//         "ha").
+//       - Place 'a' before 'h' since rank['a'] (0) < rank['h'] (7) (counting sort
+//         skips absent 'b'..'g' with count 0), producing "ah".
+//
 // Algorithm:
 //   1. Custom Comparator Rank Sort (`customSortString`):
 //      Assign every character in `order` its integer position `0 .. |order|-1`

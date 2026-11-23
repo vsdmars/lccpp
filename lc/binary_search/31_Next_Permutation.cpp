@@ -8,6 +8,41 @@
 //   rearrange `nums` into the lowest possible order (sorted ascending). The
 //   transformation must use only O(1) extra memory.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [1, 2, 3]
+//     Output: [1, 3, 2]
+//     Explanation:
+//       - Scan right-to-left: nums[1] = 2 < nums[2] = 3 stops the scan at
+//         suffix_start = 2, setting pivot = 1 (value 2).
+//       - Reverse the single-element suffix [3] in-place, leaving nums = [1, 2, 3].
+//       - Binary-search the suffix [3] with upper_bound for a value strictly
+//         greater than 2, locating 3 at index 2.
+//       - Swap nums[1] (2) and nums[2] (3) to produce [1, 3, 2].
+//
+//   Example 2:
+//     Input:  nums = [5, 4, 7, 5, 3, 2]
+//     Output: [5, 5, 2, 3, 4, 7]
+//     Explanation:
+//       - Walk backward past the non-increasing suffix [7, 5, 3, 2] until nums[1] =
+//         4 < nums[2] = 7, setting suffix_start = 2 and pivot = 1.
+//       - Reverse nums[2..5] ([7, 5, 3, 2]) in-place into ascending order [2, 3, 5,
+//         7], giving [5, 4, 2, 3, 5, 7].
+//       - Run std::ranges::upper_bound on [2, 3, 5, 7] for nums[1] = 4, which finds
+//         5 at index 4.
+//       - Swap nums[1] (4) with nums[4] (5), yielding [5, 5, 2, 3, 4, 7].
+//
+//   Example 3:
+//     Input:  nums = [3, 2, 1]
+//     Output: [1, 2, 3]
+//     Explanation:
+//       - Scan backward from index 2: 2 >= 1 and 3 >= 2 hold across the whole
+//         array, so suffix_start reaches 0.
+//       - Reverse the entire array starting at suffix_start = 0, turning [3, 2, 1]
+//         into [1, 2, 3].
+//       - Because suffix_start == 0, no pivot exists and the function returns
+//         immediately with [1, 2, 3].
+//
 // Algorithm:
 //   Scan from right to left to find the rightmost "pivot" index `pivot` such
 //   that `nums[pivot] < nums[pivot + 1]`. Every element strictly to the right

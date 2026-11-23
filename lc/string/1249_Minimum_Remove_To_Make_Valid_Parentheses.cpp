@@ -7,6 +7,40 @@
 //   positions so that the resulting string has properly balanced parentheses,
 //   and return any such valid string.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "lee(t(c)o)de)"
+//     Output: "lee(t(c)o)de"
+//     Explanation:
+//       - In Pass 1, push '(' indices 3 and 5 onto open_indices = [3, 5] while
+//         skipping letters.
+//       - Pop 5 when ')' is seen at index 7, and pop 3 when ')' is seen at index 9,
+//         leaving open_indices empty.
+//       - At index 12 (')'), open_indices is empty, so set remove_mask[12] = 1 to
+//         mark that unmatched closing parenthesis.
+//       - In Pass 2, omit index 12 and append all remaining characters to return
+//         "lee(t(c)o)de".
+//
+//   Example 2:
+//     Input:  s = "(a(b(c)d)"
+//     Output: "a(b(c)d)"
+//     Explanation:
+//       - In Pass 1, push '(' at indices 0, 2, and 4 onto open_indices = [0, 2, 4].
+//       - Pop 4 at index 6 (')') and pop 2 at index 8 (')'), leaving unmatched open
+//         index 0 on open_indices.
+//       - Drain open_indices after the scan and set remove_mask[0] = 1.
+//       - In Pass 2, skip index 0 and copy indices 1..8 to produce "a(b(c)d)".
+//
+//   Example 3:
+//     Input:  s = "))(("
+//     Output: ""
+//     Explanation:
+//       - At indices 0 and 1 (')'), open_indices is empty, so set remove_mask[0] =
+//         1 and remove_mask[1] = 1.
+//       - At indices 2 and 3 ('('), push both positions onto open_indices = [2, 3].
+//       - After Pass 1, mark remaining open_indices entries 2 and 3 in remove_mask
+//         as 1, so Pass 2 skips every index and returns "".
+//
 // Algorithm:
 //   Scan `s` from left to right while maintaining a stack of indices of
 //   currently unmatched '(' characters and a boolean removal mask initialized

@@ -10,6 +10,45 @@
 //   sub-folder of `parent` iff `p` starts with `parent` followed immediately by
 //   '/' (so "/a/b/ca" is not a sub-folder of "/a/b/c").
 //
+// Examples:
+//   Example 1:
+//     Input:  folder = ["/a", "/a/b", "/c/d", "/c/d/e", "/c/f"]
+//     Output: ["/a", "/c/d", "/c/f"]
+//     Explanation:
+//       - Sorting folder lexicographically produces ["/a", "/a/b", "/c/d",
+//         "/c/d/e", "/c/f"] so each parent precedes its sub-folders.
+//       - "/a" is added to result, and "/a/b" is skipped because
+//         is_subfolder("/a/b", "/a") verifies it starts with "/a" and has '/' at
+//         index 2.
+//       - "/c/d" does not start with "/a" so it becomes result.back(), after which
+//         "/c/d/e" is skipped due to matching prefix "/c/d" and '/' at index 4.
+//       - "/c/f" does not start with "/c/d" and is appended to result, yielding
+//         ["/a", "/c/d", "/c/f"] (matching removeSubfoldersTrie, which stops DFS at
+//         marked nodes "a", "d", and "f").
+//
+//   Example 2:
+//     Input:  folder = ["/a/b/c", "/a/b/ca", "/a/b/d"]
+//     Output: ["/a/b/c", "/a/b/ca", "/a/b/d"]
+//     Explanation:
+//       - Lexicographical sorting keeps ["/a/b/c", "/a/b/ca", "/a/b/d"] and pushes
+//         "/a/b/c" into result.
+//       - For "/a/b/ca", starts_with("/a/b/c") is true but path[6] is 'a' rather
+//         than '/', so is_subfolder returns false and "/a/b/ca" is retained.
+//       - "/a/b/d" does not start with "/a/b/ca" and is also retained, returning
+//         ["/a/b/c", "/a/b/ca", "/a/b/d"].
+//
+//   Example 3:
+//     Input:  folder = ["/a/b/c", "/a/b", "/a", "/x/y/z", "/x/y"]
+//     Output: ["/a", "/x/y"]
+//     Explanation:
+//       - Sorting reorders the input into ["/a", "/a/b", "/a/b/c", "/x/y",
+//         "/x/y/z"].
+//       - "/a" is added to result, causing both "/a/b" and "/a/b/c" to be skipped
+//         by is_subfolder because each has '/' at index 2.
+//       - "/x/y" does not start with "/a" and is appended as the new result.back(),
+//         which then filters out "/x/y/z" since "/x/y/z"[4] == '/'.
+//       - The scan finishes with ["/a", "/x/y"].
+//
 // Algorithm:
 //   Implements two approaches:
 //     1. `removeSubfolders` (Sort + Linear Prefix Scan): Sorts `folder`

@@ -10,6 +10,38 @@
 //   Constraints: 1 <= intervals.size() <= 10^4 (empty input yields 0),
 //   0 <= start_i < end_i <= 10^6.
 //
+// Examples:
+//   Example 1:
+//     Input:  intervals = [[0, 30], [5, 10], [15, 20]]
+//     Output: 2
+//     Explanation:
+//       - Extract and sort start and end times separately: starts = [0, 5, 15],
+//         ends = [10, 20, 30], with rooms = 0 and end_idx = 0.
+//       - At start = 0, 0 < ends[0] (10), so allocate a room (rooms = 1); at start
+//         = 5, 5 < ends[0] (10), so allocate another room (rooms = 2).
+//       - At start = 15, 15 >= ends[0] (10), so advance end_idx to 1 (ends[1] = 20)
+//         to reuse the freed room and return rooms = 2.
+//
+//   Example 2:
+//     Input:  intervals = [[7, 10], [2, 4]]
+//     Output: 1
+//     Explanation:
+//       - Sort starts and ends separately: starts = [2, 7], ends = [4, 10], with
+//         rooms = 0 and end_idx = 0.
+//       - At start = 2, 2 < ends[0] (4), so increment rooms to 1.
+//       - At start = 7, 7 >= ends[0] (4), so advance end_idx to 1 instead of
+//         incrementing rooms, returning 1.
+//
+//   Example 3:
+//     Input:  intervals = [[0, 10], [10, 20], [20, 30]]
+//     Output: 1
+//     Explanation:
+//       - Sort starts = [0, 10, 20] and ends = [10, 20, 30], initializing rooms = 0
+//         and end_idx = 0.
+//       - At start = 0, 0 < ends[0] (10), so increment rooms to 1.
+//       - At start = 10 (10 >= ends[0] = 10) and start = 20 (20 >= ends[1] = 20),
+//         advance end_idx without allocating new rooms, returning 1.
+//
 // Algorithm:
 //   Chronological two-pointer sweep over separately sorted start and end
 //   times. Extract all start times into `starts` and all end times into

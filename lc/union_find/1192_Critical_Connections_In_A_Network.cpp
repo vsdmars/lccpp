@@ -9,6 +9,49 @@
 //   longer reach another. Return all critical connections in any order.
 //   Typical constraints: 2 <= n <= 10^5, n - 1 <= connections.length <= 10^5.
 //
+// Examples:
+//   Example 1:
+//     Input:  n = 4, connections = [[0, 1], [1, 2], [2, 0], [1, 3]]
+//     Output: [[1, 3]]
+//     Explanation:
+//       - Build the undirected adjacency list and start DFS at node 0 (parent -1)
+//         with disc[0] = low[0] = 0, then recurse to 1 (disc[1] = low[1] = 1) and 2
+//         (disc[2] = low[2] = 2).
+//       - From node 2, neighbor 0 is already visited (not parent 1), so the
+//         back-edge updates low[2] = min(2, disc[0]) = 0.
+//       - Returning to 1 from 2 updates low[1] = min(1, low[2]) = 0; since low[2]
+//         <= disc[1] (0 <= 1), edge [1, 2] is not a bridge.
+//       - Node 1 next visits 3 with disc[3] = low[3] = 3; 3 has only parent 1, so
+//         low[3] remains 3 upon return.
+//       - Because low[3] > disc[1] (3 > 1), no path from 3's subtree reaches 1 or
+//         an ancestor, so [1, 3] is recorded as the sole bridge.
+//
+//   Example 2:
+//     Input:  n = 6, connections = [[0, 1], [1, 2], [2, 0], [2, 3], [3, 4], [4, 5],
+//             [5, 3]]
+//     Output: [[2, 3]]
+//     Explanation:
+//       - DFS traverses 0 -> 1 -> 2 assigning disc = 0, 1, 2; back-edge (2, 0) sets
+//         low[2] = 0, keeping all edges in triangle {0, 1, 2} out of bridges.
+//       - From node 2, DFS explores 3 -> 4 -> 5 with disc = 3, 4, 5, and back-edge
+//         (5, 3) sets low[5] = min(5, disc[3]) = 3.
+//       - Unwinding 5 -> 4 -> 3 propagates low[4] = 3 and low[3] = 3, so edges [3,
+//         4], [4, 5], and [5, 3] satisfy low[v] <= disc[u] and are not bridges.
+//       - Returning from 3 to 2 checks low[3] > disc[2] (3 > 2), identifying [2, 3]
+//         as the only bridge.
+//
+//   Example 3:
+//     Input:  n = 4, connections = [[0, 1], [1, 2], [2, 3], [3, 0]]
+//     Output: []
+//     Explanation:
+//       - DFS visits 0 -> 1 -> 2 -> 3 along tree edges, setting disc and initial
+//         low values to 0, 1, 2, and 3 respectively.
+//       - At node 3, non-parent neighbor 0 is already visited with disc[0] = 0, so
+//         low[3] becomes min(3, 0) = 0.
+//       - Unwinding 3 -> 2 -> 1 -> 0 propagates low = 0 through every vertex; since
+//         low[v] <= disc[u] for every tree edge, no bridges are found and [] is
+//         returned.
+//
 // Algorithm:
 //   Tarjan's Bridge-Finding Algorithm (Single-Pass DFS):
 //   1. Build an undirected adjacency list `graph` from `connections`.

@@ -9,6 +9,41 @@
 //   Equivalently, determine whether the directed dependency graph is a DAG
 //   (contains no directed cycles).
 //
+// Examples:
+//   Example 1:
+//     Input:  numCourses = 2, prerequisites = [[1, 0]]
+//     Output: true
+//     Explanation:
+//       - Build directed dependency list adj = [[], [0]] (edge 1 -> 0) and
+//         initialize state = [kUnvisited, kUnvisited].
+//       - Run dfs(0): mark state[0] = kVisiting, find no prerequisites, mark
+//         state[0] = kVisited, and return true.
+//       - Run dfs(1): mark state[1] = kVisiting, inspect neighbor 0 (already
+//         kVisited), mark state[1] = kVisited, and return true.
+//
+//   Example 2:
+//     Input:  numCourses = 2, prerequisites = [[1, 0], [0, 1]]
+//     Output: false
+//     Explanation:
+//       - Build directed edges 0 -> 1 and 1 -> 0 in adj with state = [kUnvisited,
+//         kUnvisited].
+//       - Run dfs(0): set state[0] = kVisiting and recurse into neighbor 1, which
+//         sets state[1] = kVisiting.
+//       - From course 1, visit neighbor 0 and observe state[0] == kVisiting (an
+//         active ancestor on the call stack), detecting a cycle and returning
+//         false.
+//
+//   Example 3:
+//     Input:  numCourses = 4, prerequisites = [[1, 0], [2, 0], [3, 1], [3, 2]]
+//     Output: true
+//     Explanation:
+//       - Build adj = [[], [0], [0], [1, 2]] and run dfs(0), marking state[0] =
+//         kVisited.
+//       - Run dfs(1) and dfs(2): both inspect neighbor 0 (already kVisited) and
+//         become kVisited.
+//       - Run dfs(3): both prerequisites 1 and 2 are kVisited, so state[3] becomes
+//         kVisited and canFinish returns true.
+//
 // Algorithm:
 //   Build a directed adjacency list with edges `course -> prereq` and run a
 //   3-state depth-first search (DFS) over every unvisited vertex:

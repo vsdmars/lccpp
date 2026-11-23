@@ -7,6 +7,40 @@
 //   `nums[i] + nums[j] < k`. If no such pair exists, return `-1`.
 //   Constraints: 1 <= nums.length <= 100, 1 <= nums[i] <= 1000, 1 <= k <= 2000.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [34, 23, 1, 24, 75, 33, 54, 8], k = 60
+//     Output: 58
+//     Explanation:
+//       - std::ranges::sort orders nums into [1, 8, 23, 24, 33, 34, 54, 75], with
+//         left = 0, right = 7, and best = -1.
+//       - At left = 0, right = 7: 1 + 75 = 76 >= 60 decrements right to 6; then 1 +
+//         54 = 55 < 60 updates best = 55 and increments left to 1.
+//       - At left = 1, right = 6: 8 + 54 = 62 >= 60 decrements right to 5; then
+//         left advances through 8 + 34 = 42, 23 + 34 = 57 (best = 57), and 24 + 34
+//         = 58 (best = 58) up to left = 4.
+//       - At left = 4, right = 5: 33 + 34 = 67 >= 60 decrements right to 4, ending
+//         the left < right loop and returning 58.
+//
+//   Example 2:
+//     Input:  nums = [10, 20, 30], k = 15
+//     Output: -1
+//     Explanation:
+//       - nums is already sorted as [10, 20, 30] with left = 0, right = 2, and best
+//         = -1.
+//       - 10 + 30 = 40 >= 15 decrements right to 1, and then 10 + 20 = 30 >= 15
+//         decrements right to 0.
+//       - With left == right == 0, the loop terminates and returns -1.
+//
+//   Example 3:
+//     Input:  nums = [10, 20], k = 30
+//     Output: -1
+//     Explanation:
+//       - Sorted input [10, 20] starts with left = 0, right = 1, and best = -1.
+//       - sum = 10 + 20 = 30 fails the strict inequality sum < k (30 < 30 is
+//         false), so best remains -1 and right decrements to 0.
+//       - The loop exits because left < right is false, returning -1.
+//
 // Algorithm:
 //   Sort + converging two pointers:
 //   1. If `nums.size() < 2`, no pair exists; return `-1`.

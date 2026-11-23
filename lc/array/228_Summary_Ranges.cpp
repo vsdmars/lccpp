@@ -7,6 +7,45 @@
 //   gaps inside any range and no element covered twice). Format each range
 //   `[a, b]` as `"a->b"` if `a != b`, or `"a"` if `a == b`.
 //
+// Examples:
+//   Example 1:
+//     Input:  nums = [0, 1, 2, 4, 5, 7]
+//     Output: ["0->2", "4->5", "7"]
+//     Explanation:
+//       - Initialize range_start = 0 and range_end = 0 from nums[0].
+//       - At i = 1 (nums[1] = 1 == 0 + 1) and i = 2 (nums[2] = 2 == 1 + 1), extend
+//         range_end to 1 and then 2.
+//       - At i = 3 (nums[3] = 4 != 2 + 1), flush "0->2" to result and reset
+//         range_start = 4 and range_end = 4.
+//       - At i = 4 (nums[4] = 5 == 4 + 1), extend range_end to 5; at i = 5 (nums[5]
+//         = 7 != 5 + 1), flush "4->5" and reset range_start = 7 and range_end = 7.
+//       - After the loop, flush the remaining run [7, 7] as "7" and return ["0->2",
+//         "4->5", "7"].
+//
+//   Example 2:
+//     Input:  nums = [0, 2, 3, 4, 6, 8, 9]
+//     Output: ["0", "2->4", "6", "8->9"]
+//     Explanation:
+//       - Initialize range_start = 0 and range_end = 0; at i = 1 (nums[1] = 2 != 0
+//         + 1), flush "0" and start [2, 2].
+//       - At i = 2 (nums[2] = 3) and i = 3 (nums[3] = 4), extend range_end to 4.
+//       - At i = 4 (nums[4] = 6 != 4 + 1), flush "2->4" and start [6, 6]; at i = 5
+//         (nums[5] = 8 != 6 + 1), flush "6" and start [8, 8].
+//       - At i = 6 (nums[6] = 9 == 8 + 1), extend range_end to 9, then flush "8->9"
+//         after the loop and return ["0", "2->4", "6", "8->9"].
+//
+//   Example 3:
+//     Input:  nums = [-2147483648, -2147483647, 2147483647]
+//     Output: ["-2147483648->-2147483647", "2147483647"]
+//     Explanation:
+//       - Initialize range_start = -2147483648 and range_end = -2147483648.
+//       - At i = 1, nums[1] = -2147483647 equals int64_t(-2147483648) + 1, so
+//         extend range_end to -2147483647.
+//       - At i = 2, nums[2] = 2147483647 differs from int64_t(-2147483647) + 1, so
+//         flush "-2147483648->-2147483647" and start [2147483647, 2147483647].
+//       - After the loop, flush "2147483647" and return
+//         ["-2147483648->-2147483647", "2147483647"].
+//
 // Algorithm:
 //   Single-Pass Contiguous Run Grouping:
 //     Maintain the endpoints `[range_start, range_end]` of the active

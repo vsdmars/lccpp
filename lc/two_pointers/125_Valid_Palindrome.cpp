@@ -7,6 +7,41 @@
 //   characters. An empty string (or one with no alphanumeric characters) is
 //   considered a valid palindrome.
 //
+// Examples:
+//   Example 1:
+//     Input:  s = "A man, a plan, a canal: Panama"
+//     Output: true
+//     Explanation:
+//       - Initialize left = 0 ('A') and right = 29 ('a'); their lowercase forms
+//         both equal 'a', so move inward to left = 1 and right = 28.
+//       - Skip the space at left = 1 to reach 'm' at index 2 and match it with 'm'
+//         at index 28, continuing inward while skipping spaces, commas, and ':'
+//         across matching pairs ('a', 'n', 'a', 'p', 'l', 'a', 'n', 'a', 'c', 'a',
+//         'n').
+//       - The pointers meet at the central 'a' (left = 15, right = 15), exiting the
+//         left < right loop and returning true.
+//
+//   Example 2:
+//     Input:  s = "race a car"
+//     Output: false
+//     Explanation:
+//       - Start with left = 0 and right = 9, matching 'r' (0, 9), 'a' (1, 8), and
+//         'c' (2, 7) as both pointers step inward.
+//       - At left = 3 ('e') and right = 6 (' '), the inner loop skips the space so
+//         right moves to 5 ('a').
+//       - Comparing to_lower(s[3]) ('e') against to_lower(s[5]) ('a') finds a
+//         mismatch and immediately returns false.
+//
+//   Example 3:
+//     Input:  s = "0P"
+//     Output: false
+//     Explanation:
+//       - Initialize left = 0 ('0') and right = 1 ('P'), both of which satisfy
+//         is_alnum.
+//       - Compute to_lower('0') = '0' and to_lower('P') = 'p' using
+//         unsigned-char-safe std::tolower instead of bitmasking.
+//       - Since '0' != 'p', return false immediately.
+//
 // Algorithm:
 //   Converging two pointers (`left` starting at 0, `right` starting at
 //   `s.size() - 1`) without allocating a filtered copy of the string.

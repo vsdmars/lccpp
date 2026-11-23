@@ -9,6 +9,45 @@
 //   Constraints: 1 <= words.size() <= 10^5; words[i].size() == 2; lowercase
 //   English letters `'a'`..`'z'`.
 //
+// Examples:
+//   Example 1:
+//     Input:  words = ["lc", "cl", "gg"]
+//     Output: 6
+//     Explanation:
+//       - Initialize the 26 x 26 counts table to all zeros and palindrome_len to 0.
+//       - At "lc", counts['c' - 'a']['l' - 'a'] is 0, so increment counts['l' -
+//         'a']['c' - 'a'] to 1.
+//       - At "cl", counts['l' - 'a']['c' - 'a'] is 1, so add 4 to palindrome_len
+//         (now 4) and decrement counts['l' - 'a']['c' - 'a'] to 0.
+//       - At "gg", counts['g' - 'a']['g' - 'a'] is 0, so increment counts['g' -
+//         'a']['g' - 'a'] to 1.
+//       - In Phase 2, the diagonal scan finds counts['g' - 'a']['g' - 'a'] == 1,
+//         adds 2 to palindrome_len (now 6), breaks, and returns 6.
+//
+//   Example 2:
+//     Input:  words = ["aa", "aa", "aa", "bb", "bb"]
+//     Output: 10
+//     Explanation:
+//       - Initialize counts to all zeros and palindrome_len to 0.
+//       - The first "aa" sets counts[0][0] to 1, the second "aa" pairs with it
+//         (palindrome_len = 4, counts[0][0] = 0), and the third "aa" leaves
+//         counts[0][0] = 1.
+//       - The first "bb" sets counts[1][1] to 1, and the second "bb" pairs with it
+//         to add 4 (palindrome_len = 8, counts[1][1] = 0).
+//       - In Phase 2, the diagonal scan finds counts[0][0] == 1, adds 2 for a
+//         single center "aa" (palindrome_len = 10), breaks, and returns 10.
+//
+//   Example 3:
+//     Input:  words = ["ab", "cd", "ef"]
+//     Output: 0
+//     Explanation:
+//       - Initialize counts to all zeros and palindrome_len to 0.
+//       - Process "ab", "cd", and "ef" in Phase 1: none has a reverse match in
+//         counts, so counts[0][1], counts[2][3], and counts[4][5] each become 1
+//         while palindrome_len stays 0.
+//       - Scan the diagonal counts[i][i] for 0 <= i < 26: every diagonal entry is
+//         0, so return 0.
+//
 // Algorithm:
 //   Greedy Pairing with a Fixed 26 x 26 Frequency Matrix:
 //   Every two-letter word `(a, b)` can pair symmetrically on opposite ends of

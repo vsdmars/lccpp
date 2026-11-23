@@ -9,6 +9,40 @@
 //   Return the root of the trimmed BST, which may change if the original root
 //   falls outside [low, high].
 //
+// Examples:
+//   Example 1:
+//     Input:  root = [3, 0, 4, null, 2, null, null, 1], low = 1, high = 3
+//     Output: [3, 2, null, 1]
+//     Explanation:
+//       - At root 3, 1 <= 3 <= 3 holds, so node 3 is retained and trimBST recurses
+//         on both children.
+//       - Left child 0 has 0 < 1, so 0 and its null left subtree are discarded and
+//         trimBST recurses on 0->right (2).
+//       - Node 2 and its left child 1 both lie in [1, 3], so 2 (with 1 attached on
+//         its left) becomes 3->left.
+//       - Right child 4 has 4 > 3, so 4 and its right subtree are pruned and
+//         trimBST(4->left) returns null for 3->right.
+//
+//   Example 2:
+//     Input:  root = [5, 2, 8, 1, 3, 7, 9], low = 6, high = 9
+//     Output: [8, 7, 9]
+//     Explanation:
+//       - At root 5, 5 < 6, so node 5 and its entire left subtree [2, 1, 3] are
+//         discarded and trimBST recurses on 5->right (8).
+//       - At 8, 6 <= 8 <= 9 holds, so 8 becomes the returned root and both children
+//         7 and 9 are trimmed.
+//       - Both 7 and 9 fall inside [6, 9] with null children, leaving [8, 7, 9].
+//
+//   Example 3:
+//     Input:  root = [4, 2, 6, 1, 3, 5, 7], low = 10, high = 20
+//     Output: []
+//     Explanation:
+//       - At root 4, 4 < 10 prunes 4 and its left subtree, recursing on 4->right
+//         (6).
+//       - At 6, 6 < 10 prunes 6 and 5, recursing on 6->right (7); at 7, 7 < 10
+//         recurses on 7->right (nullptr).
+//       - The null base case returns nullptr, producing an empty trimmed tree [].
+//
 // Algorithm:
 //   Recursive postorder-style BST pruning:
 //   At each node, exploit the BST ordering invariant to prune entire invalid

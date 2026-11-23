@@ -9,6 +9,44 @@
 //   Constraints: 1 <= strs.size() <= 600, 1 <= strs[i].size() <= 100,
 //   1 <= m, n <= 100.
 //
+// Examples:
+//   Example 1:
+//     Input:  strs = ["10", "0001", "111001", "1", "0"], m = 5, n = 3
+//     Output: 4
+//     Explanation:
+//       - Allocate dp[6][4] initialized to 0, where dp[i][j] tracks the largest
+//         subset using at most i zeroes and j ones.
+//       - Process "10" (cost 1,1) and "0001" (cost 3,1) in reverse capacity order,
+//         raising dp[4][2]..dp[5][3] to 2, then skip "111001" (cost 2,4) because
+//         ones = 4 exceeds n = 3.
+//       - Process "1" (cost 0,1) to reach dp[5][3] = 3, then process "0" (cost 1,0)
+//         so dp[5][3] = max(dp[5][3], dp[4][3] + 1) = 4 (subset {"10", "0001", "1",
+//         "0"}).
+//       - Return dp[5][3] = 4.
+//
+//   Example 2:
+//     Input:  strs = ["10", "0", "1"], m = 1, n = 1
+//     Output: 2
+//     Explanation:
+//       - Allocate dp[2][2] initialized to 0 for budget m = 1, n = 1.
+//       - After processing "10" (cost 1,1), dp[1][1] becomes 1; after "0" (cost
+//         1,0), dp[1][0] becomes 1 while dp[1][1] stays 1.
+//       - After processing "1" (cost 0,1), dp[0][1] becomes 1 and dp[1][1] updates
+//         to max(1, dp[1][0] + 1) = 2 by combining "0" and "1".
+//       - Return dp[1][1] = 2.
+//
+//   Example 3:
+//     Input:  strs = ["0", "00", "1", "01"], m = 3, n = 0
+//     Output: 2
+//     Explanation:
+//       - Allocate dp[4][1] initialized to 0 for zero budget m = 3 and ones budget
+//         n = 0.
+//       - Process "0" (cost 1,0) to set dp[1][0] = dp[2][0] = dp[3][0] = 1, then
+//         process "00" (cost 2,0) in reverse to update dp[3][0] = dp[1][0] + 1 = 2.
+//       - Skip both "1" (cost 0,1) and "01" (cost 1,1) because their ones count 1
+//         exceeds max_ones = 0.
+//       - Return dp[3][0] = 2.
+//
 // Algorithm:
 //   This is a two-dimensional 0/1 Knapsack problem where each string is an
 //   item with weight vector `(zeros, ones)` and value `1`, and the knapsack
