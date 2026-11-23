@@ -1,0 +1,135 @@
+// LeetCode 345: Reverse Vowels Of A String
+// https://leetcode.com/problems/reverse-vowels-of-a-string/
+//
+// Problem:
+//   Given a string `s`, reverse only the vowels ('a', 'e', 'i', 'o', 'u' in
+//   both lowercase and uppercase; 'y' is not a vowel) in the string and return
+//   the resulting string, leaving all non-vowel characters in their original
+//   positions.
+//
+// Algorithm:
+//   Converging two pointers from both ends of a mutable copy of `s`:
+//     - Initialize `left = 0` and `right = n - 1`.
+//     - Advance `left` rightward while `left < right` and `result[left]` is not
+//       a vowel.
+//     - Advance `right` leftward while `left < right` and `result[right]` is
+//       not a vowel.
+//     - If `left < right`, both pointers sit on unswapped vowels: swap them and
+//       move both pointers inward (`++left`, `--right`).
+//   Guarding both inner scans and the swap with `left < right` prevents the
+//   pointers from crossing over and accidentally double-swapping or causing
+//   unsigned underflow on empty strings.
+//   Time complexity: O(n) — each character is inspected at most once.
+//   Space complexity: O(1) auxiliary space beyond the returned output string.
+//
+// Data Structures:
+//   - std::string (`result`): mutable character buffer modified in-place.
+//   - constexpr std::string_view (`kVowels`): constant 10-character vowel set
+//     for zero-allocation membership checks.
+//   - Two converging index pointers (`left`, `right`).
+//
+// Real-World Applications:
+//   - Selective in-place reordering / obfuscation of filtered tokens inside a
+//     formatted record while preserving delimiter and punctuation positions.
+//   - Bidirectional text layout and masked-buffer reversal routines where fixed
+//     control bytes must stay anchored while payload bytes are reversed.
+//
+// Related LeetCode Problems:
+//   - #344 Reverse String [done] (unfiltered converging two-pointer reversal)
+//   - #917 Reverse Only Letters [new] (same filtered two-pointer swap with std::isalpha)
+//   - #541 Reverse String II [new] (chunked substring reversal)
+//   - #125 Valid Palindrome [done] (converging two pointers skipping non-alphanumerics)
+//   - #1119 Remove Vowels from a String [new] (single-pass vowel filtering)
+
+#include "framework/lc_framework.h"
+
+#include <cstddef>
+#include <string>
+#include <string_view>
+#include <utility>
+
+namespace {
+
+constexpr std::string_view kVowels = "aeiouAEIOU";
+
+// Returns true iff `ch` is an English ASCII vowel (excluding 'y'/'Y').
+constexpr bool is_vowel(char ch) noexcept { return kVowels.contains(ch); }
+
+class Solution {
+ public:
+  // Reverses only the vowels of `s` while leaving all other characters at
+  // their original indices.
+  //
+  // Invariant: every vowel strictly outside [left, right] has already been
+  // swapped into its final reversed position.
+  //
+  // Time: O(n), Space: O(1) auxiliary (O(n) for the returned string).
+  std::string reverseVowels(std::string_view s) {
+    std::string result(s);
+    // Strings of length 0 or 1 have no pair of positions to swap (also avoids
+    // `size() - 1` underflow on empty input).
+    if (result.size() < 2) {
+      return result;
+    }
+
+    std::size_t left = 0;
+    std::size_t right = result.size() - 1;
+
+    while (left < right) {
+      // Advance `left` to the next unswapped vowel.
+      while (left < right && !is_vowel(result[left])) {
+        ++left;
+      }
+      // Advance `right` to the previous unswapped vowel.
+      while (left < right && !is_vowel(result[right])) {
+        --right;
+      }
+      if (left < right) {
+        std::swap(result[left], result[right]);
+        ++left;
+        --right;
+      }
+    }
+
+    return result;
+  }
+};
+
+LC_PROBLEM(345, "Reverse Vowels Of A String", "two_pointers", ctx) {
+  Solution sol;
+
+  ctx.test("example_1_hello", [&] {
+    ctx.expect_eq(sol.reverseVowels("hello"), "holle");
+  });
+
+  ctx.test("example_2_leetcode", [&] {
+    ctx.expect_eq(sol.reverseVowels("leetcode"), "leotcede");
+  });
+
+  ctx.test("python_source_cases", [&] {
+    ctx.expect_eq(sol.reverseVowels("leefcode"), "leofcede");
+    ctx.expect_eq(sol.reverseVowels("ooee"), "eeoo");
+  });
+
+  ctx.test("mixed_case_vowels", [&] {
+    ctx.expect_eq(sol.reverseVowels("IceCreAm"), "AceCreIm");
+    ctx.expect_eq(sol.reverseVowels("aA"), "Aa");
+  });
+
+  ctx.test("empty_and_single_char", [&] {
+    ctx.expect_eq(sol.reverseVowels(""), "");
+    ctx.expect_eq(sol.reverseVowels("a"), "a");
+    ctx.expect_eq(sol.reverseVowels("z"), "z");
+  });
+
+  ctx.test("no_vowels_and_y_excluded", [&] {
+    ctx.expect_eq(sol.reverseVowels("rhythm"), "rhythm");
+    ctx.expect_eq(sol.reverseVowels("bcdfgY"), "bcdfgY");
+  });
+
+  ctx.test("all_vowels", [&] {
+    ctx.expect_eq(sol.reverseVowels("aeiouAEIOU"), "UOIEAuoiea");
+  });
+}
+
+}  // namespace
