@@ -54,11 +54,11 @@
 //   - Address, contact, and ticker-symbol lookup widgets with live telemetry.
 //
 // Related LeetCode Problems:
-//   - #208 Implement Trie (Prefix Tree) (base prefix tree without ranking)
-//   - #1268 Search Suggestions System (top 3 lexicographical prefix suggestions)
-//   - #677 Map Sum Pairs (aggregates numeric scores over a trie prefix subtree)
-//   - #1804 Implement Trie II (Prefix Tree) (tracks per-word frequencies in trie)
-//   - #211 Design Add and Search Words Data Structure (custom trie query design)
+//   - #208 Implement Trie [done] (Prefix Tree) (base prefix tree without ranking)
+//   - #1268 Search Suggestions System [done] (top 3 lexicographical prefix suggestions)
+//   - #677 Map Sum Pairs [new] (aggregates numeric scores over a trie prefix subtree)
+//   - #1804 Implement Trie II [new] (Prefix Tree) (tracks per-word frequencies in trie)
+//   - #211 Design Add and Search Words Data Structure [done] (custom trie query design)
 
 #include "framework/lc_framework.h"
 

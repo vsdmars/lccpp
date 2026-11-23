@@ -40,14 +40,14 @@
 //     untrusted user configurations.
 //
 // Related LeetCode Problems:
-//   - #261 Graph Valid Tree (validating that an undirected graph is a single
+//   - #261 Graph Valid Tree [done] (validating that an undirected graph is a single
 //     connected acyclic tree)
-//   - #685 Redundant Connection II (rooted directed tree anomalies involving a
+//   - #685 Redundant Connection II [done] (rooted directed tree anomalies involving a
 //     node with two parents or a directed cycle)
-//   - #2196 Create Binary Tree From Descriptions (building a binary tree from
+//   - #2196 Create Binary Tree From Descriptions [new] (building a binary tree from
 //     child links and finding the unique zero-in-degree root)
-//   - #207 Course Schedule (directed cycle detection via in-degrees and BFS)
-//   - #98 Validate Binary Search Tree (validating structural/ordering rules on
+//   - #207 Course Schedule [done] (directed cycle detection via in-degrees and BFS)
+//   - #98 Validate Binary Search Tree [done] (validating structural/ordering rules on
 //     a binary tree)
 
 #include "framework/lc_framework.h"

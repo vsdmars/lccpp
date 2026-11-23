@@ -46,11 +46,11 @@
 //   - Dictionary-pruned path search in bioinformatics sequence-motif matching.
 //
 // Related LeetCode Problems:
-//   - #79 Word Search (single-word 2D grid backtracking without a trie)
-//   - #208 Implement Trie (Prefix Tree) (foundational trie indexing structure)
-//   - #211 Design Add and Search Words Data Structure (DFS over trie branches)
-//   - #472 Concatenated Words (matches multiple dictionary words via trie/DFS)
-//   - #1032 Stream of Characters (multi-word matching using a trie)
+//   - #79 Word Search [done] (single-word 2D grid backtracking without a trie)
+//   - #208 Implement Trie [done] (Prefix Tree) (foundational trie indexing structure)
+//   - #211 Design Add and Search Words Data Structure [done] (DFS over trie branches)
+//   - #472 Concatenated Words [new] (matches multiple dictionary words via trie/DFS)
+//   - #1032 Stream of Characters [done] (multi-word matching using a trie)
 
 #include "framework/lc_framework.h"
 

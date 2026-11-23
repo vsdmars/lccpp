@@ -38,13 +38,13 @@
 //     scheduling on parallel execution units.
 //
 // Related LeetCode Problems:
-//   - #207 Course Schedule (detects whether a prerequisite graph is acyclic)
-//   - #210 Course Schedule II (returns a valid topological ordering of courses)
-//   - #1494 Parallel Courses II (adds a per-semester limit `k`, turning greedy
+//   - #207 Course Schedule [done] (detects whether a prerequisite graph is acyclic)
+//   - #210 Course Schedule II [done] (returns a valid topological ordering of courses)
+//   - #1494 Parallel Courses II [new] (adds a per-semester limit `k`, turning greedy
 //     BFS into bitmask dynamic programming)
-//   - #2050 Parallel Courses III (extends unit semesters to weighted course
+//   - #2050 Parallel Courses III [new] (extends unit semesters to weighted course
 //     durations via DAG longest-path DP)
-//   - #329 Longest Increasing Path in a Matrix (computes the longest chain
+//   - #329 Longest Increasing Path in a Matrix [done] (computes the longest chain
 //     depth in an implicit DAG via topological layering)
 
 #include "framework/lc_framework.h"

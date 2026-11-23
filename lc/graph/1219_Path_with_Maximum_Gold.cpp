@@ -42,11 +42,11 @@
 //     games) using in-place board mutation and undo during backtracking.
 //
 // Related LeetCode Problems:
-//   - #79 Word Search (2D grid backtracking DFS with in-place visited marking)
-//   - #980 Unique Paths III (grid backtracking visiting cells without revisits)
-//   - #212 Word Search II (multi-path 2D grid backtracking with Trie pruning)
-//   - #200 Number of Islands (4-directional DFS over non-zero grid regions)
-//   - #329 Longest Increasing Path in a Matrix (grid path optimization where
+//   - #79 Word Search [done] (2D grid backtracking DFS with in-place visited marking)
+//   - #980 Unique Paths III [new] (grid backtracking visiting cells without revisits)
+//   - #212 Word Search II [done] (multi-path 2D grid backtracking with Trie pruning)
+//   - #200 Number of Islands [done] (4-directional DFS over non-zero grid regions)
+//   - #329 Longest Increasing Path in a Matrix [done] (grid path optimization where
 //     strict monotonicity allows memoization instead of full backtracking)
 
 #include "framework/lc_framework.h"

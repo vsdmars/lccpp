@@ -41,12 +41,12 @@
 //     match-loop games) validating closed loops of matching tiles.
 //
 // Related LeetCode Problems:
-//   - #200 Number of Islands (4-directional DFS connected-component search on
+//   - #200 Number of Islands [done] (4-directional DFS connected-component search on
 //     a 2D grid)
-//   - #261 Graph Valid Tree (undirected cycle detection using parent tracking)
-//   - #684 Redundant Connection (detecting cycles in an undirected graph)
-//   - #130 Surrounded Regions (2D grid connected-component boundary analysis)
-//   - #1034 Coloring A Border (4-directional same-value component DFS on a
+//   - #261 Graph Valid Tree [done] (undirected cycle detection using parent tracking)
+//   - #684 Redundant Connection [done] (detecting cycles in an undirected graph)
+//   - #130 Surrounded Regions [done] (2D grid connected-component boundary analysis)
+//   - #1034 Coloring A Border [done] (4-directional same-value component DFS on a
 //     2D grid)
 
 #include "framework/lc_framework.h"

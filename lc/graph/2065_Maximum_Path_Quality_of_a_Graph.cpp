@@ -45,14 +45,14 @@
 //     graphs under strict turn or time budgets.
 //
 // Related LeetCode Problems:
-//   - #1219 Path with Maximum Gold (bounded backtracking DFS maximizing
+//   - #1219 Path with Maximum Gold [done] (bounded backtracking DFS maximizing
 //     collected path value)
-//   - #1928 Minimum Cost to Reach Destination in Time (weighted graph path
+//   - #1928 Minimum Cost to Reach Destination in Time [new] (weighted graph path
 //     optimization constrained by `maxTime`)
-//   - #787 Cheapest Flights Within K Stops (budget-constrained graph traversal)
-//   - #847 Shortest Path Visiting All Nodes (graph walks permitting revisits
+//   - #787 Cheapest Flights Within K Stops [done] (budget-constrained graph traversal)
+//   - #847 Shortest Path Visiting All Nodes [new] (graph walks permitting revisits
 //     while tracking uniquely visited nodes)
-//   - #797 All Paths From Source to Target (DFS path exploration with
+//   - #797 All Paths From Source to Target [done] (DFS path exploration with
 //     backtracking)
 
 #include "framework/lc_framework.h"

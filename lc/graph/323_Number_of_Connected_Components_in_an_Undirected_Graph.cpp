@@ -35,12 +35,12 @@
 //   - Image processing and mesh analysis counting separate geometric shells.
 //
 // Related LeetCode Problems:
-//   - #261 Graph Valid Tree (checks for 1 connected component and n - 1 edges)
-//   - #547 Number of Provinces (counts components given an adjacency matrix)
-//   - #200 Number of Islands (counts connected components on an implicit grid)
-//   - #1319 Number of Operations to Make Network Connected (uses component
+//   - #261 Graph Valid Tree [done] (checks for 1 connected component and n - 1 edges)
+//   - #547 Number of Provinces [done] (counts components given an adjacency matrix)
+//   - #200 Number of Islands [done] (counts connected components on an implicit grid)
+//   - #1319 Number of Operations to Make Network Connected [done] (uses component
 //     count to determine minimum rewires)
-//   - #2316 Count Unreachable Pairs of Nodes in an Undirected Graph (uses
+//   - #2316 Count Unreachable Pairs of Nodes in an Undirected Graph [new] (uses
 //     component sizes to count disconnected vertex pairs)
 
 #include "framework/lc_framework.h"

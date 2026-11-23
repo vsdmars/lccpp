@@ -44,11 +44,11 @@
 //     engines.
 //
 // Related LeetCode Problems:
-//   - #953 Verifying an Alien Dictionary (checks sortedness given a known order)
-//   - #207 Course Schedule (directed cycle detection in a precedence graph)
-//   - #210 Course Schedule II (topological sort over integer-indexed tasks)
-//   - #444 Sequence Reconstruction (checks unique topological order from pairs)
-//   - #1203 Sort Items by Groups Respecting Dependencies (hierarchical topo
+//   - #953 Verifying an Alien Dictionary [done] (checks sortedness given a known order)
+//   - #207 Course Schedule [done] (directed cycle detection in a precedence graph)
+//   - #210 Course Schedule II [done] (topological sort over integer-indexed tasks)
+//   - #444 Sequence Reconstruction [done] (checks unique topological order from pairs)
+//   - #1203 Sort Items by Groups Respecting Dependencies [new] (hierarchical topo
 //     sort across both items and groups)
 
 #include "framework/lc_framework.h"

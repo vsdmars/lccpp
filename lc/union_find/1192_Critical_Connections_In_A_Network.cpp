@@ -44,12 +44,12 @@
 //   - Computing 2-edge-connected components in compilers and circuit design.
 //
 // Related LeetCode Problems:
-//   - #1568 Minimum Number of Days to Disconnect Island (articulation/bridges)
-//   - #1489 Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree
+//   - #1568 Minimum Number of Days to Disconnect Island [new] (articulation/bridges)
+//   - #1489 Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree [new]
 //     (identifies edges essential to MST connectivity)
-//   - #684 Redundant Connection (dual problem: finds a removable cycle edge)
-//   - #1319 Number of Operations to Make Network Connected (network redundancy)
-//   - #2360 Longest Cycle in a Graph (DFS timestamp analysis of graph cycles)
+//   - #684 Redundant Connection [done] (dual problem: finds a removable cycle edge)
+//   - #1319 Number of Operations to Make Network Connected [done] (network redundancy)
+//   - #2360 Longest Cycle in a Graph [new] (DFS timestamp analysis of graph cycles)
 
 #include "framework/lc_framework.h"
 

@@ -37,11 +37,11 @@
 //   - Spreadsheet recalculation engines ordering dirty formula evaluations.
 //
 // Related LeetCode Problems:
-//   - #207 Course Schedule (decision version checking only for cycle absence)
-//   - #269 Alien Dictionary (topological sort over derived character ordering)
-//   - #310 Minimum Height Trees (iterative leaf peeling akin to Kahn's sort)
-//   - #444 Sequence Reconstruction (verifies uniqueness of a topological order)
-//   - #1136 Parallel Courses (layered topological sort for minimum semesters)
+//   - #207 Course Schedule [done] (decision version checking only for cycle absence)
+//   - #269 Alien Dictionary [done] (topological sort over derived character ordering)
+//   - #310 Minimum Height Trees [done] (iterative leaf peeling akin to Kahn's sort)
+//   - #444 Sequence Reconstruction [done] (verifies uniqueness of a topological order)
+//   - #1136 Parallel Courses [done] (layered topological sort for minimum semesters)
 
 #include "framework/lc_framework.h"
 

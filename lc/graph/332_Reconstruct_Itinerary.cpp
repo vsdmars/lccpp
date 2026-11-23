@@ -44,11 +44,11 @@
 //     moves across required segments.
 //
 // Related LeetCode Problems:
-//   - #753 Cracking the Safe (Eulerian circuit over a De Bruijn graph)
-//   - #2097 Valid Arrangement of Pairs (directed Eulerian path over integer
+//   - #753 Cracking the Safe [done] (Eulerian circuit over a De Bruijn graph)
+//   - #2097 Valid Arrangement of Pairs [new] (directed Eulerian path over integer
 //     pairs using Hierholzer's algorithm)
-//   - #743 Network Delay Time (weighted shortest paths in a directed network)
-//   - #787 Cheapest Flights Within K Stops (flight-graph routing with hop cap)
+//   - #743 Network Delay Time [new] (weighted shortest paths in a directed network)
+//   - #787 Cheapest Flights Within K Stops [done] (flight-graph routing with hop cap)
 
 #include "framework/lc_framework.h"
 

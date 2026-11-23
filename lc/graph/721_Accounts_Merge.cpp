@@ -48,11 +48,11 @@
 //     from multiple ingested data sources via transitive key matching.
 //
 // Related LeetCode Problems:
-//   - #547 Number of Provinces (finding connected components in a graph)
-//   - #323 Number of Connected Components in an Undirected Graph (grouping
+//   - #547 Number of Provinces [done] (finding connected components in a graph)
+//   - #323 Number of Connected Components in an Undirected Graph [done] (grouping
 //     connected nodes via DFS or Union-Find)
-//   - #737 Sentence Similarity II (transitive equivalence classes over strings)
-//   - #1202 Smallest String With Swaps (partitioning indices into connected
+//   - #737 Sentence Similarity II [done] (transitive equivalence classes over strings)
+//   - #1202 Smallest String With Swaps [done] (partitioning indices into connected
 //     components and sorting each component independently)
 
 #include "framework/lc_framework.h"

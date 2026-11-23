@@ -42,13 +42,13 @@
 //     exclude directory trees.
 //
 // Related LeetCode Problems:
-//   - #208 Implement Trie (Prefix Tree) (foundational trie generalized here to
+//   - #208 Implement Trie [done] (Prefix Tree) (foundational trie generalized here to
 //     '/'-delimited path segments)
-//   - #648 Replace Words (finding shortest root prefixes using a trie)
-//   - #1948 Delete Duplicate Folders in System (path-segment trie construction
+//   - #648 Replace Words [new] (finding shortest root prefixes using a trie)
+//   - #1948 Delete Duplicate Folders in System [new] (path-segment trie construction
 //     and duplicate subtree pruning)
-//   - #588 Design In-Memory File System (hierarchical Unix paths in a trie)
-//   - #720 Longest Word in Dictionary (prefix chains over sorted strings/trie)
+//   - #588 Design In-Memory File System [done] (hierarchical Unix paths in a trie)
+//   - #720 Longest Word in Dictionary [done] (prefix chains over sorted strings/trie)
 
 #include "framework/lc_framework.h"
 

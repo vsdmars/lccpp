@@ -38,11 +38,11 @@
 //     edits alongside fast rectangular range aggregations.
 //
 // Related LeetCode Problems:
-//   - #304 Range Sum Query 2D - Immutable (static 2D prefix sums using the
+//   - #304 Range Sum Query 2D [done] - Immutable (static 2D prefix sums using the
 //     same 2D inclusion-exclusion formula)
-//   - #307 Range Sum Query - Mutable (1D Fenwick tree counterpart)
-//   - #1314 Matrix Block Sum (sliding 2D rectangular sums via 2D prefix sums)
-//   - #1074 Number of Submatrices That Sum to Target (combines 2D prefix sums
+//   - #307 Range Sum Query [done] - Mutable (1D Fenwick tree counterpart)
+//   - #1314 Matrix Block Sum [done] (sliding 2D rectangular sums via 2D prefix sums)
+//   - #1074 Number of Submatrices That Sum to Target [done] (combines 2D prefix sums
 //     with hash-map range counting)
 
 #include "framework/lc_framework.h"

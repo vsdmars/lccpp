@@ -34,13 +34,13 @@
 //     sellers, riders vs. drivers) before running bipartite matching.
 //
 // Related LeetCode Problems:
-//   - #886 Possible Bipartition (2-coloring a dislike graph to split people
+//   - #886 Possible Bipartition [done] (2-coloring a dislike graph to split people
 //     into two conflict-free groups)
-//   - #1042 Flower Planting With No Adjacent (graph coloring with up to 4
+//   - #1042 Flower Planting With No Adjacent [new] (graph coloring with up to 4
 //     colors under bounded degree)
-//   - #2493 Divide Nodes Into the Maximum Number of Groups (requires verifying
+//   - #2493 Divide Nodes Into the Maximum Number of Groups [new] (requires verifying
 //     bipartiteness per component before BFS layering)
-//   - #207 Course Schedule (DFS node-state coloring to detect invalid cycles)
+//   - #207 Course Schedule [done] (DFS node-state coloring to detect invalid cycles)
 
 #include "framework/lc_framework.h"
 

@@ -44,14 +44,14 @@
 //   - CLI tab completion and API explorer endpoint suggestion engines.
 //
 // Related LeetCode Problems:
-//   - #208 Implement Trie (Prefix Tree) (core prefix tree for prefix lookups)
-//   - #642 Design Search Autocomplete System (stateful top-3 autocomplete
+//   - #208 Implement Trie [done] (Prefix Tree) (core prefix tree for prefix lookups)
+//   - #642 Design Search Autocomplete System [done] (stateful top-3 autocomplete
 //     ranked by historical search frequency)
-//   - #211 Design Add and Search Words Data Structure (trie traversal with
+//   - #211 Design Add and Search Words Data Structure [done] (trie traversal with
 //     wildcard character lookup)
-//   - #720 Longest Word in Dictionary (lexicographically ordered trie /
+//   - #720 Longest Word in Dictionary [done] (lexicographically ordered trie /
 //     sorted-string prefix analysis)
-//   - #14 Longest Common Prefix (prefix comparison across sorted strings)
+//   - #14 Longest Common Prefix [done] (prefix comparison across sorted strings)
 
 #include "framework/lc_framework.h"
 

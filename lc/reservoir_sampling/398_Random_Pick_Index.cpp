@@ -41,15 +41,15 @@
 //     SQL query engines.
 //
 // Related LeetCode Problems:
-//   - #382 Linked List Random Node (unfiltered k = 1 reservoir sampling over a
+//   - #382 Linked List Random Node [done] (unfiltered k = 1 reservoir sampling over a
 //     singly linked list)
-//   - #528 Random Pick with Weight (non-uniform discrete sampling with prefix
+//   - #528 Random Pick with Weight [done] (non-uniform discrete sampling with prefix
 //     sums and binary search)
-//   - #710 Random Pick with Blacklist (uniform random selection over a range
+//   - #710 Random Pick with Blacklist [new] (uniform random selection over a range
 //     excluding forbidden values)
-//   - #380 Insert Delete GetRandom O(1) (dynamic set with O(1) uniform random
+//   - #380 Insert Delete GetRandom O [done] (1) (dynamic set with O(1) uniform random
 //     sampling)
-//   - #381 Insert Delete GetRandom O(1) - Duplicates allowed (dynamic multiset
+//   - #381 Insert Delete GetRandom O [done] (1) - Duplicates allowed (dynamic multiset
 //     supporting O(1) uniform sampling)
 
 #include "framework/lc_framework.h"

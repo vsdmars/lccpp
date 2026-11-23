@@ -36,11 +36,11 @@
 //   - Spreadsheet formula engines catching circular cell references.
 //
 // Related LeetCode Problems:
-//   - #210 Course Schedule II (returns an explicit valid topological ordering)
-//   - #269 Alien Dictionary (infers letter precedence and detects order cycles)
-//   - #802 Find Eventual Safe States (finds nodes unable to reach any cycle)
-//   - #1462 Course Schedule IV (answers transitive prerequisite reachability)
-//   - #2050 Parallel Courses III (longest path / minimum time in a course DAG)
+//   - #210 Course Schedule II [done] (returns an explicit valid topological ordering)
+//   - #269 Alien Dictionary [done] (infers letter precedence and detects order cycles)
+//   - #802 Find Eventual Safe States [done] (finds nodes unable to reach any cycle)
+//   - #1462 Course Schedule IV [new] (answers transitive prerequisite reachability)
+//   - #2050 Parallel Courses III [new] (longest path / minimum time in a course DAG)
 
 #include "framework/lc_framework.h"
 

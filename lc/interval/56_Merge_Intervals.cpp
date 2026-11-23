@@ -37,11 +37,11 @@
 //     I/O schedulers (read/write coalescing).
 //
 // Related LeetCode Problems:
-//   - #57 Insert Interval (insert and merge into an already-sorted list)
-//   - #986 Interval List Intersections (intersect two disjoint interval lists)
-//   - #759 Employee Free Time (find complement gaps of merged busy schedules)
-//   - #252 Meeting Rooms (sort by start time to test for any overlap)
-//   - #435 Non-overlapping Intervals (minimum removals to avoid all overlaps)
+//   - #57 Insert Interval [done] (insert and merge into an already-sorted list)
+//   - #986 Interval List Intersections [done] (intersect two disjoint interval lists)
+//   - #759 Employee Free Time [done] (find complement gaps of merged busy schedules)
+//   - #252 Meeting Rooms [done] (sort by start time to test for any overlap)
+//   - #435 Non-overlapping Intervals [done] (minimum removals to avoid all overlaps)
 
 #include "framework/lc_framework.h"
 

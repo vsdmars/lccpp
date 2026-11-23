@@ -38,12 +38,12 @@
 //     Spark streaming jobs) where total record count is unknown ahead of time.
 //
 // Related LeetCode Problems:
-//   - #398 Random Pick Index (reservoir sampling filtered to indices matching
+//   - #398 Random Pick Index [done] (reservoir sampling filtered to indices matching
 //     a target value)
-//   - #528 Random Pick with Weight (weighted discrete sampling via prefix sums
+//   - #528 Random Pick with Weight [done] (weighted discrete sampling via prefix sums
 //     and binary search)
-//   - #384 Shuffle an Array (Fisher-Yates uniform random permutation)
-//   - #497 Random Point in Non-overlapping Rectangles (uniform geometric
+//   - #384 Shuffle an Array [done] (Fisher-Yates uniform random permutation)
+//   - #497 Random Point in Non-overlapping Rectangles [new] (uniform geometric
 //     sampling using area-weighted prefix sums)
 
 #include "framework/lc_framework.h"

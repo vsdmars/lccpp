@@ -41,11 +41,11 @@
 //   - Fuzzy dictionary lookup engines and DNS wildcard record resolution.
 //
 // Related LeetCode Problems:
-//   - #208 Implement Trie (Prefix Tree) (core trie without wildcard matching)
-//   - #212 Word Search II (combines a trie with backtracking DFS on a 2D grid)
-//   - #676 Implement Magic Dictionary (trie search with exactly one mismatch)
-//   - #745 Prefix and Suffix Search (extended trie queries on prefixes/suffixes)
-//   - #1032 Stream of Characters (matches stream suffixes via a reversed trie)
+//   - #208 Implement Trie [done] (Prefix Tree) (core trie without wildcard matching)
+//   - #212 Word Search II [done] (combines a trie with backtracking DFS on a 2D grid)
+//   - #676 Implement Magic Dictionary [done] (trie search with exactly one mismatch)
+//   - #745 Prefix and Suffix Search [new] (extended trie queries on prefixes/suffixes)
+//   - #1032 Stream of Characters [done] (matches stream suffixes via a reversed trie)
 
 #include "framework/lc_framework.h"
 

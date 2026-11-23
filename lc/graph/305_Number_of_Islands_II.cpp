@@ -43,11 +43,11 @@
 //     under real-time terrain or sensor updates.
 //
 // Related LeetCode Problems:
-//   - #200 Number of Islands (static connected-component count on a fixed grid)
-//   - #695 Max Area of Island (tracks largest connected land area on a grid)
-//   - #827 Making A Large Island (merges adjacent islands via one water flip)
-//   - #959 Regions Cut By Slashes (Union-Find region merging on a grid)
-//   - #1970 Last Day Where You Can Still Cross (dynamic grid connectivity via
+//   - #200 Number of Islands [done] (static connected-component count on a fixed grid)
+//   - #695 Max Area of Island [done] (tracks largest connected land area on a grid)
+//   - #827 Making A Large Island [done] (merges adjacent islands via one water flip)
+//   - #959 Regions Cut By Slashes [new] (Union-Find region merging on a grid)
+//   - #1970 Last Day Where You Can Still Cross [new] (dynamic grid connectivity via
 //     reverse-time Union-Find)
 
 #include "framework/lc_framework.h"

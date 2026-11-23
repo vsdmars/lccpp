@@ -44,13 +44,13 @@
 //   - Data cleaning and fuzzy record linkage in ETL pipelines.
 //
 // Related LeetCode Problems:
-//   - #854 K-Similar Strings (minimum swaps to transform one anagram into
+//   - #854 K-Similar Strings [new] (minimum swaps to transform one anagram into
 //     another)
-//   - #547 Number of Provinces (counting connected components with Union-Find)
-//   - #1202 Smallest String With Swaps (grouping swappable string indices via
+//   - #547 Number of Provinces [done] (counting connected components with Union-Find)
+//   - #1202 Smallest String With Swaps [done] (grouping swappable string indices via
 //     Union-Find)
-//   - #721 Accounts Merge (clustering string records into connected components)
-//   - #2157 Groups of Strings (grouping strings connected by single-character
+//   - #721 Accounts Merge [done] (clustering string records into connected components)
+//   - #2157 Groups of Strings [new] (grouping strings connected by single-character
 //     edits via Union-Find)
 
 #include "framework/lc_framework.h"

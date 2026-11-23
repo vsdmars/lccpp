@@ -43,15 +43,15 @@
 //     machine learning via Minimum Spanning Tree construction.
 //
 // Related LeetCode Problems:
-//   - #1135 Connecting Cities With Minimum Cost (classic MST on an explicit
+//   - #1135 Connecting Cities With Minimum Cost [new] (classic MST on an explicit
 //     weighted undirected graph)
-//   - #1168 Optimize Water Distribution in a Village (MST augmented with a
+//   - #1168 Optimize Water Distribution in a Village [new] (MST augmented with a
 //     virtual node modeling per-vertex installation costs)
-//   - #1489 Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree
+//   - #1489 Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree [new]
 //     (classifying edges by their role across all MSTs)
-//   - #743 Network Delay Time (greedy min-heap relaxation structurally similar
+//   - #743 Network Delay Time [new] (greedy min-heap relaxation structurally similar
 //     to Prim's algorithm)
-//   - #1579 Remove Max Number of Edges to Keep Graph Fully Traversable
+//   - #1579 Remove Max Number of Edges to Keep Graph Fully Traversable [new]
 //     (spanning-tree connectivity optimization across edge types)
 
 #include "framework/lc_framework.h"

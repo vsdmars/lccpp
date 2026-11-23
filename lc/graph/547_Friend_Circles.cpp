@@ -33,12 +33,12 @@
 //     shared attributes into connected risk clusters.
 //
 // Related LeetCode Problems:
-//   - #200 Number of Islands (counting connected components in a 2D grid)
-//   - #323 Number of Connected Components in an Undirected Graph (component
+//   - #200 Number of Islands [done] (counting connected components in a 2D grid)
+//   - #323 Number of Connected Components in an Undirected Graph [done] (component
 //     counting from an edge list)
-//   - #695 Max Area of Island (measuring the largest connected component)
-//   - #721 Accounts Merge (grouping records into components via shared emails)
-//   - #1319 Number of Operations to Make Network Connected (using component
+//   - #695 Max Area of Island [done] (measuring the largest connected component)
+//   - #721 Accounts Merge [done] (grouping records into components via shared emails)
+//   - #1319 Number of Operations to Make Network Connected [done] (using component
 //     counts to find the minimum bridging edges)
 
 #include "framework/lc_framework.h"

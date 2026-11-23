@@ -40,11 +40,11 @@
 //     backends for two-bank register architectures.
 //
 // Related LeetCode Problems:
-//   - #785 Is Graph Bipartite? (direct 2-coloring on a given adjacency list)
-//   - #207 Course Schedule (graph traversal and cycle detection on dependencies)
-//   - #261 Graph Valid Tree (undirected connectivity and acyclicity check)
-//   - #1042 Flower Planting With No Adjacent (4-coloring bounded-degree graphs)
-//   - #990 Satisfiability of Equality Equations (constraint-based partitioning)
+//   - #785 Is Graph Bipartite? [done] (direct 2-coloring on a given adjacency list)
+//   - #207 Course Schedule [done] (graph traversal and cycle detection on dependencies)
+//   - #261 Graph Valid Tree [done] (undirected connectivity and acyclicity check)
+//   - #1042 Flower Planting With No Adjacent [new] (4-coloring bounded-degree graphs)
+//   - #990 Satisfiability of Equality Equations [new] (constraint-based partitioning)
 
 #include "framework/lc_framework.h"
 

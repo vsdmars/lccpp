@@ -36,11 +36,11 @@
 //   - Cloud compute and memory quota enforcement across overlapping batch jobs.
 //
 // Related LeetCode Problems:
-//   - #253 Meeting Rooms II (unit-weight peak overlap via two-pointer sweep)
-//   - #1109 Corporate Flight Bookings (range-addition accumulation on indices)
-//   - #731 My Calendar II (online interval booking with capacity bound of 2)
-//   - #732 My Calendar III (dynamic peak overlap count via boundary events)
-//   - #1854 Maximum Population Year (peak simultaneous count over intervals)
+//   - #253 Meeting Rooms II [done] (unit-weight peak overlap via two-pointer sweep)
+//   - #1109 Corporate Flight Bookings [new] (range-addition accumulation on indices)
+//   - #731 My Calendar II [done] (online interval booking with capacity bound of 2)
+//   - #732 My Calendar III [new] (dynamic peak overlap count via boundary events)
+//   - #1854 Maximum Population Year [done] (peak simultaneous count over intervals)
 
 #include "framework/lc_framework.h"
 

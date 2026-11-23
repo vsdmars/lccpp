@@ -41,12 +41,12 @@
 //     minimal edge reassignments.
 //
 // Related LeetCode Problems:
-//   - #547 Number of Provinces (counting connected components in a graph)
-//   - #323 Number of Connected Components in an Undirected Graph (direct
+//   - #547 Number of Provinces [done] (counting connected components in a graph)
+//   - #323 Number of Connected Components in an Undirected Graph [done] (direct
 //     connected-component counting via DFS or Union-Find)
-//   - #684 Redundant Connection (identifying redundant cycle edges in a graph)
-//   - #261 Graph Valid Tree (checking n - 1 edges and single-component status)
-//   - #2316 Count Unreachable Pairs of Nodes in an Undirected Graph (analyzing
+//   - #684 Redundant Connection [done] (identifying redundant cycle edges in a graph)
+//   - #261 Graph Valid Tree [done] (checking n - 1 edges and single-component status)
+//   - #2316 Count Unreachable Pairs of Nodes in an Undirected Graph [new] (analyzing
 //     component structure in disconnected undirected graphs)
 
 #include "framework/lc_framework.h"

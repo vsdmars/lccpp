@@ -36,11 +36,11 @@
 //     and TCP round-trip time estimators.
 //
 // Related LeetCode Problems:
-//   - #239 Sliding Window Maximum (sliding-window aggregate with a deque)
-//   - #933 Number of Recent Calls (bounded FIFO queue over a trailing window)
-//   - #295 Find Median from Data Stream (online statistic on an unbounded stream)
-//   - #622 Design Circular Queue (ring-buffer alternative for bounded windows)
-//   - #2090 K Radius Subarray Averages (fixed-window average on a static array)
+//   - #239 Sliding Window Maximum [done] (sliding-window aggregate with a deque)
+//   - #933 Number of Recent Calls [new] (bounded FIFO queue over a trailing window)
+//   - #295 Find Median from Data Stream [done] (online statistic on an unbounded stream)
+//   - #622 Design Circular Queue [done] (ring-buffer alternative for bounded windows)
+//   - #2090 K Radius Subarray Averages [new] (fixed-window average on a static array)
 
 #include "framework/lc_framework.h"
 

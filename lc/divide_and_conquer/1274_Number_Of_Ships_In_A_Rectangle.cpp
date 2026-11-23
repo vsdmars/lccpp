@@ -38,12 +38,12 @@
 //   - Adaptive image compression and hierarchical spatial partitioning.
 //
 // Related LeetCode Problems:
-//   - #427 Construct Quad Tree (explicitly builds a 2D quadtree by recursively
+//   - #427 Construct Quad Tree [done] (explicitly builds a 2D quadtree by recursively
 //     subdividing a grid into four quadrants)
-//   - #558 Logical OR of Two Binary Grids Represented as Quad-Trees (operates
+//   - #558 Logical OR of Two Binary Grids Represented as Quad-Trees [new] (operates
 //     recursively over quadtree partitions)
-//   - #240 Search a 2D Matrix II (2D divide-and-conquer / quadrant pruning)
-//   - #302 Smallest Rectangle Enclosing Black Pixels (binary-search probing
+//   - #240 Search a 2D Matrix II [done] (2D divide-and-conquer / quadrant pruning)
+//   - #302 Smallest Rectangle Enclosing Black Pixels [new] (binary-search probing
 //     over a 2D grid to locate sparse occupied coordinates)
 
 #include "framework/lc_framework.h"

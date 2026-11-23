@@ -41,14 +41,14 @@
 //   - Monotonic timestamp deduplication in event logs and distributed tracing.
 //
 // Related LeetCode Problems:
-//   - #1647 Minimum Deletions to Make Character Frequencies Unique (making
+//   - #1647 Minimum Deletions to Make Character Frequencies Unique [new] (making
 //     counts unique via greedy decrements)
-//   - #1846 Maximum Element After Decreasing and Rearranging (sorting with
+//   - #1846 Maximum Element After Decreasing and Rearranging [new] (sorting with
 //     greedy level tracking)
-//   - #41 First Missing Positive (locating the smallest unused integer slot)
-//   - #128 Longest Consecutive Sequence (tracking contiguous integer blocks
+//   - #41 First Missing Positive [done] (locating the smallest unused integer slot)
+//   - #128 Longest Consecutive Sequence [done] (tracking contiguous integer blocks
 //     with a hash map or Union-Find)
-//   - #2195 Append K Integers With Minimal Sum (greedily assigning smallest
+//   - #2195 Append K Integers With Minimal Sum [new] (greedily assigning smallest
 //     available integers)
 
 #include "framework/lc_framework.h"

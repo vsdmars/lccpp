@@ -44,12 +44,12 @@
 //     columns into independent subproblems.
 //
 // Related LeetCode Problems:
-//   - #547 Number of Provinces (counting connected components via Union-Find)
-//   - #200 Number of Islands (connected components on a 2D grid)
-//   - #1267 Count Servers that Communicate (row and column connectivity on a
+//   - #547 Number of Provinces [done] (counting connected components via Union-Find)
+//   - #200 Number of Islands [done] (connected components on a 2D grid)
+//   - #1267 Count Servers that Communicate [new] (row and column connectivity on a
 //     2D grid)
-//   - #721 Accounts Merge (bipartite-style merging of entities via Union-Find)
-//   - #1319 Number of Operations to Make Network Connected (spanning tree
+//   - #721 Accounts Merge [done] (bipartite-style merging of entities via Union-Find)
+//   - #1319 Number of Operations to Make Network Connected [done] (spanning tree
 //     edges vs. connected components)
 
 #include "framework/lc_framework.h"

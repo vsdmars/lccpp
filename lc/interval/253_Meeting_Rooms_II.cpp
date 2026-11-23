@@ -35,11 +35,11 @@
 //     register count).
 //
 // Related LeetCode Problems:
-//   - #252 Meeting Rooms (feasibility check: whether 1 room is sufficient)
-//   - #1094 Car Pooling (weighted capacity version with passenger counts)
-//   - #2402 Meeting Rooms III (numbered room assignment with delayed meetings)
-//   - #732 My Calendar III (online peak overlap count via boundary events)
-//   - #1854 Maximum Population Year (peak simultaneous count over intervals)
+//   - #252 Meeting Rooms [done] (feasibility check: whether 1 room is sufficient)
+//   - #1094 Car Pooling [done] (weighted capacity version with passenger counts)
+//   - #2402 Meeting Rooms III [new] (numbered room assignment with delayed meetings)
+//   - #732 My Calendar III [new] (online peak overlap count via boundary events)
+//   - #1854 Maximum Population Year [done] (peak simultaneous count over intervals)
 
 #include "framework/lc_framework.h"
 

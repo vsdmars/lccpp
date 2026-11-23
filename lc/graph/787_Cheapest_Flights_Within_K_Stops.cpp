@@ -44,14 +44,14 @@
 //     perishable goods can tolerate only a fixed number of hub transfers.
 //
 // Related LeetCode Problems:
-//   - #743 Network Delay Time (standard single-source shortest paths with
+//   - #743 Network Delay Time [new] (standard single-source shortest paths with
 //     Dijkstra or Bellman-Ford)
-//   - #1514 Path with Maximum Probability (modified Dijkstra maximizing path
+//   - #1514 Path with Maximum Probability [new] (modified Dijkstra maximizing path
 //     probability)
-//   - #1631 Path With Minimum Effort (minimax shortest path via Dijkstra)
-//   - #1928 Minimum Cost to Reach Destination in Time (resource-constrained
+//   - #1631 Path With Minimum Effort [new] (minimax shortest path via Dijkstra)
+//   - #1928 Minimum Cost to Reach Destination in Time [new] (resource-constrained
 //     shortest path trading off cost and elapsed time)
-//   - #2093 Minimum Cost to Reach City With Discounts (state-space Dijkstra
+//   - #2093 Minimum Cost to Reach City With Discounts [new] (state-space Dijkstra
 //     tracking remaining discount budget)
 
 #include "framework/lc_framework.h"

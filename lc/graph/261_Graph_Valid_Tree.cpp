@@ -35,13 +35,13 @@
 //     candidate edges for cycle formation.
 //
 // Related LeetCode Problems:
-//   - #323 Number of Connected Components in an Undirected Graph (counts
+//   - #323 Number of Connected Components in an Undirected Graph [done] (counts
 //     disjoint components using graph traversal or Union-Find)
-//   - #684 Redundant Connection (finds the exact edge that creates a cycle)
-//   - #685 Redundant Connection II (directed-tree variant with 2-parent cases)
-//   - #1319 Number of Operations to Make Network Connected (connectivity and
+//   - #684 Redundant Connection [done] (finds the exact edge that creates a cycle)
+//   - #685 Redundant Connection II [done] (directed-tree variant with 2-parent cases)
+//   - #1319 Number of Operations to Make Network Connected [done] (connectivity and
 //     redundant-edge counting via Union-Find)
-//   - #1361 Validate Binary Tree Nodes (tree-validity check on binary trees)
+//   - #1361 Validate Binary Tree Nodes [done] (tree-validity check on binary trees)
 
 #include "framework/lc_framework.h"
 

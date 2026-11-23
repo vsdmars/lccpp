@@ -33,15 +33,15 @@
 //   - Leaderboard and ranking services maintaining dynamic prefix counts.
 //
 // Related LeetCode Problems:
-//   - #303 Range Sum Query - Immutable (static prefix-sum baseline without
+//   - #303 Range Sum Query [done] - Immutable (static prefix-sum baseline without
 //     point updates)
-//   - #308 Range Sum Query 2D - Mutable (2D Fenwick tree extension for mutable
+//   - #308 Range Sum Query 2D [done] - Mutable (2D Fenwick tree extension for mutable
 //     submatrix sum queries)
-//   - #315 Count of Smaller Numbers After Self (uses a Fenwick tree over
+//   - #315 Count of Smaller Numbers After Self [done] (uses a Fenwick tree over
 //     coordinate-compressed values to count inversions)
-//   - #327 Count of Range Sum (counts valid prefix-sum ranges via Fenwick tree
+//   - #327 Count of Range Sum [new] (counts valid prefix-sum ranges via Fenwick tree
 //     or divide and conquer)
-//   - #493 Reverse Pairs (tracks dynamic value counts with a Fenwick tree)
+//   - #493 Reverse Pairs [new] (tracks dynamic value counts with a Fenwick tree)
 
 #include "framework/lc_framework.h"
 

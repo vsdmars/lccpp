@@ -38,11 +38,11 @@
 //     game-AI training pipelines.
 //
 // Related LeetCode Problems:
-//   - #348 Design Tic-Tac-Toe (O(1) incremental win detection on an n x n grid)
-//   - #1275 Find Winner on a Tic Tac Toe Game (simulating a move list to find
+//   - #348 Design Tic-Tac-Toe [done] (O(1) incremental win detection on an n x n grid)
+//   - #1275 Find Winner on a Tic Tac Toe Game [done] (simulating a move list to find
 //     the winner or draw state)
-//   - #36 Valid Sudoku (verifying fixed-grid rule invariants without solving)
-//   - #294 Flip Game II (two-player turn-based game state analysis)
+//   - #36 Valid Sudoku [done] (verifying fixed-grid rule invariants without solving)
+//   - #294 Flip Game II [new] (two-player turn-based game state analysis)
 
 #include "framework/lc_framework.h"
 

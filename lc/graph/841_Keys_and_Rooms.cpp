@@ -36,13 +36,13 @@
 //     resource.
 //
 // Related LeetCode Problems:
-//   - #133 Clone Graph (directed/undirected graph traversal with visited set)
-//   - #547 Number of Provinces (component reachability via DFS)
-//   - #797 All Paths From Source to Target (directed reachability and path
+//   - #133 Clone Graph [done] (directed/undirected graph traversal with visited set)
+//   - #547 Number of Provinces [done] (component reachability via DFS)
+//   - #797 All Paths From Source to Target [done] (directed reachability and path
 //     enumeration with DFS)
-//   - #1298 Maximum Candies You Can Get from Boxes (generalized key-and-box
+//   - #1298 Maximum Candies You Can Get from Boxes [new] (generalized key-and-box
 //     unlock traversal)
-//   - #1557 Minimum Number of Vertices to Reach All Nodes (reachability
+//   - #1557 Minimum Number of Vertices to Reach All Nodes [new] (reachability
 //     analysis in directed graphs)
 
 #include "framework/lc_framework.h"

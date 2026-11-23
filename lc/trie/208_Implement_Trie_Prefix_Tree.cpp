@@ -43,11 +43,11 @@
 //   - Longest-prefix IP routing tables (CIDR / radix tries) and URL routers.
 //
 // Related LeetCode Problems:
-//   - #211 Design Add and Search Words Data Structure (adds '.' wildcard DFS)
-//   - #1804 Implement Trie II (Prefix Tree) (adds word/prefix counts & erase)
-//   - #648 Replace Words (finds shortest dictionary root prefix for each word)
-//   - #677 Map Sum Pairs (stores weights in a trie to sum values by prefix)
-//   - #720 Longest Word in Dictionary (uses trie traversal to validate prefixes)
+//   - #211 Design Add and Search Words Data Structure [done] (adds '.' wildcard DFS)
+//   - #1804 Implement Trie II [new] (Prefix Tree) (adds word/prefix counts & erase)
+//   - #648 Replace Words [new] (finds shortest dictionary root prefix for each word)
+//   - #677 Map Sum Pairs [new] (stores weights in a trie to sum values by prefix)
+//   - #720 Longest Word in Dictionary [done] (uses trie traversal to validate prefixes)
 
 #include "framework/lc_framework.h"
 

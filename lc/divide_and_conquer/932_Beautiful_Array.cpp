@@ -38,12 +38,12 @@
 //     butterfly stages and low-discrepancy (van der Corput) sampling.
 //
 // Related LeetCode Problems:
-//   - #1982 Find Array Given Subset Sums (divide-and-conquer reconstruction
+//   - #1982 Find Array Given Subset Sums [new] (divide-and-conquer reconstruction
 //     by splitting elements with an invariant offset)
-//   - #1027 Longest Arithmetic Subsequence (detects arithmetic progressions
+//   - #1027 Longest Arithmetic Subsequence [done] (detects arithmetic progressions
 //     rather than avoiding them)
-//   - #413 Arithmetic Slices (identifies contiguous 3-term arithmetic triples)
-//   - #324 Wiggle Sort II (constructive permutation satisfying global index
+//   - #413 Arithmetic Slices [new] (identifies contiguous 3-term arithmetic triples)
+//   - #324 Wiggle Sort II [done] (constructive permutation satisfying global index
 //     and ordering invariants)
 
 #include "framework/lc_framework.h"

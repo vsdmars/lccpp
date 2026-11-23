@@ -42,12 +42,12 @@
 //     encoded as ASCII text.
 //
 // Related LeetCode Problems:
-//   - #43 Multiply Strings (arbitrary-precision multiplication of decimal
+//   - #43 Multiply Strings [done] (arbitrary-precision multiplication of decimal
 //     strings)
-//   - #67 Add Binary (identical right-to-left carry propagation in base 2)
-//   - #2 Add Two Numbers (digit-by-digit addition with carry over linked lists)
-//   - #66 Plus One (adding 1 with carry propagation across a digit array)
-//   - #989 Add to Array-Form of Integer (adding an integer to a digit array)
+//   - #67 Add Binary [done] (identical right-to-left carry propagation in base 2)
+//   - #2 Add Two Numbers [done] (digit-by-digit addition with carry over linked lists)
+//   - #66 Plus One [done] (adding 1 with carry propagation across a digit array)
+//   - #989 Add to Array-Form of Integer [done] (adding an integer to a digit array)
 
 #include "framework/lc_framework.h"
 

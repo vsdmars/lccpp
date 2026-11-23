@@ -44,15 +44,15 @@
 //   - Compiler type-alias and symbol equivalence checking.
 //
 // Related LeetCode Problems:
-//   - #734 Sentence Similarity (non-transitive version solvable with a hash
+//   - #734 Sentence Similarity [done] (non-transitive version solvable with a hash
 //     set)
-//   - #721 Accounts Merge (grouping string entities transitively via
+//   - #721 Accounts Merge [done] (grouping string entities transitively via
 //     Union-Find)
-//   - #990 Satisfiability of Equality Equations (building transitive
+//   - #990 Satisfiability of Equality Equations [new] (building transitive
 //     equivalence classes with Union-Find)
-//   - #1061 Lexicographically Smallest Equivalent String (character equivalence
+//   - #1061 Lexicographically Smallest Equivalent String [new] (character equivalence
 //     classes via Union-Find)
-//   - #547 Number of Provinces (foundational connected components with
+//   - #547 Number of Provinces [done] (foundational connected components with
 //     Union-Find)
 
 #include "framework/lc_framework.h"

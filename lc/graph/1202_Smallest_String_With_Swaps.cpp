@@ -37,15 +37,15 @@
 //   - Symmetry breaking and canonical form generation in combinatorial solvers.
 //
 // Related LeetCode Problems:
-//   - #1722 Minimize Hamming Distance After Swap Operations (same connected-
+//   - #1722 Minimize Hamming Distance After Swap Operations [new] (same connected-
 //     component swappability graph, greedily matching character multisets)
-//   - #1998 GCD Sort of an Array (swappability graph induced by shared prime
+//   - #1998 GCD Sort of an Array [new] (swappability graph induced by shared prime
 //     factors, checking whether sorting each component sorts the whole array)
-//   - #547 Number of Provinces (foundational undirected connected-components
+//   - #547 Number of Provinces [done] (foundational undirected connected-components
 //     traversal via DFS or Union-Find)
-//   - #721 Accounts Merge (groups transitively connected accounts into
+//   - #721 Accounts Merge [done] (groups transitively connected accounts into
 //     components and sorts elements within each component)
-//   - #2948 Make Lexicographically Smallest Array by Swapping Elements (groups
+//   - #2948 Make Lexicographically Smallest Array by Swapping Elements [new] (groups
 //     transitively swappable elements within threshold `limit` and sorts each)
 
 #include "framework/lc_framework.h"

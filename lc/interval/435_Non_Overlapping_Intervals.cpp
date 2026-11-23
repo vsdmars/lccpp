@@ -36,11 +36,11 @@
 //     non-overlapping candidate exons or motifs.
 //
 // Related LeetCode Problems:
-//   - #452 Minimum Number of Arrows to Burst Balloons (dual earliest-end greedy)
-//   - #646 Maximum Length of Pair Chain (maximum non-overlapping chain length)
-//   - #56 Merge Intervals (sort-and-scan coalescing of overlapping intervals)
-//   - #252 Meeting Rooms (detecting whether zero removals are required)
-//   - #1235 Maximum Profit in Job Scheduling (weighted DP generalization)
+//   - #452 Minimum Number of Arrows to Burst Balloons [done] (dual earliest-end greedy)
+//   - #646 Maximum Length of Pair Chain [new] (maximum non-overlapping chain length)
+//   - #56 Merge Intervals [done] (sort-and-scan coalescing of overlapping intervals)
+//   - #252 Meeting Rooms [done] (detecting whether zero removals are required)
+//   - #1235 Maximum Profit in Job Scheduling [done] (weighted DP generalization)
 
 #include "framework/lc_framework.h"
 

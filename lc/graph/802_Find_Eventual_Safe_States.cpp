@@ -37,11 +37,11 @@
 //     by circular reference cycles.
 //
 // Related LeetCode Problems:
-//   - #207 Course Schedule (3-color DFS cycle detection in a directed graph)
-//   - #210 Course Schedule II (topological sorting of acyclic directed graphs)
-//   - #2127 Maximum Employees to Be Invited to a Meeting (analyzing directed
+//   - #207 Course Schedule [done] (3-color DFS cycle detection in a directed graph)
+//   - #210 Course Schedule II [done] (topological sorting of acyclic directed graphs)
+//   - #2127 Maximum Employees to Be Invited to a Meeting [new] (analyzing directed
 //     cycles and acyclic branches feeding into them)
-//   - #2360 Longest Cycle in a Graph (detecting and measuring cycles in a
+//   - #2360 Longest Cycle in a Graph [new] (detecting and measuring cycles in a
 //     directed graph)
 
 #include "framework/lc_framework.h"

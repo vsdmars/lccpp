@@ -39,11 +39,11 @@
 //   - Static analysis of Collatz-like bit-manipulation state machines.
 //
 // Related LeetCode Problems:
-//   - #1342 Number of Steps to Reduce a Number to Zero (integer reduction with
+//   - #1342 Number of Steps to Reduce a Number to Zero [new] (integer reduction with
 //     halving and decrementing rules)
-//   - #67 Add Binary (right-to-left binary string addition with carry)
-//   - #397 Integer Replacement (minimum steps to reach 1 via +1, -1, and /2)
-//   - #2139 Minimum Moves to Reach Target Score (greedy reverse reduction
+//   - #67 Add Binary [done] (right-to-left binary string addition with carry)
+//   - #397 Integer Replacement [done] (minimum steps to reach 1 via +1, -1, and /2)
+//   - #2139 Minimum Moves to Reach Target Score [new] (greedy reverse reduction
 //     using halving and decrement operations)
 
 #include "framework/lc_framework.h"

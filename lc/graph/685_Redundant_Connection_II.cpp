@@ -45,13 +45,13 @@
 //     edge that broke a single-inheritance tree.
 //
 // Related LeetCode Problems:
-//   - #684 Redundant Connection (undirected counterpart finding the last edge
+//   - #684 Redundant Connection [done] (undirected counterpart finding the last edge
 //     forming a cycle)
-//   - #261 Graph Valid Tree (verifying that an undirected graph is acyclic and
+//   - #261 Graph Valid Tree [done] (verifying that an undirected graph is acyclic and
 //     connected)
-//   - #1361 Validate Binary Tree Nodes (checking single-parent, single-root,
+//   - #1361 Validate Binary Tree Nodes [done] (checking single-parent, single-root,
 //     and acyclicity invariants in a directed graph)
-//   - #1579 Remove Max Number of Edges to Keep Graph Fully Traversable
+//   - #1579 Remove Max Number of Edges to Keep Graph Fully Traversable [new]
 //     (Union-Find edge selection preserving connectivity)
 
 #include "framework/lc_framework.h"

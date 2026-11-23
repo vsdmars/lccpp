@@ -40,12 +40,12 @@
 //     chains enforce a single deterministic execution order.
 //
 // Related LeetCode Problems:
-//   - #207 Course Schedule (directed cycle detection / topological feasibility)
-//   - #210 Course Schedule II (computing a valid topological ordering of a DAG)
-//   - #269 Alien Dictionary (inferring a character ordering from precedence
+//   - #207 Course Schedule [done] (directed cycle detection / topological feasibility)
+//   - #210 Course Schedule II [done] (computing a valid topological ordering of a DAG)
+//   - #269 Alien Dictionary [done] (inferring a character ordering from precedence
 //     constraints)
-//   - #1136 Parallel Courses (level-by-level topological sort on a DAG)
-//   - #2392 Build a Matrix With Conditions (constructing total orderings from
+//   - #1136 Parallel Courses [done] (level-by-level topological sort on a DAG)
+//   - #2392 Build a Matrix With Conditions [new] (constructing total orderings from
 //     relative precedence pairs)
 
 #include "framework/lc_framework.h"

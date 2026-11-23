@@ -41,12 +41,12 @@
 //   - Copy-on-write state isolation in graph databases and simulation engines.
 //
 // Related LeetCode Problems:
-//   - #138 Copy List with Random Pointer (deep-cloning a cyclic pointer graph
+//   - #138 Copy List with Random Pointer [done] (deep-cloning a cyclic pointer graph
 //     via an original-to-clone hash map)
-//   - #1485 Clone Binary Tree With Random Pointer (memoized deep copy of a
+//   - #1485 Clone Binary Tree With Random Pointer [done] (memoized deep copy of a
 //     tree augmented with arbitrary cross/cycle pointers)
-//   - #1490 Clone N-ary Tree (recursive deep cloning of an acyclic N-ary tree)
-//   - #297 Serialize and Deserialize Binary Tree (traversing and reconstructing
+//   - #1490 Clone N-ary Tree [new] (recursive deep cloning of an acyclic N-ary tree)
+//   - #297 Serialize and Deserialize Binary Tree [done] (traversing and reconstructing
 //     pointer-based node structures)
 
 #include "framework/lc_framework.h"

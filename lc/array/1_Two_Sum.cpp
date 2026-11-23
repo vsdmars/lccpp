@@ -29,13 +29,13 @@
 //   - Inventory or resource pairing systems matching complementary capacities.
 //
 // Related LeetCode Problems:
-//   - #167 Two Sum II - Input Array Is Sorted (two-pointer approach in O(1)
+//   - #167 Two Sum II [done] - Input Array Is Sorted (two-pointer approach in O(1)
 //     extra space when input is sorted)
-//   - #15 3Sum (extends pair lookup to unique triplets summing to zero)
-//   - #18 4Sum (generalizes target sum search to k-tuples with deduplication)
-//   - #560 Subarray Sum Equals K (uses the same hash-map complement technique
+//   - #15 3Sum [done] (extends pair lookup to unique triplets summing to zero)
+//   - #18 4Sum [done] (generalizes target sum search to k-tuples with deduplication)
+//   - #560 Subarray Sum Equals K [done] (uses the same hash-map complement technique
 //     over running prefix sums)
-//   - #170 Two Sum III - Data structure design (streaming API supporting add
+//   - #170 Two Sum III [done] - Data structure design (streaming API supporting add
 //     and pair-sum lookup queries)
 
 #include "framework/lc_framework.h"

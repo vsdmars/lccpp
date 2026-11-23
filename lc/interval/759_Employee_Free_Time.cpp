@@ -46,11 +46,11 @@
 //     in distributed systems profilers.
 //
 // Related LeetCode Problems:
-//   - #56 Merge Intervals (merging overlapping busy intervals into a union)
-//   - #23 Merge k Sorted Lists (same K-way min-heap merge over K sorted streams)
-//   - #986 Interval List Intersections (overlap between two sorted schedules)
-//   - #1229 Meeting Scheduler (earliest common free slot of a target duration)
-//   - #57 Insert Interval (maintaining a sorted disjoint interval set)
+//   - #56 Merge Intervals [done] (merging overlapping busy intervals into a union)
+//   - #23 Merge k Sorted Lists [done] (same K-way min-heap merge over K sorted streams)
+//   - #986 Interval List Intersections [done] (overlap between two sorted schedules)
+//   - #1229 Meeting Scheduler [new] (earliest common free slot of a target duration)
+//   - #57 Insert Interval [done] (maintaining a sorted disjoint interval set)
 
 #include "framework/lc_framework.h"
 

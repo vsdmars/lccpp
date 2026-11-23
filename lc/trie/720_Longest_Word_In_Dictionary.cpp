@@ -46,11 +46,11 @@
 //   - Word-chain puzzle engines and incremental dictionary compression.
 //
 // Related LeetCode Problems:
-//   - #208 Implement Trie (Prefix Tree) (foundational trie data structure)
-//   - #1858 Longest Word With All Prefixes (same prefix-chain requirement)
-//   - #648 Replace Words (traverses trie prefixes to find dictionary roots)
-//   - #524 Longest Word in Dictionary through Deleting (longest/lex-smallest)
-//   - #820 Short Encoding of Words (uses a trie to collapse prefix/suffix words)
+//   - #208 Implement Trie [done] (Prefix Tree) (foundational trie data structure)
+//   - #1858 Longest Word With All Prefixes [new] (same prefix-chain requirement)
+//   - #648 Replace Words [new] (traverses trie prefixes to find dictionary roots)
+//   - #524 Longest Word in Dictionary through Deleting [done] (longest/lex-smallest)
+//   - #820 Short Encoding of Words [new] (uses a trie to collapse prefix/suffix words)
 
 #include "framework/lc_framework.h"
 

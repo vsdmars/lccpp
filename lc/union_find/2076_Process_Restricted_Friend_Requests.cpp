@@ -50,11 +50,11 @@
 //     constraints in constrained clustering and data deduplication.
 //
 // Related LeetCode Problems:
-//   - #990 Satisfiability of Equality Equations (DSU unions + inequality check)
-//   - #684 Redundant Connection (incremental DSU connectivity testing)
-//   - #1697 Checking Existence of Edge Length Limited Paths (DSU query checks)
-//   - #1202 Smallest String With Swaps (groups elements into DSU components)
-//   - #721 Accounts Merge (transitive grouping of users with Disjoint Set Union)
+//   - #990 Satisfiability of Equality Equations [new] (DSU unions + inequality check)
+//   - #684 Redundant Connection [done] (incremental DSU connectivity testing)
+//   - #1697 Checking Existence of Edge Length Limited Paths [new] (DSU query checks)
+//   - #1202 Smallest String With Swaps [done] (groups elements into DSU components)
+//   - #721 Accounts Merge [done] (transitive grouping of users with Disjoint Set Union)
 
 #include "framework/lc_framework.h"
 

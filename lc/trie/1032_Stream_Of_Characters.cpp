@@ -40,12 +40,12 @@
 //     continuous symbol sequences.
 //
 // Related LeetCode Problems:
-//   - #208 Implement Trie (Prefix Tree) (core prefix tree insert and search)
-//   - #211 Design Add and Search Words Data Structure (trie traversal with
+//   - #208 Implement Trie [done] (Prefix Tree) (core prefix tree insert and search)
+//   - #211 Design Add and Search Words Data Structure [done] (trie traversal with
 //     wildcard matching)
-//   - #745 Prefix and Suffix Search (trie indexing for prefix/suffix queries)
-//   - #139 Word Break (matching dictionary words against string segments)
-//   - #3045 Count Prefix and Suffix Pairs II (trie-based prefix and suffix
+//   - #745 Prefix and Suffix Search [new] (trie indexing for prefix/suffix queries)
+//   - #139 Word Break [done] (matching dictionary words against string segments)
+//   - #3045 Count Prefix and Suffix Pairs II [new] (trie-based prefix and suffix
 //     matching across word pairs)
 
 #include "framework/lc_framework.h"

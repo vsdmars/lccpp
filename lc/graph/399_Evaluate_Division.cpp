@@ -43,13 +43,13 @@
 //     linked commodities.
 //
 // Related LeetCode Problems:
-//   - #2307 Check for Contradictions in Equations (validates consistency of
+//   - #2307 Check for Contradictions in Equations [new] (validates consistency of
 //     ratio equations on a weighted graph)
-//   - #990 Satisfiability of Equality Equations (checks transitive equality
+//   - #990 Satisfiability of Equality Equations [new] (checks transitive equality
 //     and inequality constraints across variables)
-//   - #721 Accounts Merge (groups transitively linked string-keyed entities)
-//   - #547 Number of Provinces (reachability and connected components)
-//   - #1631 Path With Minimum Effort (weighted graph path queries)
+//   - #721 Accounts Merge [done] (groups transitively linked string-keyed entities)
+//   - #547 Number of Provinces [done] (reachability and connected components)
+//   - #1631 Path With Minimum Effort [new] (weighted graph path queries)
 
 #include "framework/lc_framework.h"
 

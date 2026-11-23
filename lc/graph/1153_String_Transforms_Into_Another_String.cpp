@@ -38,15 +38,15 @@
 //   - Batch file renaming and symbol-table substitution engines.
 //
 // Related LeetCode Problems:
-//   - #205 Isomorphic Strings (checks consistent one-to-one character mapping
+//   - #205 Isomorphic Strings [done] (checks consistent one-to-one character mapping
 //     between two strings)
-//   - #290 Word Pattern (verifies consistent bijection between pattern
+//   - #290 Word Pattern [done] (verifies consistent bijection between pattern
 //     characters and space-separated words)
-//   - #890 Find and Replace Pattern (filters words matching a consistent
+//   - #890 Find and Replace Pattern [new] (filters words matching a consistent
 //     character bijection)
-//   - #854 K-Similar Strings (transforms one string into another by resolving
+//   - #854 K-Similar Strings [new] (transforms one string into another by resolving
 //     character permutation cycles with minimum swaps)
-//   - #777 Swap Adjacent in LR String (decides string transformation
+//   - #777 Swap Adjacent in LR String [new] (decides string transformation
 //     reachability via structural invariants)
 
 #include "framework/lc_framework.h"

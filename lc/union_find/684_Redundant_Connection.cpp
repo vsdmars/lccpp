@@ -42,11 +42,11 @@
 //   - Circuit-netlist verification and dependency-graph cycle checks.
 //
 // Related LeetCode Problems:
-//   - #685 Redundant Connection II (directed-graph version with 2-parent case)
-//   - #261 Graph Valid Tree (verifies a graph is a single acyclic tree via DSU)
-//   - #547 Number of Provinces (counts undirected components using DSU)
-//   - #1319 Number of Operations to Make Network Connected (redundant edges)
-//   - #1192 Critical Connections in a Network (bridges outside any cycle)
+//   - #685 Redundant Connection II [done] (directed-graph version with 2-parent case)
+//   - #261 Graph Valid Tree [done] (verifies a graph is a single acyclic tree via DSU)
+//   - #547 Number of Provinces [done] (counts undirected components using DSU)
+//   - #1319 Number of Operations to Make Network Connected [done] (redundant edges)
+//   - #1192 Critical Connections in a Network [done] (bridges outside any cycle)
 
 #include "framework/lc_framework.h"
 

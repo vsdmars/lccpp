@@ -32,10 +32,10 @@
 //     transmission windows.
 //
 // Related LeetCode Problems:
-//   - #253 Meeting Rooms II (minimum rooms needed when overlaps are allowed)
-//   - #56 Merge Intervals (sort by start time and coalesce overlapping ranges)
-//   - #435 Non-overlapping Intervals (minimum removals to eliminate overlaps)
-//   - #729 My Calendar I (online overlap detection as bookings arrive)
+//   - #253 Meeting Rooms II [done] (minimum rooms needed when overlaps are allowed)
+//   - #56 Merge Intervals [done] (sort by start time and coalesce overlapping ranges)
+//   - #435 Non-overlapping Intervals [done] (minimum removals to eliminate overlaps)
+//   - #729 My Calendar I [done] (online overlap detection as bookings arrive)
 
 #include "framework/lc_framework.h"
 

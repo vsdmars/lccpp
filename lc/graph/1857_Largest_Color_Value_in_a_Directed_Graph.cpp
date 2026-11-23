@@ -44,13 +44,13 @@
 //     resource bottleneck metrics across DAG execution pipelines.
 //
 // Related LeetCode Problems:
-//   - #207 Course Schedule (directed cycle detection via Kahn's BFS algorithm)
-//   - #210 Course Schedule II (producing a topological order via in-degrees)
-//   - #2050 Parallel Courses III (DAG dynamic programming propagated in Kahn's
+//   - #207 Course Schedule [done] (directed cycle detection via Kahn's BFS algorithm)
+//   - #210 Course Schedule II [done] (producing a topological order via in-degrees)
+//   - #2050 Parallel Courses III [new] (DAG dynamic programming propagated in Kahn's
 //     topological order)
-//   - #329 Longest Increasing Path in a Matrix (longest-path DP on an implicit
+//   - #329 Longest Increasing Path in a Matrix [done] (longest-path DP on an implicit
 //     DAG)
-//   - #802 Find Eventual Safe States (identifying cycle-free nodes via
+//   - #802 Find Eventual Safe States [done] (identifying cycle-free nodes via
 //     topological peeling)
 
 #include "framework/lc_framework.h"
